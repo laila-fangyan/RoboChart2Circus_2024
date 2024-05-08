@@ -1,0 +1,367 @@
+
+this is a thy file.
+[%
+z.type().println();
+
+z.exprList.exprs.at(0).name.word.println();
+z.eContents.println();
+%]
+Term "[%=z.binaryExpString()%]"
+
+
+
+[%
+operation Z!ApplExpr multString(): String{
+return  self.exprList.exprs.at(1).exprList.exprs.at(0).binaryExpString() +" * " + self.exprList.exprs.at(1).exprList.exprs.at(1).binaryExpString();
+}
+%]
+
+[%
+operation Z!ApplExpr plusString(): String{
+return "("+ self.exprList.exprs.at(1).exprList.exprs.at(0).binaryExpString() +" + " + self.exprList.exprs.at(1).exprList.exprs.at(1).binaryExpString() +")";
+}
+%]
+  
+[%
+operation Z!Expr binaryExpString(): String{
+//"self.type".println();
+//self.type.println();
+if(self.isTypeOf(ApplExpr) and self.exprList.exprs.at(0).name.word = "_*_"){
+	return self.multString();
+} else
+if(self.isTypeOf(ApplExpr) and self.exprList.exprs.at(0).name.word = "_+_"){
+	return self.plusString();
+} else
+if(self.isTypeOf(RefExpr)){
+	return self.name.word.asString();
+} else
+if(self.isTypeOf(NumExpr)){
+	return self.numeral.value.asString();
+} else
+
+
+
+if(self.isTypeOf(LessThan)){
+return self.lessThanString();}
+else if(self.isTypeOf(GreaterThan)){
+return self.greaterThanString();}
+else if(self.isTypeOf(LessOrEqual)){
+return self.lessOrEqualString();}
+else if(self.isTypeOf(GreaterOrEqual)){
+return self.greaterOrEqualString();}
+else if(self.isTypeOf(Equals)){
+return self.equalsString();}
+else if(self.isTypeOf(Different)){
+return self.notequalsString();}
+else if (self.isTypeOf(And)){
+return self.andString();}
+else if (self.isTypeOf(Or)){
+return self.orString();}
+else if (self.isTypeOf(Not)){
+return self.notString();}
+else if (self.isTypeOf(Plus)){
+return self.plusString();}
+else if (self.isTypeOf(Minus)){
+return self.minusString();}
+else if (self.isTypeOf(Mult)){
+return self.multString();}
+else if(self.isTypeOf(IntegerExp) or self.isTypeOf(RefExp) or self.isTypeOf(BooleanExp) or self.isTypeOf(CallExp)  or self.isTypeOf(ResultExp) or self.isTypeOf(Selection) or self.isTypeOf(EnumExp) or self.isTypeOf(ArrayExp) or self.isTypeOf(TupleExp) or self.isTypeOf(ClockExp) or self.isTypeOf(SeqExp) ){
+return self.oneSideOfBianryString();}
+else if(self.isTypeOf(ParExp)){
+return self.exp.binaryExpString();
+}
+}
+%]
+[%
+
+operation RC!Expression lessThanString(): String{
+return self.left.binaryExpString() +"<" + self.right.binaryExpString();
+}
+%]
+
+[%
+operation RC!Expression lessOrEqualString(): String{
+return self.left.binaryExpString() +"\\<le>" + self.right.binaryExpString();
+}
+%]
+
+[%
+operation RC!Expression greaterThanString(): String{
+return self.left.binaryExpString() +">" + self.right.binaryExpString();
+}
+%]
+
+[%
+operation RC!Expression greaterOrEqualString(): String{
+return self.left.binaryExpString() +"\\<ge>" + self.right.binaryExpString();
+}
+%]
+
+[%
+operation RC!Expression equalsString(): String{
+return self.left.binaryExpString() +"= (" + self.right.binaryExpString()+")";
+}
+%]
+
+[%
+operation RC!Expression notequalsString(): String{
+return self.left.binaryExpString() +" \\<noteq> (" + self.right.binaryExpString()+")";
+}
+%]
+
+[%
+operation RC!Expression andString(): String{
+return self.left.binaryExpString() +" \\<and> " + self.right.binaryExpString();
+}
+%]
+
+[%
+operation RC!Expression orString(): String{
+return "("+self.left.binaryExpString() +" \\<or> " + self.right.binaryExpString()+")";
+}
+%]
+
+[%
+operation RC!Expression notString(): String{
+return "\\<not>" + self.exp.binaryExpString();
+}
+%]
+
+
+
+[%
+operation RC!Expression minusString(): String{
+return "("+self.left.binaryExpString() +" - " + self.right.binaryExpString()+")";
+}
+%]
+
+
+[%
+operation RC!Expression multString(): String{
+return "("+self.left.binaryExpString() +" * " + self.right.binaryExpString()+")";
+}
+%]
+[%
+//DONE
+//to return the string of left or right expression string of the binary expression
+//currently covers 3 types: Integer, RefExp, CallExp
+operation Z!Expr oneSideOfBianryString(): String{
+if(self.isTypeOf(IntegerExp)){
+return self.value.toString();
+}
+
+if(self.isTypeOf(BooleanExp)){
+return self.value.toString().firstToUpperCase();
+}
+
+else if(self.isTypeOf(RefExp)){
+//self.ref.name.println();
+return self.ref.name;
+}
+else if(self.isTypeOf(CallExp)){
+//self.callExpString().println();
+return self.callExpString();
+}
+else if(self.isTypeOf(ResultExp)){
+return "result";
+}
+else if(self.isTypeOf(Selection)){
+return self.member.name+"("+self.receiver.value.ref.name+"!"+self.receiver.parameters.at(0).ref.name+")";
+}
+
+else if(self.isTypeOf(EnumExp)){
+return self.literal.name;
+}
+else if(self.isTypeOf(SeqExp)){
+return self.sequenceString();
+}
+
+else if(self.isTypeOf(ArrayExp)){
+return self.value.ref.name + "."+self.parameters.at(0).value;
+//e.g., vel[1] -> vel.1
+}
+
+else if(self.isTypeOf(TupleExp)){
+return "("+ self.values.at(0).oneSideOfBianryString()+", "+self.values.at(1).oneSideOfBianryString() +")";
+//e.g., (3,4)
+}
+
+else if(self.isTypeOf(ClockExp)){
+return "clock";
+}
+}
+ 
+ %]
+  
+ 
+  
+  
+  
+[*to generate the CallExp expression string for the statement of CallExp type, i.e. functions*]
+[% 
+operation RC!CallExp callExpString(): String{
+var args_string: String;
+var callExp_string: String;
+//to get the parameter on the right
+
+if(self.args.at(0).isTypeOf(RefExp)){
+args_string= self.args.at(0).ref.name;
+}
+else 
+//this branch is for callexp used in functions where we have the keyword result
+if(self.args.at(0).isTypeOf(ResultExp)){
+args_string= "result";
+}
+else
+if(self.args.at(0).isTypeOf(Selection)){
+args_string=self.args.at(0).member.name+"("+self.args.at(0).receiver.value.ref.name+"!"+self.args.at(0).receiver.parameters.at(0).ref.name+")";
+}
+
+//for the case that there are more than 2 args, we need insert ',' between args
+var j=1;
+while(j<self.args.size()){
+//"self.args.at(j).type:".println();
+//self.args.at(j).type.println();
+
+
+if(self.args.at(j).isTypeOf(RefExp)){
+args_string=args_string+ ", "+ self.args.at(j).ref.name;
+}
+else 
+//this branch is for callexp used in functions where we have the keyword result
+if(self.args.at(j).isTypeOf(ResultExp)){
+args_string=args_string+ ", "+ "result";
+}
+else
+if(self.args.at(j).isTypeOf(Selection)){
+self.args.at(j).receiver.println();
+//ArrayExp []
+//self.args.at(j).receiver.value.type.println();
+//self.args.at(j).receiver.value.ref.name.println();
+//gs
+//self.args.at(j).receiver.parameters.at(0).ref.name.println();
+//x
+//self.args.at(j).member.name.println();
+//i
+args_string= args_string+ ", "+self.args.at(j).member.name+"("+self.args.at(j).receiver.value.ref.name+"!"+self.args.at(j).receiver.parameters.at(0).ref.name+")";
+//i(gs!x)
+}
+
+//????shall j++ inside or outside?
+j++;
+}
+
+callExp_string=self.`function`.ref.name+"("+args_string+")";
+return callExp_string;
+}
+  %]
+  
+  
+  
+  
+  
+
+[*to generate the Call expression string for the statement of Call type, i.e. operations*]
+[% 
+operation RC!Call callString(): String{
+var args_string: String;
+var call_string: String;
+//to get the parameter on the right
+if(self.args.size()=0){
+args_string="";
+}
+else if(self.args.size()>0){
+if(self.args.at(0).isTypeOf(RefExp)){
+args_string= self.args.at(0).ref.name;
+}
+else if(self.args.at(0).isTypeOf(IntegerExp)){
+args_string= self.args.at(0).value.toString();
+}
+else if(self.args.at(0).isTypeOf(EnumExp)){
+args_string= self.args.at(0).literal.name;
+}
+else 
+//this branch is for callexp used in functions where we have the keyword result
+if(self.args.at(0).isTypeOf(ResultExp)){
+args_string= "result";
+}
+else
+if(self.args.at(0).isTypeOf(Selection)){
+args_string=self.args.at(0).member.name+"("+self.args.at(0).receiver.value.ref.name+"!"+self.args.at(0).receiver.parameters.at(0).ref.name+")";
+}
+
+//for the case that there are more than 2 args, we need insert ',' between args
+var j=1;
+while(j<self.args.size()){
+//"self.args.at(j).type:".println();
+//self.args.at(j).type.println();
+
+
+if(self.args.at(j).isTypeOf(RefExp)){
+args_string=args_string+ ", "+ self.args.at(j).ref.name;
+}
+else if(self.args.at(j).isTypeOf(IntegerExp)){
+args_string= args_string+ ", "+ self.args.at(j).value.toString();
+}
+else if(self.args.at(j).isTypeOf(EnumExp)){
+args_string= args_string+ ", "+ self.args.at(j).literal.name;
+}
+else 
+//this branch is for callexp used in functions where we have the keyword result
+if(self.args.at(j).isTypeOf(ResultExp)){
+args_string=args_string+ ", "+ "result";
+}
+else
+if(self.args.at(j).isTypeOf(Selection)){
+self.args.at(j).receiver.println();
+//ArrayExp []
+//self.args.at(j).receiver.value.type.println();
+//self.args.at(j).receiver.value.ref.name.println();
+//gs
+//self.args.at(j).receiver.parameters.at(0).ref.name.println();
+//x
+//self.args.at(j).member.name.println();
+//i
+args_string= args_string+ ", "+self.args.at(j).member.name+"("+self.args.at(j).receiver.value.ref.name+"!"+self.args.at(j).receiver.parameters.at(0).ref.name+")";
+//i(gs!x)
+}
+
+//????shall j++ inside or outside?
+j++;
+}
+}
+call_string=self.`operation`.name+"("+args_string+")";
+return call_string;
+}
+  %]
+  
+
+
+  
+[%
+operation RC!SeqExp sequenceString(): String{
+
+if(self.values.size()=0){
+return  "[]";
+} 
+else if(self.values.size()>0) {
+var m=1;
+var sequence_string="["+self.values.at(0);
+while (m<self.values.size()){
+sequence_string=sequence_string+", "+self.values.at(m);
+m++;
+}
+sequence_string=sequence_string+"]";
+return sequence_string;
+}
+}
+%]
+
+
+[%
+operation RC!ProductType productString(): String{
+var strings: String;
+strings= "("+self.types.at(0).zmType() + "\\<times>" + self.types.at(1).zmType()+")" ;
+ return strings;
+}
+%]

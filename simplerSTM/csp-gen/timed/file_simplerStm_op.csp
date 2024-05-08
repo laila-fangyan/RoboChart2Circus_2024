@@ -1,0 +1,18 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 19-04-2024 19:50:21
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "defs/state_timed_defs.csp"
+include "defs/file_simplerStm_op_defs.csp"
+include "defs/robochart_defs.csp"
+include "defs/core_defs.csp"
+include "defs/core_timed_defs.csp"
+include "instantiations.csp"
+include "defs/file_simplerStm_defs.csp"
+include "defs/file_simplerStm_op.csp"
+channel r__

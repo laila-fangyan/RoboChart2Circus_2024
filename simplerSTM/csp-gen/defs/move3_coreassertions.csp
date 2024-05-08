@@ -1,0 +1,33 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 19-04-2024 19:50:21
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_simplerStm_op_defs.csp"
+include "move3.csp"
+include "core_defs.csp"
+include "state_defs.csp"
+include "robochart_defs.csp"
+include "../instantiations.csp"
+channel r__
+-- generate OP_move3
+P_OP_move3 = let
+	id__ = 0
+	
+	param_lv = 0
+	param_a = 0
+	
+	
+	
+within
+	OP_move3::O__(id__,
+				param_lv,
+				param_a)
+assert P_OP_move3 :[deadlock-free]	
+assert P_OP_move3;RUN({r__}) :[deadlock-free]
+assert P_OP_move3 :[deterministic]
+assert P_OP_move3 :[divergence-free]

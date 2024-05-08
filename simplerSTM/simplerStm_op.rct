@@ -1,0 +1,31 @@
+
+/* 
+operation move2 ( lv : real
+, a : int
+) {
+	initial i0
+	state s0 {
+		entry skip
+		//??
+		//during lv = a *2
+	}
+	final f0
+	transition t0 {
+		from s0
+		to f0
+	}
+	transition t1 {
+		from i0
+		to s0
+	}
+}
+*/
+
+operation move3 ( lv : real
+, a : int
+) {
+
+}
+
+
+

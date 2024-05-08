@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/org.eclipse.ecore.circus.circus_metamodel/src-gen"
+    creationIcons="false" editDirectory="/org.eclipse.ecore.circus.circus_metamodel.edit/src-gen"
+    editorDirectory="/org.eclipse.ecore.circus.circus_metamodel.editor/src-gen" modelPluginID="org.eclipse.ecore.circus.circus_metamodel"
+    modelName="Circus_metamodel" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>circus_metamodel.ecore</foreignModel>
+  <testsDirectory xsi:nil="true"/>
+  <genPackages prefix="Circus_metamodel" basePackage="org.eclipse.ecore.circus" disposableProviderFactory="true"
+      ecorePackage="circus_metamodel.ecore#/">
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Term">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute circus_metamodel.ecore#//Term/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ActionList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusActionList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//Ann"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ActionSignatureAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusStateAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ImplicitChannelAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//OnTheFlyDefAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//OutputFieldAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProcessSignatureAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProofObligationAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//StateUpdateAnn"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AssignmentPairs"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ChannelSet"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusChannelSet"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ChannelSetList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusChannelSetList"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusSignature"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ActionSignature"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProcessSignature"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//Communication"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CommunicationList"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Field"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//DotField"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InputField"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//FieldList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusFieldList"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//NameSet"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusNameSet"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//NameSetList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusNameSetList"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Para"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ActionPara"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ChannelPara"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ChannelSetPara"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//NameSetPara"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProcessPara"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusConjPara"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//TransformerPara"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Pred"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//TransformerPred"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ActionTransformerPred"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProcessTransformerPred"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//QntPred"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//StateUpdate"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//SignatureList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ActionSignatureList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProcessSignatureList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ZSignatureList"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Type"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Type2"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ActionType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ChannelType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ProcessType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CircusSigType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ChannelSetType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CommunicationType"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//NameSetType"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//BasicProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CallProcess"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Process1"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//HideProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//RenameProcess"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ProcessD"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IndexedProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParamProcess"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ProcessIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SeqProcessIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ExtChoiceProcessIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IntChoiceProcessIte"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ProcessIdx"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IntChoiceProcessIdx"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ExtChoiceProcessIdx"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SeqProcessIdx"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ParProcessIdx"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AlphabetisedParallelProcessIdx"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InterleaveProcessIdx"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParallelProcessIdx"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ParProcessIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AlphabetisedParallelProcessIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InterleaveProcessIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParallelProcessIte"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Process2"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ExtChoiceProcessImpl"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IntChoiceProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SeqProcess"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ParProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AlphabetisedParallelProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InterleaveProcess"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParallelProcess"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Action1"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//GuardedAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//HideAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//MuAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//RenameAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//PrefixingAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SubstitutionAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//LetAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//LetMuAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//LetVarAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ActionD"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ActionIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParamAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ExtChoiceActionIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IntChoiceActionIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SeqActionIte"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ParActionIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AlphabetisedParallelActionIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InterleaveActionIte"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParallelActionIte"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Action2"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ExtChoiceAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IntChoiceAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InterruptAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SeqAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//ParAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AlphabetisedParallelAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//InterleaveAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ParallelAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//BasicAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ChaosAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SkipAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//StopAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusCommand"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AssignmentCommand"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SpecStmtCommand"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//VarDeclCommand"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//CircusGuardedCommand"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IfGuardedCommand"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//DoGuardedCommand"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//CallAction"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SchExprAction"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Name"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ZName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute circus_metamodel.ecore#//ZName/zname"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//NameList"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ZNameList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//ZNameList/znames"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Expr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//BasicChannelSetExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SigmaExpr"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Expr1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Expr1/exp"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Expr2">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Expr2/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Expr2/right"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Decl"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ChannelDecl">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//ChannelDecl/namelist"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//ChannelDecl/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="circus_metamodel.ecore#//QualifiedDecl"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//VarDecl"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//QntExpr"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Qnt1Expr">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Qnt1Expr/variables"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Qnt1Expr/suchthat"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Qnt1Expr/predicate"/>
+    </genClasses>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ForallExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//Exists1Expr">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute circus_metamodel.ecore#//Exists1Expr/unique"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Expr0N">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Expr0N/exp"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//Expr2N">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference circus_metamodel.ecore#//Expr2N/exps"/>
+    </genClasses>
+    <genClasses ecoreClass="circus_metamodel.ecore#//SetExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//TupleExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//NegExpr"/>
+    <genClasses image="false" ecoreClass="circus_metamodel.ecore#//SchExpr2"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//AndExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//IffExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//ImpliesExpr"/>
+    <genClasses ecoreClass="circus_metamodel.ecore#//OrExpr"/>
+  </genPackages>
+</genmodel:GenModel>

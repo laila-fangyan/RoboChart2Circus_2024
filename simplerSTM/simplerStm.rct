@@ -1,0 +1,176 @@
+
+/* 
+operation move2 ( lv : real
+, a : int
+) {
+	initial i0
+	state s0 {
+		entry skip
+		//??
+		//during lv = a *2
+	}
+	final f0
+	transition t0 {
+		from s0
+		to f0
+	}
+	transition t1 {
+		from i0
+		to s0
+	}
+}
+*/
+
+operation move2 ( lv : real
+, a : int
+) {
+
+}
+
+
+interface interface1 {
+	move ( lv : real , a : int )
+	move2 ( lv : real , a : int )
+}
+	
+	
+	stm stm0 {
+	requires interface1
+	var input : int
+
+	const delta : int
+	const Thr : int
+
+	event stop
+	 
+	event status : int
+	
+	
+
+	initial i0
+	state s0 {
+		entry input = 2 ; trigger2 ! 6 
+		during  skip
+
+		exit trigger2 ! 6
+	}
+	state s1 {
+		entry status ? input 
+		during status ! input
+	
+	exit status . 3
+	}
+	
+
+	state s2 {
+		//entry move ( 0 , 1 )
+		entry move ( 0 , input )
+
+		during if b1 then input = input4 * ( 2 + input ) else stop end
+
+		exit move2 ( 3 , 1 )
+	}
+	final f0
+	
+	transition t0 {
+		from i0
+		to s0
+
+		}
+	transition t2 {
+		from s0
+		to s2
+		trigger 
+		 
+	
+	trigger2 ? input2
+		condition input > 2
+	}
+	transition t4 {
+		from s2
+		to f0
+		condition b1 /\ b2
+		action 
+	( input = 5 + delta ) ; stop
+	}
+
+	transition t1 {
+		from s0
+		to s1
+	condition ( input2 > 3 \/ input3 < 4 ) /\ ( b1 /\ not b2 )
+		action stop
+	}
+state s3 {
+		entry  input = ( 3 + input2 ) * input3 
+		during stop
+	exit status . input
+	}
+	transition t3 {
+		from s0
+		to s3
+	trigger 
+		
+		trigger1
+		condition 
+		not b2
+		action status . input
+	}
+	transition t5 {
+		from s3
+		to s1
+	condition input2 > 1
+	}
+state s4 {
+		entry input = input2 ; trigger2 ! ( input4 * input + 4 )
+
+		during ( input = 4 - 1 )
+	exit skip
+	}
+	transition t6 {
+		from s1
+		to s4
+	}
+	transition t7 {
+		from s4
+		to s3
+	}
+var input2 : int
+	event trigger1
+	event trigger2 : int
+	event trigger3 : int
+	junction j0
+	
+	
+	transition t8 {
+		from s3
+		to j0
+	trigger 
+	
+	trigger2 ? input
+	}
+	transition t9 {
+		from j0
+		to s4
+
+	}
+var b1 : boolean
+	var b2 : boolean
+	var input3 : int
+var input4 : int
+}
+
+stm stm1 {
+	initial i0
+	state s0 {
+	}
+	final f0
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to f0
+	}
+}
+
