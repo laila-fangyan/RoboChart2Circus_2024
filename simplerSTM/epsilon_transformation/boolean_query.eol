@@ -7,9 +7,10 @@
 //
 //}
 
-var cs = createChannelSet(createBasicChannelSetExpr(Set{"share", "terminate"})).createChanSetPara("cs");
+//var cs = createChannelSet(createBasicChannelSetExpr(Set{"share", "terminate"})).createChanSetPara("cs");
 
 var nc = RC!StateMachineDef.all().at(0);
+
 //nc.FQN().println();
 
 //nc.createTransitionsAsCircusProcess();
@@ -19,6 +20,25 @@ var nc = RC!StateMachineDef.all().at(0);
 //ncCoreBehaviour(nc);
 ncBehaviour(nc);
 
+
+var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators"});
+	
+Set{"share", "share1", "share2"}.createChannelPara();
+Set{"share4", "share5"}.createChannelPara("int");
+
+for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara))){
+	zsect.addPara2ZSect(p);	
+
+//	if(p.instanceOf(Z!ChannelSetPara)){
+//		zsect = zsect.addPara2ZSect(p);	
+//		"line 34".println();
+//	} else
+//	if(p.instanceOf(Z!ProcessPara)){
+//		zsect.addPara2ZSect(p);	
+//	} 
+}
+
+createSpec(zsect);
 //RC!StateMachineDef.all().println();
 //for(n in RC!StateMachineDef.all().at(1).nodes){
 //
@@ -115,6 +135,66 @@ ncBehaviour(nc);
 //TO DO: to implement
 //to convert the element name into Fully Qualified Name (FQN)
 
+operation createSpec(zsect: Z!ZSect): Z!Spec{
+	var spec = new Z!Spec;
+	var narrativeSect = new Z!NarrSect;
+//	var zSect = new Z!ZSect;
+//	zSect =  zsect;
+	spec.sects = Sequence{narrativeSect, zsect};
+	return spec;
+}
+
+
+operation createZSect(
+	sect_name: String,
+	paraSeq: Sequence<Z!Para>,
+	parentNameSeq: Sequence<String>
+	): Z!ZSect{
+	
+	var zsect = new Z!ZSect;
+	zsect.name = sect_name;
+	
+	zsect.paraList = new Z!ZParaList;
+	zsect.paraList.paras = paraSeq;
+	
+	zsect.parents = createParentList(parentNameSeq);
+	
+	return zsect;
+}
+
+operation createParentList(parentNameSeq: Sequence<String>): Sequence<Z!Parent>{
+	var parents = Sequence<Z!Parent>;
+	parents = Sequence{};
+	for(p in parentNameSeq){
+		parents.add(createParent(p));
+	}
+	return parents;
+}
+
+operation createParent(p: String): Z!Parent{
+	var parent = new Z!Parent;
+	parent.word = p;
+	return parent;
+}
+
+operation Z!ZSect addPara2ZSect(para: Z!Para): Z!ZSect{
+	var zsect =  self;
+"line 178, addPara2ZSect is called".println();
+zsect.paraList.isDefined.println();
+zsect.paraList.println();
+
+zsect.paraList.paras.isDefined.println();
+zsect.paraList.paras.println();
+//	self.paraList = new Z!ZParaList;
+
+para.println();
+//para.name.word.println();
+	
+	zsect.paraList.paras.add(para);
+	("line 193 is executed: self.paraList.paras = " + self.paraList.paras).println();
+	return zsect;
+
+}
 
 
 operation Any FQN(): String{
@@ -157,10 +237,76 @@ operation Sequence<String> FQN():  Sequence<String>{
 
 //channel decleration for node container
 operation chanDeclNC(){
-//TO DO
-
-
+	//TO DO
 }
+
+//self = name of the channel
+//different from ChannelSetPara or ActionPara or ProcessPara, ChannelPara has no property of name
+//type indicate the type of the channel, or is sync if is uptyped
+operation Set<String> createChannelPara(type: String): Z!ChannelPara{
+	var chanDeclPara = new Z!ChannelPara;
+	chanDeclPara.declList = new Z!ZDeclList;
+	
+	var decl = self.createChannelDecl(type);
+	chanDeclPara.declList.decls = Sequence{decl};
+	
+	return chanDeclPara;
+}
+
+operation Set<String> createChannelPara(): Z!ChannelPara{
+	var chanDeclPara = new Z!ChannelPara;
+	
+	chanDeclPara.declList = new Z!ZDeclList;
+	
+	var decl = self.createChannelDecl();
+	chanDeclPara.declList.decls = Sequence{decl};
+	
+	return chanDeclPara;
+}
+
+
+operation Set<String> createChannelDecl(): Z!ChannelDecl{
+	var decl = new 	Z!ChannelDecl;
+	
+	//The first element is the (possibly empty) list of generic formal parameters
+//	var fst_list = createNameList(Set{});
+	decl.genFormals = createNameList(Set{});
+	
+	//the second element is the (possibly empty) list of declared channel names
+//	var snd_list = createNameList(self);
+	decl.channelNameList = createNameList(self);
+	//decl.nameLists is a list of non-null NameList objects with size two. decl.nameLists = new Sequence<Z!ZNameList>;
+//	decl.listOfNameLists = new Sequence<Z!ZNameList>;
+//	decl.listOfNameLists = Sequence{fst_list, snd_list};
+//	decl.listOfNameLists = Sequence{decl.genFormals, decl.channelNameList};
+	//expr attr indicate the type of the channel, and it's a RefExpr
+	//if it's untyped, type = "SYNCH"
+	decl.expr = "SYNCH".createRefExpr(false, false);
+	
+	return decl;
+}
+
+
+operation Set<String> createChannelDecl(type: String): Z!ChannelDecl{
+	var decl = new 	Z!ChannelDecl;
+	
+	//The first element is the (possibly empty) list of generic formal parameters
+//	var fst_list = createNameList(Set{});
+	decl.genFormals = createNameList(Set{});
+	//the second element is the (possibly empty) list of declared channel names
+//	var snd_list = createNameList(self);
+	decl.channelNameList = createNameList(self);
+	//decl.nameLists is a list of non-null NameList objects with size two. decl.nameLists = new Sequence<Z!ZNameList>;
+//	decl.listOfNameLists = new Sequence<Z!ZNameList>;
+//	decl.listOfNameLists = Sequence{fst_list, snd_list};
+//	decl.listOfNameLists = Sequence{decl.genFormals, decl.channelNameList};
+	//expr attr indicate the type of the channel, and it's a RefExpr
+	//if it's untyped, type = "SYNCH"
+	decl.expr = type.createRefExpr(false, false);
+	
+	return decl;
+}
+
 
 
 
@@ -324,7 +470,6 @@ operation vars(node: RC!Node):Set<String>{
 	} else{
 		varset = Set{};
 	}
-	("in Rule 48 operation, varset = " + varset).println();
 	return varset;
 }
 
@@ -966,7 +1111,7 @@ operation Z!CircusChannelSet createChanSetPara(name: String): Z!ChannelSetPara{
 }
 
 
-//CSP Rule 53, modified: update action Trans as a process: (enter.initial(nc.nodes) -> Trans)
+//CSP Rule 53, modified: update action Trans into a prefixingaction, then updated as a process: (enter.initial(nc.nodes) -> Trans)
 operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
 	
 	var trans;
@@ -1014,6 +1159,7 @@ operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
 	"line309".println();
 	vguards.println();
 	var Trans = readStateA(vguards, trans);
+	//Trans is an actioin and can not be a process, because it will be prefixed.
 	//end of CSP Rule53
 	
 	
@@ -1402,6 +1548,21 @@ operation String createZName(): Z!ZName{
 	return zname;
 }
 
+
+operation createNameList(stringSet: Set<String>): Z!ZNameList{
+	var nl = new Z!ZNameList;
+	nl.names = new Sequence<ZName>;
+	nl.names = Sequence{};
+	
+	for(str in stringSet){
+		nl.names.add(str.createZName());
+	}
+	
+	return nl;
+}
+
+
+//not used, replaced by above which take Set<String> as parameter
 operation createNameList(nl_string: String): Z!ZNameList{
 	var nl = new Z!ZNameList;
 	nl.names = new Sequence<ZName>;
@@ -1424,38 +1585,6 @@ nl_string.length.println();
 }
 
 
-operation String createChannelDecl(type: String): Z!ChannelDecl{
-	var decl = new 	Z!ChannelDecl;
-	
-	//The first element is the (possibly empty) list of generic formal parameters
-	var fst_list = createNameList("");
-	
-	//the second element is the (possibly empty) list of declared channel names
-	var snd_list = createNameList(self);
-
-	//decl.nameLists is a list of non-null NameList objects with size two. decl.nameLists = new Sequence<Z!ZNameList>;
-	decl.listOfNameLists = new Sequence<Z!ZNameList>;
-	decl.listOfNameLists = Sequence{fst_list, snd_list};
-	
-	//expr attr indicate the type of the channel, and it's a RefExpr
-	//if it's untyped, type = "SYNCH"
-	decl.expr = type.createRefExpr(false, false);
-	
-	return decl;
-}
-
-//self = name of the channel
-//type indicate the type of the channel, or is sync if is uptyped
-operation String createChannelPara(type: String): Z!ChannelPara{
-	var chanDeclPara = new Z!ChannelPara;
-	
-	chanDeclPara.declList = new Z!ZDeclList;
-	
-	var decl = self.createChannelDecl(type);
-	chanDeclPara.declList.decls = Sequence{decl};
-	
-	return chanDeclPara;
-}
 
 operation createShareAsCommunication(): Z!Communication{
 	var commu = new Z!Communication;
@@ -1489,14 +1618,14 @@ operation createSStopActionPara(): Z!ActionPara{
 
 operation createPrefixingAction(
 	commu: Z!Communication, 
-	callAction: Z!CircusAction
+	action: Z!CircusAction
 	): Z!PrefixingAction{
 	
 	var prefixingAction = new Z!PrefixingAction;
 	
 	prefixingAction.communication  = commu;
 	
-	prefixingAction.circusAction = callAction;
+	prefixingAction.circusAction = action;
 	
 	return prefixingAction;
 }
@@ -1533,9 +1662,9 @@ operation createAction2(
 	action2.leftAction = fst_action;
 
 	action2.rightAction = snd_action;
-	action2.actionList = new Z!CircusActionList;
+//	action2.actionList = new Z!CircusActionList;
 	
-	action2.actionList.circusActions = Sequence{action2.leftAction, action2.rightAction};
+//	action2.actionList.circusActions = Sequence{action2.leftAction, action2.rightAction};
 		
 	return action2;
 }
@@ -1723,9 +1852,7 @@ operation createSynchCommunication(
 
 //CSP Rule 65
 operation RC!Statement createStmtInContextAsAction(): Z!CircusAction{
-	"line949".println();
-	self.type().println();
-	self.println();
+
 	return readState(usedVariables(self), self.createStmtAsAction());
 }
 
@@ -2012,9 +2139,7 @@ operation RC!Communication createCommuOUTPUT_SYNCAsAction(): Z!InterruptAction{
 
 	
 //	var inner_prefix = inner_RC_commu.createCommunication(inner_RC_commu.event.name,self._type.name);
-	"line1202".println();
-	self._type.name.println();
-	self._type.name.type().println();
+	
 	var prefix = createOutputCommunication(self.event.name + "_out", self.value, self._type.name);
 	
 	var prefix_action = createPrefixingAction(prefix, createSkipAction());
@@ -2431,11 +2556,13 @@ operation Any createApplExpr(operator: String): Z!ApplExpr{
 	var operand_left = self.left.createExpr();
 	var operand_right = self.right.createExpr();
 
-	var left = operator.createRefExpr(false,false);
-	var right = Sequence{operand_left, operand_right}.createTupleExpr();	
+	expr.leftExpr = operator.createRefExpr(false,false);
+	expr.rightExpr = Sequence{operand_left, operand_right}.createTupleExpr();	
+//	var left = operator.createRefExpr(false,false);
+//	var right = Sequence{operand_left, operand_right}.createTupleExpr();	
 
-	expr.exprList = new Z!ZExprList;
-	expr.exprList.exprs = Sequence{left, right};
+//	expr.exprList = new Z!ZExprList;
+//	expr.exprList.exprs = Sequence{left, right};
 	
 	return 	expr;
 }
@@ -2457,9 +2584,9 @@ operation Any createUnaryApplExpr(operator: String): Z!ApplExpr{
 		expr.rightExpr = self.exp.createExpr();
 	} 
 		
-	expr.exprList = new Z!ZExprList;
-	expr.exprList.exprs = Sequence{expr.leftExpr, expr.rightExpr};
-	//expr = self.createExpr2(expr.leftExpr, expr.rightExpr);
+//	expr.exprList = new Z!ZExprList;
+//	expr.exprList.exprs = Sequence{expr.leftExpr, expr.rightExpr};
+
 	return 	expr;
 }
 

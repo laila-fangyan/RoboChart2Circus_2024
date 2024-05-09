@@ -305,7 +305,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ProcessPara" eSuperTypes="#//Para">
     <eStructuralFeatures xsi:type="ecore:EReference" name="circusProcess" eType="#//CircusProcess"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nameList" eType="#//ZNameList"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zGenFormals" eType="#//ZNameList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//ZName"
         containment="true"/>
@@ -320,18 +320,19 @@
   <eClassifiers xsi:type="ecore:EClass" name="Sect" abstract="true" eSuperTypes="#//Term"/>
   <eClassifiers xsi:type="ecore:EClass" name="ZSect" eSuperTypes="#//Sect">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="paraList" eType="#//ParaList"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parents" upperBound="-1"
         eType="#//Parent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paraList" eType="#//ZParaList"
+        containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NarrSect" eSuperTypes="#//Sect"/>
   <eClassifiers xsi:type="ecore:EClass" name="ParaList" abstract="true" eSuperTypes="#//Term"/>
   <eClassifiers xsi:type="ecore:EClass" name="ZParaList" eSuperTypes="#//ParaList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="paras" upperBound="-1"
         eType="#//Para" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParenAnn" abstract="true" eSuperTypes="#//Term"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Parent" abstract="true" eSuperTypes="#//Term">
+  <eClassifiers xsi:type="ecore:EClass" name="Parent" eSuperTypes="#//Term">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="word" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SchText" abstract="true" eSuperTypes="#//Term"/>
@@ -621,8 +622,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightProcess" eType="#//CircusProcess"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="crcusProcesses" upperBound="-1"
-        eType="#//CircusProcess" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExtChoiceProcessImpl" eSuperTypes="#//Process2"/>
   <eClassifiers xsi:type="ecore:EClass" name="IntChoiceProcess" eSuperTypes="#//Process2"/>
@@ -706,8 +705,6 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Action2" abstract="true" eSuperTypes="#//CircusAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="actionList" eType="#//CircusActionList"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftAction" eType="#//CircusAction"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightAction" eType="#//CircusAction"
@@ -722,8 +719,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightNameSet" eType="#//NameSet"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nameSets" upperBound="-1"
-        eType="#//NameSet" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AlphabetisedParallelAction" eSuperTypes="#//ParAction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="channelSets" upperBound="-1"
@@ -835,13 +830,11 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="The getNameList method contains a list of non-null NameList objects with size two. Therefore, we specify the size of the NameList as 2, so that no need for the wellformed-ness on this"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="listOfNameLists" lowerBound="2"
-        upperBound="2" eType="#//ZNameList" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="channelNameList" eType="#//ZNameList"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genFormals" eType="#//ZNameList"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channelNameList" eType="#//ZNameList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConstDecl" eSuperTypes="#//Decl">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -1011,8 +1004,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftExpr" eType="#//Expr"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightExpr" eType="#//Expr"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exprList" eType="#//ZExprList"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QntExpr" abstract="true" eSuperTypes="#//Expr">

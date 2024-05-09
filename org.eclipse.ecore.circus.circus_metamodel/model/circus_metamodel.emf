@@ -5,7 +5,11 @@ package circus;
 //Term methods to be implemented
 @GenModel(documentation="net.sourceforge.czt.z.ast")
 abstract class Term {
-	//attr String name;
+	//attr String name; //TO DO: not included in CZT AST, to be confirmed
+//	attr int annsSize;
+//	val Term[*] terms;
+//	attr boolean hasAnn;
+	
 }
 
 
@@ -398,7 +402,7 @@ class OptempPara extends Para {
 
 class ProcessPara extends Para {
 	val CircusProcess circusProcess;
-	val ZNameList nameList;
+	val ZNameList zGenFormals;
 	val ZName name;
 	attr boolean isBasicProcess;
 }
@@ -429,14 +433,22 @@ abstract class Sect extends Term {
 
 class ZSect extends Sect {
 	attr String name;
-	val ParaList paraList;
 	val Parent[*] parents;
+	val ZParaList paraList;
+
 }
-//class NarrSect extends Sect, not implemented
 
 
-//class UnparsedZSect extends Sect, not implemented
+//TO DO: to be confirmed with Alvaro
+class NarrSect extends Sect {
+//	val String[*] contents;
+}
 
+
+//TO DO: to be confirmed with Alvaro
+//class UnparsedZSect extends Sect {
+//	val String[*] contents;
+//}
 
 /********************************
           ParaList
@@ -462,7 +474,7 @@ abstract class ParenAnn extends Term {
 /********************************
           Parent
 ********************************/
-abstract class Parent extends Term {
+class Parent extends Term {
 	attr String word;
 }
 
@@ -576,8 +588,8 @@ class ActionTransformerPred extends TransformerPred {
 
 class ProcessTransformerPred extends TransformerPred {
 	val CircusProcess[*] circusProcesses;
-	val CircusProcess impl;
-	val CircusProcess spec;
+	val CircusProcess impl;//?
+	val CircusProcess spec;//?
 }
 
 abstract class QntPred extends Pred {
@@ -843,7 +855,7 @@ class ParallelProcessIte extends ParProcessIte {
 abstract class Process2 extends CircusProcess {
 	val CircusProcess leftProcess;
 	val CircusProcess rightProcess;
-	val CircusProcess[*] crcusProcesses;//is this necessary?
+//	val CircusProcess[*] crcusProcesses;//is this necessary?
 }
 
 class ExtChoiceProcessImpl extends Process2 {
@@ -955,7 +967,7 @@ class ParallelActionIte extends ParActionIte {
 }
 
 abstract class Action2 extends CircusAction {
-	val CircusActionList actionList;
+//	val CircusActionList actionList;
 	//val CircusAction[*] circusActions;
 	val CircusAction leftAction;
 	val CircusAction rightAction;
@@ -976,7 +988,7 @@ class SeqAction extends Action2 {
 abstract class ParAction extends Action2 {
 	val NameSet leftNameSet;
 	val NameSet rightNameSet;
-	val NameSet[*] nameSets;// is this necessary? is it the union of left and right?
+//	val NameSet[*] nameSets;// is this necessary? is it the union of left and right?
 }
 
 class AlphabetisedParallelAction extends ParAction {
@@ -1137,15 +1149,14 @@ class Operator extends Oper {
 abstract class Decl extends Term {
 }
 
-
+ 
 @GenModel(documentation="The getNameList method contains a list of non-null NameList objects with size two. Therefore, we specify the size of the NameList as 2, so that no need for the wellformed-ness on this")
 class ChannelDecl extends Decl {
-	//TO DO, there is not a class of NameListList, so auto-gen model can not mapping to the czt model
-	val ZNameList[2] listOfNameLists;
-	//val ZNameList[2] nameLists;// the size of 2 is not forced when building Circus model, TBD
-	val Expr expr;
-	val ZNameList channelNameList;
+	//there is not a class of NameListList, so auto-gen model can not mapping to the czt model
+	//val ZNameList[2] listOfNameLists;
 	val ZNameList genFormals;
+	val ZNameList channelNameList;
+	val Expr expr;
 }
 
 @GenModel(documentation="net.sourceforge.czt.z.ast, A constant declaration. Example: x==3")
@@ -1375,7 +1386,7 @@ abstract class Expr2 extends Expr {
 //	val Expr[*] exprs;
 //in ast, it's: Expr[*] exprs;
 //in CZT tree structure, it's ExprList
-    val ZExprList exprList;
+//    val ZExprList exprList;
 }
 
 
