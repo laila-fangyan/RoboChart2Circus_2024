@@ -1874,9 +1874,6 @@ operation RC!Statement createStmtAsAction(): Z!CircusAction{
 		return self.createParStmtAsAction();
 	} else
 	if(self.instanceOf(RC!IfStmt)){
-		"line956".println();
-		("predicate = "+ self.expression).println();
-		"line958".println();
 		return self.createIfStmtAsAction();
 	} else
 	if(self.instanceOf(RC!SeqStatement)){
@@ -1971,8 +1968,7 @@ operation clone(exp : RC!Expression) : RC!Expression   {
 	return cloned;
 }
 
-
-
+/*
 operation if_pred(actions: Sequence<Z!GuardedAction>): Z!IfGuardedCommand{
 	var action = new Z!IfGuardedCommand;
 	action.actionList = new Z!CircusActionList;
@@ -1980,7 +1976,7 @@ operation if_pred(actions: Sequence<Z!GuardedAction>): Z!IfGuardedCommand{
 	
 	return action;
 }
-
+*/
 operation createGuardedAction(
 	pred: Z!Pred, 
 	action: Z!CircusAction
@@ -2328,9 +2324,6 @@ operation RC!Communication createCommuAsCommunication(
 	
 	if(type = "OUTPUT"){ 
 		commu.commPattern = Z!CommPattern#Output;
-		"line1383".println();
-		self.println();
-		self._type.println();
 		commu.fieldList.fields = Sequence{self.value.createOutputField()};
 	} else
 	
@@ -2406,17 +2399,13 @@ operation RC!State createStateActionAsCircusAction(actionType:String): Z!CircusA
 	if(self.stateActionDefined(actionType)){
 		var index = self.indexOfStateAction(actionType);
 		
-		"line910".println();
-		("actionType = " + actionType).println();
-		("index = " + index).println();
-		self.name.println();
 		return self.actions.at(index).action.createStmtInContextAsAction();
 	} else{
 		return createSkipAction();
 	}
 }
 
-//to check if the specific type (actionType) of state action is defined
+//this is to check if the specific type (actionType) of state action is defined
 operation RC!State stateActionDefined(actionType: String): Boolean{
 	var bool = false;
 	if(self.actions.size()>0){
@@ -2762,7 +2751,6 @@ operation RC!Expression createExpr():Z!Expr{
 operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
 	var tupleExpr = new Z!TupleExpr;
 	tupleExpr.exprList = new Z!ZExprList;
-	tupleExpr.exprList.exprs.println();
 	tupleExpr.exprList.exprs = self;
 	return tupleExpr;
 

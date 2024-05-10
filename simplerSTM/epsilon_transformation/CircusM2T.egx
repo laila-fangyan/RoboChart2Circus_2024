@@ -11,7 +11,7 @@
 //}
 
 rule circusM2T
-transform z: Z!ApplExpr {
+transform z: Z!Spec {
 
 template : "circusM2T.egl"
 target : "circus_gen/" +"expr"+".thy" 

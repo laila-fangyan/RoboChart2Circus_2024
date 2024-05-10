@@ -992,7 +992,7 @@ abstract class ParAction extends Action2 {
 }
 
 class AlphabetisedParallelAction extends ParAction {
-	val ChannelSet[*] channelSets;
+//	val ChannelSet[*] channelSets;
 	val ChannelSet leftAlpha;
 	val ChannelSet rightAlpha;
 }
@@ -1037,8 +1037,7 @@ class VarDeclCommand extends CircusCommand {
 
 abstract class CircusGuardedCommand extends CircusCommand {
 	val CircusActionList actionList;
-	val GuardedAction guardedAction;
-	attr int numberOfGuards;
+
 }
 
 class IfGuardedCommand extends CircusGuardedCommand {

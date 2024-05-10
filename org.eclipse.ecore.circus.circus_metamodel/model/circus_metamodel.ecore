@@ -721,8 +721,6 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AlphabetisedParallelAction" eSuperTypes="#//ParAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="channelSets" upperBound="-1"
-        eType="#//ChannelSet" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftAlpha" eType="#//ChannelSet"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightAlpha" eType="#//ChannelSet"
@@ -760,9 +758,6 @@
       eSuperTypes="#//CircusCommand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="actionList" eType="#//CircusActionList"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="guardedAction" eType="#//GuardedAction"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfGuards" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IfGuardedCommand" eSuperTypes="#//CircusGuardedCommand"/>
   <eClassifiers xsi:type="ecore:EClass" name="DoGuardedCommand" eSuperTypes="#//CircusGuardedCommand"/>
