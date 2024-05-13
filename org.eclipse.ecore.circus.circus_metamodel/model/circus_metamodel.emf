@@ -48,7 +48,30 @@ class TypeAnn extends Ann {
 
 
 
+/********************************
+the classes below are for M2T validation purpose, and should be removed when Expression parsing is validated.
+********************************/
 
+//For validation of ApplExpr M2T
+abstract class applexprList extends Term{
+	
+}
+
+class CApplExprList extends applexprList{
+	val ApplExpr[*] applExprs;
+	
+}
+
+abstract class predList extends Term{
+	
+}
+
+class CPredList extends predList{
+	val Pred[*] preds;
+	
+}
+
+/******************************** end of validation classes ********************************/
 
 
 
@@ -1455,7 +1478,6 @@ class TupleExpr extends Expr2N {
 class ApplExpr extends Expr2 {
 	attr boolean mixFix;
 }
-
 
 abstract class SchExpr2 extends Expr2 {
 }

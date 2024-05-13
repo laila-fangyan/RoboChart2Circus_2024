@@ -26,6 +26,16 @@
   <eClassifiers xsi:type="ecore:EClass" name="TypeAnn" eSuperTypes="#//Ann">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="applexprList" abstract="true" eSuperTypes="#//Term"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CApplExprList" eSuperTypes="#//applexprList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applExprs" upperBound="-1"
+        eType="#//ApplExpr" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="predList" abstract="true" eSuperTypes="#//Term"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CPredList" eSuperTypes="#//predList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preds" upperBound="-1"
+        eType="#//Pred" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ActionList" abstract="true" eSuperTypes="#//Term"/>
   <eClassifiers xsi:type="ecore:EClass" name="CircusActionList" eSuperTypes="#//ActionList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="circusActions" upperBound="-1"

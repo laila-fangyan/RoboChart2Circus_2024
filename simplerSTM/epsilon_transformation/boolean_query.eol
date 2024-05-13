@@ -11,6 +11,7 @@
 
 var nc = RC!StateMachineDef.all().at(0);
 
+		
 //nc.FQN().println();
 
 //nc.createTransitionsAsCircusProcess();
@@ -39,17 +40,52 @@ for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!
 }
 
 createSpec(zsect);
+
+
 //RC!StateMachineDef.all().println();
+for(n in nc.nodes.select(s|s.name = "s3")){
+	("n.name = "+ n.name).println();
+	var expr = n.actions.at(0).action.right.createExpr();
+	createApplExprList(Sequence{expr});
+	
+}
+
+//create
+for (t in nc.transitions.select(t|t.name = "t1")){
+	if(t.condition != null){
+		var pred = t.condition.createExpr().createMemPredEquality();
+//		circusAction = createGuardedAction(pred, circusAction);
+		createPredList(Sequence{pred});
+	} 
+}
+
+
+
+//This is only used for M2T validation of ApplExpr
+operation createApplExprList(exprSeq: Sequence<Z!ApplExpr>): Z!CApplExprList{
+	var aeList = new Z!CApplExprList;
+	aeList.applExprs = exprSeq;
+	return aeList;
+}
+
+//This is only used for M2T validation of Pred
+operation createPredList(predSeq: Sequence<Z!Pred>): Z!CPredList{
+	var predList = new Z!CPredList;
+	predList.preds = predSeq;
+	return predList;
+}
+
 //for(n in RC!StateMachineDef.all().at(1).nodes){
 //
-//	if (n.eClass().name = "State" and n.name = "s0"){
+//	if (n.eClass().name = "State" and n.name = "s3"){
 //		RC!StateMachineDef.all().at(1).println();
 //		for(nc in RC!StateMachineDef.all()){
 //			if(nc.nodes.includes(n)){
 //				("the node container of this state: " + nc.name).println();
 //			} 
-//		}
-	
+		
+//	}
+//		"line53".println();
 //		n.actions.at(0).action.right.createExpr();
 //		//To create Minus
 //		if(n.actions.at(0).action.right.type().name = "Minus"){
@@ -1042,7 +1078,7 @@ operation createParallelProcess(
 }
 
 
-//channelset is declared in the process directly using the channel names, so has no nameo a channelset name
+//channelset is declared in the process directly using the channel names, so has no channelset name
 //therefore it is an BasicChannelSetExpr
 operation createParallelProcess(
 	channel_names: Set<String>, 
@@ -2498,6 +2534,17 @@ operation RC!BooleanExp createBooleanExpr(): Z!RefExpr{
 	return boolExpr;
 }
 
+
+operation RC!FloatExp createFloatExpr(): Z!RefExpr{
+	var floatExpr = new Z!RefExpr;
+	floatExpr.mixFix = false;
+	floatExpr.explicit = false;
+	floatExpr.name = new Z!ZName;
+	floatExpr.name.word = self.value.asString();
+		
+	return floatExpr;
+}
+
 operation  RC!IntegerExp createNumExpr(): Z!NumExpr{
 	var numExpr = new Z!NumExpr;
 	numExpr.numeral = new Z!ZNumeral;
@@ -2540,12 +2587,13 @@ operation RC!LessOrEqual createLessOrEqualExpr() {
 
 operation Any createApplExpr(operator: String): Z!ApplExpr{
 	var expr = new Z!ApplExpr;
-	expr.mixFix = true;
+	expr.mixFix = true; //CZT: C.6.21 (Function Operator Application). For example: S + T.
 	
 	var operand_left = self.left.createExpr();
 	var operand_right = self.right.createExpr();
 
 	expr.leftExpr = operator.createRefExpr(false,false);
+
 	expr.rightExpr = Sequence{operand_left, operand_right}.createTupleExpr();	
 //	var left = operator.createRefExpr(false,false);
 //	var right = Sequence{operand_left, operand_right}.createTupleExpr();	
@@ -2625,11 +2673,6 @@ operation RC!Implies createImpliesExpr():Z!ApplExpr{
 }
 
 
-operation RC!Not createNotExpr():Z!ApplExpr{
-	return self.createUnaryApplExpr("not_");
-}	
-
-
 operation RC!Plus createPlusExpr():Z!ApplExpr{
 	return self.createApplExpr("_+_");
 }
@@ -2651,6 +2694,9 @@ operation RC!Modulus createModExpr():Z!ApplExpr{
 }
 
 
+operation RC!Not createNotExpr():Z!ApplExpr{
+	return self.createUnaryApplExpr("Not_");
+}	
  	
 operation RC!Neg createNegExpr():Z!ApplExpr{
 	return self.createUnaryApplExpr("-_");
@@ -2664,10 +2710,6 @@ operation RC!IfExpression createCondExpr():Z!CondExpr{
 
 }
 
-//TO DO: what class in Z?
-operation RC!FloatExp createFloatExpr():Z!Expr{
-
-}
 
 //TO DO: what class in Z?
 operation RC!VarExp createVarExpr():Z!Expr{
@@ -2737,12 +2779,30 @@ operation RC!Expression createExpr():Z!Expr{
 	if(self.isTypeOf(RC!IfExpression)){
 		return self.createCondExpr();
 	} else
-	if(self.isTypeOf(RC!IntegerExp) or self.isTypeOf(RC!RefExp) or self.isTypeOf(RC!BooleanExp) or self.isTypeOf(RC!CallExp)  or self.isTypeOf(RC!ResultExp) or self.isTypeOf(RC!Selection) or self.isTypeOf(RC!EnumExp) or self.isTypeOf(RC!ArrayExp) or self.isTypeOf(RC!TupleExp) or self.isTypeOf(RC!ClockExp) or self.isTypeOf(RC!SeqExp) ){
-		return self.createUnaryExpr();
-	} else 
+	
+	if(self.isTypeOf(RC!IntegerExp)){
+		return self.createNumExpr();
+	} else
+	
+	if(self.isTypeOf(RC!RefExp)){
+		return self.ref.name.createRefExpr(false, false);
+	} else
+	
+	if(self.isTypeOf(RC!BooleanExp)){
+		return self.createBooleanExpr();
+	} else
+	
+	if(self.isTypeOf(RC!FloatExp)){
+		return self.createFloatExpr();
+	} else
 	if(self.isTypeOf(RC!ParExp)){
 		return self.exp.createExpr();
-	}
+	} else
+	
+	//TO DO
+	if(self.isTypeOf(RC!CallExp)  or self.isTypeOf(RC!ResultExp) or self.isTypeOf(RC!Selection) or self.isTypeOf(RC!EnumExp) or self.isTypeOf(RC!ArrayExp) or self.isTypeOf(RC!TupleExp) or self.isTypeOf(RC!ClockExp) or self.isTypeOf(RC!SeqExp) ){
+		return self.createUnaryExpr();
+	} 
 
 }
 
@@ -2758,22 +2818,15 @@ operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
 
 
 operation RC!Expression createUnaryExpr(): Z!Expr {
-	if(self.isTypeOf(RC!IntegerExp)){
-		return self.createNumExpr();
-	} else
-
-	if(self.isTypeOf(RC!BooleanExp)){
-		return self.createBooleanExpr();
-	} 
-	else
-
- 	if(self.isTypeOf(RC!RefExp)){
-		//self.ref.name.println();
-		return self.ref.name.createRefExpr(false, false);
-	} 
-	//TO DO: to complete the following unaryExpr of RoboChart
-	/*else 
 	
+	//TO DO: to complete the following unaryExpr of RoboChart
+	/*
+	
+	if(self.isTypeOf(FloatExp)){
+		return self.callExpString();
+	} else 
+	
+
 	if(self.isTypeOf(CallExp)){
 		//self.callExpString().println();
 		return self.callExpString();
