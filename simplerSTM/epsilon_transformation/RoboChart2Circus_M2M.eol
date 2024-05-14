@@ -29,8 +29,8 @@ var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators
 //Set{"share4", "share5"}.createChannelPara("channel_group1","int");
 
 
-nc.createInternalChanParaNC();
-
+//nc.createInternalChanParaNC();
+nc.createchanParaNC();
 for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara))){
 	zsect.addPara2ZSect(p);	
 
@@ -273,31 +273,41 @@ operation Sequence<String> FQN():  Sequence<String>{
 }
 
 
-operation RC!NodeContainer createInternalChanParaNC(): Z!ChannelPara{
-	
-	//1. channel internal__: NIDS
-	var internal_chanpara = createChannelPara("internal_chan_" + self.FQN());
-	for(n in self.nodes){
-		internal_chanpara.addChan2ChanPara("internal__NID_" + n.FQN());
-	}
-	return internal_chanpara;
-	
-}
 
 
 
-/*
+
 //channel decleration for node container
-operation RC!NodeContainer createchanParaNC():  {
+operation RC!NodeContainer createchanParaNC()  {
 	
 	//1. channel internal__: NIDS
-	var internal_chanpara = createChannelPara("internal_chan_" + self.FQN());
+//	var internal_chanpara = createChannelPara("internal_chan_" + self.FQN());
+	
+	var node_seq = Sequence<String>;
+	node_seq = Sequence{};
 	for(n in self.nodes){
-		internal_chanpara.addChan2ChanPara("internal__NID_" + n.FQN());
+		node_seq.add("internal__NID_" + n.FQN());
 	}
+	
+	var internal_chanpara = node_seq.createChannelPara("internal_chan_" + self.FQN());
+//	internal_chanpara.declList.decls.add(node_set.createChannelDecl());
+	
+	
+//
+//	for(n in self.nodes){
+//		
+//		internal_chanpara.addChan2ChanPara("internal__NID_" + n.FQN());
+//		if(internal_chanpara.declList.decls.size()=0){
+//			internal_chanpara.declList.decls.addChan2ChanPara("internal__NID_" + n.FQN());
+//		}
+//		internal_chanpara.declList.decls.at(0).addChan2ChanPara("internal__NID_" + n.FQN());
+		
+		
+//		self.declList.decls.at(0).addChannelDecl(chan_name, chan_type);
+//	}
 	
 	//2. Flow channel: interrupt, exited, exit, terminate
-	var flow_chanpara = Set{"interrupt".FQN(), "exited".FQN(), "exit".FQN(), "terminate".FQN()}.createChannelPara("flowchan_" + self.FQN());
+	var flow_chanpara = Sequence{"interrupt".FQN(), "exited".FQN(), "exit".FQN(), "terminate".FQN()}.createChannelPara("flowchan_" + self.FQN());
 	// should be updated to "interrupt".FQN(self)
 
 
@@ -306,30 +316,52 @@ operation RC!NodeContainer createchanParaNC():  {
 	var var_chanpara = createChannelPara("variable_chan_" + self.FQN());
 	for(vl in self.variableList){
 		if(vl.modifier = RC!VariableModifier#VAR){
+//			var i=0;
 			for(v in vl.vars){
+				
 				var type_expr = v.type.createTypeExpr();
-							
-				var_chanpara.addChan2ChanPara("get_" + v.FQN(), type_expr);
-				var_chanpara.addChan2ChanPara("set_" + v.FQN(), type_expr);
-				var_chanpara.addChan2ChanPara("setL_" + v.FQN(), type_expr);
-				var_chanpara.addChan2ChanPara("setR_" + v.FQN(), type_expr);
+				var var_seq = Sequence{"get_" + v.FQN(), "set_" + v.FQN(), "setL_" + v.FQN(), "setR_" + v.FQN()};
+				var_chanpara.declList.decls.add(var_seq.createChannelDecl(type_expr));
+				
+				
+//				var_chanpara.declList.decls.at(i).addChan2ChanDecl("get_" + v.FQN(), type_expr);
+//				var_chanpara.declList.decls.at(i).addChan2ChanDecl("set_" + v.FQN(), type_expr);
+//				var_chanpara.declList.decls.at(i).addChan2ChanDecl("setL_" + v.FQN(), type_expr);
+//				var_chanpara.declList.decls.at(i).addChan2ChanDecl("setR_" + v.FQN(), type_expr);
+//				i++;
 			}
 		}
 	}
 	
 	//4. Shared variable channels
+	//TO DO
 	
 	//5. Local variable channels for defined operations that are required by the state machine
-	
+	//TO DO
 	
 	//6. Declaring state machine events as channels
+
+	var evt_seq = new Sequence<String>;
+	for(e in self.events){
+		evt_seq.add(e.FQN() + "_in");
+		evt_seq.add(e.FQN() + "_out");
+		for(n in self.nodes){
+			evt_seq.add(e.name + "__NID_" + n.FQN() + "_in");
+			evt_seq.add(e.name + "__NID_" + n.FQN() + "_out");
+		}
+	}
+	var evt_chanpara = evt_seq.createChannelPara("event_chan_" + self.FQN());
+	
 	
 	//7. Declaring call and ret events for undefined operations as channels
+	//TO DO
 	
+	//8. Declaring local channels for each node in the node container
 	
 }
 
-*/
+ 
+
 
 //this is used for variable channel decleration, only RefType and ProductType are considered for variable's type
 operation RC!Type createTypeExpr(): Z!Expr{
@@ -352,16 +384,17 @@ operation RC!ProductType createProdExpr(): Z!ProdExpr{
 }
 
 
-//to create an empty channelPara with a para name
+//to create an empty channelPara with a para name with the decl not defined and the type not identified
 operation createChannelPara(
 	para_name: String
 	): Z!ChannelPara{
 	var chanDeclPara = new Z!ChannelPara;
 	chanDeclPara.declList = new Z!ZDeclList;
 	
-	var decl = Set{}.createChannelDecl();
-	chanDeclPara.declList.decls = Sequence{decl};
-
+//	var decl = Set{}.createChannelDecl();
+//	chanDeclPara.declList.decls = Sequence{decl};
+	
+	chanDeclPara.declList.decls = Sequence{};
 	chanDeclPara.name = para_name.createZName();
 	
 	return chanDeclPara;
@@ -374,22 +407,24 @@ operation createChannelPara(
 //self = name of the channel
 //different from ChannelSetPara or ActionPara or ProcessPara, ChannelPara has no property of name
 //type indicate the type of the channel, or is sync if is uptyped
-operation Set<String> createChannelPara(
+operation Sequence<String> createChannelPara(
 	para_name: String,
 	type: String
 	): Z!ChannelPara{
 	var chanDeclPara = new Z!ChannelPara;
 	chanDeclPara.declList = new Z!ZDeclList;
 	
-	var decl = self.createChannelDecl(type);
-	chanDeclPara.declList.decls = Sequence{decl};
+//	var decl = self.createChannelDecl(type);
+	chanDeclPara.declList.decls = Sequence{};
 	
 	chanDeclPara.name = para_name.createZName();
 	
 	return chanDeclPara;
 }
 
-operation Set<String> createChannelPara(para_name: String): Z!ChannelPara{
+operation Sequence<String> createChannelPara(
+	para_name: String
+	): Z!ChannelPara{
 	var chanDeclPara = new Z!ChannelPara;
 	
 	chanDeclPara.declList = new Z!ZDeclList;
@@ -401,10 +436,13 @@ operation Set<String> createChannelPara(para_name: String): Z!ChannelPara{
 	return chanDeclPara;
 }
 
+/*
 operation Z!ChannelPara addChan2ChanPara(
 	chan_name: String, 
 	chan_type: String
 	): Z!ChannelPara{
+	
+
 	self.declList.decls.at(0).addChannelDecl(chan_name, chan_type);
 	return self;
 }
@@ -422,13 +460,14 @@ operation Z!ChannelPara addChan2ChanPara(
 	self.declList.decls.at(0).addChannelDecl(chan_name);
 	return self;
 }
+*/
 
-operation Set<String> createChannelDecl(): Z!ChannelDecl{
+operation Sequence<String> createChannelDecl(): Z!ChannelDecl{
 	var decl = new 	Z!ChannelDecl;
 	
 	//The first element is the (possibly empty) list of generic formal parameters
 //	var fst_list = createNameList(Set{});
-	decl.genFormals = createNameList(Set{});
+	decl.genFormals = createNameList(Sequence{});
 	
 	//the second element is the (possibly empty) list of declared channel names
 //	var snd_list = createNameList(self);
@@ -439,17 +478,22 @@ operation Set<String> createChannelDecl(): Z!ChannelDecl{
 //	decl.listOfNameLists = Sequence{decl.genFormals, decl.channelNameList};
 	//expr attr indicate the type of the channel, and it's a RefExpr
 	//if it's untyped, type = "SYNCH"
-	decl.expr = "SYNCH".createRefExpr(false, false);
+	if(self.size()>0){
+		decl.expr = "SYNCH".createRefExpr(false, false);
+	} else{
+		//self.size() = 0 means this is an empty channel decl, so no type is identified.
+	}
+	
 	
 	return decl;
 }
 
 
-operation Set<String> createChannelDecl(type: String): Z!ChannelDecl{
+operation Sequence<String> createChannelDecl(type: String): Z!ChannelDecl{
 	var decl = new 	Z!ChannelDecl;
 	
 	//The first element genFormals is the (possibly empty) list of generic formal parameters
-	decl.genFormals = createNameList(Set{});
+	decl.genFormals = createNameList(Sequence{});
 	
 	//the second element is the (possibly empty) list of declared channel names
 	decl.channelNameList = createNameList(self);
@@ -461,29 +505,38 @@ operation Set<String> createChannelDecl(type: String): Z!ChannelDecl{
 	return decl;
 }
 
-operation Set<String> createChannelDecl(type: Z!Expr): Z!ChannelDecl{
+operation Sequence<String> createChannelDecl(type_expr: Z!Expr): Z!ChannelDecl{
 	var decl = new 	Z!ChannelDecl;
 	
 	//The first element genFormals is the (possibly empty) list of generic formal parameters
-	decl.genFormals = createNameList(Set{});
+	decl.genFormals = createNameList(Sequence{});
 	
 	//the second element is the (possibly empty) list of declared channel names
 	decl.channelNameList = createNameList(self);
 
 	//expr attr indicate the type of the channel, and it's a RefExpr
 	//if it's untyped, type = "SYNCH"
-	decl.expr = type;
+	decl.expr = type_expr;
 	
 	return decl;
 }
 
+/*
+
 operation Z!ChannelDecl addChannelDecl(
 	chan_name: String
 	): Z!ChannelDecl{
-	if(self.expr.name.word  = "SYNCH"){
+	if(self.expr.isDefined() and self.expr.name.word  = "SYNCH"){
 		self.channelNameList.addName2NameList(chan_name);
 		return self;
-	}	else errln("The new channel is untyped, but the existing channel has a type.");
+	}	else 
+	if(self.expr.isDefined() and not (self.expr.name.word = "SYNCH")) {
+		errln("The new channel is untyped, but the existing channel has a type.");
+	} else 
+	if(not self.expr.isDefined() ){
+	//TO DO
+	// as the context is a decl means decl exist, but expr is not identified
+	}
 }
 
 operation Z!ChannelDecl addChannelDecl(
@@ -505,6 +558,11 @@ operation Z!ChannelDecl addChannelDecl(
 		return self;
 	}	else "The type of the new channel does not match the existing channel decleration.".errln();
 }
+*/
+
+
+
+
 //CSP Rule 40
 
 operation ncBehaviour(nc:RC!NodeContainer): Z!ProcessPara{
@@ -1744,27 +1802,28 @@ operation String createZName(): Z!ZName{
 }
 
 
-operation createNameList(stringSet: Set<String>): Z!ZNameList{
+operation createNameList(stringSeq: Sequence<String>): Z!ZNameList{
 	var nl = new Z!ZNameList;
 	nl.names = new Sequence<ZName>;
 	nl.names = Sequence{};
 	
-	for(str in stringSet){
+	for(str in stringSeq){
 		nl.names.add(str.createZName());
 	}
 	
 	return nl;
 }
 
-
+/*
 //used in addChannelDecl
 operation Z!ZNameList addName2NameList(name: String){
 	self.names.add(name.createZName());
 	return self;
 }
-
+*/
 
 //not used, replaced by above which take Set<String> as parameter
+/*
 operation createNameList(nl_string: String): Z!ZNameList{
 	var nl = new Z!ZNameList;
 	nl.names = new Sequence<ZName>;
@@ -1785,7 +1844,7 @@ nl_string.length.println();
 
 	return nl;
 }
-
+*/
 
 
 operation createShareAsCommunication(): Z!Communication{
@@ -2982,7 +3041,7 @@ operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
 }
 
 
-operation RC!Expression createUnaryExpr(): Z!Expr {
+//operation RC!Expression createUnaryExpr(): Z!Expr {
 	
 	//TO DO: to complete the following unaryExpr of RoboChart
 	/*
@@ -3023,4 +3082,4 @@ operation RC!Expression createUnaryExpr(): Z!Expr {
 		return "clock";
 	}
 */
-}
+//}
