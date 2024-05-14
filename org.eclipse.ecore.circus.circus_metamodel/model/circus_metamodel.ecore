@@ -265,7 +265,12 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChannelPara" eSuperTypes="#//Para">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The property of name is not in CZT AST, as Circus does not need a name for channel paragraph, but it is convenient for M2T of Isabelle axiomatic Circus"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="declList" eType="#//ZDeclList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//ZName"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChannelSetPara" eSuperTypes="#//Para">
@@ -373,7 +378,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TruePred" eSuperTypes="#//Fact">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Truth ."/>
+      <details key="documentation" value="Truth."/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Pred2" abstract="true" eSuperTypes="#//Pred">
@@ -381,15 +386,11 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightPred" eType="#//Pred"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="preds" upperBound="-1"
-        eType="#//Pred" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MemPred" eSuperTypes="#//Pred">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Membership predicate: Mixfix=false, Equality: Mixfix=true, Other operator application: Mixfix=true"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exprs" upperBound="-1"
-        eType="#//Expr" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftExpr" eType="#//Expr"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightExpr" eType="#//Expr"
@@ -425,16 +426,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="transformation" eType="#//Transformation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ActionTransformerPred" eSuperTypes="#//TransformerPred">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="circusActions" upperBound="-1"
-        eType="#//CircusAction" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="impl" eType="#//CircusAction"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="spec" eType="#//CircusAction"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ProcessTransformerPred" eSuperTypes="#//TransformerPred">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="circusProcesses" upperBound="-1"
-        eType="#//CircusProcess" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="impl" eType="#//CircusProcess"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="spec" eType="#//CircusProcess"
@@ -466,8 +463,6 @@
         eType="#//Signature" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NewOldPair" eSuperTypes="#//Term">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="names" upperBound="-1"
-        eType="#//ZName" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="newName" eType="#//ZName"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="oldName" eType="#//ZName"
@@ -560,7 +555,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stateParaName" eType="#//ZName"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefaultState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isMainActionValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isStateValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
@@ -638,8 +632,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="SeqProcess" eSuperTypes="#//Process2"/>
   <eClassifiers xsi:type="ecore:EClass" name="ParProcess" abstract="true" eSuperTypes="#//Process2"/>
   <eClassifiers xsi:type="ecore:EClass" name="AlphabetisedParallelProcess" eSuperTypes="#//ParProcess">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="channelSetList" eType="#//ChannelSetList"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftAlpha" eType="#//ChannelSet"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightAlpha" eType="#//ChannelSet"
@@ -755,8 +747,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="post" eType="#//Pred" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pre" eType="#//Pred" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="preds" upperBound="-1"
-        eType="#//Pred" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VarDeclCommand" eSuperTypes="#//CircusCommand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="circusAction" eType="#//CircusAction"
@@ -939,8 +929,6 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CondExpr" eSuperTypes="#//Expr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="Expr" upperBound="-1" eType="#//Expr"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftExpr" eType="#//Expr"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightExpr" eType="#//Expr"

@@ -48,9 +48,9 @@ class TypeAnn extends Ann {
 
 
 
-/********************************
+/***************************************************************
 the classes below are for M2T validation purpose, and should be removed when Expression parsing is validated.
-********************************/
+***************************************************************/
 
 //For validation of ApplExpr M2T
 abstract class applexprList extends Term{
@@ -370,8 +370,12 @@ class ActionPara extends Para {
 	val ZName name;
 }
 
+@GenModel(documentation= "The property of name is not in CZT AST, as Circus does not need a name for channel paragraph, but it is convenient for M2T of Isabelle axiomatic Circus")
 class ChannelPara extends Para {
 	val ZDeclList declList;
+	val ZName name; 
+	// this val "name" is not in CZT AST, as Circus does not need a name for channeldecl paragraph
+	// but it is convenient for M2T of Isabelle axiomatic Circus
 }
 
 class ChannelSetPara extends Para {
@@ -542,21 +546,21 @@ class NegPred extends Pred {
 class FalsePred extends Fact {
 }
 
-@GenModel(documentation="Truth .")
+@GenModel(documentation="Truth.")
 class TruePred extends Fact {
 }
 
 abstract class Pred2 extends Pred {
 	val Pred leftPred;
 	val Pred rightPred;
-	val Pred[*] preds;
+//	val Pred[*] preds;
 }
 
 
 
 @GenModel(documentation="Membership predicate: Mixfix=false, Equality: Mixfix=true, Other operator application: Mixfix=true")
 class MemPred extends Pred {
-	val Expr[*] exprs; 
+//	val Expr[*] exprs; 
 	val Expr leftExpr;
 	val Expr rightExpr;
 	attr boolean mixFix;
@@ -604,13 +608,13 @@ class TransformerPred extends Pred {
 }
 
 class ActionTransformerPred extends TransformerPred {
-	val CircusAction[*] circusActions;
+//	val CircusAction[*] circusActions;
 	val CircusAction impl;//?
 	val CircusAction spec;//?
 }
 
 class ProcessTransformerPred extends TransformerPred {
-	val CircusProcess[*] circusProcesses;
+//	val CircusProcess[*] circusProcesses;
 	val CircusProcess impl;//?
 	val CircusProcess spec;//?
 }
@@ -655,7 +659,7 @@ class ZSignatureList extends SignatureList {
           NewOldPair
 ********************************/
 class NewOldPair extends Term {
-	val ZName[*] names;
+//	val ZName[*] names;
 	val ZName newName;
 	val ZName oldName;
 	
@@ -775,6 +779,8 @@ class NameSetType extends CircusSigType {
 abstract class CircusProcess extends Term {
 }
 
+
+//TBC to confirm all the properties
 class BasicProcess extends CircusProcess {
 	val Para[*] localParas;
 	val CircusAction mainAction;
@@ -782,7 +788,7 @@ class BasicProcess extends CircusProcess {
 	val ZParaList paraList;
 	val AxPara statePara;
 	val ZName stateParaName;
-	attr boolean isDefaultState;
+//	attr boolean isDefaultState;
 	attr boolean isMainActionValid;
 	attr boolean isStateValid;
 }
@@ -878,7 +884,7 @@ class ParallelProcessIte extends ParProcessIte {
 abstract class Process2 extends CircusProcess {
 	val CircusProcess leftProcess;
 	val CircusProcess rightProcess;
-//	val CircusProcess[*] crcusProcesses;//is this necessary?
+//	val CircusProcess[*] crcusProcesses;
 }
 
 class ExtChoiceProcessImpl extends Process2 {
@@ -894,7 +900,7 @@ abstract class ParProcess extends Process2 {
 }
 
 class AlphabetisedParallelProcess extends ParProcess {
-	val ChannelSetList channelSetList;//ListTerm<ChannelSet> getChannelSet(), the return type is changed to ChannelSetList 
+//	val ChannelSetList channelSetList;//ListTerm<ChannelSet> getChannelSet(), the return type is changed to ChannelSetList 
 	val ChannelSet leftAlpha;
 	val ChannelSet rightAlpha;
 }
@@ -1050,7 +1056,7 @@ class SpecStmtCommand extends CircusCommand {
 	val ZNameList frame;
 	val Pred post;
 	val Pred pre;
-	val Pred[*] preds;//necessary?
+//	val Pred[*] preds;//necessary?
 }
 
 class VarDeclCommand extends CircusCommand {
@@ -1323,7 +1329,7 @@ class BindExpr extends Expr {
 }
 
 class CondExpr extends Expr {
-	val Expr[*] Expr; 
+//	val Expr[*] Expr; 
 	val Expr leftExpr;
 	val Expr rightExpr;
 	val Pred pred;
@@ -1404,11 +1410,11 @@ class TupleSelExpr extends Expr1 {
 abstract class Expr2 extends Expr {
 	val Expr leftExpr;
 	val Expr rightExpr;
-	
+//  val ZExprList exprList;
 //	val Expr[*] exprs;
 //in ast, it's: Expr[*] exprs;
 //in CZT tree structure, it's ExprList
-//    val ZExprList exprList;
+
 }
 
 
