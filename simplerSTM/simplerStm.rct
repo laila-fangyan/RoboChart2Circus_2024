@@ -37,7 +37,7 @@ interface interface1 {
 	stm stm0 {
 	requires interface1
 	var input : int
-
+	var input5 : real
 	const delta : int
 	const Thr : int
 
@@ -101,7 +101,7 @@ interface interface1 {
 		action stop
 	}
 state s3 {
-		entry  input = ( 3 + input2 ) * input3 
+		entry  input5 = (( 3 + input2  ) * (input3 -4.2) +  (5 % 2))/(6-2)
 		during stop
 	exit status . input
 	}

@@ -1,0 +1,178 @@
+-- generate const_pkg3_M1_C1_s1_constant1
+const_pkg3_M1_C1_s1_constant1 = 0
+
+-- generate const_pkg0_C2_stm2_0_constant1
+const_pkg0_C2_stm2_0_constant1 = 0
+
+-- generate const_pkg0_C2_stm0_constant1
+const_pkg0_C2_stm0_constant1 = 0
+
+-- generate const_C_s3_constant1
+const_C_s3_constant1 = 0
+
+-- generate const_pkg2_stm1_constant1
+const_pkg2_stm1_constant1 = 0
+
+-- generate const_C1_stm0_constant1
+const_C1_stm0_constant1 = 0
+
+-- generate const_pkg3_C1_s4_constant1
+const_pkg3_C1_s4_constant1 = 0
+
+-- generate Plus
+Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
+
+-- generate const_pkg0_C2_s1_constant1
+const_pkg0_C2_s1_constant1 = 0
+
+-- OPERATION CONSTANTS
+
+-- BASIC TYPES
+
+-- generate --
+
+-- MODULE CONSTANTS
+
+-- CONTROLLER CONSTANTS
+
+-- STATEMACHINE CONSTANTS
+
+-- generate nat
+nametype core_nat = union({0..2},{calc_type_min(Union(
+			{{2},{2},{2}}))..calc_type_max(Union({{2},{2},{2}}))})
+
+-- generate core_clock_type
+nametype core_clock_type = {0..10}
+
+-- BASIC FUNCTIONS
+
+-- generate const_pkg3_C1_s1_constant1
+const_pkg3_C1_s1_constant1 = 0
+
+-- generate const_pkg0_stm0_constant1
+const_pkg0_stm0_constant1 = 0
+
+-- generate const_C_s0_constant1
+const_C_s0_constant1 = 0
+
+-- generate real
+nametype core_real = union({ -2..2},{calc_type_min(Union(
+			{{2},{2},{2},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{2},{2},{2},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{Plus(a, 1, core_int)|a <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))}) 
+
+-- VECTOR TYPES AND OPERATIONS
+
+
+-- CLOCKS
+
+-- generate const_pkg2_MainC_s0_constant1
+const_pkg2_MainC_s0_constant1 = 0
+
+-- generate const_C2_s0_constant1
+const_C2_s0_constant1 = 0
+
+-- generate const_pkg0_C1_s2_constant1
+const_pkg0_C1_s2_constant1 = 0
+
+-- generate Modulus
+Modulus(e1,e2,T) = if member(e1%e2,T) then e1%e2 else e1
+
+-- generate const_pkg3_stm1_constant1
+const_pkg3_stm1_constant1 = 0
+
+-- generate const_C_s4_constant1
+const_C_s4_constant1 = 0
+
+-- OPERATION CONSTANTS
+
+-- BASIC TYPES
+
+-- generate Minus
+Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
+
+-- generate const_pkg0_C1_stm0_c1_constant1
+const_pkg0_C1_stm0_c1_constant1 = 0
+
+-- generate const_pkg0_C2_s0_constant1
+const_pkg0_C2_s0_constant1 = 0
+
+-- generate const_pkg2_MainC_stm1_constant1
+const_pkg2_MainC_stm1_constant1 = 0
+
+-- generate string
+nametype core_string = LSeq(Char,2)
+
+-- generate const_pkg2_MainC_s1_constant1
+const_pkg2_MainC_s1_constant1 = 0
+
+-- generate const_pkg3_M1_C1_s3_constant1
+const_pkg3_M1_C1_s3_constant1 = 0
+
+-- generate const_C_s1_constant1
+const_C_s1_constant1 = 0
+
+-- generate const_pkg3_C1_s2_constant1
+const_pkg3_C1_s2_constant1 = 0
+
+-- generate const_pkg2_MainC_stmref_constant1
+const_pkg2_MainC_stmref_constant1 = 0
+
+-- generate const_C2_stm0_constant1
+const_C2_stm0_constant1 = 0
+
+-- generate -- OPERATION BOUNDS
+
+-- MODULE CONSTANTS
+
+-- CONTROLLER CONSTANTS
+
+-- STATEMACHINE CONSTANTS
+
+-- generate const_pkg0_C1_stm0_constant1
+const_pkg0_C1_stm0_constant1 = 0
+
+-- generate const_stm1_constant1
+const_stm1_constant1 = 0
+
+-- generate const_pkg0_C1_s1_constant1
+const_pkg0_C1_s1_constant1 = 0
+
+-- generate const_pkg3_M1_C1_stm0_constant1
+const_pkg3_M1_C1_stm0_constant1 = 0
+
+-- generate const_pkg3_M1_C1_s2_constant1
+const_pkg3_M1_C1_s2_constant1 = 0
+
+-- generate int
+nametype core_int = union({ -2..2},{calc_type_min(Union(
+			{{2},{2},{2},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{2},{2},{2},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{Plus(a, 1, { -2..2})|a <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))})
+
+-- generate const_pkg3_C1_s3_constant1
+const_pkg3_C1_s3_constant1 = 0
+
+-- generate Div
+Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
+
+-- generate Neg
+Neg(e1,T) = if member(-e1,T) then -e1 else e1
+
+-- generate const_C2_s1_constant1
+const_C2_s1_constant1 = 0
+
+-- generate boolean
+nametype core_boolean = Bool
+
+-- generate Mult
+Mult(e1,e2,T) = if member(e1*e2,T) then e1*e2 else e1
+
+-- generate const_C1_s1_constant1
+const_C1_s1_constant1 = 0
+
+-- generate const_C_s2_constant1
+const_C_s2_constant1 = 0
+
+-- generate const_stm0_constant1
+const_stm0_constant1 = 0
+
+-- generate const_pkg0_C1_s0_constant1
+const_pkg0_C1_s0_constant1 = 0
+

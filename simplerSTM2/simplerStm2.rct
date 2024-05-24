@@ -1,0 +1,143 @@
+package pkg0
+
+controller C1 {
+//	sref s0 = stm0_c1
+
+	sref s1 = C1::stm0
+			
+	sref s2 = C2::stm2_0
+	stm stm0_c1 {
+	event stop
+
+	event trigger1: int
+
+	event event1: int
+	
+	
+
+	initial i0
+	state s0 {
+		during a = a + 1
+
+		entry  event1!2
+	}
+	final f0
+	
+	transition t0 {
+		from i0
+		to s0
+
+		}
+	transition t1 {
+		from s0
+		to f0
+	trigger 
+		
+		stop
+	}
+
+	transition t2 {
+		from s0
+		to s0
+		trigger 
+	trigger1?a
+		condition a > 2
+	}
+	var a : int , b : int*int*(real*int)
+
+const constant1 : int
+}
+	stm stm0 {
+	event stop
+
+	event trigger1: int
+
+	
+	var a : int , b : int*int*(real*int)
+	
+	event event1: int
+	
+	initial i0
+	state s0 {		
+		entry  event1  ? a
+		
+		during a = a + 1
+	}
+	
+	final f0
+	
+	transition t0 {
+		from i0
+		to s0
+
+		}
+	transition t1 {
+		from s0
+		to f0
+	trigger 
+		
+		stop
+	}
+
+	transition t2 {
+		from s0
+		to s0
+		trigger 
+	trigger1?a
+		condition a > 2
+	}
+
+
+const constant1 : int
+}
+		
+}
+
+controller C2 {
+	sref s0 = pkg3::M1::C1::stm0
+	sref s1 = stm2_0
+			
+	stm stm2_0 {
+	event stop
+
+	event trigger1: int
+
+	event event1: int
+	
+	
+
+	initial i0
+	state s0 {
+		during a = a + 1
+
+		entry  event1!2
+	}
+	final f0
+	
+	transition t0 {
+		from i0
+		to s0
+
+		}
+	transition t1 {
+		from s0
+		to f0
+	trigger 
+		
+		stop
+	}
+
+	transition t2 {
+		from s0
+		to s0
+		trigger 
+	trigger1?a
+		condition a > 2
+	}
+	var a : int , b : int*int*(real*int)
+
+const constant1 : int
+}
+		
+}
+	

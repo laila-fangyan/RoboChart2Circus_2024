@@ -1,0 +1,1774 @@
+	var set = Set{"True","False"};
+	"line2".println();set.type().println();
+	
+	for(n in RC!StateMachineDef.all().at(0).nodes){
+	if(n.eClass().name = "State" and n.name = "s2"){
+		"line9".println();
+		n.actions.at(1).action.println();
+		n.actions.at(1).action.type().println();
+		n.actions.at(1).action.then.println();
+		n.actions.at(1).action.`else`.println();
+		n.actions.at(1).action.expression.println();
+		n.actions.at(1).action.expression.createExpr().println();
+		"line11".println();
+	}
+}
+
+"share".createChannelPara("SYNCH");
+//TO DO "ZNumeral" or "Integer"?
+"set_input".createChannelPara("Integer");
+
+//createSStopActionPara();
+
+
+
+
+for(t in RC!StateMachineDef.all().at(0).transitions){
+	
+	//To create Boolean
+	//t.name = "t0"
+	if(t.condition.isDefined() and t.condition.type().name = "BooleanExp"){
+		var condexpr = t.condition.createExpr();
+
+	} else
+	
+	//To create <=
+	//t.name = "t2" and
+	if( t.condition.isDefined() and t.condition.type().name = "LessOrEqual"){
+		t.condition.type().name.println();
+		t.condition.createExpr();
+	}
+	
+	//To create And
+	//t.name = "t4" 
+	if(t.condition.isDefined() and t.condition.type().name = "And"){
+		t.condition.createExpr();
+	}
+}
+
+
+
+
+for(t in RC!StateMachineDef.all().at(0).transitions){
+	if(t.name = "t3"){
+		"line37".println();
+		t.trigger.println();
+		t.action.println();
+		var act = t.action.createStmtAsAction();
+		"line41".println();act.println();
+	}
+}
+
+
+
+for(n in RC!StateMachineDef.all().at(0).nodes){
+
+
+
+	
+	if (n.eClass().name = "State" and n.name = "s4"){
+		
+		//To create Minus
+		if(n.actions.at(0).action.right.type().name = "Minus"){
+			"so we shall create an ApplExpr.".println();
+			n.actions.at(0).action.right.createExpr();
+		}
+		
+		//To create communication statement - SIMPLE
+		//s4, during action
+		if(n.actions.at(1).action.instanceOf(ParStmt)){
+	
+			n.actions.at(1).action.createStmtAsAction();
+	
+		}
+	}
+	
+	
+	
+	if (n.eClass().name = "State" and n.name = "s3"){
+		
+		//To create assignment statement
+		//s3, entry action
+		
+		n.actions.at(0).action.createStmtAsAction();
+		
+		n.actions.at(1).action.createStmtAsAction();
+		"line 73".println();
+		n.actions.at(2).type().println();
+		n.actions.at(2).action.createStmtAsAction();
+		
+		
+		
+		//To creat Integer
+		//s3, entry action
+		if(n.actions.at(0).action.right.type().name = "IntegerExp"){
+			"so we shall create an NumExpr.".println();
+			n.actions.at(0).action.right.createNumExpr();
+		}
+	}
+	
+	
+	
+	if (n.eClass().name = "State" and n.name = "s2" ){
+		("the state that contains Call statement: "+  n.name).println();
+		
+		//To create call statement
+		//s2, entry action
+		if(n.actions.at(0).action.instanceOf(Call)){
+			n.actions.at(0).action.instanceOf(Call).println();
+			n.actions.at(0).action.createStmtAsAction();
+		}
+		
+		//To create IfStmt statement
+		//s2, during action
+		if(n.actions.at(1).action.instanceOf(IfStmt)){
+			n.actions.at(1).action.instanceOf(IfStmt).println();
+			n.actions.at(1).action.createStmtAsAction();
+		}
+	}
+	
+
+	
+	if (n.eClass().name = "State" and n.name = "s1" ){
+
+//		n.actions.at(0).action.createStmtAsAction();
+//		n.actions.at(1).action.createStmtAsAction();
+//		n.actions.at(2).action.createStmtAsAction();
+		n.createStateActionAsCircusAction("EntryAction");
+		n.createStateActionAsCircusAction("DuringAction");
+		n.createStateActionAsCircusAction("ExitAction");
+	}
+	
+	
+	//Skip Statement
+	//s0 during action
+	if (n.eClass().name = "State" and n.name = "s0" ){
+				
+		n.actions.at(0).action.createStmtAsAction();
+		"line 130".println();
+		n.actions.at(1).action.type().println();
+		n.actions.at(1).action.createStmtAsAction();
+		"line 132".println();
+		n.actions.at(2).action.createStmtAsAction();
+				
+	}
+	
+}
+
+
+
+//to create circus action for each transition
+var ta;
+for (t in RC!StateMachineDef.all().at(0).transitions){
+	ta = t.createTransitionAsCircusAction();
+	"line162".println();
+	ta.type().println();
+	
+}
+
+
+
+"line 164".println();
+RC!StateMachineDef.all().at(0).type().println();
+var trans  = RC!StateMachineDef.all().at(0).createTransitionsAsCircusProcess();
+
+
+
+for(n in RC!StateMachineDef.all().at(0).nodes){
+	if(n.type().name = "Junction"){
+		n.createJunctionAsBasicProcess();
+	} else 
+	if(n.type().name = "Final"){
+		n.createFinalAsBasicProcess();
+	}
+	else 
+	if(n.type().name = "State" and n.nodes.size() = 0){
+	"line 183, this is the first time of the simplestate process".println();
+		n.createSimpleStateAsBasicProcess();
+	}
+
+}
+
+//for(n in RC!StateMachineDef.all().at(0).nodes){
+//	 "line 189, this is the second time of the simplestate process".println();
+//	if(n.type().name = "State" and n.nodes.size() = 0){
+//		n.createSimpleStateAsBasicProcess();
+//	}
+//
+//}
+
+
+
+
+operation RC!Junction createJunctionAsBasicProcess(): Z!BasicProcess{
+	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+		
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
+	
+	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
+	
+		
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.name), "Active".createCallAction());
+	actionParaSeq.add(Activation.createActionPara("Activation"));
+	
+	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	actionParaSeq.add(Termination.createActionPara("Termination"));
+	
+	var seqAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.name), createSkipAction()));
+	
+	var Active = createAction2("SeqAction", seqAction1, "Inactive".createCallAction());
+	actionParaSeq.add(Active.createActionPara("Active"));
+	
+	var mainActionname = "Inactive";
+	
+	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+	return basicProcess;
+}
+
+
+
+
+operation RC!Final createFinalAsBasicProcess(): Z!BasicProcess{
+	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+		
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
+	
+	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
+	
+		
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.name), "Entering".createCallAction());
+	actionParaSeq.add(Activation.createActionPara("Activation"));
+	
+	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	actionParaSeq.add(Termination.createActionPara("Termination"));
+	
+	var Entering = createPrefixingAction(createSynchCommunication("entered_" + self.name), "Active".createCallAction());
+	actionParaSeq.add(Entering.createActionPara("Entering"));
+	
+	
+	
+	var rightAction = createAction2("ExtChoiceAction", "Termination".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.name), "Interrupted".createCallAction()));
+	
+	var Active = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction);
+	actionParaSeq.add(Active.createActionPara("Active"));
+	
+	
+	
+	var rightAction2 = createPrefixingAction(createSynchCommunication("exit"), createPrefixingAction(createSynchCommunication("exited"), "Inactive".createCallAction()));
+	
+	var Interrupted = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction2);
+	actionParaSeq.add(Interrupted.createActionPara("Interrupted"));
+	
+	
+	var mainActionname = "Inactive";
+	
+	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+	return basicProcess;
+}
+
+
+
+
+
+
+operation RC!State createSimpleStateAsBasicProcess(): Z!BasicProcess{
+	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+		
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
+	var InactivePara = Inactive.createActionPara("Inactive");
+	actionParaSeq.add(InactivePara);
+	
+	"line115".println();
+	actionParaSeq.println();
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.name), "Active".createCallAction());
+	actionParaSeq.add(Activation.createActionPara("Activation"));
+	
+	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	actionParaSeq.add(Termination.createActionPara("Termination"));
+	
+	
+	"line274".println();
+	self.name.println();
+	self.actions.println();
+	self.actions.at(0).println();
+	self.actions.at(0).action.println();
+	self.actions.at(0).action.println();
+	//self.actions.at(0).action.println();
+	
+	"line279".println();
+	
+	self.actions.println();
+	self.actions.at(1).println();
+	self.actions.at(0).action.println();
+	
+	
+	var Active = createAction2("SeqAction", self.createStateActionAsCircusAction("EntryAction"), createAction2("SeqAction", "Behaviour".createCallAction(), "Exiting".createCallAction()));
+	actionParaSeq.add(Active.createActionPara("Active"));
+	
+	
+	
+	var Behaviour = createPrefixingAction(createSynchCommunication("entered_" + self.name), "During".createCallAction());
+	actionParaSeq.add(Behaviour.createActionPara("Behaviour"));
+	
+	
+	"line304".println();
+	self.actions.at(1).action.println();
+	if(self.actions.at(1).action.instanceOf(RC!IfStmt)){
+		"line307".println();
+		self.println();
+		self.actions.at(1).action.expression.type().println();
+		self.actions.at(1).action.expression.println();
+	}
+	"line322".println();
+	var duringLeft = createAction2("SeqAction", self.createStateActionAsCircusAction("DuringAction"), "SSTOP".createCallAction());
+	"line324".println();
+	var duringRight = createPrefixingAction(createSynchCommunication("interrupt_" + self.name), createSkipAction());
+	"line326".println();
+	var During = createAction2("InterruptAction", duringLeft, duringRight);
+	"line328".println();
+	actionParaSeq.add(During.createActionPara("During"));
+	
+	
+	
+	var exitingAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit"), createSkipAction()));
+	var exitingAction2 = self.createStateActionAsCircusAction("ExitAction");
+	var exitingAction3 = createPrefixingAction(createSynchCommunication("exited"), "Inactive".createCallAction());
+	var Exiting = createAction2("SeqAction", exitingAction1, createAction2("SeqAction", exitingAction2, exitingAction3));
+	actionParaSeq.add(Exiting.createActionPara("Exiting"));
+	
+	var mainActionname = "Inactive";
+	
+	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+	return basicProcess;
+}
+
+
+
+
+
+operation Z!CircusAction createActionPara(name: String): Z!ActionPara{
+	var para = new Z!ActionPara;
+	para.name = name.createZName();
+	para.circusAction = self;
+	
+	return para;
+}
+
+
+
+operation Sequence<Z!Para> createBasicProcess(mainActionName: String): Z!BasicProcess{
+	
+//	var list.paras = new Sequence<Z!Para>;
+//	list.paras = self;
+	var basicProcess = new Z!BasicProcess;
+	
+	basicProcess.mainAction = mainActionName.createCallAction();
+	
+	var list = new Z!ZParaList;
+	basicProcess.paraList = list;
+	basicProcess.paraList.paras = new Sequence<Z!Para>;
+	basicProcess.paraList.paras = self;
+		
+	return basicProcess;
+}
+
+
+
+
+operation Sequence<Z!CircusAction> createSequenceAsExtchoiceAction(): Z!ExtChoiceAction{
+	var extchoiceAction;
+	var size = self.size();
+	var i = 0;
+	extchoiceAction = createAction2("ExtChoiceAction", self.at(0), self.at(1));
+	i = i + 2;
+	if(size > 2){
+		while(i<size){
+			extchoiceAction = createAction2("ExtChoiceAction", extchoiceAction, self.at(i));
+			i = i + 1;
+		}
+	}
+	return extchoiceAction;
+}
+
+
+//This is not used yet
+operation Sequence<Z!CircusAction> createSequenceAsSeqAction(): Z!SeqAction{
+	var seqAction;
+	var size = self.size();
+	var i = 0;
+	seqAction = createAction2("SeqAction", self.at(0), self.at(1));
+	i = i + 2;
+	if(size > 2){
+		while(i<size){
+			seqAction = createAction2("SeqAction", seqAction, self.at(i));
+			i = i + 1;
+		}
+	}
+	return seqAction;
+}
+
+
+operation RC!StateMachineDef createTransitionsAsCircusProcess(): Z!CircusAction{
+	//var vguards = self.variablesInGuards(); //TO DO, this operation not implemented yet
+	var trans;
+
+	var tran_seq = Sequence<Z!CircusAction>;
+	tran_seq = Sequence{};
+	for(t in self.transitions){
+		"line188".println();
+		("tran_seq = " + tran_seq).println();
+		tran_seq.add(t.createTransitionAsCircusAction());
+	}
+	var choice1_action1_left = tran_seq.createSequenceAsExtchoiceAction();
+
+	
+	var choice1_action1_right = createPrefixingAction(createSynchCommunication("share"), createSkipAction());
+	
+ 	var choice1_action1 = createAction2("ExtChoiceAction", choice1_action1_left, choice1_action1_right);
+	"line 199".println();
+	("trans " + trans).println();
+	var choice1 = createAction2("SeqAction", choice1_action1, "trans".createCallAction());
+	
+	
+	/* Start of Choice 2 creation*/
+	//Stop /\ (exit -> Skip)
+	var choice2_action1_action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit"), createSkipAction()));
+	var choice2_action1 = createPrefixingAction(createSynchCommunication("interrupt." + self.name), choice2_action1_action2);
+	
+	//exited -> end -> Skip
+	var choice2_action2_action2 = createPrefixingAction(createSynchCommunication("exited"), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()));
+	
+	//SStop /\ (exited -> end -> Skip)
+	var choice2_action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), choice2_action2_action2);
+	var choice2 = createAction2("SeqAction", choice2_action1, choice2_action2);
+	/* End of Choice 2 creation*/
+	
+	
+	//terminate -> Skip
+	var choice3 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+		
+	var trans = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, choice3));
+	("trans: "+trans).println();
+	return trans;
+}
+
+
+//to create circus action for each transition
+operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
+	var circusAction;
+	if(self.source.type().name = "State"){
+					
+		//action1: trigger; action2: interruptAction1 ; action3: interruptAction(SStop, SeqAction )
+		
+		var action1 = trigger(self);
+		
+		//to create action2: exit
+		var rightAction1 = createPrefixingAction(createSynchCommunication("exit"), createSkipAction());
+		var action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction1);
+		
+		//to create action3_inner_1: exited
+		//TO DO: to refactor this conditin into createStmtAsAction()
+		var prefixedAction = self.createTrActionAsCircusAction();
+		
+//		if(self.action != null){
+//			prefixedAction = self.action.createStmtAsAction();
+//		} else{
+//			prefixedAction = createSkipAction();//TO DO: to confirm, this is not considered in the semantics rule Rule 54
+//		}
+	
+		
+		var action3_inner_1 = createPrefixingAction(createSynchCommunication("exited"), prefixedAction);
+		
+		
+		//to create action3_inner_2: enter
+		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter." + self.target.name), createSkipAction());
+		
+		var action3_right = createAction2("SeqAction", action3_inner_1, action3_inner_2);
+		
+		//SStop /\ ( (exited-> [[t.action]]) ; (enter_t.target -> Skip))
+		var action3 = createAction2("InterruptAction", "SSTOP".createCallAction(), action3_right);
+		
+		
+		circusAction = createAction2("SeqAction", action1, createAction2("SeqAction", action2, action3));
+		
+		if(self.condition != null){
+			var pred = self.condition.createExpr().createMemPred();
+			circusAction = createGuardedAction(pred, circusAction);
+		} 
+	} else 
+	
+	if(self.source.type().name != "State"){
+		//action1: prefixingAction
+		
+		
+		var prefixedAction = self.createTrActionAsCircusAction();
+		
+		var action1 = createPrefixingAction(tevent(self), prefixedAction);
+		
+//		var action1;
+//		if(self.action != null){
+//			action1 = createPrefixingAction(tevent(self), self.action.createStmtAsAction());
+//		} else{
+//			action1 = createPrefixingAction(tevent(self), createSkipAction());//TO DO: to refactor this null condition into createStmtAsAction();
+//		}
+			
+	
+		var action2 = createPrefixingAction(createSynchCommunication("enter." + self.target.name), createSkipAction());
+		
+		circusAction = createAction2("SeqAction", action1, action2);
+				
+		if(self.condition != null){
+			var pred = self.condition.createExpr().createMemPred();
+			circusAction = createGuardedAction(pred, circusAction);
+		} 
+	} 
+	
+	return circusAction;
+}
+
+
+//equality is s relation operator application (C.5.12): MemPred
+operation Z!Expr createMemPred(): Z!MemPred{
+	var pred =  new Z!MemPred;
+	pred.leftExpr = self;
+	
+	var set = Set{"True"};
+	pred.rightExpr = set.createSetExpr();
+	pred.mixFix = true;
+	
+	return pred;
+}
+
+
+operation  Set<String> createSetExpr(): Z!SetExpr{
+	var setExpr = new Z!SetExpr;
+	var exprList = new Z!ZExprList;
+	var exprs = new Sequence<Z!Expr>;
+	
+	for(m in self){
+		exprs.add(m.createRefExpr(false,false));
+	}
+	exprList.exprs = exprs;
+	setExpr.exprList = exprList;
+	return setExpr;
+}
+
+
+//to create a internal communication ( not from a RC communication)
+operation createSynchCommunication(
+	channel_name:String
+	): Z!Communication{
+	
+	var commu = new Z!Communication;
+	commu.commUsage = Z!CommUsage#Normal;
+	commu.indexed = false;
+	commu.multiSych = 0;
+	commu.channelExpr = channel_name.createRefExpr(false,false);
+	commu.fieldList = new Z!CircusFieldList; 
+	
+	commu.commPattern = Z!CommPattern#Synch;
+	commu.fieldList.fields = Sequence{};		
+		
+	return commu;
+}
+
+operation  trigger(t: RC!Transition): Z!PrefixingAction{
+	var triggerAction;
+	var commu;
+	var callAction;
+	var channel_name;
+	
+	if(t.trigger = null){
+	
+		commu = createSynchCommunication("internal." + t.source.name);
+		triggerAction = createPrefixingAction(commu, createSkipAction());
+			
+	} else 
+	
+	//trigger event can only be input or simple type
+	if(t.trigger._type = CommunicationType#INPUT){
+		
+		channel_name = t.trigger.event.name + "__." + t.source.name + "_in";
+		commu = t.trigger.createCommuAsCommunication(channel_name, "INPUT");
+		"line336".println();
+		t.name.println();
+		commu.channelExpr.name.println();
+		commu.fieldList.fields.println();
+		commu.fieldList.fields.varialbeName.println();
+
+		var inner_channel_name = "set_" + t.trigger.parameter.name;
+		var inner_commu = t.trigger.createCommuAsCommunication(inner_channel_name, "OUTPUT");
+		
+			
+		var rightAction = createPrefixingAction(inner_commu, createSkipAction());
+		var leftAction = "SSTOP".createCallAction();
+		callAction = createAction2("InterruptAction", leftAction, rightAction);
+		
+		triggerAction = createPrefixingAction(commu, callAction);
+	} else
+	
+	if(t.trigger._type = CommunicationType#SIMPLE){
+		channel_name = t.trigger.event.name + "__." + t.source.name + "_in";
+		commu = createSynchCommunication(channel_name);
+		triggerAction = createPrefixingAction(commu, createSkipAction());
+		
+		"line202".println();
+		t.name.println();
+		commu.channelExpr.name.println();
+	} 
+	return triggerAction;
+}
+
+
+//TO DO to confirm the Z type
+//this version returns ChannelDecl
+/*
+operation  tevent(t: RC!Transition): Z!ChannelDecl{
+ 	
+ 	var chan_name;
+ 	var chan_type;
+
+	if(t.trigger = null){
+		chan_name = "internal." + t.source.name;
+		chan_type = "SYNCH";
+	} 
+	
+	//TO DO: to confirm if this "else" is necessary 
+	//as trigger is only allowed when source= state 
+	else {
+		chan_name = t.trigger.event.name + "__." + t.source.name + "_in";
+		chan_type = "SYNCH";
+	}
+	
+	var channel = chan_name.createChannelDecl(chan_type);
+	
+	return channel;
+}
+*/
+
+//TO DO to confirm the Z type
+//this version returns Communication
+operation  tevent(t: RC!Transition): Z!Communication{
+ 	
+ 	var chan_name;
+ 	var chan_type = "SYNCH";
+
+	if(t.trigger = null){
+		chan_name = "internal." + t.source.name;
+	} 
+	
+	//TO DO: to confirm if this "else" is necessary 
+	//as trigger is only allowed when source= state 
+	else {
+		chan_name = t.trigger.event.name + "__." + t.source.name + "_in";
+	}
+	
+	var commu = createSynchCommunication(chan_name);
+	
+	return commu;
+}
+
+
+operation String createZName(): Z!ZName{
+	var zname = new Z!ZName;
+	zname.word = self;
+	return zname;
+}
+
+operation createNameList(nl_string: String): Z!ZNameList{
+	var nl = new Z!ZNameList;
+	nl.names = new Sequence<ZName>;
+"line 185".println();
+nl_string.println();
+nl_string.length.println();
+	
+	//if the nl_string is empty string, then the returned list is an empty list.
+	//i.e., nl.names = Sequence{}
+	if(nl_string.length>1){
+		var nl_seq = nl_string.split(",");
+		"line191".println();
+		nl_seq.println();
+		for(name in nl_seq){
+			nl.names.add(name.createZName());
+		}
+	} 
+
+	return nl;
+}
+
+
+operation String createChannelDecl(type: String): Z!ChannelDecl{
+	var decl = new 	Z!ChannelDecl;
+	
+	//The first element is the (possibly empty) list of generic formal parameters
+	var fst_list = createNameList("");
+	
+	//the second element is the (possibly empty) list of declared channel names
+	var snd_list = createNameList(self);
+
+	//decl.nameLists is a list of non-null NameList objects with size two. decl.nameLists = new Sequence<Z!ZNameList>;
+	decl.listOfNameLists = new Sequence<Z!ZNameList>;
+	decl.listOfNameLists = Sequence{fst_list, snd_list};
+	
+	//expr attr indicate the type of the channel, and it's a RefExpr
+	//if it's untyped, type = "SYNCH"
+	decl.expr = type.createRefExpr(false, false);
+	
+	return decl;
+}
+
+//self = name of the channel
+//type indicate the type of the channel, or is sync if is uptyped
+operation String createChannelPara(type: String): Z!ChannelPara{
+	var chanDeclPara = new Z!ChannelPara;
+	
+	chanDeclPara.declList = new Z!ZDeclList;
+	
+	var decl = self.createChannelDecl(type);
+	chanDeclPara.declList.decls = Sequence{decl};
+	
+	return chanDeclPara;
+}
+
+operation createShareAsCommunication(): Z!Communication{
+	var commu = new Z!Communication;
+	
+	var chanExpr = new Z!RefExpr;
+	var chanExpr = "share".createRefExpr(false,false);
+	commu.channelExpr = chanExpr;
+	commu.commPattern.name = "Synch";
+	commu.commUsage.name = "Normal";
+	commu.indexed = false;
+	commu.multiSych = 0;
+	
+	return commu;
+}
+
+//TO DO: shall it be an actionPara or action?
+operation createSStopActionPara(): Z!ActionPara{
+	var actionPara = new Z!ActionPara;
+	
+	actionPara.name = "SStop".createZName();
+	
+	var commu = createShareAsCommunication();
+	var callAction = "SStop".createCallAction();
+	
+	//this is a PrefixingAction
+	
+	actionPara.circusAction = createPrefixingAction(commu, callAction);
+	
+	return actionPara;
+}
+
+operation createPrefixingAction(
+	commu: Z!Communication, 
+	callAction: Z!CircusAction
+	): Z!PrefixingAction{
+	
+	var prefixingAction = new Z!PrefixingAction;
+	
+	prefixingAction.communication  = commu;
+	
+	prefixingAction.circusAction = callAction;
+	
+	return prefixingAction;
+}
+
+
+
+
+operation String createAction1(type: String): Z!Action1{
+	var action1 = new Z!Action1;
+	
+	return action1;
+}
+
+//binary circus action: not covering PrefixingAction
+//TO DO: to complete other types of Action2
+operation createAction2(
+	type: String, 
+	fst_action: Z!CircusAction, 
+	snd_action: Z!CircusAction
+	): Z!Action2{
+	
+	var action2;
+	if(type = "InterruptAction"){
+		//action2 = createInterruptAction(fst_action, snd_action);
+		action2 = new Z!InterruptAction;
+	} else
+	if(type = "SeqAction"){
+		action2 = new Z!SeqAction;
+	} else
+	if(type = "ExtChoiceAction"){
+		action2 = new Z!ExtChoiceAction;
+	} 
+	
+	
+	action2.leftAction = fst_action;
+	"line437".println();
+	action2.leftAction.println();
+	action2.rightAction = snd_action;
+	action2.actionList = new Z!CircusActionList;
+	"line 556".println();
+	("action2.leftAction " + action2.leftAction).println();
+	("action2.rightAction " + action2.rightAction).println();
+	
+	action2.actionList.circusActions = Sequence{action2.leftAction, action2.rightAction};
+		
+	return action2;
+}
+
+
+operation String createCallAction(): Z!CallAction{
+	var callAction = new Z!CallAction;
+	callAction.name = self.createZName();
+	
+	return callAction;
+}
+
+
+
+operation String createCallAction(list: Sequence<Z!Expr>): Z!CallAction{
+	var callAction = new Z!CallAction;
+	callAction.name = self.createZName();
+	callAction.exprList =  new Z!ZExprList;
+	callAction.exprList.exprs = list;
+	
+	return callAction;
+}
+
+
+operation OrderedSet<Any> createSeqAsAction(): Z!CircusAction{
+	var seq = self;
+	if(seq.size()= 0){
+		return null; //TO DO: need to confirm
+	} else
+	if(seq.size()= 1){
+		return seq.at(0).createStmtAsAction();
+	} else	
+	if(seq.size()>1){
+		var leftAction = seq.at(0).createStmtAsAction();
+		seq.removeAt(0);
+		var rightAction = seq.createSeqAsAction();
+		return createAction2("SeqAction", leftAction, rightAction);
+		
+		//return circusAction;
+	}
+}
+
+
+
+operation RC!SeqStatement createSeqStmtAsAction(): Z!CircusAction{
+	var seq = self.statements;
+	"line799".println();
+	seq.println();
+	seq.type().println();
+	(seq.instanceOf(OrderedSet<Any>)).println();
+	(seq.instanceOf(Sequence<Any>)).println();
+	return seq.createSeqAsAction();
+	
+//	if(seq.size()= 0){
+//		return null; //TO DO: need to confirm
+//	} else
+//	if(seq.size()= 1){
+//		return seq.at(0).createStmtAsAction();
+//	} else	
+//	if(seq.size()>1){
+//	
+//		"line374".println();
+//		self.statements.size().println();
+//		self.statements.println();
+//		var leftAction = seq.at(0).createStmtAsAction();
+//	
+//		seq.removeAt(0);
+//		"line380".println();
+//		seq.size().println();
+//		var rightAction;
+//		rightAction = seq.createStmtAsAction();
+////		if(seq.size()=1){
+////			rightAction = seq.at(0).createStmtAsAction();
+////		} else
+////		if(seq.size()>1){
+////			rightAction = seq.createStmtAsAction();
+////		} 
+//		"line803".println();
+//				
+//		var circusAction = createAction2("SeqAction", leftAction, rightAction);
+//		
+//		return circusAction;
+//		}
+}
+
+//self = state.actions.at(0)/(1)/(2)
+//operation RC!Action createStateActionAsCircusAction(): Z!CircusAction{
+//	if(self != null){
+//		return self.action.createStmtAsAction();
+//	} else{
+//		return createSkipAction();
+//	}
+//}
+
+operation RC!State createStateActionAsCircusAction(actionType:String): Z!CircusAction{
+	
+	if(self.stateActionDefined(actionType)){
+		var index = self.indexOfStateAction(actionType);
+		
+		"line910".println();
+		("actionType = " + actionType).println();
+		("index = " + index).println();
+		self.name.println();
+		return self.actions.at(index).action.createStmtAsAction();
+	} else{
+		return createSkipAction();
+	}
+}
+
+//to check if the specific type (actionType) of state action is defined
+operation RC!State stateActionDefined(actionType: String): Boolean{
+	var bool = false;
+	if(self.actions.size()>0){
+		for(act in self.actions){
+			if(act.type().name = actionType){
+				bool = true;
+			}
+		}
+	} 
+	return bool;
+}
+
+
+
+
+operation RC!State indexOfStateAction(actionType: String): Integer{
+	var index = 0;
+	
+	for(act in self.actions){
+		if(act.type().name = actionType){
+			return index;
+		} else{
+			index++;
+		}
+	}
+	
+}
+
+
+
+operation RC!Transition createTrActionAsCircusAction(): Z!CircusAction{
+	if(self.action != null){
+		return self.action.createStmtAsAction();
+	} else{
+		return createSkipAction();
+	}
+}
+
+operation RC!Statement createStmtAsAction(): Z!CircusAction{
+	if(self.instanceOf(RC!Assignment)){
+		"this line 324 is running".println();
+		return self.createAssignmentStmtAsAction();
+	} else
+	if(self.instanceOf(RC!Call)){
+		return self.createCallStmtAsAction();
+	} else
+	if(self.instanceOf(RC!Skip)){
+		return self.createSkipStmtAsAction();
+	} else
+	if(self.instanceOf(RC!CommunicationStmt)){
+		return self.createCommuStmtAsAction();
+	} else
+	if(self.instanceOf(RC!ParStmt)){
+		return self.createParStmtAsAction();
+	} else
+	if(self.instanceOf(RC!IfStmt)){
+		"line956".println();
+		("predicate = "+ self.expression).println();
+		"line958".println();
+		return self.createIfStmtAsAction();
+	} else
+	if(self.instanceOf(RC!SeqStatement)){
+		return self.createSeqStmtAsAction();
+	} 
+}
+
+
+//parenthesis is removed in Circus
+operation RC!ParStmt createParStmtAsAction(): Z!CircusAction{
+	return self.stmt.createStmtAsAction();
+}
+
+
+//TO DO: to comfirm the semantics
+operation RC!Skip createSkipStmtAsAction(): Z!InterruptAction{
+
+	var leftAction = "SSTOP".createCallAction();
+	
+	var rightAction = createSkipAction();
+
+	var circusAction = createAction2("InterruptAction", leftAction, rightAction);
+	
+	return circusAction;
+}
+
+
+//TO DO: to confirm pred is type of Pred or Expr or Boolean, currently Boolean (RefExpr)
+operation RC!IfStmt createIfStmtAsAction(): Z!IfGuardedCommand{
+	"line886".println();
+	self.println();
+	self.expression.isDefined().println();
+	self.expression.println();
+	self.then.println();
+	self.`else`.println();
+
+	self.expression.type().println();
+		//n.actions.at(1).action.expression.println();
+
+	var if_expr = self.expression;
+		"line999".println();
+	self.expression.println();
+//		var ifAction = createGuardedAction(pred_expr, self.then.createStmtAsAction());
+	var pred_if = self.expression.createExpr().createMemPred();
+	var ifAction = createGuardedAction(pred_if, self.then.createStmtAsAction());
+	"line199".println();
+	self.expression.println();
+	var else_expr = new RC!Not;
+	//var exp = self.expression.clone();
+
+
+	else_expr.exp = clone(if_expr);
+	//else_pred.exp = self.expression;
+	"line399".println();
+	else_expr.println();
+	"line 1004".println();
+	self.expression.println();
+	var pred_else = else_expr.createExpr().createMemPred();
+	var elseAction = createGuardedAction(pred_else, self.`else`.createStmtAsAction());
+
+	var actions = Sequence{ifAction, elseAction};
+	var action = createIFGuardedCommand(actions);
+	//var circusAction = createAction2("ExtChoiceAction", leftAction, rightAction);
+	
+	return action;
+}
+
+
+
+
+
+operation clone(exp : RC!Expression) : RC!Expression   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	
+	var cloned = ecoreUtil.copy(exp);
+	return cloned;
+}
+
+
+operation createIFGuardedCommand(actions: Sequence<Z!GuardedAction>): Z!IfGuardedCommand{
+	var action = new Z!IfGuardedCommand;
+	action.actionList = new Z!CircusActionList;
+	action.actionList.circusActions = actions;
+	
+	return action;
+}
+
+operation createGuardedAction(
+	pred: Z!Pred, 
+	action: Z!CircusAction
+	): Z!GuardedAction{
+	var guardedaction = new Z!GuardedAction;
+	
+	guardedaction.pred = pred;
+	guardedaction.circusAction = action;
+	return guardedaction;
+}
+
+
+//TBD NEED Pedro to confirm the semantics first
+
+operation RC!Assignment createAssignmentStmtAsAction(): Z!InterruptAction{
+	
+	/*
+	assignment is an interrupt actio in Circus
+	left action is SStop
+	right action is a prefixing action
+	*/
+	
+	/* CallAction permits a name to be an action.
+	*/
+	var leftAction = "SSTOP".createCallAction();
+	
+	var rightAction = createPrefixingAction(self.createCommunication("",""), createSkipAction()); //PrefixingAction is a type of Action1, so can not use createAction2()
+
+	var circusAction = createAction2("InterruptAction", leftAction, rightAction);
+	
+	return circusAction;
+}
+
+operation String createRCRefExp():RC!RefExp{
+
+ 	var refExp = new RC!RefExp;
+ 	refExp.ref = new RC!Variable;
+ 	refExp.ref.name = self;
+ 	
+ 	return refExp;
+}
+
+operation RC!Communication createCommuINPUTAsAction(): Z!InterruptAction{
+	/*
+	CommunicationStmt is an interrupt action in Circus
+	left action is SStop
+	right action is a prefixing action
+	*/
+	var leftAction = "SSTOP".createCallAction();
+	
+
+	/*to create inner-layer prefixing of the prefixingAction,i.e., the setting part
+	e.g., set_input!input
+	we need to create an internal RC!Communication of OUTPUT type first*/
+	var inner_RC_commu = new RC!Communication;//set_input!input
+	
+	inner_RC_commu.event = new RC!Event;
+	inner_RC_commu.event.name = "set_"+ self.parameter.name;
+	
+	inner_RC_commu.value =  self.parameter.name.createRCRefExp();
+
+	inner_RC_commu._type = CommunicationType#OUTPUT;
+	
+	/*End of internal RC!Communication creation*/
+		
+	var inner_prefix = inner_RC_commu.createCommunication(inner_RC_commu.event.name,"OUTPUT");
+	var inner_prefix_action = createPrefixingAction(inner_prefix, createSkipAction());
+	var inner_interrupt_action = createAction2("InterruptAction", "SSTOP".createCallAction(),inner_prefix_action);
+	
+	var outer_prefix = self.createCommunication(self.event.name+"_in","INPUT");
+	var outer_prefix_action = createPrefixingAction(outer_prefix, inner_interrupt_action);
+	
+	var circusAction = createAction2("InterruptAction", leftAction, outer_prefix_action);
+	
+	return circusAction;
+}
+
+
+
+operation RC!Communication createCommuOUTPUT_SYNCRefAsAction(): Z!InterruptAction{
+	
+	/*
+	CommunicationStmt is an interrupt action in Circus
+	left action is SStop
+	right action is a prefixing action
+	*/
+	var leftAction = "SSTOP".createCallAction();
+	
+
+	/*to create inner-layer prefixing of the prefixingAction,i.e., the setting part
+	e.g., status_out!input, status_out.input
+	we need to create an internal RC!Communication of OUTPUT type first*/
+	var inner_RC_commu = new RC!Communication;//set_input!input
+	
+	inner_RC_commu.event = new RC!Event;
+	inner_RC_commu.event.name = self.event.name + "_out";
+	inner_RC_commu.value = self.value.ref.name.createRCRefExp();
+	inner_RC_commu._type = self._type;
+
+	/*End of internal RC!Communication creation*/
+	
+	var inner_prefix = inner_RC_commu.createCommunication(inner_RC_commu.event.name,self._type.name);
+	var inner_prefix_action = createPrefixingAction(inner_prefix, createSkipAction());
+	var inner_interrupt_action = createAction2("InterruptAction", "SSTOP".createCallAction(), inner_prefix_action);
+		
+	var outer_prefix = self.createCommunication("get_" + self.value.ref.name,"INPUT");
+	var outer_prefix_action = createPrefixingAction(outer_prefix, inner_interrupt_action);
+	
+	var circusAction = createAction2("InterruptAction", leftAction, outer_prefix_action);
+	
+	return circusAction;
+}
+
+
+//status_out!6; status_out.6
+operation RC!Communication createCommuOUTPUT_SYNCConcreteAsAction(): Z!InterruptAction{
+	
+	/*
+	CommunicationStmt is an interrupt action in Circus
+	left action is SStop
+	right action is a prefixing action
+	*/
+	var leftAction = "SSTOP".createCallAction();
+			
+	var prefix = self.createCommunication(self.event.name + "_out",self._type.name);
+	var prefix_action = createPrefixingAction(prefix, createSkipAction());
+	
+	var circusAction = createAction2("InterruptAction", leftAction, prefix_action);
+	
+	return circusAction;
+}
+
+
+operation Any createCommunication(
+			channel_name:String, 
+			type:String
+			):Z!Communication{
+	var commu;
+	
+	if(self.EClass().name = "Assignment"){
+		commu = self.createAssignmentAsOutputCommunication();
+	} else
+	if(self.EClass().name = "Communication"){
+		commu = self.createCommuAsCommunication(channel_name, type);
+		("line 511, this commu pattern is "+ commu.commPattern).println();
+	}
+	return commu;
+}
+
+//this is used for the assignment statement
+operation RC!Expression createOutputField(): Z!DotField{
+	var field = new Z!DotField;
+	field.expr = self.createExpr();
+	field.outputField = true;
+	return field;
+}
+
+//this is used for the communication statement
+operation RC!Communication createOutputField(): Z!DotField{
+	var field = new Z!DotField;
+	var expr;
+	if(self._type = CommunicationType#INPUT){
+	("self.parameter: "+self.parameter).println();
+		expr = self.parameter.name.createRefExpr(false,false);
+	} else
+	if(self._type = CommunicationType#OUTPUT or self._type = CommunicationType#SYNC){
+
+	("self.value: "+self.value).println();
+		if(self.value.type().name = "RefExp"){
+			expr = self.value.ref.name.createRefExpr(false,false);		
+		} else{
+			expr = self.value.createNumExpr();
+		}
+	}
+	field.expr = expr;
+	field.outputField = true;
+	
+	return field;
+}
+
+
+operation RC!Communication createDotField(): Z!DotField{
+	var dotField = new Z!DotField;
+	dotField.outputField = false;
+	
+	if(self.value.type().name = "RefExp"){
+		dotField.expr = self.value.ref.name.createRefExpr(false,false);		
+	} else{
+		dotField.expr = self.value.createNumExpr();
+	}
+	
+	return dotField;
+}
+
+
+operation RC!Communication createInputField(): Z!InputField{
+	var inputField = new Z!InputField;
+	var name = new String;
+	if(self._type = CommunicationType#INPUT){
+		inputField.varialbeName = self.parameter.name.createZName();
+	} else
+	if(self._type = CommunicationType#OUTPUT){
+		inputField.varialbeName = self.value.ref.name.createZName();
+	} 
+	
+	return inputField;
+}
+
+
+
+operation RC!Assignment createAssignmentAsOutputCommunication():Z!Communication{
+	var commu = new Z!Communication;
+	
+	commu.commUsage = Z!CommUsage#Normal;
+	commu.indexed = false;
+	commu.multiSych = 0;
+	commu.commPattern = Z!CommPattern#Output;	
+	("line 588 commPattern = "+commu.commPattern).println();
+	commu.channelExpr = ("set_" + self.left.name.name).createRefExpr(false,false);
+	
+	commu.fieldList = new Z!CircusFieldList;
+	commu.fieldList.fields = Sequence{self.right.createOutputField()};
+
+	return commu;
+}
+
+operation RC!Communication createCommuAsCommunication(
+	channel_name:String,
+	type:String
+	): Z!Communication{
+	
+	var commu = new Z!Communication;
+	"line884".println();
+	commu.println();
+	commu.type().println();
+	type.println();
+	commu.commUsage = Z!CommUsage#Normal;
+	commu.indexed = false;
+	commu.multiSych = 0;
+	commu.channelExpr = channel_name.createRefExpr(false,false);
+	commu.fieldList = new Z!CircusFieldList; 
+	
+	if(type = "INPUT"){ 
+		commu.commPattern = Z!CommPattern#Input;
+		commu.fieldList.fields = Sequence{self.createInputField()};
+	} else
+	
+	if(type = "OUTPUT"){ 
+		commu.commPattern = Z!CommPattern#Output;
+		commu.fieldList.fields = Sequence{self.createOutputField()};
+	} else
+	
+	if(type = "SIMPLE"){ 
+		commu.commPattern = Z!CommPattern#Synch;
+		commu.fieldList.fields = Sequence{};		
+	} else
+	
+	if(type = "SYNC"){
+		commu.commPattern = Z!CommPattern#Output;
+		commu.fieldList.fields = Sequence{self.createDotField()};		
+	} 
+	
+	return commu;
+}
+
+
+
+
+operation createSkipAction(): Z!SkipAction {
+	var skipAction = new Z!SkipAction;
+	return skipAction;
+}
+
+
+
+operation RC!Call createCallStmtAsAction(): Z!CircusAction{
+	
+	var list = new Sequence<Z!Expr>;
+	
+	for(elem in self.args){
+		list.add(elem);
+	}
+	var circusAction = self.`operation`.name.createCallAction(list);
+	
+	return circusAction;
+}
+
+
+operation RC!CommunicationStmt createCommuStmtAsAction(): Z!CircusAction{
+
+	if(self.communication._type.name = "INPUT"){
+		"this is an INPUT type communication".println();
+		return self.communication.createCommuINPUTAsAction();
+	} else
+
+	if(self.communication._type.name = "OUTPUT" or self.communication._type.name = "SYNC"){
+		"this is an OUTPUT or SYNC type communication".println();
+		if(self.communication.value.isTypeOf(RC!RefExp)){
+			return self.communication.createCommuOUTPUT_SYNCRefAsAction();
+		} else{
+			return self.communication.createCommuOUTPUT_SYNCConcreteAsAction();
+		}
+	} else
+	
+	if(self.communication._type.name = "SIMPLE"){
+		"this is an SIMPLE type communication".println();
+		return self.communication.createCommuSIMPLEAsAction();
+	} 
+
+}
+
+//TO DO: to confirm if this is used
+operation RC!Communication createCommuAsAction(): Z!CircusAction{
+
+	if(self._type.name = "INPUT"){
+		"this is an INPUT type communication".println();
+		return self.createCommuINPUTAsAction();
+	} else
+
+	if(self._type.name = "OUTPUT" or self.communication._type.name = "SYNC"){
+		"this is an OUTPUT or SYNC type communication".println();
+		if(self.value.isTypeOf(RefExp)){
+			return self.createCommuOUTPUT_SYNCRefAsAction();
+		} else{
+			return self.createCommuOUTPUT_SYNCConcreteAsAction();
+		}
+	} else
+	
+	if(self._type.name = "SIMPLE"){
+		"this is an SIMPLE type communication".println();
+		return self.createCommuSIMPLEAsAction();
+	} 
+
+}
+
+operation RC!Communication createCommuSIMPLEAsAction(): Z!InterruptAction{
+
+	var prefix = self.createCommunication(self.event.name+"_out","SIMPLE");
+
+	var prefix_action = createPrefixingAction(prefix, createSkipAction());
+	
+	var circusAction = createAction2("InterruptAction", "SSTOP".createCallAction(), prefix_action);
+	
+	return circusAction;	
+
+}
+
+
+
+
+
+operation String createRefExpr(explicit: Boolean, mixFix: Boolean): Z!RefExpr{
+	var refExpr = new Z!RefExpr;
+	refExpr.mixFix = mixFix;
+	refExpr.explicit = explicit;
+	refExpr.name = self.createZName();
+	refExpr.name.word = self;
+	
+	return refExpr;
+
+}
+
+operation RC!BooleanExp createBooleanExpr(): Z!RefExpr{
+	var boolExpr = new Z!RefExpr;
+	boolExpr.mixFix = false;
+	boolExpr.explicit = false;
+	boolExpr.name = new Z!ZName;
+	if(self.value = "true"){
+		boolExpr.name.word ="True";
+	} else {
+		boolExpr.name.word ="False";
+	}
+	
+	return boolExpr;
+}
+
+operation  RC!IntegerExp createNumExpr(): Z!NumExpr{
+	var numExpr = new Z!NumExpr;
+	numExpr.numeral = new Z!ZNumeral;
+	numExpr.numeral.value = self.value;
+	
+	return numExpr;
+}
+	
+/*
+operation RC!Minus createMinusExpr(){
+				
+	var minus_left = self.left.createNumExpr();
+	var minus_right = self.right.createNumExpr();
+				
+	var minusExpr = new Z!ApplExpr;
+	minusExpr.mixFix = true;
+				
+	minusExpr.leftExpr = "_-_".createRefExpr(false,false);
+
+				
+	minusExpr.rightExpr = new Z!TupleExpr;
+	minusExpr.rightExpr.exprList = new Z!ZExprList;
+	minusExpr.rightExpr.exprList.exprs = Sequence{minus_left, minus_right};
+	minusExpr.rightExpr.exprList.exprs.println();
+}
+*/
+
+/*
+operation RC!LessOrEqual createLessOrEqualExpr() {
+	var left = self.left.createNumExpr();
+	var right = self.right.createNumExpr();
+	var lessOrEqualExpr = new Z!ApplExpr;
+	lessOrEqualExpr.mixFix = true;
+				
+	lessOrEqualExpr.leftExpr = "_leq_".createRefExpr(false,false);
+							
+	lessOrEqualExpr.rightExpr = Sequence{left, right}.createTupleExpr();
+}
+*/
+
+operation Any createApplExpr(operator: String): Z!ApplExpr{
+	var expr = new Z!ApplExpr;
+	expr.mixFix = true;
+	
+	var operand_left = self.left.createExpr();
+	var operand_right = self.right.createExpr();
+
+	var left = operator.createRefExpr(false,false);
+	var right = Sequence{operand_left, operand_right}.createTupleExpr();	
+
+	expr.exprList = new Z!ZExprList;
+	expr.exprList.exprs = Sequence{left, right};
+	
+	return 	expr;
+}
+
+
+
+
+
+//covers Neg, Not
+//TO DO: is there other unaryApplExpr?
+operation Any createUnaryApplExpr(operator: String): Z!ApplExpr{
+
+	var expr = new Z!ApplExpr;
+	expr.mixFix = true;
+	
+	expr.leftExpr = operator.createRefExpr(false,false);
+	
+	if(self.isTypeOf(Neg) or self.isTypeOf(Not)){
+		expr.rightExpr = self.exp.createExpr();
+	} 
+		
+	expr.exprList = new Z!ZExprList;
+	expr.exprList.exprs = Sequence{expr.leftExpr, expr.rightExpr};
+	//expr = self.createExpr2(expr.leftExpr, expr.rightExpr);
+	return 	expr;
+}
+
+operation RC!LessThan createLessThanExpr():Z!ApplExpr{
+	return self.createApplExpr("_less_");
+}
+
+
+operation RC!GreaterThan createGreaterThanExpr():Z!ApplExpr{
+	return self.createApplExpr("_greater_");
+}
+
+
+operation RC!LessOrEqual createLessOrEqualExpr():Z!ApplExpr{
+	return self.createApplExpr("_leq_");
+}
+
+operation RC!GreaterOrEqual createGreaterOrEqualExpr():Z!ApplExpr{
+	return self.createApplExpr("_geq_");
+}
+
+operation RC!Equals createEqualsExpr():Z!ApplExpr{
+	return self.createApplExpr("_equals_");
+}
+
+operation RC!Different createNequalExpr():Z!ApplExpr{
+	return self.createApplExpr("_nequals_");
+}
+
+
+operation RC!And createAndExpr():Z!ApplExpr{
+	return self.createApplExpr("_And_");
+}
+
+operation RC!Or createOrExpr():Z!ApplExpr{
+	return self.createApplExpr("_Or_");
+}
+
+
+
+operation RC!Iff createIffExpr():Z!ApplExpr{
+	return self.createApplExpr("_Equivalence_");
+}
+
+operation RC!Implies createImpliesExpr():Z!ApplExpr{
+	return self.createApplExpr("_Implies_");
+}
+
+
+operation RC!Not createNotExpr():Z!ApplExpr{
+	return self.createUnaryApplExpr("not_");
+}	
+
+
+operation RC!Plus createPlusExpr():Z!ApplExpr{
+	return self.createApplExpr("_+_");
+}
+
+operation RC!Minus createMinusExpr():Z!ApplExpr{
+	return self.createApplExpr("_-_");
+}
+
+operation RC!Mult createMultExpr():Z!ApplExpr{
+	return self.createApplExpr("_*_");
+}
+
+operation RC!Div createDivExpr():Z!ApplExpr{
+	return self.createApplExpr("_div_");
+}
+
+operation RC!Modulus createModExpr():Z!ApplExpr{
+	return self.createApplExpr("_mod_");
+}
+
+
+ 	
+operation RC!Neg createNegExpr():Z!ApplExpr{
+	return self.createUnaryApplExpr("-_");
+}	
+
+
+ 		
+////TO DO: shall this be an ApplExpr instead??
+//operation RC!Iff createIffExpr():Z!IffExpr{
+//	return self.createApplExpr("_iff_");
+//	//return self.createExpr2(self.left.createExpr(), self.right.createExpr());
+//}
+
+////TO DO: shall this be an ApplExpr instead??
+//operation RC!Implies createImpliesExpr():Z!ImpliesExpr{
+//	return self.createApplExpr("_implies_");
+//	//return self.createExpr2(self.left.createExpr(), self.right.createExpr());
+//}
+
+//TO DO: shall this be an ApplExpr instead??
+operation RC!IfExpression createCondExpr():Z!CondExpr{
+
+}
+
+//TO DO: what class in Z?
+operation RC!FloatExp createFloatExpr():Z!Expr{
+
+}
+
+//TO DO: what class in Z?
+operation RC!VarExp createVarExpr():Z!Expr{
+
+}
+
+//TO DO: what class in Z?
+operation RC!CallExp createCallExpr():Z!Expr{
+
+}
+
+
+
+
+operation RC!Expression createExpr():Z!Expr{
+	if(self.isTypeOf(RC!LessThan)){
+		return self.createLessThanExpr();
+	} else 
+	if(self.isTypeOf(RC!GreaterThan)){
+		return self.createGreaterThanExpr();
+	} else 
+	if(self.isTypeOf(RC!LessOrEqual)){
+		return self.createLessOrEqualExpr();
+	} else 
+	if(self.isTypeOf(RC!GreaterOrEqual)){
+		return self.createGreaterOrEqualExpr();
+	} else 
+	if(self.isTypeOf(RC!Equals)){
+		return self.createEqualsExpr();
+	} else 
+	if(self.isTypeOf(RC!Different)){
+		return self.createNequalExpr();
+	} else 
+	if (self.isTypeOf(RC!And)){
+		return self.createAndExpr();
+	} else 
+	if (self.isTypeOf(RC!Or)){
+		return self.createOrExpr();
+	} else 
+	if (self.isTypeOf(RC!Not)){
+		return self.createNotExpr();
+	} else 
+	if (self.isTypeOf(RC!Plus)){
+		return self.createPlusExpr();
+	} else 
+	if (self.isTypeOf(RC!Minus)){
+		return self.createMinusExpr();
+	} else 
+	if (self.isTypeOf(RC!Mult)){
+		return self.createMultExpr();
+	} else 
+	if (self.isTypeOf(RC!Div)){
+		return self.createDivExpr();
+	} else
+	if (self.isTypeOf(RC!Modulus)){
+		return self.createModExpr();
+	} else
+	if (self.isTypeOf(RC!Neg)){
+		return self.createNegExpr();
+	} else
+	if(self.isTypeOf(RC!Iff)){
+	 return self.createIffExpr();
+	} else
+	if(self.isTypeOf(RC!Implies)){
+		return self.createImpliesExpr();
+	} else
+	if(self.isTypeOf(RC!IfExpression)){
+		return self.createCondExpr();
+	} else
+	if(self.isTypeOf(RC!IntegerExp) or self.isTypeOf(RC!RefExp) or self.isTypeOf(RC!BooleanExp) or self.isTypeOf(RC!CallExp)  or self.isTypeOf(RC!ResultExp) or self.isTypeOf(RC!Selection) or self.isTypeOf(RC!EnumExp) or self.isTypeOf(RC!ArrayExp) or self.isTypeOf(RC!TupleExp) or self.isTypeOf(RC!ClockExp) or self.isTypeOf(RC!SeqExp) ){
+		return self.createUnaryExpr();
+	} else 
+	if(self.isTypeOf(RC!ParExp)){
+		return self.exp.createExpr();
+	}
+
+}
+
+
+
+operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
+	var tupleExpr = new Z!TupleExpr;
+	tupleExpr.exprList = new Z!ZExprList;
+	tupleExpr.exprList.exprs.println();
+	tupleExpr.exprList.exprs = self;
+	return tupleExpr;
+
+}
+
+
+operation RC!Expression createUnaryExpr(): Z!Expr {
+	if(self.isTypeOf(RC!IntegerExp)){
+		return self.createNumExpr();
+	} else
+
+	if(self.isTypeOf(RC!BooleanExp)){
+		return self.createBooleanExpr();
+	} 
+	else
+
+ 	if(self.isTypeOf(RC!RefExp)){
+		//self.ref.name.println();
+		return self.ref.name.createRefExpr(false, false);
+	} 
+	//TO DO: to complete the following unaryExpr of RoboChart
+	/*else 
+	
+	if(self.isTypeOf(CallExp)){
+		//self.callExpString().println();
+		return self.callExpString();
+	} else 
+	
+	if(self.isTypeOf(ResultExp)){
+		return "result";
+	} else 
+	
+	if(self.isTypeOf(Selection)){
+		return self.member.name+"("+self.receiver.value.ref.name+"!"+self.receiver.parameters.at(0).ref.name+")";
+	} else 
+	
+	if(self.isTypeOf(EnumExp)){
+		return self.literal.name;
+	} else 
+	
+	if(self.isTypeOf(SeqExp)){
+		return self.sequenceString();
+	} else 
+	
+	if(self.isTypeOf(ArrayExp)){
+		return self.value.ref.name + "."+self.parameters.at(0).value;
+		//e.g., vel[1] -> vel.1
+	} else 
+	
+	if(self.isTypeOf(TupleExp)){
+		return "("+ self.values.at(0).oneSideOfBianryString()+", "+self.values.at(1).oneSideOfBianryString() +")";
+		//e.g., (3,4)
+	} else 
+	
+	if(self.isTypeOf(ClockExp)){
+		return "clock";
+	}
+*/
+}

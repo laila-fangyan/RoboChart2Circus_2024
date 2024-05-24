@@ -8,7 +8,9 @@
 //}
 
 //var cs = createChannelSet(createBasicChannelSetExpr(Set{"share", "terminate"})).createChanSetPara("cs");
-
+var p = RC!RCPackage.all();
+p.println();
+p.eContents.println();
 var nc = RC!StateMachineDef.all().at(0);
 
 		
@@ -333,11 +335,14 @@ operation RC!NodeContainer createchanParaNC()  {
 		}
 	}
 	
+	
 	//4. Shared variable channels
 	//TO DO
 	
+	
 	//5. Local variable channels for defined operations that are required by the state machine
 	//TO DO
+	
 	
 	//6. Declaring state machine events as channels
 
@@ -353,11 +358,20 @@ operation RC!NodeContainer createchanParaNC()  {
 	var evt_chanpara = evt_seq.createChannelPara("event_chan_" + self.FQN());
 	
 	
+	
 	//7. Declaring call and ret events for undefined operations as channels
 	//TO DO
 	
-	//8. Declaring local channels for each node in the node container
 	
+	
+	//8. Declaring local channels for each node in the node container
+	for(n in self.nodes){
+		if(n.instanceOf(RC!Junction)){
+			var junc_chan = Sequence{"enter_"+ n.FQN(), "interrupt_"+ n.FQN()}.createChannelPara("junc_chan_" + n.FQN());
+		} else{
+			var st_chan = Sequence{"enter_"+ n.FQN(), "entered_"+ n.FQN(), "interrupt_"+ n.FQN(), "enteredL_"+ n.FQN(),"enteredR_"+ n.FQN()}.createChannelPara("st_chan_" + n.FQN());
+		}
+	}
 }
 
  

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ASCII"?>
+<robochart:RCPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:robochart="http://www.robocalc.circus/RoboChart" name="pkg3">
+  <machines name="stm1">
+    <variableList>
+      <vars name="a">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </vars>
+      <vars name="b">
+        <type xsi:type="robochart:ProductType">
+          <types xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+          </types>
+          <types xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+          </types>
+          <types xsi:type="robochart:ProductType">
+            <types xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+            </types>
+            <types xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </types>
+          </types>
+        </type>
+      </vars>
+    </variableList>
+    <variableList modifier="CONST">
+      <vars name="constant1">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </vars>
+    </variableList>
+    <events name="stop"/>
+    <events name="trigger1">
+      <type xsi:type="robochart:TypeRef">
+        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+      </type>
+    </events>
+    <events name="event1"/>
+    <nodes xsi:type="robochart:Initial" name="i0"/>
+    <nodes xsi:type="robochart:State" name="s0">
+      <actions xsi:type="robochart:DuringAction">
+        <action xsi:type="robochart:Assignment">
+          <left xsi:type="robochart:VarRef" name="//@machines.0/@variableList.0/@vars.0"/>
+          <right xsi:type="robochart:Plus">
+            <left xsi:type="robochart:RefExp" ref="//@machines.0/@variableList.0/@vars.0"/>
+            <right xsi:type="robochart:IntegerExp" value="1"/>
+          </right>
+        </action>
+      </actions>
+      <actions xsi:type="robochart:EntryAction">
+        <action xsi:type="robochart:CommunicationStmt">
+          <communication event="//@machines.0/@events.2"/>
+        </action>
+      </actions>
+    </nodes>
+    <nodes xsi:type="robochart:Final" name="f0"/>
+    <transitions name="t0" source="//@machines.0/@nodes.0" target="//@machines.0/@nodes.1"/>
+    <transitions name="t1" source="//@machines.0/@nodes.1" target="//@machines.0/@nodes.2">
+      <trigger event="//@machines.0/@events.0"/>
+    </transitions>
+    <transitions name="t2" source="//@machines.0/@nodes.1" target="//@machines.0/@nodes.1">
+      <trigger event="//@machines.0/@events.1" parameter="//@machines.0/@variableList.0/@vars.0" _type="INPUT"/>
+      <condition xsi:type="robochart:GreaterThan">
+        <left xsi:type="robochart:RefExp" ref="//@machines.0/@variableList.0/@vars.0"/>
+        <right xsi:type="robochart:IntegerExp" value="2"/>
+      </condition>
+    </transitions>
+  </machines>
+  <controllers name="C1">
+    <machines xsi:type="robochart:StateMachineRef" name="s3">
+      <ref href="../../workspace-xtend/simplerSTM2/pk3.rct#|20"/>
+    </machines>
+    <machines xsi:type="robochart:StateMachineRef" name="s4">
+      <ref href="../../workspace-xtend/simplerSTM2/pk3.rct#|21"/>
+    </machines>
+  </controllers>
+</robochart:RCPackage>

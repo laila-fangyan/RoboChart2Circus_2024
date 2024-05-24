@@ -1,0 +1,16 @@
+
+
+
+controller C {
+//	sref s0 = pkg3::stm1
+//	sref s1 = pkg0::C1::stm0
+//	sref s2 = pkg0::C2::stm0
+//	sref s3 = pkg0::stm0
+	
+	sref s0 = pkg2::stm1
+	sref s1 = pkg0::C1::stm0_c1
+	sref s2 = pkg0::C2::stm2_0
+	sref s3 = pkg0::C1::stm0
+//	sref s4 = pkg3::stm1
+}
+

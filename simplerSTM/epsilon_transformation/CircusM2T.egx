@@ -12,7 +12,7 @@
 
 rule circusM2T
 transform z: Z!Spec {
-
+//transform z: Z!CApplExprList{
 template : "circusM2T.egl"
 target : "circus_gen/" +"expr"+".thy" 
 //target : "circus_gen/" +"expr_"+javaDateString +".thy" 

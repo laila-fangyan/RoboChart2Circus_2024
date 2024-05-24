@@ -1,0 +1,65 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-05-2024 18:21:17
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "pkg2_MainC.csp"
+include "core_defs.csp"
+include "state_defs.csp"
+include "pkg2_defs.csp"
+include "robochart_defs.csp"
+include "../instantiations.csp"
+channel r__
+-- generate pkg2_MainC
+P_pkg2_MainC = let
+	id__ = 0
+	
+	
+	
+	const_pkg2_MainC_s1_constant1 = const_pkg0_C1_stm0_constant1
+	const_pkg2_MainC_stmref_constant1 = const_pkg2_stm1_constant1
+		
+within
+	pkg2_MainC::O__(id__,
+			    const_pkg2_MainC_s1_constant1,
+			    const_pkg2_MainC_stmref_constant1)
+
+assert P_pkg2_MainC :[deadlock-free]	
+assert P_pkg2_MainC;RUN({r__}) :[deadlock-free]
+assert P_pkg2_MainC :[deterministic]
+assert P_pkg2_MainC :[divergence-free]
+
+-- generate pkg2_MainC_s1
+P_pkg2_MainC_s1 = let
+	id__ = 0
+	
+	
+	
+within
+	pkg2_MainC::s1::O__(
+		id__,
+		const_pkg0_C1_stm0_constant1
+	)
+assert P_pkg2_MainC_s1 :[deadlock-free]	
+assert P_pkg2_MainC_s1;RUN({r__}) :[deadlock-free]
+assert P_pkg2_MainC_s1 :[deterministic]
+assert P_pkg2_MainC_s1 :[divergence-free]
+-- generate pkg2_MainC_stmref
+P_pkg2_MainC_stmref = let
+	id__ = 0
+	
+	
+	
+within
+	pkg2_MainC::stmref::O__(
+		id__,
+		const_pkg2_stm1_constant1
+	)
+assert P_pkg2_MainC_stmref :[deadlock-free]	
+assert P_pkg2_MainC_stmref;RUN({r__}) :[deadlock-free]
+assert P_pkg2_MainC_stmref :[deterministic]
+assert P_pkg2_MainC_stmref :[divergence-free]
