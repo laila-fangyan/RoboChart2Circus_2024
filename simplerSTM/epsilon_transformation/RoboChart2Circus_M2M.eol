@@ -7,13 +7,21 @@
 //
 //}
 
-//var cs = createChannelSet(createBasicChannelSetExpr(Set{"share", "terminate"})).createChanSetPara("cs");
+
+RC.println();
+removeRef();
+
 var p = RC!RCPackage.all();
 p.println();
 p.eContents.println();
 var nc = RC!StateMachineDef.all().at(0);
 
-		
+
+
+RC!StateMachine.all().println();
+
+
+
 //nc.FQN().println();
 
 //nc.createTransitionsAsCircusProcess();
@@ -22,8 +30,8 @@ var nc = RC!StateMachineDef.all().at(0);
 //composedNodes(nodes).createRenameProcess(Sequence{"share"},Sequence{"share", "setL_a"});
 //ncCoreBehaviour(nc);
 ncBehaviour(nc);
-
-
+//
+//
 var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators"});
 	
 //Set{}.createChannelPara("channel_group1").addChan2ChanPara("channel1");
@@ -32,23 +40,36 @@ var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators
 
 
 //nc.createInternalChanParaNC();
-nc.createchanParaNC();
-for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara))){
+//
+for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara) or p.instanceOf(Z!FreePara) )){
 	zsect.addPara2ZSect(p);	
+}
+//
+createSpec(zsect);
+"line 49".println();
+RC!StateMachineDef.all().println();
+RC!StateMachineDef.all().at(0).nodes.println();
 
-//	if(p.instanceOf(Z!ChannelSetPara)){
-//		zsect = zsect.addPara2ZSect(p);	
-//		"line 34".println();
-//	} else
-//	if(p.instanceOf(Z!ProcessPara)){
-//		zsect.addPara2ZSect(p);	
-//	} 
+for(n in RC!StateMachineDef.all().at(0).nodes.select(s|s.name = "s3")){
+	"line3".println();
+	usedVariables(n.actions.at(0).action).println();
+	nc(n.actions.at(0).action).println();
+	"line5".println();
+	
+	if(n.eClass().name = "State" and n.name = "s3"){
+		
+//		n.createStateActionAsCircusAction("DuringAction");
+		//n.actions.at(0).action.createStmtInContextAsAction();
+		usedVariables(n.actions.at(0).action).println();
+		nc(n.actions.at(0).action).println();
+		"line5".println();
+		//set1.at(0).type().println();
+
+	}
 }
 
-createSpec(zsect);
-
-
 //RC!StateMachineDef.all().println();
+//This is only used for M2T validation of ApplExpr
 for(n in nc.nodes.select(s|s.name = "s3")){
 	("n.name = "+ n.name).println();
 	var expr = n.actions.at(0).action.right.createExpr();
@@ -56,7 +77,7 @@ for(n in nc.nodes.select(s|s.name = "s3")){
 	
 }
 
-//create
+//This is only used for M2T validation of createPredList
 for (t in nc.transitions.select(t|t.name = "t1")){
 	if(t.condition != null){
 		var pred = t.condition.createExpr().createMemPredEquality();
@@ -117,17 +138,7 @@ operation createPredList(predSeq: Sequence<Z!Pred>): Z!CPredList{
 
 //RC!StateMachineDef.all().at(0).createTransitionsAsCircusProcess();
 
-//for(n in RC!StateMachineDef.all().at(0).nodes){
-//	if(n.eClass().name = "State" and n.name = "s3"){
-//		"line3".println();
-//		n.createStateActionAsCircusAction("DuringAction");
-//		//n.actions.at(0).action.createStmtInContextAsAction();
-//		//usedVariables(n.actions.at(1).action).println();
-//		"line5".println();
-//		//set1.at(0).type().println();
-//
-//	}
-//}
+
 
 //for(n in RC!StateMachineDef.all().at(0).nodes){
 //	if(n.eClass().name = "State" and n.name = "s2"){
@@ -174,9 +185,51 @@ operation createPredList(predSeq: Sequence<Z!Pred>): Z!CPredList{
 //}
 
 
-//TO DO: to implement
-//to convert the element name into Fully Qualified Name (FQN)
 
+operation removeRef(){
+
+	for(stmr in RC!StateMachineRef.all()){
+	
+		var stm_new = new RC!StateMachineDef;
+		stm_new = clone(stmr.ref);
+		stm_new.name = stmr.name;
+	 		
+	 	ctl(stmr).machines.add(stm_new);
+	 	ctl(stmr).machines.remove(stmr);
+//	 	delete stmr;
+		
+	}
+
+	for(ctlr in RC!ControllerRef.all()){
+
+		var ctl_new = new RC!ControllerDef;
+		ctl_new = clone(ctl.ref);
+		ctl_new.name = ctlr.name;
+	 		
+	 	module(ctlr).nodes.add(ctl_new);
+	 	module(ctlr).nodes.remove(ctlr);
+//	 	delete ctlr;
+		
+	}
+	return RC;
+}
+
+operation ctl(stmr: RC!StateMachineRef): RC!ControllerDef{
+	for(ctl in RC!ControllerDef.all()){
+		if(ctl.machines.includes(stmr)){
+			return ctl;
+		}
+	}
+}
+
+operation module(ctlr: RC!ControllerRef): RC!RCModule{
+	for(module in RC!RCModule.all()){
+		if(module.nodes.includes(ctlr)){
+			return module;
+		}
+	}
+}
+//Spec is the root element of the generated Circus model, it contains a narrative section and a ZSection
 operation createSpec(zsect: Z!ZSect): Z!Spec{
 	var spec = new Z!Spec;
 	var narrativeSect = new Z!NarrSect;
@@ -204,6 +257,7 @@ operation createZSect(
 	return zsect;
 }
 
+//used in createZSect
 operation createParentList(parentNameSeq: Sequence<String>): Sequence<Z!Parent>{
 	var parents = Sequence<Z!Parent>;
 	parents = Sequence{};
@@ -221,99 +275,313 @@ operation createParent(p: String): Z!Parent{
 
 operation Z!ZSect addPara2ZSect(para: Z!Para): Z!ZSect{
 	var zsect =  self;
-	"line 178, addPara2ZSect is called".println();
-	zsect.paraList.isDefined().println();
-	zsect.paraList.println();
-	
-	zsect.paraList.paras.isDefined().println();
-	zsect.paraList.paras.println();
-	//	self.paraList = new Z!ZParaList;
-	
-	para.println();
-	//para.name.word.println();
-	
+		
 	zsect.paraList.paras.add(para);
 	("line 193 is executed: self.paraList.paras = " + self.paraList.paras).println();
 	return zsect;
 
 }
 
+//used to create NIDS enumeration typePara
+operation Z!Freetype createEnumTypePara(): Z!FreePara{
+	var freePara = new Z!FreePara;
+	freePara.freetypeList =  new Z!ZFreetypeList;
+	freePara.freetypeList.freeTypes.add(self);
+	
+	return freePara;
+}
 
-operation Any FQN(): String{
-/*TO DO: Issue: the hierachy is not fixed, can have infinite combination.
-	var fqn = new String;
 
-	if(self.instanceOf(RC!Node)){
-		for(nc in RC!NodeContainer.all()){
-			if(nc.nodes.includes(n)){
-				fqn = self.name + "_" + nc.name;
-				if(nc.instanceOf(RC!Node)){
-					//TO DO, the composite state can have infinite sublayers, when to stop?
-				}
-				for(ctrl in RC!ControllerDef.all()){
-					if(ctrl.machines.includes(nc)){
-						fqn = fqn + "_" + ctrl.name;  //s0_stm0_ctrl0
-					}
-				}
+//to create enumeration type to be used for channels, e.g., channel internal__: NIDS, where NIDS is a enumeration type
+operation createEnumType(
+	name: String, 
+	str_seq: Sequence<String>
+	): Z!Freetype{
+	
+	var enumType = new Z!Freetype;
+	enumType.name = name.createZName();
+	
+	var branchList = new Z!ZBranchList;
+	for(elm in str_seq){
+		branchList.branches.add(elm.createBranch());
+	}
+	enumType.branchList = branchList;
+	
+	return enumType;
+}
+
+
+//used in createEnumType
+operation String createBranch(): Z!Branch{
+	var branch = new Z!Branch;
+	branch.name = self.createZName();
+	return branch;
+	//branch.expr = null;
+}
+
+//Fully Qualified Name for Node
+operation RC!Node FQN(): String{
+	var  stm_sets = RC!StateMachineDef.all();
+	"line 13".println();
+	stm_sets.println();
+	
+	//Case 1: the node is contained in a stm
+	for(stm in stm_sets){
+		if(stm.nodes.includes(self)){
+			return self.name+"_"+ stm.FQN();
+		}
+	}
+	
+	//Case 2: the node is contained in a composite node
+	for(nd in RC_model!Node.all()){
+		if(nd.nodes.size>0){
+			if(nd.nodes.includes(self)){
+				return self.name+"_"+ nd.FQN();
+			}
+		}
+	}	
+}
+
+
+//Fully Qualified Name for events
+operation RC!Event FQN(): String{
+	var  stm_sets = RC!StateMachineDef.all();
+	"line 13".println();
+	stm_sets.println();
+	
+	//Case 1: the event is contained in a stmdef
+	for(stm in stm_sets){
+		if(stm.events.includes(self)){
+			return self.name+"_"+ stm.FQN();
+		}
+	}
+	
+	//Case 2: the node is contained in a controllerdef node
+	for(ctl in RC!ControllerDef.all()){
+		if(ctl.events.includes(self)){
+			return self.name + "_" + ctl.FQN();
+		}
+	}	
+}
+
+
+
+//Fully Qualified Name for StateMachineDef
+operation RC!StateMachineDef FQN(): String{
+
+	//Case 1: the stm is contained in a controllerdef
+	for(ctl in RC!ControllerDef.all()){
+		if(ctl.machines.includes(self)){
+			return self.name + "_" + ctl.FQN();
+		}
+	}
+	
+	//Case 2: the stm is contained in a package
+	for(pkg in RC!RCPackage.all()){
+		if(pkg.machines.includes(self)){
+			if(pkg.name.isDefined()){
+				return self.name + "_" + pkg.name;			
+			}else{
+				return self.name;	
+			}
+		}
+	}	
+	
+	//a module can not have a stm outside a controller
+}
+
+
+//Fully Qualified Name for ControllerDef
+operation RC!ControllerDef FQN(): String{
+	//Case 1: the controller is contained in a module
+	for(md in RC!RCModule.all()){
+		if(md.nodes.includes(self)){
+			return self.name + "_" + md.FQN();
+		}
+	}
+	
+	//Case 2: the controller is contained in a package
+	for(pkg in RC!RCPackage.all()){
+		if(pkg.controllers.includes(self)){
+			if(pkg.name.isDefined()){
+				return self.name + "_" + pkg.name;			
+			}else{
+				return self.name;	
 			}
 		}
 	}
-*/
-	return self.name;
 }
 
-operation String FQN(): String{
-	return self;
+// Fully Qualified Name for RCModule
+operation RC!RCModule FQN(): String{
+
+	//Case 1: the module is contained in a package
+	for(pkg in RC!RCPackage.all()){
+		if(pkg.modules.includes(self)){
+			if(pkg.name.isDefined()){
+				return self.name + "_" + pkg.name;			
+			}else{
+				return self.name;	
+			}
+		}
+	}		
 }
 
-operation Set<String> FQN():  Set<String>{
-	return self;
-}
-
-operation Sequence<String> FQN():  Sequence<String>{
-	return self;
-}
 
 
+////Fully Qualified Name for Node
+//operation RC!Node FQN(RC_model: Any): String{
+//	var  stm_sets = RC_model!StateMachineDef.all();
+//	"line 13".println();
+//	stm_sets.println();
+//	
+//	//Case 1: the node is contained in a stm
+//	for(stm in stm_sets){
+//		if(stm.nodes.includes(self)){
+//			return self.name+"_"+ stm.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the node is contained in a composite node
+//	for(nd in RC_model!Node.all()){
+//		if(nd.nodes.size>0){
+//			if(nd.nodes.includes(self)){
+//				return self.name+"_"+ nd.FQN(RC_model);
+//			}
+//		}
+//	}	
+//}
+//
+//
+//
+//
+//
+////Fully Qualified Name for events
+//operation RC!Event FQN(RC_model: Any): String{
+//	var  stm_sets = RC_model!StateMachineDef.all();
+//	"line 13".println();
+//	stm_sets.println();
+//	
+//	//Case 1: the event is contained in a stmdef
+//	for(stm in stm_sets){
+//		if(stm.events.includes(self)){
+//			return self.name+"_"+ stm.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the node is contained in a controllerdef node
+//	for(ctl in RC_model!ControllerDef.all()){
+//		if(ctl.events.includes(self)){
+//			return self.name + "_" + ctl.FQN(RC_model);
+//		}
+//	}	
+//}
+//
+//
+//
+//
+////Fully Qualified Name for StateMachineDef
+//operation RC!StateMachineDef FQN(RC_model: Any): String{
+//
+//	//Case 1: the stm is contained in a controllerdef
+//	for(ctl in RC_model!ControllerDef.all()){
+//		if(ctl.machines.includes(self)){
+//			return self.name + "_" + ctl.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the stm is contained in a package
+//	for(pkg in RC_model!RCPackage.all()){
+//		if(pkg.machines.includes(self)){
+//			if(pkg.name.isDefined()){
+//				return self.name + "_" + pkg.name;			
+//			}else{
+//				return self.name;	
+//			}
+//		}
+//	}	
+//	
+//	//a module can not have a stm outside a controller
+//}
+//
+//
+////Fully Qualified Name for ControllerDef
+//operation RC!ControllerDef FQN(RC_model: Any): String{
+//	//Case 1: the controller is contained in a module
+//	for(md in RC_model!RCModule.all()){
+//		if(md.nodes.includes(self)){
+//			return self.name + "_" + md.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the controller is contained in a package
+//	for(pkg in RC_model!RCPackage.all()){
+//		if(pkg.controllers.includes(self)){
+//			if(pkg.name.isDefined()){
+//				return self.name + "_" + pkg.name;			
+//			}else{
+//				return self.name;	
+//			}
+//		}
+//	}
+//}
+//
+////Fully Qualified Name for RCModule
+//operation RC!RCModule FQN(RC_model: Any): String{
+//
+//	//Case 1: the module is contained in a package
+//	for(pkg in RC_model!RCPackage.all()){
+//		if(pkg.modules.includes(self)){
+//			if(pkg.name.isDefined()){
+//				return self.name + "_" + pkg.name;			
+//			}else{
+//				return self.name;	
+//			}
+//		}
+//	}		
+//}
 
 
 
 
-//channel decleration for node container
+
+
+
+//channel decleration and channelset declaration for node container (NC)
 operation RC!NodeContainer createchanParaNC()  {
 	
 	//1. channel internal__: NIDS
 //	var internal_chanpara = createChannelPara("internal_chan_" + self.FQN());
 	
-	var node_seq = Sequence<String>;
-	node_seq = Sequence{};
+	var NID_node_seq = Sequence<String>;
+	NID_node_seq = Sequence{};
+		
 	for(n in self.nodes){
-		node_seq.add("internal__NID_" + n.FQN());
+		NID_node_seq.add("NID_" + n.FQN());
 	}
 	
-	var internal_chanpara = node_seq.createChannelPara("internal_chan_" + self.FQN());
-//	internal_chanpara.declList.decls.add(node_set.createChannelDecl());
+	//CSPM: datatype NIDS = NID_i0 | NID_s0 | ...
+	var NIDS = createEnumType("NIDS_"+self.FQN(), NID_node_seq);
 	
+	var NIDS_para = NIDS.createEnumTypePara();
 	
-//
+	//CSPM: channel internal__:NIDS
+	var internal_chanpara = Sequence{"internal__"+self.FQN()}.createChannelPara("internal_chan_" + self.FQN(), NIDS.name.word);
+	
 //	for(n in self.nodes){
-//		
-//		internal_chanpara.addChan2ChanPara("internal__NID_" + n.FQN());
-//		if(internal_chanpara.declList.decls.size()=0){
-//			internal_chanpara.declList.decls.addChan2ChanPara("internal__NID_" + n.FQN());
-//		}
-//		internal_chanpara.declList.decls.at(0).addChan2ChanPara("internal__NID_" + n.FQN());
-		
-		
-//		self.declList.decls.at(0).addChannelDecl(chan_name, chan_type);
+//		node_seq.add("internal__NID_" + n.FQN());
 //	}
+	//	var internal_chanpara = node_seq.createChannelPara("internal_chan_" + self.FQN());
+	
+	
+
 	
 	//2. Flow channel: interrupt, exited, exit, terminate
-	var flow_chanpara = Sequence{"interrupt".FQN(), "exited".FQN(), "exit".FQN(), "terminate".FQN()}.createChannelPara("flowchan_" + self.FQN());
+	var flow_chanpara = Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN(), "exit_"+self.FQN(), "terminate"}.createChannelPara("flowchan_" + self.FQN());
 	// should be updated to "interrupt".FQN(self)
 
 
-	//3. variable channels //TO DO: the channels are notgenerated, because when an empty chanpara is created, the type is identified as Synch, so no typed var can be considered
+	//3. variable channels, each var has a channel declaration, as vars can have different types, while the channels in the chandecl.list should have the same type.
 	
 	var var_chanpara = createChannelPara("variable_chan_" + self.FQN());
 	for(vl in self.variableList){
@@ -322,7 +590,12 @@ operation RC!NodeContainer createchanParaNC()  {
 			for(v in vl.vars){
 				
 				var type_expr = v.type.createTypeExpr();
-				var var_seq = Sequence{"get_" + v.FQN(), "set_" + v.FQN(), "setL_" + v.FQN(), "setR_" + v.FQN()};
+				
+				var var_seq = Sequence{"get_" + v.name + "_" + self.FQN(), 
+									   "set_" + v.name + "_" + self.FQN(), 
+									   "setL_" + v.name + "_" + self.FQN(), 
+									   "setR_" + v.name + "_" + self.FQN()};
+									   
 				var_chanpara.declList.decls.add(var_seq.createChannelDecl(type_expr));
 				
 				
@@ -346,32 +619,100 @@ operation RC!NodeContainer createchanParaNC()  {
 	
 	//6. Declaring state machine events as channels
 
-	var evt_seq = new Sequence<String>;
+	var evt_chanpara = createChannelPara("event_chan_" + self.FQN());
+	
+	//Case 1: to create the type for the state machine event channels (external), 
+	//e.g., CSPM: trigger1:InOut.core_int;   NIDS is not involved.
+	//Circus: trigger1_in ::int, trigger1_out ::int
 	for(e in self.events){
-		evt_seq.add(e.FQN() + "_in");
-		evt_seq.add(e.FQN() + "_out");
-		for(n in self.nodes){
-			evt_seq.add(e.name + "__NID_" + n.FQN() + "_in");
-			evt_seq.add(e.name + "__NID_" + n.FQN() + "_out");
+				
+		var evt_seq = Sequence{e.FQN() + "_in", //CSPM InOut enumtype is removed for Circus, so becomes 2 channels
+							   e.FQN() + "_out"};
+									   
+		if(e.type=null){
+			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl());	
+		}else{
+			var type_expr = e.type.createTypeExpr();
+			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl(type_expr));
 		}
 	}
-	var evt_chanpara = evt_seq.createChannelPara("event_chan_" + self.FQN());
 	
-	
+	//Case 2: to generate channels for the events to be used as transition triggers
+	//e.g., CSPM: trigger1__:NIDS.InOut.core_int
+	//Circus: trigger1_stm0_pkg0__in :: NIDS x int
+	for(e in self.events){
+		var evt_seq = Sequence{e.FQN() + "__in"//,
+							 //e.FQN() + "__out" , this is removed because the out channel is not necessary, as e.NIDS channel is only used for transition triggers, and a trigger can only be an input.
+							   };	
+							   	
+		if(e.type=null){
+			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl(NIDS.name.word));	
+		}else{
+			var type_expr = e.type.createTypeExpr();
+			
+			//to create the PRODUCT type for the state machine event channels (internal), 
+			//e.g., CSPM: trigger1__:NIDS.InOut.core_int
+			type_expr = createProdExpr(type_expr, NIDS.name.word.createTypeExpr());					   
+			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl(type_expr));
+		}
+	}
 	
 	//7. Declaring call and ret events for undefined operations as channels
 	//TO DO
 	
 	
-	
 	//8. Declaring local channels for each node in the node container
+	//shall these local ones be declared in state semantics?
 	for(n in self.nodes){
 		if(n.instanceOf(RC!Junction)){
-			var junc_chan = Sequence{"enter_"+ n.FQN(), "interrupt_"+ n.FQN()}.createChannelPara("junc_chan_" + n.FQN());
+			var junc_chan = Sequence{"enter_"+ n.FQN(),
+									 "interrupt_"+ n.FQN()}.createChannelPara("junc_chan_" + n.FQN());
 		} else{
-			var st_chan = Sequence{"enter_"+ n.FQN(), "entered_"+ n.FQN(), "interrupt_"+ n.FQN(), "enteredL_"+ n.FQN(),"enteredR_"+ n.FQN()}.createChannelPara("st_chan_" + n.FQN());
+			var st_chan = Sequence{"enter_"+ n.FQN(),
+								   "entered_"+ n.FQN(),
+								   "interrupt_"+ n.FQN(),
+								   "enteredL_"+ n.FQN(),
+								   "enteredR_"+ n.FQN()}.createChannelPara("st_chan_" + n.FQN());
 		}
 	}
+	
+	
+	//9. Declaring NC channelsets: enterSS, enteredSS, internal_events, shared_variable_events, sem__events
+	
+	//enterSS
+	var enterSSchannelset = createChannelSet(createBasicChannelSetExpr(enterSS(self)));
+	var enterSSchannelsetPara = enterSSchannelset.createChanSetPara("enterSS_"+self.FQN());
+	
+	//enteredSS
+	var enteredSSchannelset = createChannelSet(createBasicChannelSetExpr(enteredSS(self)));
+	var enteredSSchannelsetPara = enteredSSchannelset.createChanSetPara("enteredSS_"+self.FQN());
+	
+	
+	//internal_events
+	var internal_stringset = enterSS(self).includingAll(enteredSS(self)).includingAll(Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN()});
+	var internal_events_channelset = createChannelSet(createBasicChannelSetExpr(internal_stringset));
+	var internal_events_channelsetPara = internal_events_channelset.createChanSetPara("internal_events_"+self.FQN());
+	
+	
+	//shared_variable_events
+	//TO DO
+	
+	
+	//sem__events
+	//Shall terminate be FQN? No
+	var sem__events_stringset = Sequence{"terminate"};
+	
+	for(e in self.events){				
+		sem__events_stringset.add(e.FQN() + "_in");
+		sem__events_stringset.add(e.FQN() + "_out");
+	}
+		
+	var sem__events_channelset = createChannelSet(createBasicChannelSetExpr(sem__events_stringset));
+	var sem__events_channelsetPara = sem__events_channelset.createChanSetPara("sem__events_"+self.FQN());
+	
+	//10. Declaring State Local channelsets: enterSS_s0, enteredSS_s0, etc
+	//shall these local ones be declared in state semantics?
+	
 }
 
  
@@ -386,7 +727,11 @@ operation RC!Type createTypeExpr(): Z!Expr{
 	}
 }
   
-  
+//this is used for variable channel decleration, a RefType is generated from the name of the enumeration type, e.g., NIDS
+operation String createTypeExpr(): Z!Expr{
+	return self.createRefExpr(false, false);
+}
+
 operation RC!ProductType createProdExpr(): Z!ProdExpr{
 	var prodexpr = new 	Z!ProdExpr;
 	prodexpr.exprList = new Z!ZExprList;
@@ -394,6 +739,14 @@ operation RC!ProductType createProdExpr(): Z!ProdExpr{
  		prodexpr.exprList.exprs.add(t.createTypeExpr());
  	}
  	
+ 	return prodexpr;
+}
+
+operation createProdExpr(exp1: Z!Expr, exp2:Z!Expr): Z!ProdExpr{
+	var prodexpr = new 	Z!ProdExpr;
+	prodexpr.exprList = new Z!ZExprList;
+	prodexpr.exprList.exprs = Sequence{exp1,exp2};
+	
  	return prodexpr;
 }
 
@@ -418,8 +771,6 @@ operation createChannelPara(
 
 
 
-//self = name of the channel
-//different from ChannelSetPara or ActionPara or ProcessPara, ChannelPara has no property of name
 //type indicate the type of the channel, or is sync if is uptyped
 operation Sequence<String> createChannelPara(
 	para_name: String,
@@ -428,9 +779,10 @@ operation Sequence<String> createChannelPara(
 	var chanDeclPara = new Z!ChannelPara;
 	chanDeclPara.declList = new Z!ZDeclList;
 	
-//	var decl = self.createChannelDecl(type);
+	var decl = self.createChannelDecl(type);
 	chanDeclPara.declList.decls = Sequence{};
-	
+	chanDeclPara.declList.decls.add(decl);
+
 	chanDeclPara.name = para_name.createZName();
 	
 	return chanDeclPara;
@@ -486,10 +838,7 @@ operation Sequence<String> createChannelDecl(): Z!ChannelDecl{
 	//the second element is the (possibly empty) list of declared channel names
 //	var snd_list = createNameList(self);
 	decl.channelNameList = createNameList(self);
-	//decl.nameLists is a list of non-null NameList objects with size two. decl.nameLists = new Sequence<Z!ZNameList>;
-//	decl.listOfNameLists = new Sequence<Z!ZNameList>;
-//	decl.listOfNameLists = Sequence{fst_list, snd_list};
-//	decl.listOfNameLists = Sequence{decl.genFormals, decl.channelNameList};
+	
 	//expr attr indicate the type of the channel, and it's a RefExpr
 	//if it's untyped, type = "SYNCH"
 	if(self.size()>0){
@@ -535,58 +884,27 @@ operation Sequence<String> createChannelDecl(type_expr: Z!Expr): Z!ChannelDecl{
 	return decl;
 }
 
-/*
-
-operation Z!ChannelDecl addChannelDecl(
-	chan_name: String
-	): Z!ChannelDecl{
-	if(self.expr.isDefined() and self.expr.name.word  = "SYNCH"){
-		self.channelNameList.addName2NameList(chan_name);
-		return self;
-	}	else 
-	if(self.expr.isDefined() and not (self.expr.name.word = "SYNCH")) {
-		errln("The new channel is untyped, but the existing channel has a type.");
-	} else 
-	if(not self.expr.isDefined() ){
-	//TO DO
-	// as the context is a decl means decl exist, but expr is not identified
-	}
-}
-
-operation Z!ChannelDecl addChannelDecl(
-	chan_name: String,
-	chan_type: String
-	): Z!ChannelDecl{
-	if(self.expr.name.word  = chan_type){
-		self.channelNameList.addName2NameList(chan_name);
-		return self;
-	}	else errln("The type of the new channel does not match the existing channel decleration.");
-}
-
-operation Z!ChannelDecl addChannelDecl(
-	chan_name: String,
-	chan_type: Z!Expr
-	): Z!ChannelDecl{
-	if(self.expr  = chan_type){
-		self.channelNameList.addName2NameList(chan_name);
-		return self;
-	}	else "The type of the new channel does not match the existing channel decleration.".errln();
-}
-*/
-
 
 
 
 //CSP Rule 40
 
 operation ncBehaviour(nc:RC!NodeContainer): Z!ProcessPara{
-
-	var hideset_string = enterSS(nc).includingAll(Set{"exit", "exited", "internal__"}.FQN());
+	nc.createchanParaNC(); // HERE is the place to declare all the channels for a state machine
+	var hideset_string = enterSS(nc).includingAll(Sequence{"exit_" + nc.FQN(), "exited_" + nc.FQN(), "internal__"+nc.FQN()});
 	
-	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hideset_string).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
+	var hidechannelset = createChannelSet(createBasicChannelSetExpr(hideset_string));
+	var hidechannelsetPara = hidechannelset.createChanSetPara("ncCoreBeh_hideset_"+nc.FQN());
+//	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hideset_string).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
+
+
+	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hidechannelsetPara.name.word).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
+	//TO DO: need to confirm the M2T part
+	
+//	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hidechannelset).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
 	
 	("line 175, renameTriggerEventsPairL(nc) = " + renameTriggerEventsPairL(nc)).println();
-	var ncBehaviourProcPara =  ncBehaviourProc.createProcessPara("ncBehaviourProc_"+nc.name.FQN(), true);
+	var ncBehaviourProcPara =  ncBehaviourProc.createProcessPara("ncBehaviourProc_"+nc.FQN(), true);
 
 	return ncBehaviourProcPara;
 }
@@ -604,7 +922,7 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	//firstly, to calculate the renaming pair for the transitions
 	var tidsR_trans_pairL = new Sequence<String>;
 	for(t in nc.transitions){
-		tidsR_trans_pairL.add("interrupt."+nc.name+"."+t.source.name);
+		tidsR_trans_pairL.add("interrupt_"+t.source.FQN());
 	}
 	var tidsR_trans_pairR = new Sequence<String>;
 	for(t in nc.transitions){
@@ -616,11 +934,11 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	//Secondly, to calculate the renaming pair for the nodes
 	var tidsR_nodes_pairL = new Sequence<String>; 
 	for(n in nc.nodes.select(m|m.instanceOf(State))){
-		tidsR_nodes_pairL.add("interrupt."+nc.name+"."+n.name);
+		tidsR_nodes_pairL.add("interrupt_" + n.FQN());
 	}
 	var tidsR_nodes_pairR = new Sequence<String>;
 	for(n in nc.nodes.select(m|m.instanceOf(State))){
-		tidsR_nodes_pairR.add("interrupt."+nc.name);
+		tidsR_nodes_pairR.add("interrupt_"+nc.FQN());
 	}
 	
 
@@ -643,43 +961,24 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	var transProcPara = transProc.createProcessPara("trans_proc_" + nc.FQN(), true);
 	
 	
+	//this step creates the string set, but not a channelset, because this can SIMPLIFY the coding. 
+	//we will generate a channelset after all channels are collected (by union) for the channelset
 	var cs_stringset = flowevts(nc).includingAll(transSync(nc));
 	cs_stringset.add("terminate");
-	//?? TO DO: do "terminate" need to be "terminate"+"_"+ nc.name? 
+	("line903: cs_stringset.type = " +cs_stringset).println();
+	
 	
 	/***************begin of C.2.2 metanotatin************************/
-	/*
-	"line 238".println();
-	("No1:  nc.type = "+ nc.eClass().name).println();
 	
-	("No1.1:  nc.type = nodecontainer? "+ nc.instanceOf(RC!NodeContainer)).println();
-	
-	("No2:  composeNodeProcRenamed2Para.name.createCallProcess().type = "+ composeNodeProcRenamed2Para.name.createCallProcess().eClass().name).println();
-	
-	("No2.1:  callprocss.type = circusproc? "+ composeNodeProcRenamed2Para.name.createCallProcess().instanceOf(Z!CircusProcess)).println();
-	
-	("No3:  vars(nc.nodes).type = "+ vars(nc.nodes).type().name).println();
-	
-	
-	("No3.1:  vars(nc.nodes).type = set<string>? "+ vars(nc.nodes).instanceOf(Set<String>)).println();
-	
-	
-	("No4:  vars(nc.nodes).type = "+ vars(nc.nodes).type().name).println();
-	
-	("No5:  cs_stringset.type = "+ cs_stringset.type().name).println();
-	
-	("No6:  vtguards(nc).type = "+ vtguards(nc).type().name).println();
-	
-	("No7:  Set{}.type = "+ Set{}.type().name).println();
-	
-	("No8:  transProcPara.name.createCallProcess().type = "+ transProcPara.name.createCallProcess().eClass().name).println();
-	
-	
-	("lin 255").println();
-	*/
-	
-	
-	var ncCoreBehProc = createMetaParallelProcess(nc, composedNodeProcTidsRenamed, vars(nc.nodes), vars(nc.nodes), cs_stringset, vtguards(nc), Set{}, transProcPara.name.createCallProcess());
+	var ncCoreBehProc = createMetaParallelProcess(nc, 
+												  composedNodeProcTidsRenamed, 
+												  vars(nc.nodes), 
+												  vars(nc.nodes), 
+												  cs_stringset, 
+												  vtguards(nc), 
+												  Set{}, 
+												  transProcPara.name.createCallProcess()
+												  );
 	/***************end of C.2.2 metanotatin************************/
 	
 	
@@ -717,7 +1016,7 @@ operation vars(ts: Set<RC!Transition>):Set<String>{
 	"Rule 47 is called".println();
 	var varset = Set<String>;
 	for(t in ts){
-		varset = varset.includingAll(vars(t));
+		varset = varset.includingAll(vars(t));//Rule 49
 	}
 	return varset;
 }
@@ -730,10 +1029,11 @@ operation vars(node: RC!Node):Set<String>{
 	varset = Set{};
 	if(node.instanceOf(RC!State)){
 		for(a in node.actions){
-			varset = varset.includingAll(vars(a.action));
+			varset = varset.includingAll(vars(a.action));//Rule 50
 		}
 		"line 285".println();
-		varset = varset.includingAll(vars(node.nodes)).includingAll(vars(node.transitions));
+		varset = varset.includingAll(vars(node.nodes))//Rule 46
+				       .includingAll(vars(node.transitions));//Rule 47
 	} else{
 		varset = Set{};
 	}
@@ -745,10 +1045,10 @@ operation vars(t: RC!Transition):Set<String>{
 	"Rule 49 is called".println();
 	var varset = Set<String>;
 	if(t.condition.isDefined()){
-		varset = varset.includingAll(vars(t.condition));
+		varset = varset.includingAll(vars(t.condition));//Rule 50
 	}
 	if(t.action.isDefined()){
-		varset = varset.includingAll(vars(t.action));
+		varset = varset.includingAll(vars(t.action));//Rule 50
 	}
 	if(t.deadline.isDefined()){
 		varset = varset.includingAll(vars(t.deadline));
@@ -759,14 +1059,19 @@ operation vars(t: RC!Transition):Set<String>{
 
 //CSP Rule 50
 operation vars(stmt: RC!Statement):Set<String>{
-	"Rule 50 is called".println();
 	var varset = Set<String>;
 	varset = Set{};
+	
 	if(stmt.instanceOf(RC!Assignment)){
 //		varset = usedVariables(stmt.left).includingAll(usedVariables(stmt.right));
-		varset = Set{stmt.left.name.name}.includingAll(usedVariables(stmt.right));
-		//TO DO: to confirm: "stmt.left.name.name" works for one var name, is there stmt.left has multiple names?
+//		this line above nc(stmt.left.name) is commented out, because usedVariables (Rule 45) does not cover VarRef, a subclass of Assignable
 		
+		varset = Set{stmt.left.name.name + "_" + nc(stmt.left.name).FQN()}.includingAll(usedVariables(stmt.right));
+		//stmt.left is an Assignable, stmt.left.name is a Variable
+		//nc(stmt.left.name) returns the basiccontext that defines this variable
+		
+		//TO DO: to confirm: "stmt.left.name.name" works for one var name, but is there stmt.left has multiple names?
+		("line 1071, stmt.left.name.name + nc(stmt.left.name).FQN() = " + stmt.left.name.name + "_" + nc(stmt.left.name).FQN()).println();
 	} else
 	if(stmt.instanceOf(RC!Call)){
 		for(arg in stmt.args){
@@ -781,14 +1086,21 @@ operation vars(stmt: RC!Statement):Set<String>{
 		varset = usedVariables(stmt.communication.value);
 	} else
 	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#INPUT)){
-		varset = Set{stmt.communication.parameter.name};
+//		var para_str = stmt.communication.parameter.name + "_" + container.FQN();
+		var para_str = stmt.communication.parameter.name + "_" + nc(stmt.communication.parameter).FQN();
+		//parameter is a Variable
+		
+		varset = Set{para_str};
 	} else
+	
 	if(stmt.instanceOf(RC!ParStmt)){
 		varset = vars(stmt.stmt);
 	} else
+	
 	if(stmt.instanceOf(RC!SeqStatement)){
 		varset = vars(stmt.statements);
 	} else
+	
 	if(stmt.instanceOf(RC!TimedStatement)){
 		varset = vars(stmt.stmt).includingAll(vars(stmt.deadline));
 	}
@@ -853,6 +1165,10 @@ operation createMetaParallelProcess(
 	for(v in pw_qr){
 		PRenaming_pairR.add("set_"+v);//Rule 201
 		PRenaming_pairL.add("setL_"+v);//R204 setL(v)
+		
+		//TO confirm 
+		//IF this is the place to give variable a FQN, the benefit of not FQN in operations vars is the vars are simplified in this way, i.e., we don't need to add .FQN() for each vars
+		//the drawback is that we need to be careful to not omit any places that needs FQN
 	}
 	
 	var PRenamed = P.createRenameProcess(PRenaming_pairR, PRenaming_pairL);
@@ -890,12 +1206,12 @@ operation createMetaParallelProcess(
 	//TO DO, each channel in channelset_stringSet needs to be declared as a channel.
 	//channelset_stringSet.createChannel();
 	
-	var channelset = createChannelSet(createBasicChannelSetExpr(channel_names)).createChanSetPara("chanset_paral_ncCoreBeh_" + nc.name);
-	
+	var channelset = createChannelSet(createBasicChannelSetExpr(channel_names)).createChanSetPara("parallel_chanset_ncCoreBeh_" + nc.FQN());
+	//this channelset is the one in CSPM: [| union(union(union(flowevts,transSync),{terminate}),{|share__						 			,setL_a,setR_a|}) |]
 	
 	//step 4 - create parallel process	P{|channelset|}Q
 	
-	var PparQ = createParallelProcess("chanset_paral_ncCoreBeh_" + nc.name, PRenamed,QRenamed);
+	var PparQ = createParallelProcess("parallel_chanset_ncCoreBeh_" + nc.FQN(), PRenamed,QRenamed);
 	
 	
 	//step 5 - rename parallel process: (1) create assigementpairs, (2) rename P{|channelset|}Q
@@ -932,21 +1248,39 @@ operation intersect(
 }
 
 //used in CSP Rule 41
+//this creates the string set, but not a channelset, because this can SIMPLIFY the coding. 
+//we will generate a channelset after all channels are collected (by union) for the channelset
 operation flowevts(nc: RC!NodeContainer): Set<String>{
-	var flowevts = enterSS(nc).includingAll(Set{"exit."+nc.name, "exited."+nc.name, "interrupt."+nc.name});
+	var flowevts = enterSS(nc).
+				   includingAll(Set{"exit_"+nc.FQN(),
+				   					"exited_"+nc.FQN(),
+				   					"interrupt_"+nc.FQN()}
+				   				).asSet();
 	return flowevts;
 }
 
 
 //used in CSP Rule 40 and operation flowevts
-//this creates the string set, but not the channel declaration yet //TO DO
-operation enterSS(nc: RC!NodeContainer): Set<String>{
-	var set = new Set<String>;
+//this creates the string set, but not a channelset, because this can SIMPLIFY the coding. 
+//we will generate a channelset after all channels are collected (by union) for the channelset
+operation enterSS(nc: RC!NodeContainer): Sequence<String>{
+	var seq = new Sequence<String>;
 	for(n in nc.nodes){
-		set.add(nc.name+"."+n.name+"::enter"); //stm0.i0::enter ? 
+//		set.add(nc.name+"."+n.name+"::enter"); //stm0.i0::enter ?
+		seq.add("enter_" + n.FQN()); 
 	}
-	return set;
+	return seq;
 }
+
+
+operation enteredSS(nc: RC!NodeContainer): Sequence<String>{
+	var seq = new Sequence<String>;
+	for(n in nc.nodes.select(m|m.instanceOf(RC!State))){
+		seq.add("entered_" + n.FQN()); 
+	}
+	return seq;
+}
+
 
 
 //used in Rule 41
@@ -977,13 +1311,31 @@ operation setRC(nameset: Set<String>):Set<String>{
 	return set;
 }
 
+
+//CSPM example:
+/****************************
+[[ stop__.x____ 	<- stop,
+   trigger1__.x____ <- trigger1,
+   event1__.x____ 	<- event1
+   | x____ <- NIDS
+]]
+*******************************/
 //CSP Rule 42 - part1, used in Rule 40
+//by 5th June 2024, this operation is only used in Rule 40
+//and this is the only place involving "event1__.x____ <- event1 | x____ <- NIDS"
+//in Isabelle, we use "event1_stm0_pkg0__in\<cdot>x" to represent the above
 operation renameTriggerEventsPairL(nc:RC!NodeContainer): Sequence<String>{
 	var pairL = new Sequence<String>;
 	
 	for(t in nc.transitions.select(l|l.trigger.isDefined())){
 		
-		pairL.add(t.trigger.event.name + "__."+ nc.name+"." + t.name + "." + t.source.name); //TO DO: confirm the FQN format for t.src
+		pairL.add(t.trigger.event.FQN()+"__in" +"\\<cdot>x" );
+		//in Isabelle, event1\<cdot>x means the set of events that take all values of the first type of event1  when the tirgger's type is a product.
+		//what about the case the trigger's type is not a product, but only NIDS?
+		//TBC
+		
+		
+//		pairL.add(t.trigger.event.FQN()+"__in"  +".NID_"+ t.source.FQN() );		
 	}
 	return pairL;
 }
@@ -992,13 +1344,13 @@ operation renameTriggerEventsPairL(nc:RC!NodeContainer): Sequence<String>{
 operation renameTriggerEventsPairR(nc:RC!NodeContainer): Sequence<String>{
 	var pairR = new Sequence<String>;
 	for(t in nc.transitions.select(l|l.trigger.isDefined())){
-		pairR.add(nc.name+"." + t.name + "." + t.trigger.event.name);//TO DO: confirm the FQN format
+		pairR.add(t.trigger.event.FQN()+"_in");
 	}
 	return pairR;
 }
 
 
-//TO DO: NEED to test in CZT first
+//This operation is not used yet
 //channelset is declared, and is referred here as a name (RefExp)
 operation Z!CircusProcess createHideProcess(
 	cs_name: String//, 
@@ -1015,7 +1367,7 @@ operation Z!CircusProcess createHideProcess(
 
 //channelset is not declared, and is declared within hideProcess, but has no name (BasicChannelSetExpr)
 operation Z!CircusProcess createHideProcess(
-	channel_names: Set<String>//, 
+	channel_names: Sequence<String>//, 
 //	nc: RC!NodeContainer
 	):Z!HideProcess{
 
@@ -1024,11 +1376,23 @@ operation Z!CircusProcess createHideProcess(
 	hideProc.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
 	
 	hideProc.circusProcess = self;
-	hideProc.type().println();
  	return hideProc;
 }
 
 
+//the parameter is a channelset instead of string set
+operation Z!CircusProcess createHideProcess(
+	cs: Z!CircusChannelSet//, 
+//	nc: RC!NodeContainer
+	):Z!HideProcess{
+
+	"line 622 createHideProcess is called".println();
+	var hideProc = new Z!HideProcess;
+//	hideProc.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
+	hideProc.channelSet = cs;
+	hideProc.circusProcess = self;
+ 	return hideProc;
+}
 
 operation Z!CircusProcess createRenameProcess(
 	nameSetL: Sequence<String>, 
@@ -1082,17 +1446,19 @@ operation tevent(t: RC!Transition, context: String): String{
 }
 */
 
+// CSP Rule 43 variation
 // used in R41 tidsR(nc) //TO DO: 't.source.name' should be replaced by 't.source.FQN()' later on.
 operation tevent_str(t: RC!Transition): String{
  	
  	var tevent_string;
  	
 	if(t.trigger = null){
-		tevent_string = "internal." + t.source.name;
+		tevent_string = "internal__" + nc(t).FQN()  + ".NID_" + t.source.FQN();
 	} 
 	
 	else {
-		tevent_string = t.trigger.event.name + "__." + t.source.name + "_in";
+		tevent_string = t.trigger.event.FQN() + "__in"   + "." + t.source.FQN();//TBC: + "." + t.source.FQN() part
+//		tevent_string = t.trigger.event.name + "__." + t.source.name + "_in";
 	}
 	
 	return tevent_string;
@@ -1102,22 +1468,117 @@ operation tevent_str(t: RC!Transition): String{
 //TO DO: to confirm the Z type, shall trigger event be both a channel AND a communication?
 //this version returns Communication
 operation  tevent(t: RC!Transition): Z!Communication{
- 	
+ 	"line 1397, tevent to return communication is called".println();
  	var chan_name;
  	var chan_type = "SYNCH";
 
 	if(t.trigger = null){
-		chan_name = "internal." + t.source.name;
+		chan_name = "internal__" + nc(t).FQN()  + ".NID_" + t.source.FQN();//TBC
+//		chan_name = "internal." + t.source.name;
 	} 
 	
 	else {
-		chan_name = t.trigger.event.name + "__." + t.source.name + "_in";
+		chan_name = t.trigger.event.FQN() + "__in"      + "." + t.source.FQN();//TBC
+//		chan_name = t.trigger.event.name + "__." + t.source.name + "_in";
 	}
 	
 	var commu = createSynchCommunication(chan_name);
 	
 	return commu;
 }
+
+
+//to obtain the nodecontainer that contains the transition t
+operation nc(t: RC!Transition): RC!NodeContainer{
+	for(nc in RC!NodeContainer.all()){
+		if(nc.transitions.includes(t)){
+			return nc;
+		}
+	}
+}
+
+operation nc(nd: RC!Node): RC!NodeContainer{
+	for(nc in RC!NodeContainer.all()){
+		if(nc.nodes.includes(nd)){
+			return nc;
+		}
+	}
+}
+
+//to return the nodecontainer of the variable
+//TO DO: the required var
+operation nc(v: RC!Variable): RC!BasicContext{
+
+	//Case 1: v belongs to a STMDef
+	for(nc in RC!StateMachineDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	//Case 2: v belongs to a OperationDef
+	for(nc in RC!OperationDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	//Case 3: v belongs to a ControllerDef
+	for(nc in RC!ControllerDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	//Case 4: v belongs to a PlatformDef
+	for(nc in RC!PlatformDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	
+	//Case 5: v belongs to a Interface
+	for(nc in RC!Interface.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+}
+
+
+operation nc(stm: RC!Statement): RC!NodeContainer{
+	for(nc in RC!NodeContainer.all()){
+		
+		for(st in nc.nodes.select(s|s.instanceOf(RC!State))){
+			if(st.actions.size()>0){
+				for(action in st.actions){
+					if(action.action = stm){
+						return nc;
+					}
+				}
+			}
+		}	
+		
+		for(tr in nc.transitions){
+			if(tr.action = stm){
+				return nc;
+			}			
+		}
+	}
+}
+
+
 
 
 //CSP Rule 44
@@ -1173,15 +1634,20 @@ operation usedVariables(expr:RC!Expression): Set<String>{
 	if(expr.instanceOf(RefExp)){
 		var value = expr.ref;
 		if(value.instanceOf(RC!Variable) and value.modifier= VariableModifier#VAR){
-			set.add(value.name);
+			set.add(value.name + "_" + nc(value).FQN());
+			//here we use operation nc() to return the basiccontext that defines this variable,
+			//therefore we do not need to pass the parameter 'container' to the usedVariables operaiton as below
+//			set.add(value.name + "_" + container.FQN());
 		}
 
-	} else{
+	} else
+	{
 		"line814".println();
 		 expr.eContents.println();
 		 "line816".println();
 		for(obj in expr.eContents){
 			if(obj.instanceOf(RC!Expression)){
+//				set = set.includingAll(usedVariables(obj));
 				set = set.includingAll(usedVariables(obj));
 			}
 		}
@@ -1211,7 +1677,7 @@ operation composedNodes(nodes: Set<Node>): Z!CircusProcess{
 		var ndProcNameSet = new Set<String>;
 		
 		for(nd in nodes){
-			var proc_name = nd.name + "_proc";//TO DO: need to give the fully qualified name?
+			var proc_name = "state_proc_" + nd.FQN() ;//TO DO: need to give the fully qualified name?
 			if(nd.instanceOf(Junction)){
 				
 				//to create the process for this node as a standalone process paragraph
@@ -1328,7 +1794,7 @@ operation createParallelProcess(
 
 
 //to create BasicChannelSetExpr used in channel set declaration
-operation createBasicChannelSetExpr(channel_names: Set<String>): Z!BasicChannelSetExpr{
+operation createBasicChannelSetExpr(channel_names:Sequence<String>): Z!BasicChannelSetExpr{
 	var expr = new Z!BasicChannelSetExpr;
 	var commuList = new Sequence<Z!Communication>;
 	for(n in channel_names){
@@ -1340,7 +1806,17 @@ operation createBasicChannelSetExpr(channel_names: Set<String>): Z!BasicChannelS
 	return expr;
 }
 
-
+operation createBasicChannelSetExpr(channel_names:Set<String>): Z!BasicChannelSetExpr{
+	var expr = new Z!BasicChannelSetExpr;
+	var commuList = new Sequence<Z!Communication>;
+	for(n in channel_names){
+		commuList.add(createChannelSetCommunication(n));
+	} 
+	var communicationList = new Z!CircusCommunicationList;
+	expr.communicationList = communicationList;
+	expr.communicationList.communications = commuList;
+	return expr;
+}
 //to create communication of channelset type to be used in the BasicChannelSetExpr
 operation createChannelSetCommunication(
 	channel_name:String
@@ -2243,6 +2719,14 @@ operation clone(exp : RC!Expression) : RC!Expression   {
 	var cloned = ecoreUtil.copy(exp);
 	return cloned;
 }
+
+operation clone(stmdef : RC!StateMachineDef) : RC!StateMachineDef   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	var cloned = ecoreUtil.copy(stmdef);
+	return cloned;
+}
+
 
 /*
 operation if_pred(actions: Sequence<Z!GuardedAction>): Z!IfGuardedCommand{
