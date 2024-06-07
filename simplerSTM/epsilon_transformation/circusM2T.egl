@@ -1,8 +1,16 @@
-theory [*[%=z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).name%]_CirCus *]
+theory [%=z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).name%]_Circus 
 	imports Axiomatic_Circus
 begin
-[%
-z.eContents.println();
+
+subsection \<open> Prelude \<close>
+
+lit_vars
+unbundle Circus_Syntax
+
+hide_const (open) sum
+
+subsection \<open> Model \<close>
+[%z.eContents.println();
 //z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).name.println();
 z.type().println();
 //z.allInstances().println();
@@ -13,43 +21,80 @@ z.type().println();
 [*
 s3.entryaction.expr = [%=z.eContents.at(0).parseExpr()%]
 *]
+[%z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!FreePara)).println();
+var freeparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!FreePara));
+
+for(freepara in freeparas){
+	var enumType = freepara.freetypeList.freeTypes.at(0);
+//	var chans = chandecl.channelNameList.names;
+	%]
+datatype [%=enumType.name.word%] = 
+	[%for(bran in enumType.branchList.branches){%]
+	[%=bran.name.word%] [%if(hasMore){%] | [%} 
+	}
+}%]
 
 
+\<comment> \<open>Channel Decleration\<close>
+chantype mychan = 
+share :: unit
 [%z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ChannelPara)).println();
 var channelparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ChannelPara));
 
-for(chanpara in channelparas){
-	var chandecl = chanpara.declList.decls.at(0);
-	var chans = chandecl.channelNameList.names;%]
-	
-chantype [%=chanpara.name.word%] = 
-	[%for(chan in chans){%]
-	[%=chan.word%] [%if(chandecl.expr.name.word = "SYNCH"){%] :: unit [%} else{%] :: [%=chandecl.expr.name.word%][%}%]
-	
-	[%}
-}%]
+for(chanpara in channelparas){%]
+\<comment> \<open>[%=chanpara.name.parse()%]\<close>
+[%//	var chandecl = chanpara.declList.decls.at(0);
+	for(chandecl in chanpara.declList.decls){
+		var chans = chandecl.channelNameList.names;%]
 
-[*
+		[%for(chan in chans){%]
+[%=chan.word%] [*[%if(chandecl.expr.name.word = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.name.word = "Value"){%]real[%}else{%][%=chandecl.expr.name.word%][%}}*][%if(chandecl.expr.parseExpr() = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.parseExpr() = "Value"){%]real[%}else if(chandecl.expr.instanceOf(ProdExpr)){%]"[%=chandecl.expr.parseExpr()%]"[%}else{%][%=chandecl.expr.parseExpr()%][%}}%]
+		
+		[%}
+	}%]
+	
+[%}%]
+
+
+\<comment> \<open>ChannelSet Decleration\<close>
+[%var channelsetparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ChannelSetPara));
+
+for(chansetpara in channelsetparas){
+//	var chanset = chansetpara.declList.decls.at(0);
+	var chans = chansetpara.channelSet.expr.communicationList.communications;%]
+	
+definition "[%= chansetpara.name.word%] = \<lbrace> [%for(chan in chans){%][%=chan.channelExpr.name.word%][%if(hasMore){%], [%}}%] \<rbrace>"
+[%}%]
+
+definition relu :: "real \<Rightarrow> real" where
+	"relu x = max 0 x"
 [%var procparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ProcessPara));
-procparas.println();
-procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.type().println();
+//procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.type().println();
+//
+//procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.actionList.circusActions.println();
+//procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.leftAction.println();
+//procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.rightAction.println();
+for(procpara in procparas){%]
 
-procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.actionList.circusActions.println();
-procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.leftAction.println();
-procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.rightAction.println();
-for(procpara in procparas){
-	procpara.circusProcess.parseProc();
-}
-%]*]
+locale [%=procpara.name.word%]
+begin
+
+actions  is "(mychan, unit) action" where 
+"SSTOP = share  \<rightarrow>  SSTOP" |
+[%=procpara.circusProcess.parseProc()%]
+
+\<comment> \<open>Main action of the process\<close>
+[%		if(procpara.circusProcess.instanceOf(Z!BasicProcess)){%]
+definition "MainAction = cProcess [%= procpara.circusProcess.mainAction.parseAction()%]"
+	[%} else {%]
+definition "MainAction = cProcess [%= procpara.name.word%].MainAction"
+	[%}%]
+end
+[%}%]
  
-
 end
 
 
-[%operation Z!ProcessPara parseProcPara(): String{
-	//TO DO
-}
-%]
 
 
 [%operation Z!ActionPara parseActionPara(): String{
@@ -75,6 +120,9 @@ end
 	} else 
 	if(self.instanceOf(Z!CallProcess)){
 		return self.parseCallProcess();
+	} else 
+	if(self.instanceOf(Z!BasicProcess)){
+		return self.parseBasicProcess();
 	} 
 }%]
 
@@ -97,8 +145,46 @@ end
 		return  self.callExpr.name.word;
 	}
 }%]
+[*TBC: when proc is refered in other proc as XX.MainAction, how to deal with parameters?*]
 
 
+[%operation Z!BasicProcess parseBasicProcess(): String{
+	var str: String;
+	
+	for(actpara in self.paraList.paras){
+		str = str + "\"" + actpara.nameWithSig() + " = " + actpara.circusAction.parseAction() + "\"";
+		if(hasMore){
+//			str = str + " | " + " \\\\";
+			str = str + " | ";
+		}
+	}
+	return str;
+}%]
+
+[*to return the action name with the parameters, e.g., Collator(l::nat, i::nat)*]
+[%operation Z!Para nameWithSig(): String{
+	var str: String;
+	if(self.circusAction.instanceOf(Z!ParamAction)){
+		str = self.name.word;
+		str = str + "(";
+		for(decl in self.circusAction.declList.decls){
+			
+			for(n in decl.nameList.names){
+				str = str + n.word + " :: " + decl.expr.parseExpr();
+				if(hasMore){
+					str = str + ", ";
+				}
+			}
+			if(hasMore){
+				str = str + ", ";
+			}
+		}
+		str = str + ")";
+	} else {
+		str = self.name.word;
+	}
+	return str;
+}%]
 
 
 [%operation Z!CircusAction parseAction(){
@@ -123,21 +209,24 @@ end
 	if(self.instanceOf(Z!SkipAction)){
 		return self.parseSkipAction();
 	} else
+	if(self.instanceOf(Z!HideAction)){
+		return self.parseHideAction();
+	} else
 	if(self.instanceOf(Z!ParamAction)){
 		return self.parseParamAction();
 	} else
 	if(self.instanceOf(Z!ParallelAction)){
 		return self.parseParallelAction();
 	} else
-	if(self.instanceOf(Z!HideAction)){
-		return self.parseHideAction();
+	if(self.instanceOf(Z!ParallelActionIte)){
+		return self.parseParallelActionIte();
 	} else
 	if(self.instanceOf(Z!InterleaveActionIte)){
 		return self.parseInterleaveActionIte();
 	} else
-	if(self.instanceOf(Z!ParallelActionIte)){
-		return self.parseParallelActionIte();
-	}
+	if(self.instanceOf(Z!RenameAction)){
+		return self.parseRenameAction();
+	} 
 }%]
 
 
@@ -150,20 +239,20 @@ end
 }%]
 
 [%operation Z!ExtChoiceAction parseExtChoiceAction(): String{
-	return  "(" + self.leftAction.parseAction() + " \\<box> " + self.rightAction.parseAction() + ")";
+	return  "(" + self.leftAction.parseAction() + " \\<box>" + self.rightAction.parseAction() + ")";
 }%]
 
 
 [%operation Z!CallAction parseCallAction(): String{
 	if(self.exprList.isDefined()){
-		return  self.name.word + "(" + self.exprList.parse() + ")";
+		return  self.name.word + "(" + self.exprList.parseZExprList() + ")";
 	} else {
 		return  self.name.word;
 	}
 }%]
 
 [%operation Z!SeqAction parseSeqAction(): String{
-	return  "(" + self.leftAction.parseAction() + "; " + self.rightAction.parseAction() + ")";
+	return  "(" + self.leftAction.parseAction() + ";; " + self.rightAction.parseAction() + ")";
 }%]
 
 [%operation Z!GuardedAction parseGuardedAction(): String{
@@ -175,28 +264,66 @@ end
 	return  "Skip";
 }%]
 
+
+[%operation Z!HideAction parseHideAction(): String{
+	return  "(" + self.circusAction.parseAction() + " \\<Zhide> " + self.channelSet.parse() + ")";
+}%]
+
+[*
 [%operation Z!ParamAction parseParamAction(): String{
-//	return  self.word;
+	var param : String;
+	for(decl in self.declList.decls){
+		for(name in decl.nameList.names){
+			if(hasMore){
+				param = param + name.word+ ", ";
+			} else{
+				param = param + name.word+ ": ";
+			}
+		}
+		param = param + decl.expr.parseExpr();
+		if(hasMore){
+			param = param + ", ";
+		}
+	}
+
+	return  "\"" + param + " \\<zspot> " + self.circusAction.parseAction() + ")";
+}%]
+*]
+
+[%operation Z!ParamAction parseParamAction(): String{
+	
+	return  "(" + self.circusAction.parseAction() + ")";
 }%]
 
 [%operation Z!ParallelAction parseParallelAction(): String{
 	return  "(" + self.leftAction.parseAction() + " \\<lbrakk> | " + self.channelSet.parse() + " | \\<rbrakk> " + self.rightAction.parseAction() + ")";
 }%]
 
-[%operation Z!HideAction parseHideAction(): String{
-	return  "(" + self.circusAction.parseAction() + " \\ " + self.channelSet.parse() + ")";
-}%]
-
-[%operation Z!InterleaveActionIte parseInterleaveActionIte(): String{
-//	return  self.word;
-}%]
 
 [%operation Z!ParallelActionIte parseParallelActionIte(): String{
-//	return  self.word;
+	return  "(" + " \\<lbrakk> " + self.channelSet.parse() + " \\<rbrakk> " + self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<zspot> " + self.circusAction.parseAction() + ")";
+}%]
+[*suppose there is only one parameter for iteration*]
+
+
+[%operation Z!InterleaveActionIte parseInterleaveActionIte(): String{
+	return  "( \\<interleave> "  +  self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<zspot>  " + self.circusAction.parseAction() + " )";
+}%]
+[*suppose there is only one parameter for iteration*]
+
+
+[%operation Z!RenameAction parseRenameAction(): String{
+	return  "(" + self.circusAction.parseAction() + " [ " + self.assignmentPairs.parse() + " ])";
 }%]
 
 
-
+[%operation Z!VarDecl parseVarDeclInIteAct(): String{
+	//assume there is only one parameter for iteration
+	var var_name = self.nameList.names.at(0).word;
+	var var_range = self.expr.parseExpr();
+	
+	return  var_name + " \\<in> " + var_range;
+}%]
 
 
 [%operation Z!ZName parse(): String{
@@ -204,40 +331,55 @@ end
 }%]
 
 
+
+
 [%operation Z!Communication parse(): String{
 	var commu_str : String;
 
-	if(self.commPattern = 0 or self.commPattern = 4){//commu.commPattern = Z!CommPattern#ChannelSet or Z!CommPattern#Synch;
+	if(self.commPattern = Z!CommPattern#ChannelSet or self.commPattern = Z!CommPattern#Synch){
+//	if(self.commPattern = 0 or self.commPattern = 4){//commu.commPattern = Z!CommPattern#ChannelSet or Z!CommPattern#Synch;
 		commu_str = self.channelExpr.parseExpr();
 	} else
 	
-	if(self.commPattern = 1){//commu.commPattern = Z!CommPattern#Input;
-		commu_str = self.channelExpr.parseExpr() + "?" + self.fieldList.fields.at(0).varialbeName.parse();
+	if(self.commPattern = Z!CommPattern#Input){
+//	if(self.commPattern = 1){//commu.commPattern = Z!CommPattern#Input;
+		commu_str = self.channelExpr.parseExpr() + "?(" + self.fieldList.fields.at(0).varialbeName.parse() + ")";
 	} else
 	
-	if(self.commPattern = 3){//commu.commPattern = Z!CommPattern#Output;
+	if(self.commPattern = Z!CommPattern#Output){
+//	if(self.commPattern = 3){//commu.commPattern = Z!CommPattern#Output;
 		commu_str = self.channelExpr.parseExpr();
 		var field = self.fieldList.fields.at(0);
 		if(field.outputField = true){
 			commu_str = commu_str + "!" + field.expr.parseExpr();
 		} else
 		if(field.outputField = false){
-			commu_str = commu_str + "." + field.expr.parseExpr();
+			commu_str = commu_str + ".(" + field.expr.parseExpr() + ")";
 		} 
 	} 
 	
+	if(self.commPattern = Z!CommPattern#Mixed){
+	//TO DO
+	}
 	return commu_str;
 }%]
 
-[*currently, we only create MemPred of Pred type in Circus models, other types pred is not generated.*]
+
+[*In EOL for general RoboChart, condition and guards are transformed into MemPred. However, in ANN version, AndPred is used.*]
 [%operation Z!MemPred parse(): String{
 	if(self.mixFix = true){
 		return self.leftExpr.parseExpr();
 	}
 }%] 
 
+
+
+
 [*currently in M2M, channelSet.expr may be of type createBasicChannelSetExpr or type RefExpr, the *]
 [%operation Z!ChannelSet parse(): String{
+//	if(self.expr.isTypeOf(Z!RefExpr)){
+//		return self.expr.parseExpr();
+//	}
 	return self.expr.parseExpr();
 }%]
   
@@ -246,21 +388,14 @@ end
 [%operation Z!AssignmentPairs parse(): String{
 
 	var pair_str : String;
+	var i=0;
 	
-	for(name in self.lhsElement){
-		pair_str = name.parse();
-		if (hasMore){
-			pair_str = pair_str + ",";
+	while(i<self.lhsElement.names.size()){
+		pair_str = pair_str + self.lhsElement.names.at(i).parse() +"\\<mapsto>" + self.rhsElement.exprs.at(i).parseExpr();
+		if(i<self.lhsElement.names.size()-1){
+			pair_str = pair_str + ", ";
 		}
-	}
-	
-	pair_str = pair_str + " ::= ";
-	
-	for(expr in self.rhsElement){
-		pair_str = expr.parseExpr();
-		if (hasMore){
-			pair_str = pair_str + ",";
-		}
+		i++;
 	}
 	
 	return  pair_str;
@@ -272,7 +407,7 @@ end
 	var list_str : String;
 
 	for(expr in self.exprs){
-		list_str = expr.parseExpr();
+		list_str = list_str + expr.parseExpr();
 		if (hasMore){
 			list_str = list_str + ",";
 		}
@@ -331,6 +466,12 @@ end
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_mod_"){
 		return self.parseModulus();
 	} else
+	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_.._"){
+		return self.parseSetRange();
+	} else	
+	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "relu"){
+		return self.parseRelu();
+	} else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "-_"){
 		return self.parseNeg();
 	} else
@@ -351,6 +492,9 @@ end
 	} else
 	if(self.isTypeOf(BasicChannelSetExpr)){
 		return self.parseBasicChannelSetExpr();
+	} else
+	if(self.isTypeOf(ProdExpr)){
+		return self.parseProdExpr();
 	} 
 }%]
 
@@ -424,9 +568,16 @@ end
 	return "("+ self.rightExpr.exprList.exprs.at(0).parseExpr() +" mod " + self.rightExpr.exprList.exprs.at(1).parseExpr() +")";
 }%]
 
+[%operation Z!ApplExpr parseSetRange(): String{
+	return "{"+ self.rightExpr.exprList.exprs.at(0).parseExpr() +".." + self.rightExpr.exprList.exprs.at(1).parseExpr() +"}";
+}%]
 
 [%operation Z!ApplExpr parseNot(): String{
 	return  "(\\<not>" + self.rightExpr.parseExpr() +")";
+}%]
+
+[%operation Z!ApplExpr parseRelu(): String{
+	return  "relu(" + self.rightExpr.parseExpr() +")";
 }%]
 
 [%operation Z!ApplExpr parseNeg(): String{
@@ -437,17 +588,27 @@ end
 [%operation Z!BasicChannelSetExpr parseBasicChannelSetExpr(): String{
 	var cs_str : String;
 	for (commu in self.communicationList.communications){
-		cs_str = commu.parse();
+		cs_str = cs_str + commu.parse();
 		if (hasMore){
 			cs_str = cs_str + ",";
 		}
 	}
-	return  "(" + cs_str +")";
+	return  "\\<lbrace> " + cs_str +" \\<rbrace>";
 }%]
 
 
 
-
+[%operation Z!ProdExpr parseProdExpr(): String{
+	var str : String;
+	for(expr in self.exprList.exprs){
+		str = str + expr.parseExpr();
+		if(hasMore){
+			str = str + "\\<times>";
+		}
+	}
+	
+	return  str;
+}%]
   
  
   

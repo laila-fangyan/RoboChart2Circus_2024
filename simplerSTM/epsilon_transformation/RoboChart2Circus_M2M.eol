@@ -566,7 +566,7 @@ operation RC!NodeContainer createchanParaNC()  {
 	var NIDS_para = NIDS.createEnumTypePara();
 	
 	//CSPM: channel internal__:NIDS
-	var internal_chanpara = Sequence{"internal__"+self.FQN()}.createChannelPara("internal_chan_" + self.FQN(), NIDS.name.word);
+	var internal_chanpara = Sequence{"internal__"+self.FQN()}.createChannelPara("internal_channel_" + self.FQN(), NIDS.name.word);
 	
 //	for(n in self.nodes){
 //		node_seq.add("internal__NID_" + n.FQN());
@@ -577,13 +577,13 @@ operation RC!NodeContainer createchanParaNC()  {
 
 	
 	//2. Flow channel: interrupt, exited, exit, terminate
-	var flow_chanpara = Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN(), "exit_"+self.FQN(), "terminate"}.createChannelPara("flowchan_" + self.FQN());
+	var flow_chanpara = Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN(), "exit_"+self.FQN(), "terminate"}.createChannelPara("flowchannel_" + self.FQN());
 	// should be updated to "interrupt".FQN(self)
 
 
 	//3. variable channels, each var has a channel declaration, as vars can have different types, while the channels in the chandecl.list should have the same type.
 	
-	var var_chanpara = createChannelPara("variable_chan_" + self.FQN());
+	var var_chanpara = createChannelPara("variable_channel_" + self.FQN());
 	for(vl in self.variableList){
 		if(vl.modifier = RC!VariableModifier#VAR){
 //			var i=0;
@@ -619,7 +619,7 @@ operation RC!NodeContainer createchanParaNC()  {
 	
 	//6. Declaring state machine events as channels
 
-	var evt_chanpara = createChannelPara("event_chan_" + self.FQN());
+	var evt_chanpara = createChannelPara("event_channel_" + self.FQN());
 	
 	//Case 1: to create the type for the state machine event channels (external), 
 	//e.g., CSPM: trigger1:InOut.core_int;   NIDS is not involved.
@@ -666,13 +666,13 @@ operation RC!NodeContainer createchanParaNC()  {
 	for(n in self.nodes){
 		if(n.instanceOf(RC!Junction)){
 			var junc_chan = Sequence{"enter_"+ n.FQN(),
-									 "interrupt_"+ n.FQN()}.createChannelPara("junc_chan_" + n.FQN());
+									 "interrupt_"+ n.FQN()}.createChannelPara("junction_channel_" + n.FQN());
 		} else{
 			var st_chan = Sequence{"enter_"+ n.FQN(),
 								   "entered_"+ n.FQN(),
 								   "interrupt_"+ n.FQN(),
 								   "enteredL_"+ n.FQN(),
-								   "enteredR_"+ n.FQN()}.createChannelPara("st_chan_" + n.FQN());
+								   "enteredR_"+ n.FQN()}.createChannelPara("state_channel_" + n.FQN());
 		}
 	}
 	
