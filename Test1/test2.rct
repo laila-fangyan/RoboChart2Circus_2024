@@ -1,0 +1,61 @@
+package pkg1
+interface  I1{
+	var a : int
+}
+interface  I2{
+	var a1: int,a2:int
+	var a3:int
+}
+interface  I3{
+	var m: int, m1:int
+}
+
+
+ controller C1{
+ 	
+	stm stm0 {
+		
+
+	var l: int 
+	var a:int, m:int, a1:int
+	
+	
+	event stop
+	event event1: int
+	event event2: int
+	event trigger1: int
+
+	const const1 : int
+	
+	initial i0
+	state s0 {		
+		entry  event1  ? a1
+		
+		during a = a1 + l + 1
+	}
+	
+	final f0
+	
+	transition t0 {
+		from i0
+		to s0
+
+		}
+	transition t1 {
+		from s0
+		to f0
+	trigger event1  ? a1
+//	condition a>4
+	}
+
+	transition t2 {
+		from s0
+		to s0
+		trigger event2 ? a
+		action trigger1 ! a1 
+			}
+}
+ 	
+ 	
+ }
+	

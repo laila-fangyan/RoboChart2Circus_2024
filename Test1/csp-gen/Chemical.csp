@@ -1,0 +1,20 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 18-06-2024 09:43:32
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "defs/Chemical.csp"
+include "defs/function_toolkit_defs.csp"
+include "defs/robochart_defs.csp"
+include "defs/state_defs.csp"
+include "defs/core_defs.csp"
+include "defs/sequence_toolkit_defs.csp"
+include "defs/Chemical_defs.csp"
+include "defs/set_toolkit_defs.csp"
+include "instantiations.csp"
+include "defs/relation_toolkit_defs.csp"
+channel r__
