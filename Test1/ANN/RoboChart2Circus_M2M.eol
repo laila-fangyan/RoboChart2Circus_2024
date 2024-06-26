@@ -1,101 +1,72 @@
-/****************************
-when using rct as source model, if the source is set as both read on load and store on disposal, the model is deleted every time the program run
-this issue is avoided when use exported EMF models
-One thing to notice:
-when change in rct directly, after create local vars for the shared vars, as long as the required interface in stm is deleted, all the vars in statement point to the local declared vars automatically.
-But when do EOL transformation, it is not the case.
-Even if we delete all stm.rinterfaces, the vars in statements still point to the interfaces.
-So we need to replace all the vars expr by expr with the one in the allLocalVariables.
-
-This is a tedious process, but can not be avoided.
-We will need the usedVariablesModel again and modify it to implement the FQN replacement.
+/*this section need to be part of the transformation*/
 
 
-
-******************************/
-
-
-//var pkg =  RC!RCPackage.all().selectOne(p|p.name = "Chemical");
-var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0");
-
-
-//the following is to be UNCOMMENTED after stm is sorted out
-////To create local var for requried shared var at Controller level
-//for(c in RC!ControllerDef.all()){
-//	c.rinterfaces.println();
-//	var varset = Set<Variable>;
-//	varset = Set{};
-//	for(ri in c.rinterfaces){
-//		for(vl in ri.variableList){
-//		varset = varset.includingAll(vl.vars);
-//		}
-//	}
-//	
-//	if(c.variableList.size()>0 and c.variableList.select(l|l.modifier = RC!VariableModifier#VAR).size()>0){
-//		c.variableList.select(l|l.modifier = RC!VariableModifier#VAR).at(0).vars = c.variableList.at(0).vars.includingAll(varset);
-//	} else {
-//	var vl = new RC!VariableList;
-//	c.variableList.add(vl);
-//	vl.vars = vl.vars.includingAll(varset);
-//	}
+//for(stm in RC!StateMachineDef.all().at(0)){
+//	//var name = RC!StateMachineDef.all().at(0).name + "_" + n.name + "proc";
+//	stm.nodes.composedNodes();
+//
 //}
 
 
+RC.println();
+//removeRef();
 
-
-
-//replaceRef();
-
-
-//To transform RoboChart user defined types
-createTypeDeclPara(pkg);
-
-//To copy the shared vardecls as local vardecls, then replace all the shared with local, then FQN in localdecls
-
-
-
-for(stm in RC!StateMachineDef.all()){
-	declareSharedVarAndConstAsLocalVar(stm);
-	Shared2FQLocalVariablesAndConst(stm);
-	
-	
-	for(evt in stm.events){
-	evt.name.println();
-	evt.name = evt.name + "_" + stm.FQN();
-	evt.name.println();
-	}
-	
-	declareConstants(stm);
-}
-//var stm = RC!StateMachineDef.all().at(0);
-//declareConstants(stm);
-
-
-
-
-
-
-
-
-
+var p = RC!RCPackage.all();
+p.println();
+p.eContents.println();
 var nc = RC!StateMachineDef.all().at(0);
 
 
 
+RC!StateMachine.all().println();
+
+
+
+//nc.FQN().println();
+
+//nc.createTransitionsAsCircusProcess();
+//var nodes = RC!StateMachineDef.all().at(0).nodes;
+//nodes.println();
+//composedNodes(nodes).createRenameProcess(Sequence{"share"},Sequence{"share", "setL_a"});
+//ncCoreBehaviour(nc);
 ncBehaviour(nc);
-//ncBehaviour(stm1.ref);
 //
 //
 var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators"});
 	
-for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara) or p.instanceOf(Z!FreePara)  or p.instanceOf(Z!GivenPara)  or p.instanceOf(Z!AxPara) )){
+//Set{}.createChannelPara("channel_group1").addChan2ChanPara("channel1");
+//Set{"share", "share1", "share2"}.createChannelPara("channel_group1").addChan2ChanPara("share3");
+//Set{"share4", "share5"}.createChannelPara("channel_group1","int");
+
+
+//nc.createInternalChanParaNC();
+//
+for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara) or p.instanceOf(Z!FreePara) )){
 	zsect.addPara2ZSect(p);	
 }
-
-
+//
 createSpec(zsect);
+"line 49".println();
+RC!StateMachineDef.all().println();
+RC!StateMachineDef.all().at(0).nodes.println();
 
-/*
+for(n in RC!StateMachineDef.all().at(0).nodes.select(s|s.name = "s3")){
+	"line3".println();
+	usedVariables(n.actions.at(0).action).println();
+	nc(n.actions.at(0).action).println();
+	"line5".println();
+	
+	if(n.eClass().name = "State" and n.name = "s3"){
+		
+//		n.createStateActionAsCircusAction("DuringAction");
+		//n.actions.at(0).action.createStmtInContextAsAction();
+		usedVariables(n.actions.at(0).action).println();
+		nc(n.actions.at(0).action).println();
+		"line5".println();
+		//set1.at(0).type().println();
+
+	}
+}
 
 //RC!StateMachineDef.all().println();
 //This is only used for M2T validation of ApplExpr
@@ -115,314 +86,6 @@ for (t in nc.transitions.select(t|t.name = "t1")){
 	} 
 }
 
-*/
-
-
-
-
-/**************************************************************
- Operations that supports the transformation procedures above 
-
-***************************************************************/
-
-/*RoboChart example:
-
-type Chem
-type Intensity
-datatype GasSensor {
-	c : Chem
-	i : Intensity
-}
-enumeration Angle { Left Right Back Front }
-*/
-operation createTypeDeclPara(pkg:RC!RCPackage){
-	for(tp in pkg.types){
-		if(tp.instanceOf(RC!PrimitiveType)){
-			var givenPara = new Z!GivenPara;
-			givenPara.nameList = createNameList(Sequence{tp.name});
-			
-		}else
-		
-		if(tp.instanceOf(RC!RecordType)){
-			var recordpara = new Z!AxPara;
-			recordpara.box = Z!Box#SchBox;
-			recordpara.zSchText = new Z!ZSchText;
-			
-			var declList = new Z!ZDeclList;
-			declList.decls.add(tp.createConstDecl());
-			
-			recordpara.zSchText.declList = declList;
-		
-		}else
-		
-		if(tp.instanceOf(RC!Enumeration)){
-			var literal_seq = new Sequence<String>;
-			for(l in tp.literals){
-				literal_seq.add(l.name);
-			}
-			var freetype = createEnumType(tp.name, literal_seq);
-			
-			var freetypePara =  freetype.createEnumTypePara();		
-		}
-	
-	}
-}
-
-
-operation RC!RecordType createConstDecl(): Z!ConstDecl{
-	var constDecl = new Z!ConstDecl;
-	constDecl.name = self.name.createZName();
-	
-	constDecl.expr = self.fields.createSchExprFromFields();
-
-	return constDecl;
-}
-
-//used in createConstDecl
-//to create A schema construction expression for record type transformation 
-operation Set<RC!Field> createSchExprFromFields(): Z!SchExpr{
-	var schExpr = new Z!SchExpr;
-	
-	schExpr.schText = new Z!ZSchText;
-	var declList = new Z!ZDeclList;
-	
-	for(f in self){
-		declList.decls.add(f.createVarDecl());
-	}
-	schExpr.schText.declList = declList;
-	
-	return schExpr;
-
-}
-
-//used in createSchExprFromFields
-operation RC!Field createVarDecl(): Z!VarDecl{
-	var varDecl = new Z!VarDecl;
-	
-	varDecl.nameList = createNameList(Sequence{self.name});
-//	varDecl.expr = self.type.ref.name.createRefExpr(false, false);
-	varDecl.expr = self.type.createTypeExpr();
-	return varDecl;
-}
-
-operation declareSharedVarAndConstAsLocalVar(nc: RC!NodeContainer){
-	var vlset = Set<RC!VariableList>;
-	vlset = Set{};
-	
-	//To collect vars in required interfaces, and to delare as new vars
-	for(ri in nc.rinterfaces){
-//		var cloned = new RC!Variable;
-	
-		for(vl in ri.variableList){
-			vlset.add(clone(vl));
-		
-//			for(v in vl.vars){
-//				var cloned = clone(v);//without clone, the var in Interface will be removed.
-//				if(v.modifier = RC!VariableModifier#CONST){
-//					cloned.modifier = RC!VariableModifier#CONST;
-//				}
-//				varset.add(cloned);
-//			}
-		}
-	}
-	
-	var varset = new Set<RC!Variable>;
-	for(varlist in vlset){
-		for(v in varlist.vars){
-			varset.add(v);
-		}
-	}
-	("line 224 varset = "  + vlset).println();
-	
-	//to add newly delared vars into the stm.variableList, such they become local vars
-//	if(nc.variableList.size()>0 and nc.variableList.select(l|l.modifier = RC!VariableModifier#VAR).size()>0){
-//		nc.variableList.select(l|l.modifier = RC!VariableModifier#VAR).at(0).vars = nc.variableList.at(0).vars.includingAll(varset);
-//	} else {
-		
-		
-		if(varset.select(v|v.modifier = RC!VariableModifier#VAR).size()>0){
-			var vl_var = new RC!VariableList;
-			vl_var.modifier = RC!VariableModifier#VAR;
-			nc.variableList.add(vl_var);
-			for(v in varset.select(v|v.modifier = RC!VariableModifier#VAR)){
-				vl_var.vars.add(v);
-			}
-		}
-		
-		
-		//one case is not covered: when local var has the same name as the shared/requried const
-		if(varset.select(v|v.modifier = RC!VariableModifier#CONST).size()>0){
-			var vl_const = new RC!VariableList;
-			vl_const.modifier = RC!VariableModifier#CONST;
-			nc.variableList.add(vl_const);
-			for(v in varset.select(v|v.modifier = RC!VariableModifier#CONST)){
-				vl_const.vars.add(v);
-			}
-		}
-
-
-//	nc.rinterfaces.clear();//this is commented out, becasue we need to know the shared vars through the rinterface so that we can declare the EXT channel
-	//it makes no difference removing rinterfaces or not in terms of the update of the vars used in all the statement, because all the varrefs need to be replaced one by one in the actual stmt/expr
-}
-
-
-//to replace each  shared var with local var in the node container
-operation Shared2FQLocalVariablesAndConst(nc: RC!NodeContainer){
-	for(st in nc.nodes.select(s|s.instanceOf(RC!State))){
-		for(act in st.actions){
-			Shared2LocalVariablesAndConstInStmt(act.action,nc);
-		}
-	}
-	
-	for(tr in nc.transitions){
-		if(tr.trigger.isDefined() and tr.trigger._type=CommunicationType#INPUT){
-			//tr.trigger.type = Communication
-			tr.trigger.parameter = allLocalVariablesandConst(nc).selectOne(v|v.name = tr.trigger.parameter.name // and v.modifier = RC!VariableModifier#VAR 
-			);
-		}
-		
-		if(tr.condition.isDefined()){
-			Shared2LocalVariablesAndConstInExpr(tr.condition,nc);
-		}
-		
-		if(tr.action.isDefined()){
-			Shared2LocalVariablesAndConstInStmt(tr.action,nc);
-		}
-	}
-	
-	
-	//here to convert all the names to FQN
-	FQAllLocalVariables(nc);
-}
-
-operation FQAllLocalVariables(nc: RC!NodeContainer){
-
-	for(v in allLocalVariablesandConst(nc)){
-		v.name = v.name + "_" + nc.FQN();
-	}
-}
-
-operation Shared2LocalVariablesAndConstInStmt(
-	stmt: RC!Statement,
-	nc: RC!NodeContainer){
-	
-	if(stmt.instanceOf(RC!Assignment)){
-				
-		stmt.left.name = allLocalVariablesandConst(nc).selectOne(v|v.name = stmt.left.name.name); //and v.modifier = RC!VariableModifier#VAR 
-		
-		
-		Shared2LocalVariablesAndConstInExpr(stmt.right,nc);
-		
-	} else
-	
-	if(stmt.instanceOf(RC!Call)){
-		for(arg in stmt.args){
-			Shared2LocalVariablesAndConstInExpr(arg,nc);
-		}
-	} else
-	
-	if(stmt.instanceOf(RC!IfStmt)){
-		Shared2LocalVariablesAndConstInExpr(stmt.expression, nc);
-		Shared2LocalVariablesAndConstInStmt(stmt.then, nc);
-		Shared2LocalVariablesAndConstInStmt(stmt.`else`, nc);
-		
-	} else
-	
-	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#SYNC or stmt.communication._type=CommunicationType#OUTPUT)){
-		Shared2LocalVariablesAndConstInExpr(stmt.communication.value,nc);
-	} else
-	
-	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#INPUT )){
-	stmt.communication.parameter = allLocalVariablesandConst(nc).selectOne(v|v.name = stmt.communication.parameter.name); //and v.modifier = RC!VariableModifier#VAR 
-	
-	
-	} else
-	if(stmt.instanceOf(RC!SeqStatement)){
-		for(s in stmt.statements){
-			Shared2LocalVariablesAndConstInStmt(s, nc);
-		}
-	} else
-	if(stmt.instanceOf(RC!ParStmt)){
-		varSet = Shared2LocalVariablesAndConstInStmt(stmt.stmt);
-	} else
-	if(stmt.instanceOf(RC!TimedStatement)){
-		Shared2LocalVariablesAndConstInStmt(stmt.stmt);
-		Shared2LocalVariablesAndConstInStmt(stmt.deadline); //Stmt or Expr?
-	} else
-	{ 	}	
-}
-
-
-operation Shared2LocalVariablesAndConstInExpr(
-	expr: RC!Expression,
-	nc: RC!NodeContainer){
-	
-	if(expr = null){	
-	} else
-	
-	if(expr.instanceOf(RefExp)){
-		if(expr.ref.instanceOf(RC!Variable)){
-			expr.ref = allLocalVariablesandConst(nc).selectOne(v|v.name = expr.ref.name);
-		}
-//TO DO: temporarily do not differetiate VAR and CONST
- 
-	} else {
-	
-	("line 299 expr.eContents = " +expr.eContents).println();
-		for(obj in expr.eContents){
-			if(obj.instanceOf(RC!Expression)){
-				("obj = " + obj).println();
-				Shared2LocalVariablesAndConstInExpr(obj,nc);
-			}
-		}
-		
-	}
-	
-}
-
-
-//operation Shared2LocalVariablesAndConstInExpr(
-//	expr: RC!Expression,
-//	nc: RC!NodeContainer){
-//	if(expr = null){	
-//	} else
-//	
-//	if(expr.instanceOf(RefExp)){
-////		var value = expr.ref;
-////		("value.name = " + value.name).println();
-////		(value.instanceOf(RC!Variable) and value.modifier= VariableModifier#VAR).println();
-//		
-////		if(expr.ref.instanceOf(RC!Variable) and expr.ref.modifier= VariableModifier#VAR){
-//		if(expr.ref.instanceOf(RC!Variable)){
-//					
-//			expr.ref = allLocalVariablesandConst(nc).selectOne(v|v.name = expr.ref.name);
-////			expr.ref = allLocalVariablesandConst(nc).selectOne(v|v.name = expr.ref.name and v.modifier = RC!VariableModifier#VAR);
-//
-////TO DO: temporarily do not differetiate VAR and CONST
-//
-////		if(expr.ref.instanceOf(RC!Variable) and expr.ref.modifier= VariableModifier#VAR){
-////					
-////			expr.ref = allLocalVariablesandConst(nc).selectOne(v|v.name = expr.ref.name and v.modifier = RC!VariableModifier#VAR );
-////			("expr.ref.name = " + expr.ref.name).println();
-////			("nc of value = " + nc(expr.ref)).println();
-////		} else 
-////		if(expr.ref.instanceOf(RC!Variable) and expr.ref.modifier= VariableModifier#CONST){
-////			expr.ref = allLocalVariablesandConst(nc).selectOne(v|v.name = expr.ref.name and v.modifier = RC!VariableModifier#CONST );
-////		} 
-//	} else {
-//	
-//	("line 299 expr.eContents = " +expr.eContents).println();
-//		for(obj in expr.eContents){
-//			if(obj.instanceOf(RC!Expression)){
-//				("obj = " + obj).println();
-//				Shared2LocalVariablesAndConstInExpr(obj,nc);
-//			}
-//		}
-//		
-//	}
-//	
-//}
-
 
 
 //This is only used for M2T validation of ApplExpr
@@ -439,262 +102,118 @@ operation createPredList(predSeq: Sequence<Z!Pred>): Z!CPredList{
 	return predList;
 }
 
+//for(n in RC!StateMachineDef.all().at(1).nodes){
+//
+//	if (n.eClass().name = "State" and n.name = "s3"){
+//		RC!StateMachineDef.all().at(1).println();
+//		for(nc in RC!StateMachineDef.all()){
+//			if(nc.nodes.includes(n)){
+//				("the node container of this state: " + nc.name).println();
+//			} 
+		
+//	}
+//		"line53".println();
+//		n.actions.at(0).action.right.createExpr();
+//		//To create Minus
+//		if(n.actions.at(0).action.right.type().name = "Minus"){
+//			"so we shall create an ApplExpr.".println();
+//			n.actions.at(0).action.right.createExpr();
+//		}
+//		
+//		
+//	}
+//}
+
+//for (t in RC!StateMachineDef.all().at(1).transitions){
+//	if(t.name = "t1"){
+//	RC!StateMachineDef.all().at(1).println();
+//		for(nc in RC!StateMachineDef.all()){
+//			if(nc.transitions.includes(t)){
+//				("the node container of this transition: " + nc.name).println();
+//			} 
+//		}
+//	}
+//
+//}
+
+//RC!StateMachineDef.all().at(0).createTransitionsAsCircusProcess();
 
 
-operation replaceRef(){
+
+//for(n in RC!StateMachineDef.all().at(0).nodes){
+//	if(n.eClass().name = "State" and n.name = "s2"){
+//		"line3".println();
+//		var set1 = usedVariables(n.actions.at(1).action);
+//		set1.println();
+//		"line5".println();
+//		set1.at(0).type().println();
+//
+//	}
+//}
+
+
+//var ta;
+//for (t in RC!StateMachineDef.all().at(0).transitions){
+//	if(t.name = "t3"){
+//		ta = t.createTransitionAsCircusAction();
+//	"line162".println();
+//	ta.type().println();
+//	
+//	}
+//
+//}
+
+//for(n in RC!StateMachineDef.all().at(0).nodes){
+//	if(n.eClass().name = "State" and n.name = "s4"){
+//		"line3".println();
+//		n.actions.at(1).println();
+//		n.actions.at(1).action.println();
+//		var set1 = usedVariables(n.actions.at(1).action);
+//		set1.println();
+//		"line5".println();
+//		set1.type().println();
+//				//readState(set1,"SSTOP".createCallAction());
+//	}
+//}
+	
+//for(n in RC!StateMachineDef.all().at(0).nodes){
+//	if(n.eClass().name = "State" and n.name = "s3"){
+//		"line11".println();
+//		usedVariables(n.actions.at(0).action).println();
+//		"line13".println();
+//	}
+//}
+
+
+
+operation removeRef(){
 
 	for(stmr in RC!StateMachineRef.all()){
 	
-		var stm_new = clone(stmr.ref);
+		var stm_new = new RC!StateMachineDef;
+		stm_new = clone(stmr.ref);
 		stm_new.name = stmr.name;
 	 		
 	 	ctl(stmr).machines.add(stm_new);
-//	 	ctl(stmr).machines.remove(stmr);
-//THIS is commented out BECAUSE EOL will fail, msg: Unknown reason
+	 	ctl(stmr).machines.remove(stmr);
 //	 	delete stmr;
 		
 	}
 
 	for(ctlr in RC!ControllerRef.all()){
 
-		var ctl_new = clone(ctlr.ref);
+		var ctl_new = new RC!ControllerDef;
+		ctl_new = clone(ctl.ref);
 		ctl_new.name = ctlr.name;
 	 		
 	 	module(ctlr).nodes.add(ctl_new);
-//	 	module(ctlr).nodes.remove(ctlr);//THIS is commented out BECAUSE EOL will fail, msg: Unknown reason, for both the cases that taking  EMF model and rct as source model
+	 	module(ctlr).nodes.remove(ctlr);
 //	 	delete ctlr;
 		
 	}
 	return RC;
 }
 
-//to create constant declaration for local constants of context
-//a constant decl is a AxPara which has schemaText
-operation declareConstants(context: RC!Context){
-	("line 613, context = " + context).println();
-	for(c in allLocalConstants(context)){
-	
-		("line 611 c = " + c).println();
-		var constDecl = new Z!AxPara;
-		constDecl.box = Z!Box#AxBox;
-		constDecl.zSchText = new Z!ZSchText;
-			
-		var declList = new Z!ZDeclList;
-		declList.decls.add(createVarDecl(c));
-			
-		constDecl.zSchText.declList = declList;
-		
-	}
-}
-
-//used in declareConstants
-operation createVarDecl(c: RC!Variable):Z!VarDecl{
-	var varDecl = new Z!VarDecl;
-	
-	varDecl.nameList = createNameList(Sequence{c.name});
-	varDecl.expr = c.type.createTypeExpr();
-
-	return varDecl;
-}
-
-
-
-//CSP Rule 5
-operation allVariables(context: RC!Context): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	for(vl in context.variableList.select(l|l.modifier = RC!VariableModifier#VAR)){
-		for(v in vl.vars){
-			varset.add(v);
-		}
-	}
-	
-	for(i in context.pInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#VAR)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	
-	for(i in context.rInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#VAR)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	return varset;
-}
-
-//CSP Rule 6
-operation requiredVariables(context: RC!Context): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	
-	for(i in context.rInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#VAR)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	return varset;
-}
-
-
-//CSP Rule 7
-operation allLocalVariables(context: RC!Context): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	for(vl in context.variableList.select(l|l.modifier = RC!VariableModifier#VAR)){
-		for(v in vl.vars){
-			varset.add(v);
-		}
-	}
-	
-	for(i in context.pInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#VAR)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	return varset;
-}
-
-//CSP Rule 8
-operation allConstants(context: RC!Context): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	for(vl in context.variableList.select(l|l.modifier = RC!VariableModifier#CONST)){
-		for(v in vl.vars){
-			varset.add(v);
-		}
-	}
-	
-	for(i in context.pInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#CONST)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	
-	for(i in context.rInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#CONST)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	return varset;
-}
-
-//CSP Rule 9
-operation requiredConstants(context: RC!Context): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	
-	for(i in context.rInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#CONST)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-	return varset;
-}
-
-//CSP Rule 10
-operation allLocalConstants(context: RC!Context): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	for(vl in context.variableList.select(l|l.modifier = RC!VariableModifier#CONST)){
-		for(v in vl.vars){
-			varset.add(v);
-		}
-	}
-	
-	for(i in context.pInterfaces){
-		for(vl in i.variableList.select(l|l.modifier = RC!VariableModifier#CONST)){
-			for(v in vl.vars){
-				varset.add(v);
-			}
-		}
-	}
-
-	return varset;
-}
-
-
-operation allLocalVariablesandConst(context: Any): Set<RC!Variable>{
-	var varset: Set<RC!Variable>; 
-	for(vl in context.variableList){
-		for(v in vl.vars){
-			varset.add(v);
-		}
-	}
-	return varset;
-}
-
-
-
-operation nc(stmt: RC!Statement): RC!NodeContainer{
-	for(nc in RC!NodeContainer.all()){
-		
-		for(st in nc.nodes.select(s|s.instanceOf(RC!State))){
-			if(st.actions.size()>0){
-				for(action in st.actions){
-					if(action.action = stmt){
-						return nc;
-					}
-				}
-			}
-		}	
-		
-		for(tr in nc.transitions){
-			if(tr.action = stmt){
-				return nc;
-			}			
-		}
-	}
-}
-
-
-
-operation clone(stmdef : RC!StateMachineDef) : RC!StateMachineDef   {
-	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
-	var ecoreUtil = emfTool.ecoreUtil;
-	var cloned = ecoreUtil.copy(stmdef);
-	return cloned;
-}
-
-operation clone(ctldef : RC!ControllerDef) : RC!ControllerDef   {
-	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
-	var ecoreUtil = emfTool.ecoreUtil;
-	var cloned = ecoreUtil.copy(ctldef);
-	return cloned;
-}
-
-operation clone(vl : RC!VariableList) : RC!VariableList   {
-	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
-	var ecoreUtil = emfTool.ecoreUtil;
-	var cloned = ecoreUtil.copy(vl);
-	return cloned;
-}
-
-
-operation clone(v : RC!Variable) : RC!Variable   {
-	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
-	var ecoreUtil = emfTool.ecoreUtil;
-	var cloned = ecoreUtil.copy(v);
-	("line 554 v.modifier = " + v.modifier).println();
-	("line 555 cloned.modifier = " + cloned.modifier).println();
-/**************************************
-	Not working: cloned.modifier = v.modifier; 
-    var.modifer is a DERIVED attribute, can not be changed
-    the cloned var has a default modifier VAR even if v is a constant
-    to slove this issue, we need to clone VariableList then collect all the vars from it.
-****************************************/
-	return cloned;
-}
-
-//return the controller that contains the statemachineref stmr
 operation ctl(stmr: RC!StateMachineRef): RC!ControllerDef{
 	for(ctl in RC!ControllerDef.all()){
 		if(ctl.machines.includes(stmr)){
@@ -703,143 +222,6 @@ operation ctl(stmr: RC!StateMachineRef): RC!ControllerDef{
 	}
 }
 
-
-
-
-
-
-//CSP Rule 44-0
-//return the vaiables as models instead of strings
-//TO DO: depend on the context using this operation, this operation might not be complete
-//need to be revisited
-operation usedVariablesModel(stmt:RC!Statement):Set<Variable>{
-	var varSet = new Set<Variable>;
-	var container = nc(stmt);//this is to be passed to Rule 45, so that the variable name can be fully qualified with container's name, but not the component that declares the var
-	
-	if(stmt.instanceOf(RC!Assignment)){
-		varSet = usedVariablesInExprModel(stmt.right,container);
-	} else
-	if(stmt.instanceOf(RC!Call)){
-		for(arg in stmt.args){
-			varSet = varSet.includingAll(usedVariablesInExprModel(arg,container));
-		}
-	} else
-	//stmt.then and stmt.else are handled in the IfStmt incontext semantics
-	if(stmt.instanceOf(RC!IfStmt)){
-		varSet = usedVariablesInExprModel(stmt.expression,container);
-	} else
-	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#SYNC or stmt.communication._type=CommunicationType#OUTPUT)){
-		varSet = usedVariablesInExprModel(stmt.communication.value,container);
-	} else
-//	if(stmt.instanceOf(RC!SeqStatement)){
-//		for(s in stmt.statements){
-//			varSet = varSet.includingAll(usedVariables(s));
-//		}
-//	} else
-//	if(stmt.instanceOf(RC!ParStmt)){
-//		varSet = usedVariables(stmt.stmt);
-//	} else
-	if(stmt.instanceOf(RC!TimedStatement)){
-		varSet = usedVariables(stmt.stmt).includingAll(usedVariables(stmt.deadline));
-	} else
-	{//SeqStatement falls in this case
-	}
-	
-	return varSet;
-}
-
-//CSP Rule 45-0
-//to return a set of Variable models, instead of Variable name strings
-operation usedVariablesInExprModel(expr:RC!Expression, container: Any): Set<Variable>{
-	var set = new Set<String>;
-	if(expr = null
-	 //when expr is concreate value (int, float, string, boolean, ect.), as these do not fall into any if case, therefore, set = {}
-	 //or expr.instanceOf(IntegerExp) or expr.instanceOf(FloatExp) or expr.instanceOf(StringExp) or expr.instanceOf(BooleanExp)
-	 ){
-	} else
-	if(expr.instanceOf(RefExp)){
-		var value = expr.ref;
-		if(value.instanceOf(RC!Variable) and value.modifier= VariableModifier#VAR){
-			set.add(value);
-			//here we tried to use operation nc() to return the basiccontext that defines this variable
-			//However, the var may be declared in another component
-			//therefore we do not need to pass the parameter 'container' to the usedVariables operaiton as below
-//			set.add(value.name + "_" + container.FQN());
-		}
-
-	} else
-	{
-		"line814".println();
-		 expr.eContents.println();
-		 "line816".println();
-		for(obj in expr.eContents){
-			if(obj.instanceOf(RC!Expression)){
-//				set = set.includingAll(usedVariables(obj));
-				set = set.includingAll(usedVariablesInExprModel(obj,container));
-			}
-		}
-		
-	}
-	
-	return set;
-}
-
-
-//to return the nodecontainer of the variable
-//TO DO: the required var
-operation nc(v: RC!Variable): RC!BasicContext{
-
-	//Case 1: v belongs to a STMDef
-	for(nc in RC!StateMachineDef.all()){
-		for(vl in nc.variableList){
-			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
-				return nc;
-			}
-		}
-	}
-	
-	//Case 2: v belongs to a OperationDef
-	for(nc in RC!OperationDef.all()){
-		for(vl in nc.variableList){
-			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
-				return nc;
-			}
-		}
-	}
-	
-	//Case 3: v belongs to a ControllerDef
-	for(nc in RC!ControllerDef.all()){
-		for(vl in nc.variableList){
-			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
-				return nc;
-			}
-		}
-	}
-	
-	//Case 4: v belongs to a PlatformDef
-	for(nc in RC!RoboticPlatformDef.all()){
-		for(vl in nc.variableList){
-			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
-				return nc;
-			}
-		}
-	}
-	
-	
-	//Case 5: v belongs to a Interface
-	for(nc in RC!Interface.all()){
-		for(vl in nc.variableList){
-			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
-				return nc;
-			}
-		}
-	}
-}
-
-
-
-
-//return the module that contains the controller ctlr
 operation module(ctlr: RC!ControllerRef): RC!RCModule{
 	for(module in RC!RCModule.all()){
 		if(module.nodes.includes(ctlr)){
@@ -847,11 +229,12 @@ operation module(ctlr: RC!ControllerRef): RC!RCModule{
 		}
 	}
 }
-
-//Spec is the ROOT element of the generated Circus model, it contains a narrative section and a ZSection
+//Spec is the root element of the generated Circus model, it contains a narrative section and a ZSection
 operation createSpec(zsect: Z!ZSect): Z!Spec{
 	var spec = new Z!Spec;
 	var narrativeSect = new Z!NarrSect;
+//	var zSect = new Z!ZSect;
+//	zSect =  zsect;
 	spec.sects = Sequence{narrativeSect, zsect};
 	return spec;
 }
@@ -892,7 +275,9 @@ operation createParent(p: String): Z!Parent{
 
 operation Z!ZSect addPara2ZSect(para: Z!Para): Z!ZSect{
 	var zsect =  self;
+		
 	zsect.paraList.paras.add(para);
+	("line 193 is executed: self.paraList.paras = " + self.paraList.paras).println();
 	return zsect;
 
 }
@@ -937,6 +322,8 @@ operation String createBranch(): Z!Branch{
 //Fully Qualified Name for Node
 operation RC!Node FQN(): String{
 	var  stm_sets = RC!StateMachineDef.all();
+	"line 13".println();
+	stm_sets.println();
 	
 	//Case 1: the node is contained in a stm
 	for(stm in stm_sets){
@@ -947,7 +334,7 @@ operation RC!Node FQN(): String{
 	
 	//Case 2: the node is contained in a composite node
 	for(nd in RC_model!Node.all()){
-		if(nd.nodes.size()>0){
+		if(nd.nodes.size>0){
 			if(nd.nodes.includes(self)){
 				return self.name+"_"+ nd.FQN();
 			}
@@ -955,7 +342,7 @@ operation RC!Node FQN(): String{
 	}	
 }
 
-/*
+
 //Fully Qualified Name for events
 operation RC!Event FQN(): String{
 	var  stm_sets = RC!StateMachineDef.all();
@@ -975,10 +362,8 @@ operation RC!Event FQN(): String{
 			return self.name + "_" + ctl.FQN();
 		}
 	}	
-	
-	//Case 3: ?? TBC
 }
-*/
+
 
 
 //Fully Qualified Name for StateMachineDef
@@ -1027,21 +412,6 @@ operation RC!ControllerDef FQN(): String{
 	}
 }
 
-
-//interface does not have a semantics function, its name is ignored?
-operation RC!Interface FQN(): String{
-
-	for(pkg in RC!RCPackage.all()){
-		if(pkg.interfaces.includes(self)){
-			if(pkg.name.isDefined()){
-				return  pkg.name;			
-			}else{
-				return null;	
-			}
-		}
-	}
-}
-
 // Fully Qualified Name for RCModule
 operation RC!RCModule FQN(): String{
 
@@ -1059,12 +429,129 @@ operation RC!RCModule FQN(): String{
 
 
 
+////Fully Qualified Name for Node
+//operation RC!Node FQN(RC_model: Any): String{
+//	var  stm_sets = RC_model!StateMachineDef.all();
+//	"line 13".println();
+//	stm_sets.println();
+//	
+//	//Case 1: the node is contained in a stm
+//	for(stm in stm_sets){
+//		if(stm.nodes.includes(self)){
+//			return self.name+"_"+ stm.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the node is contained in a composite node
+//	for(nd in RC_model!Node.all()){
+//		if(nd.nodes.size>0){
+//			if(nd.nodes.includes(self)){
+//				return self.name+"_"+ nd.FQN(RC_model);
+//			}
+//		}
+//	}	
+//}
+//
+//
+//
+//
+//
+////Fully Qualified Name for events
+//operation RC!Event FQN(RC_model: Any): String{
+//	var  stm_sets = RC_model!StateMachineDef.all();
+//	"line 13".println();
+//	stm_sets.println();
+//	
+//	//Case 1: the event is contained in a stmdef
+//	for(stm in stm_sets){
+//		if(stm.events.includes(self)){
+//			return self.name+"_"+ stm.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the node is contained in a controllerdef node
+//	for(ctl in RC_model!ControllerDef.all()){
+//		if(ctl.events.includes(self)){
+//			return self.name + "_" + ctl.FQN(RC_model);
+//		}
+//	}	
+//}
+//
+//
+//
+//
+////Fully Qualified Name for StateMachineDef
+//operation RC!StateMachineDef FQN(RC_model: Any): String{
+//
+//	//Case 1: the stm is contained in a controllerdef
+//	for(ctl in RC_model!ControllerDef.all()){
+//		if(ctl.machines.includes(self)){
+//			return self.name + "_" + ctl.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the stm is contained in a package
+//	for(pkg in RC_model!RCPackage.all()){
+//		if(pkg.machines.includes(self)){
+//			if(pkg.name.isDefined()){
+//				return self.name + "_" + pkg.name;			
+//			}else{
+//				return self.name;	
+//			}
+//		}
+//	}	
+//	
+//	//a module can not have a stm outside a controller
+//}
+//
+//
+////Fully Qualified Name for ControllerDef
+//operation RC!ControllerDef FQN(RC_model: Any): String{
+//	//Case 1: the controller is contained in a module
+//	for(md in RC_model!RCModule.all()){
+//		if(md.nodes.includes(self)){
+//			return self.name + "_" + md.FQN(RC_model);
+//		}
+//	}
+//	
+//	//Case 2: the controller is contained in a package
+//	for(pkg in RC_model!RCPackage.all()){
+//		if(pkg.controllers.includes(self)){
+//			if(pkg.name.isDefined()){
+//				return self.name + "_" + pkg.name;			
+//			}else{
+//				return self.name;	
+//			}
+//		}
+//	}
+//}
+//
+////Fully Qualified Name for RCModule
+//operation RC!RCModule FQN(RC_model: Any): String{
+//
+//	//Case 1: the module is contained in a package
+//	for(pkg in RC_model!RCPackage.all()){
+//		if(pkg.modules.includes(self)){
+//			if(pkg.name.isDefined()){
+//				return self.name + "_" + pkg.name;			
+//			}else{
+//				return self.name;	
+//			}
+//		}
+//	}		
+//}
+
+
+
+
+
 
 
 //channel decleration and channelset declaration for node container (NC)
 operation RC!NodeContainer createchanParaNC()  {
 	
 	//1. channel internal__: NIDS
+//	var internal_chanpara = createChannelPara("internal_chan_" + self.FQN());
 	
 	var NID_node_seq = Sequence<String>;
 	NID_node_seq = Sequence{};
@@ -1079,7 +566,7 @@ operation RC!NodeContainer createchanParaNC()  {
 	var NIDS_para = NIDS.createEnumTypePara();
 	
 	//CSPM: channel internal__:NIDS
-	var internal_chanpara = Sequence{"internal__"+self.FQN()}.createChannelPara("internal_channel_" + self.FQN(), NIDS.name.word);
+	var internal_chanpara = Sequence{"internal__"+self.FQN()}.createChannelPara("internal_chan_" + self.FQN(), NIDS.name.word);
 	
 //	for(n in self.nodes){
 //		node_seq.add("internal__NID_" + n.FQN());
@@ -1090,13 +577,13 @@ operation RC!NodeContainer createchanParaNC()  {
 
 	
 	//2. Flow channel: interrupt, exited, exit, terminate
-	var flow_chanpara = Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN(), "exit_"+self.FQN(), "terminate"}.createChannelPara("flowchannel_" + self.FQN());
-
+	var flow_chanpara = Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN(), "exit_"+self.FQN(), "terminate"}.createChannelPara("flowchan_" + self.FQN());
+	// should be updated to "interrupt".FQN(self)
 
 
 	//3. variable channels, each var has a channel declaration, as vars can have different types, while the channels in the chandecl.list should have the same type.
 	
-	var var_chanpara = createChannelPara("variable_channel_" + self.FQN());
+	var var_chanpara = createChannelPara("variable_chan_" + self.FQN());
 	for(vl in self.variableList){
 		if(vl.modifier = RC!VariableModifier#VAR){
 //			var i=0;
@@ -1104,10 +591,10 @@ operation RC!NodeContainer createchanParaNC()  {
 				
 				var type_expr = v.type.createTypeExpr();
 				
-				var var_seq = Sequence{"get_" + v.name , 
-									   "set_" + v.name, 
-									   "setL_" + v.name , 
-									   "setR_" + v.name };
+				var var_seq = Sequence{"get_" + v.name + "_" + self.FQN(), 
+									   "set_" + v.name + "_" + self.FQN(), 
+									   "setL_" + v.name + "_" + self.FQN(), 
+									   "setR_" + v.name + "_" + self.FQN()};
 									   
 				var_chanpara.declList.decls.add(var_seq.createChannelDecl(type_expr));
 				
@@ -1132,18 +619,15 @@ operation RC!NodeContainer createchanParaNC()  {
 	
 	//6. Declaring state machine events as channels
 
-	var evt_chanpara = createChannelPara("event_channel_" + self.FQN());
+	var evt_chanpara = createChannelPara("event_chan_" + self.FQN());
 	
 	//Case 1: to create the type for the state machine event channels (external), 
 	//e.g., CSPM: trigger1:InOut.core_int;   NIDS is not involved.
 	//Circus: trigger1_in ::int, trigger1_out ::int
 	for(e in self.events){
 				
-//		var evt_seq = Sequence{e.FQN() + "_in", //CSPM InOut enumtype is removed for Circus, so becomes 2 channels
-//							   e.FQN() + "_out"};
-	
-		var evt_seq = Sequence{e.name + "_in", //CSPM InOut enumtype is removed for Circus, so becomes 2 channels
-							   e.name + "_out"};
+		var evt_seq = Sequence{e.FQN() + "_in", //CSPM InOut enumtype is removed for Circus, so becomes 2 channels
+							   e.FQN() + "_out"};
 									   
 		if(e.type=null){
 			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl());	
@@ -1157,14 +641,10 @@ operation RC!NodeContainer createchanParaNC()  {
 	//e.g., CSPM: trigger1__:NIDS.InOut.core_int
 	//Circus: trigger1_stm0_pkg0__in :: NIDS x int
 	for(e in self.events){
-//		var evt_seq = Sequence{e.FQN() + "__in"//,
-//							 //e.FQN() + "__out" , this is removed because the out channel is not necessary, as e.NIDS channel is only used for transition triggers, and a trigger can only be an input.
-//							   };	
-
-		var evt_seq = Sequence{e.name + "__in"//,
-							 //e.name + "__out" , this is removed because the out channel is not necessary, as e.NIDS channel is only used for transition triggers, and a trigger can only be an input.
+		var evt_seq = Sequence{e.FQN() + "__in"//,
+							 //e.FQN() + "__out" , this is removed because the out channel is not necessary, as e.NIDS channel is only used for transition triggers, and a trigger can only be an input.
 							   };	
-							   							   	
+							   	
 		if(e.type=null){
 			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl(NIDS.name.word));	
 		}else{
@@ -1172,7 +652,7 @@ operation RC!NodeContainer createchanParaNC()  {
 			
 			//to create the PRODUCT type for the state machine event channels (internal), 
 			//e.g., CSPM: trigger1__:NIDS.InOut.core_int
-			type_expr = createProdExpr(NIDS.name.word.createTypeExpr(), type_expr);					   
+			type_expr = createProdExpr(type_expr, NIDS.name.word.createTypeExpr());					   
 			evt_chanpara.declList.decls.add(evt_seq.createChannelDecl(type_expr));
 		}
 	}
@@ -1186,13 +666,13 @@ operation RC!NodeContainer createchanParaNC()  {
 	for(n in self.nodes){
 		if(n.instanceOf(RC!Junction)){
 			var junc_chan = Sequence{"enter_"+ n.FQN(),
-									 "interrupt_"+ n.FQN()}.createChannelPara("junction_channel_" + n.FQN());
+									 "interrupt_"+ n.FQN()}.createChannelPara("junc_chan_" + n.FQN());
 		} else{
 			var st_chan = Sequence{"enter_"+ n.FQN(),
 								   "entered_"+ n.FQN(),
 								   "interrupt_"+ n.FQN(),
 								   "enteredL_"+ n.FQN(),
-								   "enteredR_"+ n.FQN()}.createChannelPara("state_channel_" + n.FQN());
+								   "enteredR_"+ n.FQN()}.createChannelPara("st_chan_" + n.FQN());
 		}
 	}
 	
@@ -1223,10 +703,8 @@ operation RC!NodeContainer createchanParaNC()  {
 	var sem__events_stringset = Sequence{"terminate"};
 	
 	for(e in self.events){				
-//		sem__events_stringset.add(e.FQN() + "_in");
-//		sem__events_stringset.add(e.FQN() + "_out");
-		sem__events_stringset.add(e.name + "_in");
-		sem__events_stringset.add(e.name + "_out");
+		sem__events_stringset.add(e.FQN() + "_in");
+		sem__events_stringset.add(e.FQN() + "_out");
 	}
 		
 	var sem__events_channelset = createChannelSet(createBasicChannelSetExpr(sem__events_stringset));
@@ -1240,17 +718,12 @@ operation RC!NodeContainer createchanParaNC()  {
  
 
 
-//this is used for variable channel decleration, only TypeRef, ProductType and SeqType are considered for variable's type
+//this is used for variable channel decleration, only RefType and ProductType are considered for variable's type
 operation RC!Type createTypeExpr(): Z!Expr{
-	("line 1249, self = " + self).println();
 	if(self.isTypeOf(ProductType)){
 		return self.createProdExpr();
-	} else  if(self.isTypeOf(TypeRef)){  
+	} else  {  
 		return self.ref.name.createRefExpr(false, false);
-	} else  if(self.isTypeOf(SeqType)){  
-
-//		return createRefExprAsGenOpAppl("seq_",self.domain.name.asString());
-		return createRefExprAsGenOpAppl("seq_",self.domain.createTypeExpr());
 	}
 }
   
@@ -1298,7 +771,7 @@ operation createChannelPara(
 
 
 
-//type indicate the type of the channel, or is sync if is untyped
+//type indicate the type of the channel, or is sync if is uptyped
 operation Sequence<String> createChannelPara(
 	para_name: String,
 	type: String
@@ -1329,6 +802,31 @@ operation Sequence<String> createChannelPara(
 	return chanDeclPara;
 }
 
+/*
+operation Z!ChannelPara addChan2ChanPara(
+	chan_name: String, 
+	chan_type: String
+	): Z!ChannelPara{
+	
+
+	self.declList.decls.at(0).addChannelDecl(chan_name, chan_type);
+	return self;
+}
+
+operation Z!ChannelPara addChan2ChanPara(
+	chan_name: String, 
+	chan_type: Z!Expr
+	): Z!ChannelPara{
+	self.declList.decls.at(0).addChannelDecl(chan_name, chan_type);
+	return self;
+}
+operation Z!ChannelPara addChan2ChanPara(
+	chan_name: String
+	): Z!ChannelPara{
+	self.declList.decls.at(0).addChannelDecl(chan_name);
+	return self;
+}
+*/
 
 operation Sequence<String> createChannelDecl(): Z!ChannelDecl{
 	var decl = new 	Z!ChannelDecl;
@@ -1403,7 +901,9 @@ operation ncBehaviour(nc:RC!NodeContainer): Z!ProcessPara{
 	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hidechannelsetPara.name.word).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
 	//TO DO: need to confirm the M2T part
 	
-
+//	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hidechannelset).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
+	
+	("line 175, renameTriggerEventsPairL(nc) = " + renameTriggerEventsPairL(nc)).println();
 	var ncBehaviourProcPara =  ncBehaviourProc.createProcessPara("ncBehaviourProc_"+nc.FQN(), true);
 
 	return ncBehaviourProcPara;
@@ -1492,7 +992,7 @@ operation vtguards(nc: RC!NodeContainer):  Set<String>{
 	var varset = new Set<String>;
 	varset = Set{};
 	for(t in nc.transitions){
-		varset = varset.includingAll(usedVariablesInExpr(t.condition,nc));
+		varset = varset.includingAll(usedVariables(t.condition));
 	}
 	return varset;
 }
@@ -1564,40 +1064,32 @@ operation vars(stmt: RC!Statement):Set<String>{
 	
 	if(stmt.instanceOf(RC!Assignment)){
 //		varset = usedVariables(stmt.left).includingAll(usedVariables(stmt.right));
-//		THIS line above nc(stmt.left.name) is commented out, because usedVariables (Rule 45) does not cover VarRef, a subclass of Assignable
+//		this line above nc(stmt.left.name) is commented out, because usedVariables (Rule 45) does not cover VarRef, a subclass of Assignable
 		
-		varset = Set{stmt.left.name.name }.includingAll(usedVariablesInExpr(stmt.right, nc(stmt)));
+		varset = Set{stmt.left.name.name + "_" + nc(stmt.left.name).FQN()}.includingAll(usedVariables(stmt.right));
 		//stmt.left is an Assignable, stmt.left.name is a Variable
 		//nc(stmt.left.name) returns the basiccontext that defines this variable
-		// we use the nc(stmt) as scope or nc(stmt.left.name) as scope? e.g., in module stm0, var is a local and to be renamed using EXT
-		//TO be checked
 		
 		//TO DO: to confirm: "stmt.left.name.name" works for one var name, but is there stmt.left has multiple names?
-		
+		("line 1071, stmt.left.name.name + nc(stmt.left.name).FQN() = " + stmt.left.name.name + "_" + nc(stmt.left.name).FQN()).println();
 	} else
-	
 	if(stmt.instanceOf(RC!Call)){
 		for(arg in stmt.args){
-			varset = usedVariablesInExpr(arg, nc(stmt));
+			varset = usedVariables(arg);
 		}
 		varset = varset.includingAll(requiredVariables(stmt.`operation`));
 	} else
-	
 	if(stmt.instanceOf(RC!IfStmt)){
-		varset = usedVariablesInExpr(stmt.expression, nc(stmt)).includingAll(vars(stmt.then)).includingAll(vars(stmt.`else`));
+		varset = usedVariables(stmt.expression).includingAll(vars(stmt.then)).includingAll(vars(stmt.`else`));
 	} else
-	
 	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#SYNC or stmt.communication._type=CommunicationType#OUTPUT)){
-		varset = usedVariablesInExpr(stmt.communication.value, nc(stmt));
+		varset = usedVariables(stmt.communication.value);
 	} else
-	//CSP Rule 50 does not consider INPUT, should raise an issue in github
 	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#INPUT)){
-//		var para_str = stmt.communication.parameter.name + "_" + nc(stmt.communication.parameter).FQN();
-//		var para_str = stmt.communication.parameter.name + "_" + nc(stmt).FQN();
-		var para_str = stmt.communication.parameter.name;
+//		var para_str = stmt.communication.parameter.name + "_" + container.FQN();
+		var para_str = stmt.communication.parameter.name + "_" + nc(stmt.communication.parameter).FQN();
 		//parameter is a Variable
-		//SAME HERE: TODO: TBC: shall we use the nc(stmt) as scope or nc(stmt.left.name) as scope? e.g., in module stm0, var is a local and to be renamed using EXT
-		//the var may be declared one level above. TO be checked
+		
 		varset = Set{para_str};
 	} else
 	
@@ -1630,7 +1122,7 @@ operation requiredVariables(op: RC!OperationSig): Set<String>{
 
 //CSP Rule 51
 operation vars(seq: Sequence<RC!Statement>):Set<String>{
-
+	"Rule 51 is called".println();
 	var varset = Set<String>;
 	for(stmt in seq){
 		varset = varset.includingAll(vars(stmt));
@@ -1662,11 +1154,8 @@ operation createMetaParallelProcess(
 	
 	//share <-- setR(v)
 	var pr_qw = intersect(pr,qw);
-	("line 1488 pr = " + pr).println();
-	("line 1489 qw = " + qw).println();
-	("line 1488 pr_qw = " + pr_qw).println();
 	
-	for(v in pr_qw){//because qw is empty, this for loop never happens
+	for(v in pr_qw){
 		PRenaming_pairR.add("share");
 		PRenaming_pairL.add("setR_"+v);//R207 setR(v)
 	}
@@ -1683,14 +1172,6 @@ operation createMetaParallelProcess(
 	}
 	
 	var PRenamed = P.createRenameProcess(PRenaming_pairR, PRenaming_pairL);
-	/****************************************************************
-	TO DO, this renaming above is WRONG, as it should be RELATIONAL renaming
-	e.g.,  [[ share__ <- x__ | x__ <- {| share__,setR_a,setR_a1 |} ]] 
-	It means share becomes three channels
-	Thus, P = share -> P becomes
-	Q = share -> Q or setR_a -> Q or setR_a1 -> Q
-	
-	***************************************************************************/
 	
 	
 
@@ -1709,7 +1190,7 @@ operation createMetaParallelProcess(
 	
 	//set(v) <-- setR(v)
 	var qw_pr = intersect(pw,qr);
-	for(v in qw_pr){//because qw is empty, this for loop never happens
+	for(v in qw_pr){
 		PRenaming_pairR.add("set_"+v);//Rule 201
 		PRenaming_pairL.add("setR_"+v);//R207 setR(v)
 	}
@@ -1722,12 +1203,11 @@ operation createMetaParallelProcess(
 	
 	var channel_names = cs.includingAll(setLC(intersect(pw,qr))).includingAll(setRC(intersect(qw,pr)));
 	channel_names.add("share");
-	("line 1708, channel_names = " + channel_names).println();
 	//TO DO, each channel in channelset_stringSet needs to be declared as a channel.
 	//channelset_stringSet.createChannel();
 	
 	var channelset = createChannelSet(createBasicChannelSetExpr(channel_names)).createChanSetPara("parallel_chanset_ncCoreBeh_" + nc.FQN());
-	//this channelset is the one in CSPM: [| union(union(union(flowevts,transSync),{terminate}),{|share__,setL_a,setR_a|}) |]
+	//this channelset is the one in CSPM: [| union(union(union(flowevts,transSync),{terminate}),{|share__						 			,setL_a,setR_a|}) |]
 	
 	//step 4 - create parallel process	P{|channelset|}Q
 	
@@ -1738,23 +1218,18 @@ operation createMetaParallelProcess(
 	
 	var PQRenaming_pairR = new Sequence<String>;
 	var PQRenaming_pairL = new Sequence<String>;
-	if(pr_qw.size()>0 or qr_pw.size()>0){
-		
-		for(v in pr_qw){//because qw is empty, this for loop never happens
-			PQRenaming_pairR.add("setR_"+v);
-			PQRenaming_pairL.add("set_"+v);
-		}
-		for(v in qr_pw){
-			PQRenaming_pairR.add("setL_"+v);
-			PQRenaming_pairL.add("set_"+v);
-		}
-		
-		var PparQRenamed = PparQ.createRenameProcess(PQRenaming_pairR, PQRenaming_pairL);
-		
-		return PparQRenamed;
-	} else {
-		return PparQ;
+	for(v in pr_qw){
+		PQRenaming_pairR.add("setR_"+v);
+		PQRenaming_pairL.add("set_"+v);
 	}
+	for(v in qr_pw){
+		PQRenaming_pairR.add("setL_"+v);
+		PQRenaming_pairL.add("set_"+v);
+	}
+	
+	var PparQRenamed = PparQ.createRenameProcess(PQRenaming_pairR, PQRenaming_pairL);
+	
+	return PparQRenamed;
 }
 
 
@@ -1822,7 +1297,7 @@ operation transSync(nc: RC!NodeContainer): Set<String>{
 operation setLC(nameset: Set<String>):Set<String>{
 	var set = new Set<String>;
 	for(n in nameset){
-		set.add("setL_"+n);
+		set.add("SetL_"+n);
 	}
 	return set;
 }
@@ -1831,7 +1306,7 @@ operation setLC(nameset: Set<String>):Set<String>{
 operation setRC(nameset: Set<String>):Set<String>{
 	var set = new Set<String>;
 	for(n in nameset){
-		set.add("setR_"+n);
+		set.add("SetR_"+n);
 	}
 	return set;
 }
@@ -1854,13 +1329,13 @@ operation renameTriggerEventsPairL(nc:RC!NodeContainer): Sequence<String>{
 	
 	for(t in nc.transitions.select(l|l.trigger.isDefined())){
 		
-		pairL.add(t.trigger.event.name +"__in" +"\\<cdot>x" );
-//		pairL.add(t.trigger.event.FQN()+"__in" +"\\<cdot>x" );
+		pairL.add(t.trigger.event.FQN()+"__in" +"\\<cdot>x" );
 		//in Isabelle, event1\<cdot>x means the set of events that take all values of the first type of event1  when the tirgger's type is a product.
 		//what about the case the trigger's type is not a product, but only NIDS?
 		//TBC
 		
 		
+//		pairL.add(t.trigger.event.FQN()+"__in"  +".NID_"+ t.source.FQN() );		
 	}
 	return pairL;
 }
@@ -1869,8 +1344,7 @@ operation renameTriggerEventsPairL(nc:RC!NodeContainer): Sequence<String>{
 operation renameTriggerEventsPairR(nc:RC!NodeContainer): Sequence<String>{
 	var pairR = new Sequence<String>;
 	for(t in nc.transitions.select(l|l.trigger.isDefined())){
-//		pairR.add(t.trigger.event.FQN()+"_in");
-		pairR.add(t.trigger.event.name +"_in");
+		pairR.add(t.trigger.event.FQN()+"_in");
 	}
 	return pairR;
 }
@@ -1908,11 +1382,13 @@ operation Z!CircusProcess createHideProcess(
 
 //the parameter is a channelset instead of string set
 operation Z!CircusProcess createHideProcess(
-	cs: Z!CircusChannelSet
+	cs: Z!CircusChannelSet//, 
+//	nc: RC!NodeContainer
 	):Z!HideProcess{
 
+	"line 622 createHideProcess is called".println();
 	var hideProc = new Z!HideProcess;
-
+//	hideProc.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
 	hideProc.channelSet = cs;
 	hideProc.circusProcess = self;
  	return hideProc;
@@ -1971,20 +1447,18 @@ operation tevent(t: RC!Transition, context: String): String{
 */
 
 // CSP Rule 43 variation
-// used in R41 tidsR(nc) 
+// used in R41 tidsR(nc) //TO DO: 't.source.name' should be replaced by 't.source.FQN()' later on.
 operation tevent_str(t: RC!Transition): String{
  	
  	var tevent_string;
  	
 	if(t.trigger = null){
 		tevent_string = "internal__" + nc(t).FQN()  + ".NID_" + t.source.FQN();
-		tevent_string = "internal__" + nc(t).FQN()  + "\\<cdot>NID_" + t.source.FQN();
 	} 
 	
 	else {
-//		tevent_string = t.trigger.event.FQN() + "__in.NID_" + t.source.FQN();
-//		tevent_string = t.trigger.event.name + "__in.NID_" + t.source.FQN();
-		tevent_string = t.trigger.event.name + "__in\\<cdot>NID_" + t.source.FQN();
+		tevent_string = t.trigger.event.FQN() + "__in"   + "." + t.source.FQN();//TBC: + "." + t.source.FQN() part
+//		tevent_string = t.trigger.event.name + "__." + t.source.name + "_in";
 	}
 	
 	return tevent_string;
@@ -1993,23 +1467,22 @@ operation tevent_str(t: RC!Transition): String{
 //CSP Rule 43 variation
 //TO DO: to confirm the Z type, shall trigger event be both a channel AND a communication?
 //this version returns Communication
-operation tevent(t: RC!Transition): Z!Communication{
+operation  tevent(t: RC!Transition): Z!Communication{
  	"line 1397, tevent to return communication is called".println();
  	var chan_name;
- 	var para_name = "NID_" + t.source.FQN();//TBC
-	var commu;
+ 	var chan_type = "SYNCH";
+
 	if(t.trigger = null){
-		chan_name = "internal__" + nc(t).FQN();
-		commu = createOutputCommunicationFromString(chan_name, para_name, "SYNC");
+		chan_name = "internal__" + nc(t).FQN()  + ".NID_" + t.source.FQN();//TBC
+//		chan_name = "internal." + t.source.name;
 	} 
 	
 	else {
-		chan_name = t.trigger.event.name + "__in";
-//		chan_name = t.trigger.event.FQN() + "__in";
-		commu = createOutputCommunicationFromString(chan_name, para_name, "SYNC");
+		chan_name = t.trigger.event.FQN() + "__in"      + "." + t.source.FQN();//TBC
+//		chan_name = t.trigger.event.name + "__." + t.source.name + "_in";
 	}
-	("line 1814, commu.chan = " + commu.channelExpr.name.word.asString()).println();
-	("line 1815, commu.expr = " + commu.fieldList.fields.at(0).expr.name.word.asString()).println();
+	
+	var commu = createSynchCommunication(chan_name);
 	
 	return commu;
 }
@@ -2024,40 +1497,107 @@ operation nc(t: RC!Transition): RC!NodeContainer{
 	}
 }
 
-//operation nc(nd: RC!Node): RC!NodeContainer{
-//	for(nc in RC!NodeContainer.all()){
-//		if(nc.nodes.includes(nd)){
-//			return nc;
-//		}
-//	}
-//}
 operation nc(nd: RC!Node): RC!NodeContainer{
-	("line 1933, nd"+ nd).println();
-	("line 1933, nd.eContainer()"+ nd.eContainer()).println();
-	return nd.eContainer();
+	for(nc in RC!NodeContainer.all()){
+		if(nc.nodes.includes(nd)){
+			return nc;
+		}
+	}
 }
+
+//to return the nodecontainer of the variable
+//TO DO: the required var
+operation nc(v: RC!Variable): RC!BasicContext{
+
+	//Case 1: v belongs to a STMDef
+	for(nc in RC!StateMachineDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	//Case 2: v belongs to a OperationDef
+	for(nc in RC!OperationDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	//Case 3: v belongs to a ControllerDef
+	for(nc in RC!ControllerDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	//Case 4: v belongs to a PlatformDef
+	for(nc in RC!PlatformDef.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+	
+	
+	//Case 5: v belongs to a Interface
+	for(nc in RC!Interface.all()){
+		for(vl in nc.variableList){
+			if(vl.modifier = RC!VariableModifier#VAR and vl.vars.includes(v)){
+				return nc;
+			}
+		}
+	}
+}
+
+
+operation nc(stm: RC!Statement): RC!NodeContainer{
+	for(nc in RC!NodeContainer.all()){
+		
+		for(st in nc.nodes.select(s|s.instanceOf(RC!State))){
+			if(st.actions.size()>0){
+				for(action in st.actions){
+					if(action.action = stm){
+						return nc;
+					}
+				}
+			}
+		}	
+		
+		for(tr in nc.transitions){
+			if(tr.action = stm){
+				return nc;
+			}			
+		}
+	}
+}
+
 
 
 
 //CSP Rule 44
 operation usedVariables(stmt:RC!Statement):Set<String>{
 	var varSet = new Set<String>;
-	var container = nc(stmt);//this is to be passed to Rule 45, so that the variable name can be fully qualified with container's name, but not the component that declares the var
-	
 	if(stmt.instanceOf(RC!Assignment)){
-		varSet = usedVariablesInExpr(stmt.right,container);
+		varSet = usedVariables(stmt.right);
 	} else
 	if(stmt.instanceOf(RC!Call)){
 		for(arg in stmt.args){
-			varSet = varSet.includingAll(usedVariablesInExpr(arg,container));
+			varSet = varSet.includingAll(usedVariables(arg));
 		}
 	} else
 	//stmt.then and stmt.else are handled in the IfStmt incontext semantics
 	if(stmt.instanceOf(RC!IfStmt)){
-		varSet = usedVariablesInExpr(stmt.expression,container);
+		varSet = usedVariables(stmt.expression);
 	} else
 	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#SYNC or stmt.communication._type=CommunicationType#OUTPUT)){
-		varSet = usedVariablesInExpr(stmt.communication.value,container);
+		varSet = usedVariables(stmt.communication.value);
 	} else
 //	if(stmt.instanceOf(RC!SeqStatement)){
 //		for(s in stmt.statements){
@@ -2084,7 +1624,7 @@ operation usedVariables(stmt:RC!Statement):Set<String>{
 //as the lamda expression is not well considered.
 //the local variable in lamda expr should not be considered in this function
 //CSP Rule 45
-operation usedVariablesInExpr(expr:RC!Expression, container: Any): Set<String>{
+operation usedVariables(expr:RC!Expression): Set<String>{
 	var set = new Set<String>;
 	if(expr = null
 	 //when expr is concreate value (int, float, string, boolean, ect.), as these do not fall into any if case, therefore, set = {}
@@ -2094,9 +1634,8 @@ operation usedVariablesInExpr(expr:RC!Expression, container: Any): Set<String>{
 	if(expr.instanceOf(RefExp)){
 		var value = expr.ref;
 		if(value.instanceOf(RC!Variable) and value.modifier= VariableModifier#VAR){
-			set.add(value.name );
-			//here we tried to use operation nc() to return the basiccontext that defines this variable
-			//However, the var may be declared in another component
+			set.add(value.name + "_" + nc(value).FQN());
+			//here we use operation nc() to return the basiccontext that defines this variable,
 			//therefore we do not need to pass the parameter 'container' to the usedVariables operaiton as below
 //			set.add(value.name + "_" + container.FQN());
 		}
@@ -2109,7 +1648,7 @@ operation usedVariablesInExpr(expr:RC!Expression, container: Any): Set<String>{
 		for(obj in expr.eContents){
 			if(obj.instanceOf(RC!Expression)){
 //				set = set.includingAll(usedVariables(obj));
-				set = set.includingAll(usedVariablesInExpr(obj,container));
+				set = set.includingAll(usedVariables(obj));
 			}
 		}
 		
@@ -2245,6 +1784,7 @@ operation createParallelProcess(
 	):Z!ParallelProcess{
 	
 	var proc = new Z!ParallelProcess;
+//	proc.channelSet = createChannelSet(cs_name.createRefExpr(false,false));
 	proc.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
 	proc.leftProcess = left;
 	proc.rightProcess = right;
@@ -2314,7 +1854,7 @@ operation Z!CircusChannelSet createChanSetPara(name: String): Z!ChannelSetPara{
 }
 
 
-//CSP Rule 53, modified: 1. update action Trans into a prefixingaction, then 2. updated as a process: (enter.initial(nc.nodes) -> Trans)
+//CSP Rule 53, modified: update action Trans into a prefixingaction, then updated as a process: (enter.initial(nc.nodes) -> Trans)
 operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
 	
 	var trans;
@@ -2334,16 +1874,16 @@ operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
  	var choice1_action1 = createAction2("ExtChoiceAction", choice1_action1_left, choice1_action1_right);
 	"line 199".println();
 	("trans " + trans).println();
-//	var choice1 = createAction2("SeqAction", choice1_action1, "trans".createCallAction());
-	var choice1 = createAction2("SeqAction", choice1_action1, ("prefixedTransAction_"+nc.FQN()).createCallAction());
+	var choice1 = createAction2("SeqAction", choice1_action1, "trans".createCallAction());
+	
 	
 	/* Start of Choice 2 creation*/
 	//Stop /\ (exit -> Skip)
-	var choice2_action1_action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit_"+self.FQN()), createSkipAction()));
-	var choice2_action1 = createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), choice2_action1_action2);
+	var choice2_action1_action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit"), createSkipAction()));
+	var choice2_action1 = createPrefixingAction(createSynchCommunication("interrupt." + self.name), choice2_action1_action2);
 	
 	//exited -> end -> Skip
-	var choice2_action2_action2 = createPrefixingAction(createSynchCommunication("exited_"+self.FQN()), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()));
+	var choice2_action2_action2 = createPrefixingAction(createSynchCommunication("exited"), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()));
 	
 	//SStop /\ (exited -> end -> Skip)
 	var choice2_action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), choice2_action2_action2);
@@ -2368,15 +1908,17 @@ operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
 	
 	//to integrate the prefix "enter.initial"
 	//and to convert the action into a Process
-	var initial_name = nc.nodes.selectOne(n|n.instanceOf(Initial)).FQN();
-
-	var commu = createSynchCommunication("enter_" + initial_name);
+	var initial_name = nc.nodes.selectOne(n|n.instanceOf(Initial)).name;
+	"line496".println();
+	nc.nodes.selectOne(n|n.instanceOf(Initial)).println();
+	nc.nodes.selectOne(n|n.instanceOf(Initial)).name.println();
+	var commu = createSynchCommunication("enter." + nc.name + "." + initial_name);
 	
 	var prefixAction = createPrefixingAction(commu, Trans);
 	
 	var actionParaSeq = new Sequence<Z!ActionPara>;
-	actionParaSeq = Sequence{prefixAction.createActionPara("prefixedTransAction_"+nc.FQN())};
-	var proc = actionParaSeq.createBasicProcess("prefixedTransAction_"+nc.FQN());
+	actionParaSeq = Sequence{prefixAction.createActionPara("prefixedTransAction_"+nc.name)};
+	var proc = actionParaSeq.createBasicProcess("prefixedTransAction_"+nc.name);
 		
 	return proc;
 }
@@ -2393,18 +1935,18 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		var action1 = trigger(self);
 		
 		//to create action2: exit
-		var rightAction1 = createPrefixingAction(createSynchCommunication("exit_"+nc(self).FQN()), createSkipAction());
+		var rightAction1 = createPrefixingAction(createSynchCommunication("exit"), createSkipAction());
 		var action2 = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction1);
 		
 		//to create action3_inner_1: exited
 		var prefixedAction = self.createTrActionAsCircusAction();
 		
 		
-		var action3_inner_1 = createPrefixingAction(createSynchCommunication("exited_"+nc(self).FQN()), prefixedAction);
+		var action3_inner_1 = createPrefixingAction(createSynchCommunication("exited"), prefixedAction);
 		
 		
 		//to create action3_inner_2: enter
-		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), createSkipAction());
+		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter." + self.target.name), createSkipAction());
 		
 		var action3_right = createAction2("SeqAction", action3_inner_1, action3_inner_2);
 		
@@ -2415,10 +1957,6 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		circusAction = createAction2("SeqAction", action1, createAction2("SeqAction", action2, action3));
 		
 		if(self.condition != null){
-			
-			("line 2419,  self.condition.eContainer() = " + self.condition.eContainer()).println(); 
-			("line 2419,  self.condition = " + self.condition).println();
-			("line 2419,  self.condition.type() = " + self.condition.type()).println();
 			var pred = self.condition.createExpr().createMemPredEquality();
 			circusAction = createGuardedAction(pred, circusAction);
 		} 
@@ -2427,14 +1965,12 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 	if(self.source.type().name != "State"){
 		//action1: prefixingAction
 		
-		("line 2225, self.source.type().name = " + self.source.type().name).println();
+		
 		var prefixedAction = self.createTrActionAsCircusAction();
 		
-		/*A transition containing a trigger must start on a state, so tevent below can only return internal__.id(t.source)*/
 		var action1 = createPrefixingAction(tevent(self), prefixedAction);
 		
-		
-		var action2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), createSkipAction());
+		var action2 = createPrefixingAction(createSynchCommunication("enter." + self.target.name), createSkipAction());
 		
 		circusAction = createAction2("SeqAction", action1, action2);
 				
@@ -2465,7 +2001,7 @@ operation  Set<String> createSetExpr(): Z!SetExpr{
 	var setExpr = new Z!SetExpr;
 	var exprList = new Z!ZExprList;
 	var exprs = new Sequence<Z!Expr>;
-	exprs = Sequence{};
+	
 	for(m in self){
 		exprs.add(m.createRefExpr(false,false));
 	}
@@ -2479,7 +2015,7 @@ operation  Set<String> createSetExpr(): Z!SetExpr{
  
 
 //CSP Rule 55
-operation trigger(t: RC!Transition): Z!PrefixingAction{
+operation  trigger(t: RC!Transition): Z!PrefixingAction{
 	var triggerAction;
 	var commu;
 	var callAction;
@@ -2487,39 +2023,23 @@ operation trigger(t: RC!Transition): Z!PrefixingAction{
 	
 	if(t.trigger = null){
 	
-		/*************************************
-		commu is a dot communication
-		CSP semantics funciton: internal.id(t.source)
-		CSPM example: internal__!NID_s0
-		Circus example: internal__stm0.NID_s0_stm0
-		****************************************/
-		commu = createOutputCommunicationFromString("internal__" + nc(t).FQN(), "NID_" + t.source.FQN(), "SYNC");
+		commu = createSynchCommunication("internal." + t.source.name);
 		triggerAction = createPrefixingAction(commu, createSkipAction());
-	} else
-	//transition trigger event can only be input or simple type
+			
+	} else 
+	
+	//trigger event can only be input or simple type
 	if(t.trigger._type = CommunicationType#INPUT){
 		
-		/*************************************
-		CSP semantics function: eventId(t.event)__.id(t.soure).in?x
-		CSPM example: trigger1__!NID_s0.in?a
-		Circus example: trigger1_stm0__in!NID_s0_stm0?a_stm0
-		****************************************/
-		channel_name = t.trigger.event.name + "__in";
-//		channel_name = t.trigger.event.FQN() + "__in";		
-		var dot_para = "NID_" + t.source.FQN();
+		var channel_name = t.trigger.event.name + "__." + t.source.name + "_in";
+		var var_name = t.trigger.parameter.name;
+		commu = createInputCommunication(channel_name, var_name);
 
-//		var input_var = t.trigger.parameter.name + "_" + nc(t.trigger.parameter).FQN();
-		//the line above is commented out because the var name should be in a state machine scope, i.e. as a local var
-		var input_var = t.trigger.parameter.name;
-//		commu = createOutputInputCommunication(channel_name, output_para,input_var);
-		commu = createDotInputCommunication(channel_name, dot_para,input_var);
-		
-		//Circus example: set_a_stm0!a_stm0
 		var inner_channel_name = "set_" + t.trigger.parameter.name;
-		
 		var expr_string = t.trigger.parameter.name;
-		var inner_commu = createOutputCommunicationFromString(inner_channel_name, expr_string, "OUTPUT");
-			
+		var inner_commu = createOutputCommunicationFromString(inner_channel_name, expr_string);
+//		var inner_commu = t.trigger.createCommuAsCommunication(inner_channel_name, "OUTPUT");
+					
 		var rightAction = createPrefixingAction(inner_commu, createSkipAction());
 		var leftAction = "SSTOP".createCallAction();
 		callAction = createAction2("InterruptAction", leftAction, rightAction);
@@ -2528,15 +2048,10 @@ operation trigger(t: RC!Transition): Z!PrefixingAction{
 	} else
 	
 	if(t.trigger._type = CommunicationType#SIMPLE){
-		channel_name = t.trigger.event.name + "__in" ;
-//		channel_name = t.trigger.event.FQN() + "__in" ;
-		var dot_para = "NID_"+ t.source.FQN();
-//		commu = createSynchCommunication(channel_name);
-		commu = createOutputCommunicationFromString(channel_name, dot_para, "SYNC");
-	
+		channel_name = t.trigger.event.name + "__." + t.source.name + "_in";
+		commu = createSynchCommunication(channel_name);
 		triggerAction = createPrefixingAction(commu, createSkipAction());
 	} 
-	
 	return triggerAction;
 }
 
@@ -2555,13 +2070,13 @@ operation RC!Junction createJunctionAsBasicProcess(): Z!BasicProcess{
 	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
 	
 		
-	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), "Active".createCallAction());
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.name), "Active".createCallAction());
 	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
 	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
 	actionParaSeq.add(Termination.createActionPara("Termination"));
 	
-	var seqAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), createSkipAction()));
+	var seqAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.name), createSkipAction()));
 	
 	var Active = createAction2("SeqAction", seqAction1, "Inactive".createCallAction());
 	actionParaSeq.add(Active.createActionPara("Active"));
@@ -2580,28 +2095,28 @@ operation RC!Final createFinalAsBasicProcess(): Z!BasicProcess{
 	var actionParaSeq = new Sequence<Z!ActionPara>;
 	
 		
-	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
+	var Inactive = createAction2("InterruptAction", "".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
 	
 	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
 	
 		
-	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), "Entering".createCallAction());
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.name), "Entering".createCallAction());
 	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
 	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
 	actionParaSeq.add(Termination.createActionPara("Termination"));
 	
-	var Entering = createPrefixingAction(createSynchCommunication("entered_" + self.FQN()), "Active".createCallAction());
+	var Entering = createPrefixingAction(createSynchCommunication("entered_" + self.name), "Active".createCallAction());
 	actionParaSeq.add(Entering.createActionPara("Entering"));
 	
 	
 	
-	var rightAction = createAction2("ExtChoiceAction", "Termination".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), "Interrupted".createCallAction()));
+	var rightAction = createAction2("ExtChoiceAction", "Termination".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.name), "Interrupted".createCallAction()));
 	
 	var Active = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction);
 	actionParaSeq.add(Active.createActionPara("Active"));
 	
-	var rightAction2 = createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), "Inactive".createCallAction()));
+	var rightAction2 = createPrefixingAction(createSynchCommunication("exit"), createPrefixingAction(createSynchCommunication("exited"), "Inactive".createCallAction()));
 	
 	var Interrupted = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction2);
 	actionParaSeq.add(Interrupted.createActionPara("Interrupted"));
@@ -2619,13 +2134,14 @@ operation RC!Final createFinalAsBasicProcess(): Z!BasicProcess{
 operation RC!State createSimpleStateAsBasicProcess(): Z!BasicProcess{
 	var actionParaSeq = new Sequence<Z!ActionPara>;
 	
+		
 	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
-	
 	var InactivePara = Inactive.createActionPara("Inactive");
 	actionParaSeq.add(InactivePara);
 	
-
-	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), "Active".createCallAction());
+	"line115".println();
+	actionParaSeq.println();
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.name), "Active".createCallAction());
 	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
 	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
@@ -2635,20 +2151,22 @@ operation RC!State createSimpleStateAsBasicProcess(): Z!BasicProcess{
 	actionParaSeq.add(Active.createActionPara("Active"));
 	
 	
-	var Behaviour = createPrefixingAction(createSynchCommunication("entered_" + self.FQN()), "During".createCallAction());
+	var Behaviour = createPrefixingAction(createSynchCommunication("entered_" + self.name), "During".createCallAction());
 	actionParaSeq.add(Behaviour.createActionPara("Behaviour"));
 	
 	var duringLeft = createAction2("SeqAction", self.createStateActionAsCircusAction("DuringAction"), "SSTOP".createCallAction());
-	var duringRight = createPrefixingAction(createSynchCommunication("interrupt_" + self.FQN()), createSkipAction());
+	"line324".println();
+	var duringRight = createPrefixingAction(createSynchCommunication("interrupt_" + self.name), createSkipAction());
+	"line326".println();
 	var During = createAction2("InterruptAction", duringLeft, duringRight);
 	"line328".println();
 	actionParaSeq.add(During.createActionPara("During"));
 	
 	
 	
-	var exitingAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createSkipAction()));
+	var exitingAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit"), createSkipAction()));
 	var exitingAction2 = self.createStateActionAsCircusAction("ExitAction");
-	var exitingAction3 = createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), "Inactive".createCallAction());
+	var exitingAction3 = createPrefixingAction(createSynchCommunication("exited"), "Inactive".createCallAction());
 	var Exiting = createAction2("SeqAction", exitingAction1, createAction2("SeqAction", exitingAction2, exitingAction3));
 	actionParaSeq.add(Exiting.createActionPara("Exiting"));
 	
@@ -2727,7 +2245,7 @@ operation Sequence<Z!CircusAction> createSequenceAsSeqAction(): Z!SeqAction{
 operation RC!NodeContainer vguards(): Set<String>{
 	var vguards = new Set<String>;
 	for (tr in self.transitions){
-		vguards= vguards.includingAll(usedVariablesInExpr(tr.condition,self));
+		vguards= vguards.includingAll(usedVariables(tr.condition));
 	}
 
 	return vguards;
@@ -2776,7 +2294,7 @@ operation String createZName(): Z!ZName{
 
 operation createNameList(stringSeq: Sequence<String>): Z!ZNameList{
 	var nl = new Z!ZNameList;
-	nl.names = new Sequence<Z!ZName>;
+	nl.names = new Sequence<ZName>;
 	nl.names = Sequence{};
 	
 	for(str in stringSeq){
@@ -3046,7 +2564,6 @@ operation createOutputCommunication(
 	
 	commu.commPattern = Z!CommPattern#Output;		
 	var field = new Z!DotField;
-	("line 2874 expr = " + expr).println();
 	field.expr = expr.createExpr();
 		
 	if(type = "OUTPUT"){ 
@@ -3132,11 +2649,10 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!InterruptAction{
 	*/
 	var leftAction = "SSTOP".createCallAction();
 	var chan_name = "set_" + self.left.name.name;
-	
 	var prefix = createOutputCommunication(chan_name, self.right, "OUTPUT");
-
+	
 	var rightAction = createPrefixingAction(prefix, createSkipAction());
-	//PrefixingAction is a type of Action1, so can not use createAction2()
+//	var rightAction = createPrefixingAction(self.createCommunication("",""), createSkipAction()); //PrefixingAction is a type of Action1, so can not use createAction2()
 
 	var circusAction = createAction2("InterruptAction", leftAction, rightAction);
 	
@@ -3204,7 +2720,12 @@ operation clone(exp : RC!Expression) : RC!Expression   {
 	return cloned;
 }
 
-
+operation clone(stmdef : RC!StateMachineDef) : RC!StateMachineDef   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	var cloned = ecoreUtil.copy(stmdef);
+	return cloned;
+}
 
 
 /*
@@ -3248,13 +2769,12 @@ operation RC!CommunicationStmt createCommuStmtAsAction(): Z!CircusAction{
 	
 	if(self.communication._type.name = "INPUT"){
 		"this is an INPUT type communication".println();
-		("line 3038, nc(self) = " + nc(self)).println();
-		return self.communication.createCommuINPUTAsAction(nc(self));
+		return self.communication.createCommuINPUTAsAction();
 	} else
 
 	if(self.communication._type.name = "OUTPUT" or self.communication._type.name = "SYNC"){
 		"this is an OUTPUT or SYNC type communication".println();
-		return self.communication.createCommuOUTPUT_SYNCAsAction(nc(self));
+		return self.communication.createCommuOUTPUT_SYNCAsAction();
 //		if(self.communication.value.isTypeOf(RC!RefExp)){
 //			return self.communication.createCommuOUTPUT_SYNCRefAsAction();
 //		} else{
@@ -3264,28 +2784,44 @@ operation RC!CommunicationStmt createCommuStmtAsAction(): Z!CircusAction{
 	
 	if(self.communication._type.name = "SIMPLE"){
 		"this is an SIMPLE type communication".println();
-		return self.communication.createCommuSIMPLEAsAction(nc(self));
+		return self.communication.createCommuSIMPLEAsAction();
 	} 
 
 }
 
 //CSP Rule 69 - RC commu.type = Input
-operation RC!Communication createCommuINPUTAsAction(nc:RC!NodeContainer): Z!InterruptAction{
-	/*************************************************
-	RoboChart example: event1 ? a1	
-	CSPM example: SStop /\ (event1.in?a1 -> (SStop /\ set_a1!a1 -> SKIP))) 
-
+operation RC!Communication createCommuINPUTAsAction(): Z!InterruptAction{
+	/*
 	CommunicationStmt is an interrupt action in Circus
 	left action is SStop
 	right action is a prefixing action
-	************************************************/
+	*/
 	var leftAction = "SSTOP".createCallAction();
 	
 
+//	/*to create inner-layer prefixing of the prefixingAction,i.e., the setting part
+//	e.g., set_input!input
+//	we need to create an internal RC!Communication of OUTPUT type first*/
+//	var inner_RC_commu = new RC!Communication;//set_input!input
+//	
+//	inner_RC_commu.event = new RC!Event;
+//	inner_RC_commu.event.name = "set_"+ self.parameter.name;
+//	
+//	inner_RC_commu.value =  self.parameter.name.createRCRefExp();
+//
+//	inner_RC_commu._type = CommunicationType#OUTPUT;
+//	
+//	/*End of internal RC!Communication creation*/
+		
+//	var inner_prefix = inner_RC_commu.createCommunication(inner_RC_commu.event.name,"OUTPUT");
+
 	var chan_name = "set_" + self.parameter.name;
 	var expr_string = self.parameter.name;
-	var inner_prefix = createOutputCommunicationFromString(chan_name, expr_string,"OUTPUT");
+	var inner_prefix = createOutputCommunicationFromString(chan_name, expr_string);
 	
+//	var expr = self.parameter.name.createRefExpr(false,false);
+//	var inner_prefix = createOutputCommunication(chan_name, expr, "OUTPUT");
+//	var inner_prefix = createOutputCommunicationFromString("set_" + self.parameter.name, self.parameter.name);
 
 
 	var inner_prefix_action = createPrefixingAction(inner_prefix, createSkipAction());
@@ -3300,10 +2836,11 @@ operation RC!Communication createCommuINPUTAsAction(nc:RC!NodeContainer): Z!Inte
 }
 
 
+
+
 operation createOutputCommunicationFromString(
 	chan_name: String,
-	expr_string:String,
-	type: String
+	expr_string:String
 	): Z!Communication{
 	
 	var commu = new Z!Communication;
@@ -3319,13 +2856,13 @@ operation createOutputCommunicationFromString(
 	commu.commPattern = Z!CommPattern#Output;		
 	var field = new Z!DotField;
 	field.expr = expr_string.createRefExpr(false,false);
-//	field.outputField = true;
-	if(type = "OUTPUT"){ 
-		field.outputField = true;
-	} else
-	if(type = "SYNC"){ 
-		field.outputField = false;
-	}
+	field.outputField = true;
+//	if(type = "OUTPUT"){ 
+//		field.outputField = true;
+//	} else
+//	if(type = "Sync"){ 
+//		field.outputField = false;
+//	}
 	
 	commu.fieldList.fields = Sequence{field};
 	
@@ -3334,46 +2871,13 @@ operation createOutputCommunicationFromString(
 
 
 
-operation createDotInputCommunication(
-	chan_name: String,
-	dot_para:String,
-	input_var: String
-	): Z!Communication{
-	
-	var commu = new Z!Communication;
-
-	commu.commUsage = Z!CommUsage#Normal;
-	commu.indexed = false;
-	commu.multiSych = 0;
-	commu.channelExpr = chan_name.createRefExpr(false,false);
-
-	commu.fieldList = new Z!CircusFieldList; 
-		
-	
-	commu.commPattern = Z!CommPattern#Mixed;		
-	var field1 = new Z!DotField;
-	field1.expr = dot_para.createRefExpr(false,false);
-	field1.outputField = false;
-	
-	
-	var field2 = new Z!InputField;
-	field2.varialbeName = input_var.createZName();
-	
-	commu.fieldList.fields = Sequence{field1,field2};
-	
-	return commu;
-}
-
-
-
 
 //CSP Rule 69 - RC commu.type = Output/Sync
-operation RC!Communication createCommuOUTPUT_SYNCAsAction(nc:RC!NodeContainer): Z!InterruptAction{
+operation RC!Communication createCommuOUTPUT_SYNCAsAction(): Z!InterruptAction{
 	
 	/*
 	CommunicationStmt is an interrupt action in Circus
 	left action is SStop
-
 	right action is a prefixing action
 	*/
 	
@@ -3382,10 +2886,17 @@ operation RC!Communication createCommuOUTPUT_SYNCAsAction(nc:RC!NodeContainer): 
 	/*to create prefixing of the prefixingAction,i.e., the setting part
 	e.g., status_out!input, status_out.input
 	*/
+//	var inner_RC_commu = new RC!Communication;//set_input!input
+//	
+//	inner_RC_commu.event = new RC!Event;
+//	inner_RC_commu.event.name = self.event.name + "_out";
+//	inner_RC_commu.value = self.value.ref.name.createRCRefExp();
+//	inner_RC_commu._type = self._type;
 
-	var prefix = createOutputCommunication(self.event.name + "_out", self.value, self._type.name);
 	
-//	var prefix = createOutputCommunication(self.event.name + "_" + nc.FQN() + "_out", self.value, self._type.name);
+//	var inner_prefix = inner_RC_commu.createCommunication(inner_RC_commu.event.name,self._type.name);
+	
+	var prefix = createOutputCommunication(self.event.name + "_out", self.value, self._type.name);
 	
 	var prefix_action = createPrefixingAction(prefix, createSkipAction());
 	var interrupt_action = createAction2("InterruptAction", "SSTOP".createCallAction(), prefix_action);
@@ -3395,10 +2906,9 @@ operation RC!Communication createCommuOUTPUT_SYNCAsAction(nc:RC!NodeContainer): 
 
 
 //CSP Rule 69 - 3:  RC comm.type = simple
-operation RC!Communication createCommuSIMPLEAsAction(nc:RC!NodeContainer): Z!InterruptAction{
-	
-	var prefix = self.createCommuAsCommunication(self.event.name +"_out","SIMPLE");
-//	var prefix = self.createCommuAsCommunication(self.event.name + "_" + nc.FQN() +"_out","SIMPLE");
+operation RC!Communication createCommuSIMPLEAsAction(): Z!InterruptAction{
+
+	var prefix = self.createCommuAsCommunication(self.event.name+"_out","SIMPLE");
 
 	var prefix_action = createPrefixingAction(prefix, createSkipAction());
 	
@@ -3429,11 +2939,34 @@ operation RC!Communication createCommuSIMPLEAsAction(nc:RC!NodeContainer): Z!Int
 //}
 
 
+//operation Any createCommunication(
+//			channel_name:String, 
+//			type:String
+//			):Z!Communication{
+//	var commu;
+//	
+//	if(self.EClass().name = "Assignment"){
+//		commu = self.createAssignmentAsOutputCommunication();
+//	} else
+//	if(self.EClass().name = "Communication"){
+//		commu = self.createCommuAsCommunication(channel_name, type);
+//		("line 511, this commu pattern is "+ commu.commPattern).println();
+//	}
+//	return commu;
+//}
+
 
 
 operation String createInputField(): Z!InputField{
 	var field = new Z!InputField;
 	field.varialbeName = self.createZName();
+	//var name = new String;
+//	if(self._type = CommunicationType#INPUT){
+//		inputField.varialbeName = self.parameter.name.createZName();
+//	} else
+//	if(self._type = CommunicationType#OUTPUT){
+//		inputField.varialbeName = self.value.ref.name.createZName();
+//	} 
 	
 	return field;
 }
@@ -3698,55 +3231,19 @@ operation createSkipAction(): Z!SkipAction {
 	return skipAction;
 }
 
-//2024.6.25 a new version 
-//create RefExpr as Generic Operator Application: explicit = true, mixFix = true
-//used for Robochart SeqType transformation: name = seq_, expr = refExpr
-operation createRefExprAsGenOpAppl(
-	name_str: String,
-	expr: Z!Expr
-	): Z!RefExpr{
-	
-	var refExpr = new Z!RefExpr;
-	refExpr.mixFix = true;
-	refExpr.explicit = true;
-	refExpr.name = name_str.createZName();
-	refExpr.exprList = new Z!ZExprList;
-	refExpr.exprList.exprs.add(expr);
-	
-	return refExpr;
-
-}
 
 
-//create RefExpr as Generic Operator Application: explicit = true, mixFix = true
-//used for Robochart SeqType transformation: name = seq_, expr = refExpr
-operation createRefExprAsGenOpAppl(
-	name_str: String,
-	expr_str: String
-	): Z!RefExpr{
-	
-	var refExpr = new Z!RefExpr;
-	refExpr.mixFix = true;
-	refExpr.explicit = true;
-	refExpr.name = name_str.createZName();
-	refExpr.exprList = new Z!ZExprList;
-	refExpr.exprList.exprs.add(expr_str.createRefExpr(false,false));
-	
-	return refExpr;
-
-}
-
-
-//create RefExpr as Reference: explicit = false, mixFix = false
 operation String createRefExpr(explicit: Boolean, mixFix: Boolean): Z!RefExpr{
 	var refExpr = new Z!RefExpr;
 	refExpr.mixFix = mixFix;
 	refExpr.explicit = explicit;
 	refExpr.name = self.createZName();
+//	refExpr.name.word = self;
 	
 	return refExpr;
 
 }
+
 operation RC!BooleanExp createBooleanExpr(): Z!RefExpr{
 	var boolExpr = new Z!RefExpr;
 	boolExpr.mixFix = false;
@@ -3771,20 +3268,6 @@ operation RC!FloatExp createFloatExpr(): Z!RefExpr{
 		
 	return floatExpr;
 }
-
-
-
-operation RC!EnumExp createEnumExpr(): Z!SetExpr{
-	var expr = new Z!SetExpr;
-	expr.exprList = new Z!ZExprList;
-	expr.exprList.exprs.add(self.literal.name.createRefExpr(false,false));
-		
-	return expr;
-}
-
-
-
-
 
 operation  RC!IntegerExp createNumExpr(): Z!NumExpr{
 	var numExpr = new Z!NumExpr;
@@ -3826,8 +3309,6 @@ operation RC!LessOrEqual createLessOrEqualExpr() {
 }
 */
 
-
-//CZT: C.6.21 (Function Operator Application). For example: S + T.
 operation Any createApplExpr(operator: String): Z!ApplExpr{
 	var expr = new Z!ApplExpr;
 	expr.mixFix = true; //CZT: C.6.21 (Function Operator Application). For example: S + T.
@@ -3849,32 +3330,6 @@ operation Any createApplExpr(operator: String): Z!ApplExpr{
 
 
 
-//CZT: C.6.22 (Application)
-//RC CallExp is a Z ApplExpr
-operation RC!CallExp createCallExpr(): Z!ApplExpr{
-	var expr = new Z!ApplExpr;
-	expr.mixFix = false; 
-
-	expr.leftExpr = self.`function`.createExpr();
-	
-	("self.function = " + self.`function`).println();
-	("self.function.type = " + self.`function`.type()).println();
-	
-	("self.function.asString() = " + self.`function`.asString()).println();
-	
-	var arg_seq = new Sequence<Z!Expr>;
-	for(arg in self.args){
-		arg_seq.add(arg.createExpr());
-	}
-	expr.rightExpr = arg_seq.createTupleExpr();	
-//	var left = operator.createRefExpr(false,false);
-//	var right = Sequence{operand_left, operand_right}.createTupleExpr();	
-
-//	expr.exprList = new Z!ZExprList;
-//	expr.exprList.exprs = Sequence{left, right};
-	
-	return 	expr;
-}
 
 
 //covers Neg, Not
@@ -3962,26 +3417,6 @@ operation RC!Modulus createModExpr():Z!ApplExpr{
 	return self.createApplExpr("_mod_");
 }
 
-operation RC!SeqExp createSeqExpr(): Z!ApplExpr{
-	var expr = new Z!ApplExpr;
-	expr.mixFix = true; //CZT: C.6.21 (Function Operator Application). 
-	
-	expr.leftExpr = "<,,>".createRefExpr(false,false);
-
-	var setExpr = new Z!SetExpr;
-	var exprList = new Z!ZExprList;
-	var exprs = new Sequence<Z!Expr>;
-	exprs = Sequence{};
-	for(v in self.values){
-		exprs.add(v.createExpr());
-	}
-	exprList.exprs = exprs;
-	setExpr.exprList = exprList;
-	expr.rightExpr = setExpr;	
-
-	
-	return 	expr;
-}
 
 operation RC!Not createNotExpr():Z!ApplExpr{
 	return self.createUnaryApplExpr("Not_");
@@ -3994,8 +3429,6 @@ operation RC!Neg createNegExpr():Z!ApplExpr{
 
 
 
-
-
 //TO DO: shall this be an ApplExpr instead??
 operation RC!IfExpression createCondExpr():Z!CondExpr{
 
@@ -4004,6 +3437,11 @@ operation RC!IfExpression createCondExpr():Z!CondExpr{
 
 //TO DO: what class in Z?
 operation RC!VarExp createVarExpr():Z!Expr{
+
+}
+
+//TO DO: what class in Z?
+operation RC!CallExp createCallExpr():Z!Expr{
 
 }
 
@@ -4080,34 +3518,66 @@ operation RC!Expression createExpr():Z!Expr{
 	} else
 	if(self.isTypeOf(RC!ParExp)){
 		return self.exp.createExpr();
-	} else
-	
-	if(self.isTypeOf(RC!EnumExp)){
-		return self.createEnumExpr();
-	} else
-	
-	if(self.isTypeOf(RC!CallExp)){
-		return self.createCallExpr();
-	} else
-	
-	if(self.isTypeOf(RC!SeqExp)){
-		return self.createSeqExpr();
 	} 
 //	else
 //	
 //	//TO DO
-//	if(self.isTypeOf(RC!IfExpression)  or self.isTypeOf(RC!ResultExp) or self.isTypeOf(RC!Selection) or self.isTypeOf(RC!ArrayExp) or self.isTypeOf(RC!TupleExp) or self.isTypeOf(RC!ClockExp) ){
+//	if(self.isTypeOf(RC!IfExpression) or self.isTypeOf(RC!CallExp)  or self.isTypeOf(RC!ResultExp) or self.isTypeOf(RC!Selection) or self.isTypeOf(RC!EnumExp) or self.isTypeOf(RC!ArrayExp) or self.isTypeOf(RC!TupleExp) or self.isTypeOf(RC!ClockExp) or self.isTypeOf(RC!SeqExp) ){
 //		return self.createUnaryExpr();
 //	} 
 
 }
 
+
+
 operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
 	var tupleExpr = new Z!TupleExpr;
 	tupleExpr.exprList = new Z!ZExprList;
-	("line 4044 self = " + self).println();
-//	("line 4044 self.name = " + self.name).println();
 	tupleExpr.exprList.exprs = self;
 	return tupleExpr;
 
 }
+
+
+//operation RC!Expression createUnaryExpr(): Z!Expr {
+	
+	//TO DO: to complete the following unaryExpr of RoboChart
+	/*
+	
+
+	if(self.isTypeOf(CallExp)){
+		//self.callExpString().println();
+		return self.callExpString();
+	} else 
+	
+	if(self.isTypeOf(ResultExp)){
+		return "result";
+	} else 
+	
+	if(self.isTypeOf(Selection)){
+		return self.member.name+"("+self.receiver.value.ref.name+"!"+self.receiver.parameters.at(0).ref.name+")";
+	} else 
+	
+	if(self.isTypeOf(EnumExp)){
+		return self.literal.name;
+	} else 
+	
+	if(self.isTypeOf(SeqExp)){
+		return self.sequenceString();
+	} else 
+	
+	if(self.isTypeOf(ArrayExp)){
+		return self.value.ref.name + "."+self.parameters.at(0).value;
+		//e.g., vel[1] -> vel.1
+	} else 
+	
+	if(self.isTypeOf(TupleExp)){
+		return "("+ self.values.at(0).oneSideOfBianryString()+", "+self.values.at(1).oneSideOfBianryString() +")";
+		//e.g., (3,4)
+	} else 
+	
+	if(self.isTypeOf(ClockExp)){
+		return "clock";
+	}
+*/
+//}
