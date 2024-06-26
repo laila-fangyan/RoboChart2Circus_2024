@@ -10,31 +10,51 @@ unbundle Circus_Syntax
 hide_const (open) sum
 
 subsection \<open> Model \<close>
-[%z.eContents.println();
-//z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).name.println();
-z.type().println();
-//z.allInstances().println();
-//z.exprList.exprs.at(0).name.word.println();
-//z.eContents.select(s|s.instanceOf(Z!ZSect)).paraList.println();
-%]
 
-[*
-s3.entryaction.expr = [%=z.eContents.at(0).parseExpr()%]
-*]
-[%z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!FreePara)).println();
+[*giventype declaration, RoboChart e.g., "type Chem"*]
+[%
+var givenParas =  z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!GivenPara));
+
+if(givenParas.size()>0){
+	for(gp in givenParas){%]
+type_synonym [%=gp.nameList.names.at(0).word%] = nat
+[%} }%]
+
+[*enumType declaration*]
+[%
 var freeparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!FreePara));
 
 for(freepara in freeparas){
 	var enumType = freepara.freetypeList.freeTypes.at(0);
 //	var chans = chandecl.channelNameList.names;
 	%]
+	
+	
 datatype [%=enumType.name.word%] = 
 	[%for(bran in enumType.branchList.branches){%]
 	[%=bran.name.word%] [%if(hasMore){%] | 
- [%} 
-	}
-}%]
+ [%}}}%]
 
+
+[*record type declaration*]
+[%var axParas  =  z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!AxPara));
+
+if(axParas.select(p|p.box = Z!Box#SchBox).size()>0){
+	for(ap in axParas.select(p|p.box = Z!Box#SchBox)){%]
+record [%=ap.zSchText.declList.decls.at(0).name.word%] =
+[%for(vardecl in ap.zSchText.declList.decls.at(0).expr.schText.declList.decls){%]
+	[%=vardecl.nameList.names.at(0).word%] :: "[%=vardecl.expr.parseExpr()%]"
+[%}} }%]
+
+[*constants declaration*]
+[%
+if(axParas.select(p|p.box = Z!Box#AxBox).size()>0){%]
+
+\<comment> \<open>constant declaration\<close>
+[%	for(ap in axParas.select(p|p.box = Z!Box#AxBox)){%]
+consts [%=ap.zSchText.declList.decls.at(0).nameList.names.at(0).word%] :: [%=ap.zSchText.declList.decls.at(0).expr.parseExpr()%]
+
+[%} }%]
 
 \<comment> \<open>Channel Declaration\<close>
 chantype mychan = 
@@ -43,14 +63,14 @@ share :: unit
 var channelparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ChannelPara));
 
 for(chanpara in channelparas){%]
-\<comment> \<open>[%=chanpara.name.parse()%]\<close>
+\<comment> \<open>[%=chanpara.name.word%]\<close>
 [%//	var chandecl = chanpara.declList.decls.at(0);
 	for(chandecl in chanpara.declList.decls){
 		var chans = chandecl.channelNameList.names;%]
 
 		[%for(chan in chans){%]
-[%=chan.word%] [*[%if(chandecl.expr.name.word = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.name.word = "Value"){%]real[%}else{%][%=chandecl.expr.name.word%][%}}*][%if(chandecl.expr.parseExpr() = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.parseExpr() = "Value"){%]real[%}else if(chandecl.expr.instanceOf(ProdExpr)){%]"[%=chandecl.expr.parseExpr()%]"[%}else{%][%=chandecl.expr.parseExpr()%][%}}%]
-		
+[%=chan.word%] [*[%if(chandecl.expr.name.word = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.name.word = "Value"){%]real[%}else{%][%=chandecl.expr.name.word%][%}}*][%if(chandecl.expr.parseExpr() = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.parseExpr() = "Value"){%]real[%} else {%]"[%=chandecl.expr.parseExpr()%]"[%}}%]
+
 		[%}
 	}%]
 	
@@ -98,23 +118,13 @@ definition "MainAction = cProcess [%= procpara.circusProcess.mainAction.parseAct
 	[%} else {%]
 definition "MainAction = cProcess [%= procpara.name.word%].MainAction"
 	[%}%]
+
 end
 [%}%]
  
 end
 
 
-
-
-[%operation Z!ActionPara parseActionPara(): String{
-	//TO DO
-}
-%]
-
-[%operation Z!ChannelSetPara parseChannelSetPara(): String{
-	//TO DO
-}
-%]
 
 
 [%operation Z!CircusProcess parseProc(): String{
@@ -312,13 +322,13 @@ end
 
 
 [%operation Z!ParallelActionIte parseParallelActionIte(): String{
-	return  "(" + " \\<lbrakk> " + self.channelSet.parseChannelSet() + " \\<rbrakk> " + self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<zspot> " + self.circusAction.parseAction() + ")";
+	return  "(" + " \\<lbrakk> " + self.channelSet.parseChannelSet() + " \\<rbrakk> " + self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<bullet> " + self.circusAction.parseAction() + ")";
 }%]
 [*suppose there is only one parameter for iteration*]
 
 
 [%operation Z!InterleaveActionIte parseInterleaveActionIte(): String{
-	return  "( \\<interleave> "  +  self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<zspot>  " + self.circusAction.parseAction() + " )";
+	return  "( \\<interleave> "  +  self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<bullet>  " + self.circusAction.parseAction() + " )";
 }%]
 [*suppose there is only one parameter for iteration*]
 
@@ -462,90 +472,157 @@ end
 
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_less_"){
 		return self.parseLessThan();
-	} else
+	} //else
+	
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_greater_"){
 		return self.parseGreaterThan();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_leq_"){
 		return self.parseLessOrEqual();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_geq_"){
 		return self.parseGreaterOrEqual();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_equals_"){
 		return self.parseEquals();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_nequals_"){
 		return self.parseDifferent();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_And_"){
 		return self.parseAnd();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_Or_"){
 		return self.parseOr();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_Equivalence_"){
 		return self.parseIff();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_Implies_"){
 		return self.parseImplies();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_+_"){
 		return self.parsePlus();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_-_"){
 		return self.parseMinus();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_*_"){
 		return self.parseMult();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_div_"){
 		return self.parseDiv();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_mod_"){
 		return self.parseModulus();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "_.._"){
 		return self.parseSetRange();
-	} else	
+	} //else	
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "relu"){
 		return self.parseRelu();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "-_"){
 		return self.parseNeg();
-	} else
+	} //else
 	if(self.isTypeOf(ApplExpr) and self.leftExpr.name.word = "Not_"){
 		return self.parseNot();
-	} else
-//	if(self.isTypeOf(ApplExpr)){
-//		return self.parseBinaryApplExpr();
-//	} else
-	if(self.isTypeOf(RefExpr)){
-		return self.name.word.asString();
-	} else
-	if(self.isTypeOf(NumExpr)){
+	} //else
+	
+	if(self.isTypeOf(Z!ApplExpr) and self.leftExpr.name.word = "<,,>"){
+		return self.parseSequence();
+	} //else
+	
+	if(self.isTypeOf(Z!ApplExpr) and self.mixFix = false){//this is a RC!CallExpr
+		return self.parseApplExprAsCallExpr();
+	} //else 
+	
+	if(self.isTypeOf(Z!RefExpr) and self.explicit = false and self.mixFix = false){//create RefExpr as Reference: explicit = false, mixFix = false
+		return self.name.word;
+	} //else 
+	
+	if(self.isTypeOf(Z!RefExpr) and self.explicit = true and self.mixFix = true){//create RefExpr as Generic Operator Application: explicit = true, mixFix = true. Currently only channel type Seq(type) falls into this case 
+		if(self.name.word = "seq_"){
+			return "(" + self.exprList.exprs.at(0).parseExpr() + " list)";
+		}
+	} //else	
+	
+	if(self.isTypeOf(Z!NumExpr)){
 		return self.numeral.value.asString();
-	} else
-	if(self.isTypeOf(TupleExpr)){
-//		return self.numeral.value.asString();
-	} else
-	if(self.isTypeOf(BasicChannelSetExpr)){
+	} //else
+	
+	if(self.isTypeOf(Z!TupleExpr)){
+		return self.parseTupleExpr();
+	} //else
+	
+	if(self.isTypeOf(Z!BasicChannelSetExpr)){
 		return self.parseBasicChannelSetExpr();
-	} else
-	if(self.isTypeOf(ProdExpr)){
+	} //else
+	
+	if(self.isTypeOf(Z!ProdExpr)){
 		return self.parseProdExpr();
-	} 
+	} //else//this is RC!EnumExpr
+	
+	if(self.isTypeOf(Z!SetExpr)){
+		return self.parseSetExpr();
+	}
 }%]
 
-[*
-[%operation Z!ApplExpr parseUnaryApplExpr(): String{
-	return  "(" + self.leftExpr.name.word + " " + self.rightExpr.parseExpr() +")";
-}%]*]
 
-[*
-[%operation Z!ApplExpr parseBinaryApplExpr(): String{
-	return  "("+ self.rightExpr.exprList.exprs.at(0).parseExpr() + " " + self.leftExpr.name.word + " " + self.rightExpr.exprList.exprs.at(1).parseExpr() +")";
-}%]*]
+
+[%operation Z!ApplExpr parseSequence(): String{
+	var seq_str : String;
+	
+	if(self.rightExpr.exprList.exprs.size()>0){
+		seq_str = "[" + self.rightExpr.parseSetExpr() + "]";
+	} else { 
+		seq_str = "[]";
+	}
+
+	return seq_str;
+}%]
+
+[%operation Z!SetExpr parseSetExpr(): String{
+	var set_str : String;
+	
+//	set_str = self.exprList.exprs.at(0).parseRefExpr();
+	for(expr in self.exprList.exprs){
+		set_str = set_str + expr.parseExpr();
+		if(hasMore){
+			set_str = set_str + ",";
+		}
+	}
+	return set_str;
+}%]
+
+
+[%operation Z!ApplExpr parseApplExprAsCallExpr(): String{
+	var call_str : String;
+
+	call_str = self.leftExpr.parseExpr() + "(";
+	if(self.rightExpr.exprList.exprs.size()>0){
+		("line 613, self.rightExpr.type = " + self.rightExpr.type()).println();
+		call_str = call_str + self.rightExpr.parseTupleExpr() + ")";
+	} else { 
+		call_str = call_str + ")";
+	}
+
+	return call_str;
+}%]
+
+
+[%operation Z!TupleExpr parseTupleExpr(): String{
+	var tup_str : String;
+	for(expr in self.exprList.exprs){
+		tup_str = tup_str + expr.parseExpr();
+		if(hasMore){
+			tup_str = tup_str + ",";
+		}
+	}
+
+	return tup_str;
+}%]
+
 
 [%operation Z!ApplExpr parseLessThan(): String{
 	return  "("+ self.rightExpr.exprList.exprs.at(0).parseExpr() +" < " + self.rightExpr.exprList.exprs.at(1).parseExpr() +")";

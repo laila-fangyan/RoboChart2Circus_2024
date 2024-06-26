@@ -17,31 +17,7 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 
 //var pkg =  RC!RCPackage.all().selectOne(p|p.name = "Chemical");
 var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0");
-
-
-//the following is to be UNCOMMENTED after stm is sorted out
-////To create local var for requried shared var at Controller level
-//for(c in RC!ControllerDef.all()){
-//	c.rinterfaces.println();
-//	var varset = Set<Variable>;
-//	varset = Set{};
-//	for(ri in c.rinterfaces){
-//		for(vl in ri.variableList){
-//		varset = varset.includingAll(vl.vars);
-//		}
-//	}
-//	
-//	if(c.variableList.size()>0 and c.variableList.select(l|l.modifier = RC!VariableModifier#VAR).size()>0){
-//		c.variableList.select(l|l.modifier = RC!VariableModifier#VAR).at(0).vars = c.variableList.at(0).vars.includingAll(varset);
-//	} else {
-//	var vl = new RC!VariableList;
-//	c.variableList.add(vl);
-//	vl.vars = vl.vars.includingAll(varset);
-//	}
-//}
-
-
-
+pkg.println();
 
 
 //replaceRef();
@@ -67,8 +43,7 @@ for(stm in RC!StateMachineDef.all()){
 	
 	declareConstants(stm);
 }
-//var stm = RC!StateMachineDef.all().at(0);
-//declareConstants(stm);
+
 
 
 
@@ -83,9 +58,7 @@ var nc = RC!StateMachineDef.all().at(0);
 
 
 ncBehaviour(nc);
-//ncBehaviour(stm1.ref);
-//
-//
+
 var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators"});
 	
 for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!ProcessPara) or p.instanceOf(Z!FreePara)  or p.instanceOf(Z!GivenPara)  or p.instanceOf(Z!AxPara) )){
@@ -117,14 +90,14 @@ for (t in nc.transitions.select(t|t.name = "t1")){
 
 */
 
-
-
-
+//
+//
+//
 /**************************************************************
  Operations that supports the transformation procedures above 
 
 ***************************************************************/
-
+//
 /*RoboChart example:
 
 type Chem
@@ -933,7 +906,7 @@ operation String createBranch(): Z!Branch{
 	return branch;
 	//branch.expr = null;
 }
-
+//
 //Fully Qualified Name for Node
 operation RC!Node FQN(): String{
 	var  stm_sets = RC!StateMachineDef.all();
@@ -3122,14 +3095,13 @@ operation RC!Statement createStmtAsAction(): Z!CircusAction{
 //CSP Rule 66
 operation RC!Assignment createAssignmentStmtAsAction(): Z!InterruptAction{
 	
-	/*
-	assignment is an interrupt actio in Circus
-	left action is SStop
-	right action is a prefixing action
-	*/
+	/*/
+	//assignment is an interrupt actio in Circus
+	//left action is SStop
+	//right action is a prefixing action
+	/*/
 	
-	/* CallAction permits a name to be an action.
-	*/
+	/* CallAction permits a name to be an action.	*/
 	var leftAction = "SSTOP".createCallAction();
 	var chan_name = "set_" + self.left.name.name;
 	
@@ -3996,111 +3968,108 @@ operation RC!Neg createNegExpr():Z!ApplExpr{
 
 
 
-//TO DO: shall this be an ApplExpr instead??
-operation RC!IfExpression createCondExpr():Z!CondExpr{
-
-}
-
-
-//TO DO: what class in Z?
-operation RC!VarExp createVarExpr():Z!Expr{
-
-}
 
 
 
-
+//ELSE must be removed, otherwise the program runs for a very long time 
 operation RC!Expression createExpr():Z!Expr{
 	if(self.isTypeOf(RC!LessThan)){
 		return self.createLessThanExpr();
-	} else 
+	} //else 
 	if(self.isTypeOf(RC!GreaterThan)){
 		return self.createGreaterThanExpr();
-	} else 
+	} //else 
 	if(self.isTypeOf(RC!LessOrEqual)){
 		return self.createLessOrEqualExpr();
-	} else 
+	} //else 
 	if(self.isTypeOf(RC!GreaterOrEqual)){
 		return self.createGreaterOrEqualExpr();
-	} else 
+	} //else 
 	if(self.isTypeOf(RC!Equals)){
 		return self.createEqualsExpr();
-	} else 
+	} //else 
 	if(self.isTypeOf(RC!Different)){
 		return self.createNequalExpr();
-	} else 
+	} //else 
 	if (self.isTypeOf(RC!And)){
 		return self.createAndExpr();
-	} else 
+	} //else 
 	if (self.isTypeOf(RC!Or)){
 		return self.createOrExpr();
-	} else 
+	} //else 
 	if (self.isTypeOf(RC!Not)){
 		return self.createNotExpr();
-	} else 
+	} //else 
 	if (self.isTypeOf(RC!Plus)){
 		return self.createPlusExpr();
-	} else 
+	} //else 
 	if (self.isTypeOf(RC!Minus)){
 		return self.createMinusExpr();
-	} else 
+	} //else 
+	
 	if (self.isTypeOf(RC!Mult)){
 		return self.createMultExpr();
-	} else 
+	} //else 
+	
 	if (self.isTypeOf(RC!Div)){
 		return self.createDivExpr();
-	} else
+	} //else
+	
 	if (self.isTypeOf(RC!Modulus)){
 		return self.createModExpr();
-	} else
+	} //else
+	
 	if (self.isTypeOf(RC!Neg)){
 		return self.createNegExpr();
-	} else
+	} //else
+	
 	if(self.isTypeOf(RC!Iff)){
 	 return self.createIffExpr();
-	} else
+	} //else
+	
 	if(self.isTypeOf(RC!Implies)){
 		return self.createImpliesExpr();
-	} else
-
+	} //else
+	
 	if(self.isTypeOf(RC!IntegerExp)){
 		return self.createNumExpr();
-	} else
+	} //else
 	
 	if(self.isTypeOf(RC!RefExp)){
 		return self.ref.name.createRefExpr(false, false);
-	} else
+	} //else
 	
 	if(self.isTypeOf(RC!BooleanExp)){
 		return self.createBooleanExpr();
-	} else
+	} //else
 	
 	if(self.isTypeOf(RC!FloatExp)){
 		return self.createFloatExpr();
-	} else
+	} //else
+	
 	if(self.isTypeOf(RC!ParExp)){
 		return self.exp.createExpr();
-	} else
+	} //else
 	
 	if(self.isTypeOf(RC!EnumExp)){
 		return self.createEnumExpr();
-	} else
+	} //else
 	
 	if(self.isTypeOf(RC!CallExp)){
 		return self.createCallExpr();
-	} else
+	} //else
 	
 	if(self.isTypeOf(RC!SeqExp)){
 		return self.createSeqExpr();
 	} 
-//	else
-//	
+	
 //	//TO DO
 //	if(self.isTypeOf(RC!IfExpression)  or self.isTypeOf(RC!ResultExp) or self.isTypeOf(RC!Selection) or self.isTypeOf(RC!ArrayExp) or self.isTypeOf(RC!TupleExp) or self.isTypeOf(RC!ClockExp) ){
 //		return self.createUnaryExpr();
 //	} 
-
 }
+
+
 
 operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
 	var tupleExpr = new Z!TupleExpr;
