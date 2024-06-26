@@ -326,7 +326,7 @@ class ZDeclList extends DeclList {
 ********************************/
 class Freetype extends Term {
 	val ZName name; 
-	val BranchList branchList; 
+	val ZBranchList branchList; 
 }
 
 
@@ -393,7 +393,7 @@ class ConjPara extends Para {
 
 class FreePara extends Para {
 	val FreetypeList freetypeList; 
-}
+	}
 
 class GivenPara extends Para {
 	val ZNameList nameList; 
@@ -1340,6 +1340,7 @@ class NumExpr extends Expr {
 	val ZNumeral numeral;
 }
 
+@GenModel(documentation="C.6.21 - Generic Operator Application. For example: S \rel T.  mixfix and explicit are  true; C.6.28 - Reference. For example: \arithmos, mixfix and explicit are false; C.6.29 - Generic Instantiation. For example: \emptyset[T], mixfix is always false")
 class RefExpr extends Expr {
 	attr boolean explicit;
 	val ZExprList exprList;
@@ -1353,8 +1354,10 @@ class SigmaExpr extends Expr {
 }
 
 
+
+@GenModel(documentation="A schema construction expression C.6.34")
 class SchExpr extends Expr {
-	val SchText schText;
+	val ZSchText schText;
 }
 
 
@@ -1391,7 +1394,6 @@ class PreExpr extends Expr1 {
 }
 
 class RenameExpr extends Expr1 {
-	//val or ref
 	val ZRenameList renameList;
 }
 
@@ -1480,7 +1482,7 @@ class TupleExpr extends Expr2N {
 
 
 
-@GenModel(documentation="Function Operator Application: mixFox = true, Application: mixFix = false")
+@GenModel(documentation="Function Operator Application: mixFix = true, Application: mixFix = false")
 class ApplExpr extends Expr2 {
 	attr boolean mixFix;
 }
