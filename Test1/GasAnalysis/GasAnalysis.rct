@@ -5,42 +5,15 @@ package Chemical
 enumeration Status {  noGas gasD } import sequence_toolkit::*
 enumeration Angle { Left Right Back Front }
 datatype GasSensor {
-	c : Chem
+	c: Chem
+//	c: int * int
 	i : Intensity
 }
+
 type Chem
 type Intensity
 
 //Analyze whether there is gas or not
-function analysis( gs : Seq( GasSensor )) : Status {
-		precondition size ( gs ) > 0
-    postcondition exists x: nat | 0 < x /\ x <= size (gs) /\ gs[x].i>0 @ result == gasD
-	postcondition forall y: nat | 0 < y /\ y <= size (gs) /\ gs[y].i==0 @  result == noGas
-	 
-}
-
-//check if intensity is high enough
-function goreq(  i1 : Intensity , i2 : Intensity) : boolean {
-postcondition result == (i1 > i2)}
-
-//Return the highest intensity
-function intensity( gs : Seq( GasSensor )) : Intensity {
-	precondition size ( gs ) > 0
-	postcondition forall x : nat | 0 < x /\ x <= size ( gs ) @ goreq ( result , gs [ x ] . i )
-	postcondition exists y: nat | 0 < y /\ y <= size (gs) @ result == gs[y].i
-}
-function location( gs : Seq( GasSensor )) : Angle {
-	precondition size ( gs ) > 0
-	postcondition exists x : nat | 0 < x /\ x <= size ( gs ) @ gs [ x ] . i == intensity ( gs ) /\ result == angle ( x )
-}
-function angle( x : nat) : Angle { 
-//precondition 0< x /\ x<=360
-	postcondition if 0< x< 90 then result ==Front else if 90<= x<180 then result ==Right else if 180<= x< 270 then result ==Back	else result==Left end end end }
-
-
-function card(A:Set(?X)): nat {
-}
-
 import Location::*
 
 stm GasAnalysis {
@@ -56,7 +29,7 @@ stm GasAnalysis {
 	
 	event turn : Angle
 	event stop
-initial i1
+	initial i1
 
 	state GasDetected {
 		entry ins = intensity ( gs )
@@ -65,7 +38,7 @@ initial i1
 	state Reading {
 	}
 	state Analysis {
-		entry sts = analysis(gs)
+		during sts = analysis ( gs )
 	}
 	state NoGas {
 	}
@@ -114,3 +87,34 @@ initial i1
 }
 
 
+function analysis( gs : Seq( GasSensor )) : Status {
+	precondition size ( gs ) > 0
+    postcondition exists x: nat | 0 < x /\ x <= size (gs) /\ gs[x].i>0 @ result == gasD
+	postcondition forall y: nat | 0 < y /\ y <= size (gs) /\ gs[y].i==0 @  result == noGas
+	 
+}
+
+//check if intensity is high enough
+function goreq(  i1 : Intensity , i2 : Intensity) : boolean {
+
+postcondition result == (i1 > i2)}
+
+//Return the highest intensity
+function intensity( gs : Seq( GasSensor )) : Intensity {
+	precondition size ( gs ) > 0
+
+	postcondition forall x : nat | 0 < x /\ x <= size ( gs ) @ goreq ( result , gs [ x ] . i )
+	postcondition exists y: nat | 0 < y /\ y <= size (gs) @ result == gs[y].i
+}
+function location( gs : Seq( GasSensor )) : Angle {
+	precondition size ( gs ) > 0
+	postcondition exists x : nat | 0 < x /\ x <= size ( gs ) @ gs [ x ] . i == intensity ( gs ) /\ result == angle ( x )
+}
+function angle( x : nat) : Angle { 
+//precondition 0< x /\ x<=360
+
+	postcondition if 0< x< 90 then result ==Front else if 90<= x<180 then result ==Right else if 180<= x< 270 then result ==Back	else result==Left end end end }
+
+
+function card(A:Set(?X)): nat {
+}

@@ -1,43 +1,145 @@
 package pkg0
 interface  I1{
-	var a : int
+//	var a : int
+	const c2 : int
+
 }
 interface  I2{
-	var a1: int,a2:int
+	var a1: int*int
 	var a3:int
 }
 interface  I3{
-	var m: int, m1:int
+	var m: int
+//    move1(m : int)
+    move2 ( lv : real, a : int )
+    move4()
+
 }
 
 
- controller C1{
+
+operation move1 ( m :  int) {
+//	terminates
+	
+}
  	
+operation move4 ( ) {
+//	terminates
+	
+}
+//operation move5 ( ) {
+////	terminates
+//	
+//} no need to define
+interface I4 {
+	event evt1 : int
+	
+}
+
+interface I5 {
+		move1(m : int)
+	
+}
+interface Ivar{
+	var x: int
+	event evta: int
+	
+}
+interface moveIF {
+	    move ( lv : real, a : int) 
+	
+}
+interface moveIF1 {
+	    move5 ( lv : real, a : int) //as move5 is just a opsig, we do not need to declare move5 standalone, but declare it in the interface is enough
+	
+}
+operation move2 ( lv : real, a : int ) {
+	requires I5//move1 has to be required before called in move2
+	
+	event opevt: int
+	initial i0
+	
+	final f0
+	transition t0 {
+		from i0
+		to f0
+		action opevt!3; move1(2)
+	}
+
+}
+
+ module M {
+
+ 	
+ robotic platform P1{
+ 	provides I1
+ 	provides I2
+ 	provides I3
+ 	provides I5
+ 	provides moveIF1
+ 	var pv1: int
+ 	
+ 	
+ }
+// cref C0 = C1
+ controller C1{
+
+ 	uses Ivar // i.e. "define interface" in the manual
+ 	//everyting is local, equivalent to declare locally the vars and events
+ 	//interface is used to group things 
+ 	
+//	provides I5
 	requires I3
 	requires I2
 	requires I1
- 			
+	requires moveIF1
+	//there is no corresponding 'provides' for moveIF because move is defined in ctrl, and this stm is within ctrl context, so it is implicitly provided
+	var cv1: int //who will use this cv1??
+	
+	operation move ( lv : real, a : int)
+	 {
+		var mv_var1: int
+		var mv_var2:int
+		event mv_evt1: int //  move' uses event 'mv_evt1' so 'stm0'should use or define mv_evt1. BUT how?
+		initial i0
+		
+		final f0
+		transition t0 {
+			from i0
+			to f0
+			action mv_evt1!3; move1(2)
+		}
+	}
+
+//	opref op2 = move2
 	stm stm0 {
 		
 	requires I3
 	requires I2
 	requires I1
+	requires moveIF//provided by ctrl
+	requires moveIF1
 	var l: int 
+	var a: int
 //	var a:int, m:int, a1:int
-	
+
+	event mv_evt1: int
 	
 	event stop
-	event event1: int
+	event event1: int*int
 	event event2: int
 	event trigger1: int
-
-	const const1 : int
+	
+	const c1 : int
 	
 	initial i0
 	state s0 {		
-		entry  event1  ? a1
+		entry  move4();event1  ? a1; event2 ?a3; m = m + c1 
 		
-		during a = a1 + l + 1
+		during a = a3 + l + 1;move2(4,5)
+		
+		exit move1(5); move(1, 2 )
+		//move is defined in controller, but has to be required by stm before call it. ctlr does not need to provide move because it defines it (equivalent to provide it)
 	}
 	
 	final f0
@@ -56,12 +158,16 @@ interface  I3{
 	transition t2 {
 		from s0
 		to s0
-		trigger event2 ? a
-		action trigger1 ! a1 
+		trigger 
+		event2 ? a
+		condition a3 > 4
+		action trigger1 ! ( a3 + c2 )
 			}
-}
+		}
  	
  	sref stm1 = stm0
  	
- }
+	}
 	
+}
+

@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 18-06-2024 09:43:32
+-- Automatically generated on 06-08-2024 22:28:38
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -91,23 +91,13 @@ exports
 	
 	
 	channel get_CLID_Reading : core_clock_type 
-	channel get_CLID_j1 : core_clock_type 
 	channel get_CLID_GasDetected : core_clock_type 
-	channel get_CLID_Analysis : core_clock_type 
+	channel get_CLID_j1 : core_clock_type 
 	channel get_CLID_NoGas : core_clock_type 
+	channel get_CLID_Analysis : core_clock_type 
 	--channel increment__
 	
 	CLID_Reading_clock_type(id__,
-			          const_Chemical_GasAnalysis_thr) = 
-		let
-			max = (clock_type_max(Union({
-	{}
-	}))+1)
-		ctype = {0..max}
-	within
-		if member(max,core_clock_type) then ctype else error("core_clock_type is not wide enough")
-	
-	CLID_j1_clock_type(id__,
 			          const_Chemical_GasAnalysis_thr) = 
 		let
 			max = (clock_type_max(Union({
@@ -127,7 +117,7 @@ exports
 	within
 		if member(max,core_clock_type) then ctype else error("core_clock_type is not wide enough")
 	
-	CLID_Analysis_clock_type(id__,
+	CLID_j1_clock_type(id__,
 			          const_Chemical_GasAnalysis_thr) = 
 		let
 			max = (clock_type_max(Union({
@@ -138,6 +128,16 @@ exports
 		if member(max,core_clock_type) then ctype else error("core_clock_type is not wide enough")
 	
 	CLID_NoGas_clock_type(id__,
+			          const_Chemical_GasAnalysis_thr) = 
+		let
+			max = (clock_type_max(Union({
+	{}
+	}))+1)
+		ctype = {0..max}
+	within
+		if member(max,core_clock_type) then ctype else error("core_clock_type is not wide enough")
+	
+	CLID_Analysis_clock_type(id__,
 			          const_Chemical_GasAnalysis_thr) = 
 		let
 			max = (clock_type_max(Union({
@@ -411,13 +411,13 @@ exports
 					
 					Termination = terminate -> SKIP
 					
-					Active 		= share__choice(share__choice(get_gs?gs -> pre_Chemical_analysis(gs) & (share__choice(set_sts!Chemical_analysis(gs) -> SKIP)))) ; 
+					Active 		= SKIP ; 
 							 	  Behaviour ; 
 							 	  share__choice(exit -> SKIP) ; SKIP ; 
 							 	  share__choice(exited -> SKIP) ; Inactive
 				
 					Behaviour 	= entered -> During
-					During 		= ((SKIP ; SStop) /\ interrupt -> SKIP)
+					During 		= ((share__choice(share__choice(get_gs?gs -> pre_Chemical_analysis(gs) & (share__choice(set_sts!Chemical_analysis(gs) -> SKIP)))) ; SStop) /\ interrupt -> SKIP)
 				within
 					Inactive [| {terminate} |> SKIP)
 					
@@ -428,13 +428,13 @@ exports
 					
 					Termination = terminate -> SKIP
 					
-					Active 		= share__choice(share__choice(get_gs?gs -> pre_Chemical_analysis(gs) & (share__choice(set_sts!Chemical_analysis(gs) -> SKIP)))) ; 
+					Active 		= SKIP ; 
 							 	  Behaviour ; 
 							 	  share__choice(exit -> SKIP) ; SKIP ; 
 							 	  share__choice(exited -> SKIP) ; Inactive
 				
 					Behaviour 	= entered -> During
-					During 		= ((SKIP ; SStop) /\ interrupt -> SKIP)
+					During 		= ((share__choice(share__choice(get_gs?gs -> pre_Chemical_analysis(gs) & (share__choice(set_sts!Chemical_analysis(gs) -> SKIP)))) ; SStop) /\ interrupt -> SKIP)
 				within
 					Inactive [| {terminate} |> SKIP)
 				
@@ -701,7 +701,7 @@ exports
 		Behaviour(id__,
 				    const_Chemical_GasAnalysis_thr) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_Analysis,Analysis::entered,get_CLID_NoGas,NoGas::entered|}
+				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_NoGas,NoGas::entered,get_CLID_Analysis,Analysis::entered|}
 			 within
 				(MachineBody(id__,
 						    const_Chemical_GasAnalysis_thr) [| union(stateClockSync,{terminate}) |] StateClocks(id__,
@@ -712,7 +712,7 @@ exports
 		IteratedBehaviour(id__,
 				    const_Chemical_GasAnalysis_thr) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_Analysis,Analysis::entered,get_CLID_NoGas,NoGas::entered|}
+				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_NoGas,NoGas::entered,get_CLID_Analysis,Analysis::entered|}
 			 within
 				(dbisim(
 					sbisim(
@@ -724,15 +724,15 @@ exports
 											sbisim(
 												MachineBody(id__,
 														    const_Chemical_GasAnalysis_thr)
-												[| {|get_CLID_NoGas,NoGas::entered,terminate|} |]
-												dbisim(Clock_CLID_NoGas(id__,0,
+												[| {|get_CLID_Analysis,Analysis::entered,terminate|} |]
+												dbisim(Clock_CLID_Analysis(id__,0,
 														          const_Chemical_GasAnalysis_thr))
-											)\{|get_CLID_NoGas|}
+											)\{|get_CLID_Analysis|}
 										)
-										[| {|get_CLID_Analysis,Analysis::entered,terminate|} |]
-										dbisim(Clock_CLID_Analysis(id__,0,
+										[| {|get_CLID_NoGas,NoGas::entered,terminate|} |]
+										dbisim(Clock_CLID_NoGas(id__,0,
 												          const_Chemical_GasAnalysis_thr))
-									)\{|get_CLID_Analysis|}
+									)\{|get_CLID_NoGas|}
 								)
 								[| {|get_CLID_GasDetected,GasDetected::entered,terminate|} |]
 								dbisim(Clock_CLID_GasDetected(id__,0,
@@ -894,7 +894,7 @@ exports
 		Behaviour_VS_O(id__,
 				    const_Chemical_GasAnalysis_thr) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_Analysis,Analysis::entered,get_CLID_NoGas,NoGas::entered|}
+				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_NoGas,NoGas::entered,get_CLID_Analysis,Analysis::entered|}
 			 within
 				(MachineBody_VS_O(id__,
 						    const_Chemical_GasAnalysis_thr) [| union(stateClockSync,{terminate}) |] StateClocks(id__,
@@ -905,7 +905,7 @@ exports
 		IteratedBehaviour_VS_O(id__,
 				    const_Chemical_GasAnalysis_thr) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_Analysis,Analysis::entered,get_CLID_NoGas,NoGas::entered|}
+				stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_NoGas,NoGas::entered,get_CLID_Analysis,Analysis::entered|}
 			 within
 				(dbisim(
 					sbisim(
@@ -917,15 +917,15 @@ exports
 											sbisim(
 												MachineBody_VS_O(id__,
 														    const_Chemical_GasAnalysis_thr)
-												[| {|get_CLID_NoGas,NoGas::entered,terminate|} |]
-												dbisim(Clock_CLID_NoGas(id__,0,
+												[| {|get_CLID_Analysis,Analysis::entered,terminate|} |]
+												dbisim(Clock_CLID_Analysis(id__,0,
 														          const_Chemical_GasAnalysis_thr))
-											)\{|get_CLID_NoGas|}
+											)\{|get_CLID_Analysis|}
 										)
-										[| {|get_CLID_Analysis,Analysis::entered,terminate|} |]
-										dbisim(Clock_CLID_Analysis(id__,0,
+										[| {|get_CLID_NoGas,NoGas::entered,terminate|} |]
+										dbisim(Clock_CLID_NoGas(id__,0,
 												          const_Chemical_GasAnalysis_thr))
-									)\{|get_CLID_Analysis|}
+									)\{|get_CLID_NoGas|}
 								)
 								[| {|get_CLID_GasDetected,GasDetected::entered,terminate|} |]
 								dbisim(Clock_CLID_GasDetected(id__,0,
@@ -1091,18 +1091,6 @@ exports
 				terminate -> SKIP,Clock_CLID_GasDetected(id__,clock_type_plus(x__,1,CLID_GasDetected_clock_type(id__,
 						          const_Chemical_GasAnalysis_thr)),
 						          const_Chemical_GasAnalysis_thr))
-		Clock_CLID_Analysis(id__,x__,
-				          const_Chemical_GasAnalysis_thr) = 
-			TimeOut_1(
-				Analysis::entered -> Clock_CLID_Analysis(id__,0,
-						          const_Chemical_GasAnalysis_thr)
-				[]
-				get_CLID_Analysis!x__ -> Clock_CLID_Analysis(id__,x__,
-						          const_Chemical_GasAnalysis_thr)
-				[]
-				terminate -> SKIP,Clock_CLID_Analysis(id__,clock_type_plus(x__,1,CLID_Analysis_clock_type(id__,
-						          const_Chemical_GasAnalysis_thr)),
-						          const_Chemical_GasAnalysis_thr))
 		Clock_CLID_NoGas(id__,x__,
 				          const_Chemical_GasAnalysis_thr) = 
 			TimeOut_1(
@@ -1115,6 +1103,18 @@ exports
 				terminate -> SKIP,Clock_CLID_NoGas(id__,clock_type_plus(x__,1,CLID_NoGas_clock_type(id__,
 						          const_Chemical_GasAnalysis_thr)),
 						          const_Chemical_GasAnalysis_thr))
+		Clock_CLID_Analysis(id__,x__,
+				          const_Chemical_GasAnalysis_thr) = 
+			TimeOut_1(
+				Analysis::entered -> Clock_CLID_Analysis(id__,0,
+						          const_Chemical_GasAnalysis_thr)
+				[]
+				get_CLID_Analysis!x__ -> Clock_CLID_Analysis(id__,x__,
+						          const_Chemical_GasAnalysis_thr)
+				[]
+				terminate -> SKIP,Clock_CLID_Analysis(id__,clock_type_plus(x__,1,CLID_Analysis_clock_type(id__,
+						          const_Chemical_GasAnalysis_thr)),
+						          const_Chemical_GasAnalysis_thr))
 		
 		StateClocks(id__,
 				          const_Chemical_GasAnalysis_thr) = dbisim(Clock_CLID_Reading(id__,0,
@@ -1123,16 +1123,16 @@ exports
 		dbisim(Clock_CLID_GasDetected(id__,0,
 				          const_Chemical_GasAnalysis_thr))
 		[| { terminate } |] (
-		dbisim(Clock_CLID_Analysis(id__,0,
+		dbisim(Clock_CLID_NoGas(id__,0,
 				          const_Chemical_GasAnalysis_thr))
 		[| { terminate } |] (
-		dbisim(Clock_CLID_NoGas(id__,0,
+		dbisim(Clock_CLID_Analysis(id__,0,
 				          const_Chemical_GasAnalysis_thr))
 		)
 		)
 		)
 		
-		stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_Analysis,Analysis::entered,get_CLID_NoGas,NoGas::entered|}
+		stateClockSync = {|get_CLID_Reading,Reading::entered,get_CLID_GasDetected,GasDetected::entered,get_CLID_NoGas,NoGas::entered,get_CLID_Analysis,Analysis::entered|}
 		
 		-- Shared memory
 		-- Shared memory variables

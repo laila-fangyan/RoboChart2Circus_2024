@@ -1,6 +1,11 @@
 -- generate string
 nametype core_string = LSeq(Char,2)
 
+-- generate pkg0_move1_BOUND
+pkg0_move1_BOUND = 2
+
+-- MODULE CONSTANTS
+
 -- generate Chem
 nametype Chemical_Chem = {0,1}
 
@@ -8,28 +13,25 @@ nametype Chemical_Chem = {0,1}
 
 -- MODULE CONSTANTS
 
+-- generate const_pkg0_M_C1_stm1_c1
+const_pkg0_M_C1_stm1_c1 = 0
+
+-- OPERATION CONSTANTS
+
+-- BASIC TYPES
+
+-- generate const_pkg0_M_P1_c2
+const_pkg0_M_P1_c2 = 0
+
 -- CONTROLLER CONSTANTS
-
--- STATEMACHINE CONSTANTS
-
--- OPERATION CONSTANTS
-
--- BASIC TYPES
-
--- VECTOR TYPES AND OPERATIONS
-
-
--- CLOCKS
-
--- generate const_pkg0_stm0_const1
-const_pkg0_stm0_const1 = 0
-
--- OPERATION CONSTANTS
-
--- BASIC TYPES
 
 -- generate Plus
 Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
+
+-- generate const_pkg0_M_C1_c2
+const_pkg0_M_C1_c2 = 0
+
+-- STATEMACHINE CONSTANTS
 
 -- generate Chemical_location
 Chemical_location(gs) = Chemical_Angle_Left
@@ -38,13 +40,9 @@ Chemical_location(gs) = Chemical_Angle_Left
 
 -- MODULE CONSTANTS
 
--- CONTROLLER CONSTANTS
-
--- STATEMACHINE CONSTANTS
-
 -- generate nat
 nametype core_nat = union({0..2},{calc_type_min(Union(
-			{}))..calc_type_max(Union({}))})
+			{{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{x|x <- {0..2}},{3},{2}}))})
 
 -- generate core_clock_type
 nametype core_clock_type = {0..10}
@@ -54,11 +52,6 @@ nametype core_clock_type = {0..10}
 -- generate Intensity
 nametype Chemical_Intensity = {0,1}
 
--- VECTOR TYPES AND OPERATIONS
-
-
--- CLOCKS
-
 -- generate Chemical_analysis
 Chemical_analysis(gs) = Chemical_Status_noGas
 
@@ -67,7 +60,7 @@ Chemical_angle(x) = Chemical_Angle_Left
 
 -- generate real
 nametype core_real = union({ -2..2},{calc_type_min(Union(
-			{{a|a <- { -2..2}},{Plus(Plus(l, 1, core_int), m, core_int)|l <- { -2..2},m <- { -2..2}},{Plus(l, const1, core_int)|const1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{a|a <- { -2..2}},{Plus(Plus(l, 1, core_int), m, core_int)|l <- { -2..2},m <- { -2..2}},{Plus(l, const1, core_int)|const1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))}) 
+			{{(Plus(a3, c2, core_int))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, core_int)|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, core_int), 1, core_int)|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, core_int), 1, core_int)|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{(Plus(a3, c2, core_int))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, core_int)|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, core_int), 1, core_int)|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, core_int), 1, core_int)|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))}) 
 
 -- VECTOR TYPES AND OPERATIONS
 
@@ -77,28 +70,24 @@ nametype core_real = union({ -2..2},{calc_type_min(Union(
 -- generate Chemical_goreq
 Chemical_goreq(i1,i2) = true
 
--- generate const_pkg0_C1_stm1_const1
-const_pkg0_C1_stm1_const1 = 0
-
--- OPERATION CONSTANTS
-
--- BASIC TYPES
-
--- generate const_pkg0_C1_stm0_const1
-const_pkg0_C1_stm0_const1 = 0
-
 -- generate int
 nametype core_int = union({ -2..2},{calc_type_min(Union(
-			{{a|a <- { -2..2}},{Plus(Plus(l, 1, { -2..2}), m, { -2..2})|l <- { -2..2},m <- { -2..2}},{Plus(l, const1, { -2..2})|const1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{a|a <- { -2..2}},{Plus(Plus(l, 1, { -2..2}), m, { -2..2})|l <- { -2..2},m <- { -2..2}},{Plus(l, const1, { -2..2})|const1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))})
+			{{(Plus(a3, c2, { -2..2}))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, { -2..2})|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{(Plus(a3, c2, { -2..2}))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, { -2..2})|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))})
 
 -- generate Div
 Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
+
+-- generate const_pkg0_M_C1_stm0_c1
+const_pkg0_M_C1_stm0_c1 = 0
 
 -- generate Neg
 Neg(e1,T) = if member(-e1,T) then -e1 else e1
 
 -- generate Chemical_card
 Chemical_card(A) = 0
+
+-- generate const_pkg0_M_C1_stm0_c2
+const_pkg0_M_C1_stm0_c2 = 0
 
 -- generate const_Chemical_GasAnalysis_thr
 const_Chemical_GasAnalysis_thr = 0

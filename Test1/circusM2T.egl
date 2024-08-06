@@ -46,15 +46,15 @@ record [%=ap.zSchText.declList.decls.at(0).name.word%] =
 	[%=vardecl.nameList.names.at(0).word%] :: "[%=vardecl.expr.parseExpr()%]"
 [%}} }%]
 
-[*constants declaration*]
+[*constants and functions declaration*]
 [%
 if(axParas.select(p|p.box = Z!Box#AxBox).size()>0){%]
 
-\<comment> \<open>constant declaration\<close>
+\<comment> \<open>constant and function declaration\<close>
 [%	for(ap in axParas.select(p|p.box = Z!Box#AxBox)){%]
-consts [%=ap.zSchText.declList.decls.at(0).nameList.names.at(0).word%] :: [%=ap.zSchText.declList.decls.at(0).expr.parseExpr()%]
+consts [%=ap.zSchText.declList.decls.at(0).nameList.names.at(0).word%] :: "[%=ap.zSchText.declList.decls.at(0).expr.parseExpr()%]"
 
-[%} }%]
+[% } }%]
 
 \<comment> \<open>Channel Declaration\<close>
 chantype mychan = 
@@ -114,9 +114,9 @@ actions  is "(mychan, unit) action" where
 
 \<comment> \<open>Main action of the process\<close>
 [%if(procpara.circusProcess.instanceOf(Z!BasicProcess)){%]
-definition "MainAction = cProcess [%= procpara.circusProcess.mainAction.parseAction()%]"
+definition "ProcDef = cProcess [%= procpara.circusProcess.mainAction.parseAction()%]"
 	[%} else {%]
-definition "MainAction = cProcess [%= procpara.name.word%].MainAction"
+definition "ProcDef = cProcess [%= procpara.name.word%].ProcDef"
 	[%}%]
 
 end
@@ -164,7 +164,7 @@ end
 		return  self.callExpr.name.word;
 	}
 }%]
-[*TBC: when proc is refered in other proc as XX.MainAction, how to deal with parameters?*]
+[*TBC: when proc is refered in other proc as XX.ProcDef, how to deal with parameters?*]
 
 
 [%operation Z!BasicProcess parseBasicProcess(): String{
@@ -544,7 +544,11 @@ end
 	if(self.isTypeOf(Z!RefExpr) and self.explicit = true and self.mixFix = true){//create RefExpr as Generic Operator Application: explicit = true, mixFix = true. Currently only channel type Seq(type) falls into this case 
 		if(self.name.word = "seq_"){
 			return "(" + self.exprList.exprs.at(0).parseExpr() + " list)";
-		}
+		} 
+		//refExpr is a function type expr
+		if(self.name.word = "_->_"){
+			return self.exprList.exprs.at(0).parseExpr() + " \\<RightArrow> " + self.exprList.exprs.at(1).parseExpr();
+		} 
 	} //else	
 	
 	if(self.isTypeOf(Z!NumExpr)){

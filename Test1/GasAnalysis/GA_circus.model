@@ -1,0 +1,2990 @@
+<?xml version="1.0" encoding="ASCII"?>
+<circus:Spec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:circus="http://www.robocalc.circus/Circus">
+  <sects xsi:type="circus:NarrSect"/>
+  <sects xsi:type="circus:ZSect" name="circus_theory">
+    <parents word="Boolean_operators"/>
+    <paraList>
+      <paras xsi:type="circus:FreePara">
+        <freetypeList xsi:type="circus:ZFreetypeList">
+          <freeTypes>
+            <name word="Status"/>
+            <branchList>
+              <branches>
+                <name word="noGas"/>
+              </branches>
+              <branches>
+                <name word="gasD"/>
+              </branches>
+            </branchList>
+          </freeTypes>
+        </freetypeList>
+      </paras>
+      <paras xsi:type="circus:FreePara">
+        <freetypeList xsi:type="circus:ZFreetypeList">
+          <freeTypes>
+            <name word="Angle"/>
+            <branchList>
+              <branches>
+                <name word="Left"/>
+              </branches>
+              <branches>
+                <name word="Right"/>
+              </branches>
+              <branches>
+                <name word="Back"/>
+              </branches>
+              <branches>
+                <name word="Front"/>
+              </branches>
+            </branchList>
+          </freeTypes>
+        </freetypeList>
+      </paras>
+      <paras xsi:type="circus:AxPara" box="SchBox">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:ConstDecl">
+              <name word="GasSensor"/>
+              <expr xsi:type="circus:SchExpr">
+                <schText xsi:type="circus:ZSchText">
+                  <declList>
+                    <decls xsi:type="circus:VarDecl">
+                      <expr xsi:type="circus:RefExpr">
+                        <name word="Chem"/>
+                      </expr>
+                      <nameList>
+                        <names word="c"/>
+                      </nameList>
+                    </decls>
+                    <decls xsi:type="circus:VarDecl">
+                      <expr xsi:type="circus:RefExpr">
+                        <name word="Intensity"/>
+                      </expr>
+                      <nameList>
+                        <names word="i"/>
+                      </nameList>
+                    </decls>
+                  </declList>
+                </schText>
+              </expr>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:GivenPara">
+        <nameList>
+          <names word="Chem"/>
+        </nameList>
+      </paras>
+      <paras xsi:type="circus:GivenPara">
+        <nameList>
+          <names word="Intensity"/>
+        </nameList>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                    <exprList>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="GasSensor"/>
+                      </exprs>
+                    </exprList>
+                    <name word="seq_"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="Status"/>
+                  </exprs>
+                </exprList>
+                <name word="_->_"/>
+              </expr>
+              <nameList>
+                <names word="analysis"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                    <exprList>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="GasSensor"/>
+                      </exprs>
+                    </exprList>
+                    <name word="seq_"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="Angle"/>
+                  </exprs>
+                </exprList>
+                <name word="_->_"/>
+              </expr>
+              <nameList>
+                <names word="location"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="nat"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="Angle"/>
+                  </exprs>
+                </exprList>
+                <name word="_->_"/>
+              </expr>
+              <nameList>
+                <names word="angle"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                    <exprList>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="GasSensor"/>
+                      </exprs>
+                    </exprList>
+                    <name word="seq_"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="Intensity"/>
+                  </exprs>
+                </exprList>
+                <name word="_->_"/>
+              </expr>
+              <nameList>
+                <names word="intensity"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <exprList>
+                  <exprs xsi:type="circus:ProdExpr">
+                    <exprList>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="Intensity"/>
+                      </exprs>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="Intensity"/>
+                      </exprs>
+                    </exprList>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="boolean"/>
+                  </exprs>
+                </exprList>
+                <name word="_->_"/>
+              </expr>
+              <nameList>
+                <names word="goreq"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr">
+                <name word="Intensity"/>
+              </expr>
+              <nameList>
+                <names word="thr_GasAnalysis_Chemical"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:AxPara">
+        <zSchText>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <expr xsi:type="circus:RefExpr">
+                <name word="Intensity"/>
+              </expr>
+              <nameList>
+                <names word="thr_GasAnalysis_Chemical"/>
+              </nameList>
+            </decls>
+          </declList>
+        </zSchText>
+      </paras>
+      <paras xsi:type="circus:FreePara">
+        <freetypeList xsi:type="circus:ZFreetypeList">
+          <freeTypes>
+            <name word="NIDS_GasAnalysis_Chemical"/>
+            <branchList>
+              <branches>
+                <name word="NID_i1_GasAnalysis_Chemical"/>
+              </branches>
+              <branches>
+                <name word="NID_GasDetected_GasAnalysis_Chemical"/>
+              </branches>
+              <branches>
+                <name word="NID_j1_GasAnalysis_Chemical"/>
+              </branches>
+              <branches>
+                <name word="NID_Reading_GasAnalysis_Chemical"/>
+              </branches>
+              <branches>
+                <name word="NID_Analysis_GasAnalysis_Chemical"/>
+              </branches>
+              <branches>
+                <name word="NID_NoGas_GasAnalysis_Chemical"/>
+              </branches>
+            </branchList>
+          </freeTypes>
+        </freetypeList>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="internal__GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_GasAnalysis_Chemical"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="internal_channel_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="interrupt_GasAnalysis_Chemical"/>
+              <names word="exited_GasAnalysis_Chemical"/>
+              <names word="exit_GasAnalysis_Chemical"/>
+              <names word="terminate"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="flowchannel_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="get_sts_GasAnalysis_Chemical"/>
+              <names word="set_sts_GasAnalysis_Chemical"/>
+              <names word="setL_sts_GasAnalysis_Chemical"/>
+              <names word="setR_sts_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="Status"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="get_gs_GasAnalysis_Chemical"/>
+              <names word="set_gs_GasAnalysis_Chemical"/>
+              <names word="setL_gs_GasAnalysis_Chemical"/>
+              <names word="setR_gs_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+              <exprList>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="GasSensor"/>
+                </exprs>
+              </exprList>
+              <name word="seq_"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="get_ins_GasAnalysis_Chemical"/>
+              <names word="set_ins_GasAnalysis_Chemical"/>
+              <names word="setL_ins_GasAnalysis_Chemical"/>
+              <names word="setR_ins_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="Intensity"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="get_anl_GasAnalysis_Chemical"/>
+              <names word="set_anl_GasAnalysis_Chemical"/>
+              <names word="setL_anl_GasAnalysis_Chemical"/>
+              <names word="setR_anl_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="Angle"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="variable_channel_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="gas_GasAnalysis_Chemical_in"/>
+              <names word="gas_GasAnalysis_Chemical_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+              <exprList>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="GasSensor"/>
+                </exprs>
+              </exprList>
+              <name word="seq_"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="resume_GasAnalysis_Chemical_in"/>
+              <names word="resume_GasAnalysis_Chemical_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="turn_GasAnalysis_Chemical_in"/>
+              <names word="turn_GasAnalysis_Chemical_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="Angle"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="stop_GasAnalysis_Chemical_in"/>
+              <names word="stop_GasAnalysis_Chemical_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="gas_GasAnalysis_Chemical__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:ProdExpr">
+              <exprList>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="NIDS_GasAnalysis_Chemical"/>
+                </exprs>
+                <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                  <exprList>
+                    <exprs xsi:type="circus:RefExpr">
+                      <name word="GasSensor"/>
+                    </exprs>
+                  </exprList>
+                  <name word="seq_"/>
+                </exprs>
+              </exprList>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="resume_GasAnalysis_Chemical__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_GasAnalysis_Chemical"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="turn_GasAnalysis_Chemical__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:ProdExpr">
+              <exprList>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="NIDS_GasAnalysis_Chemical"/>
+                </exprs>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="Angle"/>
+                </exprs>
+              </exprList>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="stop_GasAnalysis_Chemical__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_GasAnalysis_Chemical"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="event_channel_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_i1_GasAnalysis_Chemical"/>
+              <names word="interrupt_i1_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="junction_channel_i1_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_GasDetected_GasAnalysis_Chemical"/>
+              <names word="entered_GasDetected_GasAnalysis_Chemical"/>
+              <names word="interrupt_GasDetected_GasAnalysis_Chemical"/>
+              <names word="enteredL_GasDetected_GasAnalysis_Chemical"/>
+              <names word="enteredR_GasDetected_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_GasDetected_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_j1_GasAnalysis_Chemical"/>
+              <names word="entered_j1_GasAnalysis_Chemical"/>
+              <names word="interrupt_j1_GasAnalysis_Chemical"/>
+              <names word="enteredL_j1_GasAnalysis_Chemical"/>
+              <names word="enteredR_j1_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_j1_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_Reading_GasAnalysis_Chemical"/>
+              <names word="entered_Reading_GasAnalysis_Chemical"/>
+              <names word="interrupt_Reading_GasAnalysis_Chemical"/>
+              <names word="enteredL_Reading_GasAnalysis_Chemical"/>
+              <names word="enteredR_Reading_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_Reading_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_Analysis_GasAnalysis_Chemical"/>
+              <names word="entered_Analysis_GasAnalysis_Chemical"/>
+              <names word="interrupt_Analysis_GasAnalysis_Chemical"/>
+              <names word="enteredL_Analysis_GasAnalysis_Chemical"/>
+              <names word="enteredR_Analysis_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_Analysis_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_NoGas_GasAnalysis_Chemical"/>
+              <names word="entered_NoGas_GasAnalysis_Chemical"/>
+              <names word="interrupt_NoGas_GasAnalysis_Chemical"/>
+              <names word="enteredL_NoGas_GasAnalysis_Chemical"/>
+              <names word="enteredR_NoGas_GasAnalysis_Chemical"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_NoGas_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_j1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="enterSS_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_j1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="enteredSS_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_j1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_j1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="interrupt_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="internal_events_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="terminate"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="gas_GasAnalysis_Chemical_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="gas_GasAnalysis_Chemical_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="resume_GasAnalysis_Chemical_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="resume_GasAnalysis_Chemical_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="turn_GasAnalysis_Chemical_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="turn_GasAnalysis_Chemical_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="stop_GasAnalysis_Chemical_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="stop_GasAnalysis_Chemical_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="sem__events_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_j1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exit_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="internal__GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="ncCoreBeh_hideset_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="Inactive"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Activation"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Inactive"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Active"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_i1_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Activation"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Termination"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:SkipAction"/>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="interrupt_i1_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:CallAction">
+                  <name word="Inactive"/>
+                </rightAction>
+              </circusAction>
+              <name word="Active"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="node_proc_i1_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="Inactive"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Activation"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Inactive"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Active"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_GasDetected_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Activation"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Termination"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:GuardedAction">
+                      <circusAction xsi:type="circus:InterruptAction">
+                        <leftAction xsi:type="circus:CallAction">
+                          <name word="SSTOP"/>
+                        </leftAction>
+                        <rightAction xsi:type="circus:PrefixingAction">
+                          <circusAction xsi:type="circus:SkipAction"/>
+                          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="set_ins_GasAnalysis_Chemical"/>
+                            </channelExpr>
+                            <fieldList>
+                              <fields xsi:type="circus:DotField" outputField="true">
+                                <expr xsi:type="circus:ApplExpr">
+                                  <leftExpr xsi:type="circus:RefExpr">
+                                    <name word="intensity"/>
+                                  </leftExpr>
+                                  <rightExpr xsi:type="circus:TupleExpr">
+                                    <exprList>
+                                      <exprs xsi:type="circus:RefExpr">
+                                        <name word="gs_GasAnalysis_Chemical"/>
+                                      </exprs>
+                                    </exprList>
+                                  </rightExpr>
+                                </expr>
+                              </fields>
+                            </fieldList>
+                          </communication>
+                        </rightAction>
+                      </circusAction>
+                      <pred xsi:type="circus:MemPred" mixFix="true">
+                        <leftExpr xsi:type="circus:ApplExpr" mixFix="true">
+                          <leftExpr xsi:type="circus:RefExpr">
+                            <name word="_greater_"/>
+                          </leftExpr>
+                          <rightExpr xsi:type="circus:TupleExpr">
+                            <exprList>
+                              <exprs xsi:type="circus:ApplExpr">
+                                <leftExpr xsi:type="circus:RefExpr">
+                                  <name word="size"/>
+                                </leftExpr>
+                                <rightExpr xsi:type="circus:TupleExpr">
+                                  <exprList>
+                                    <exprs xsi:type="circus:RefExpr">
+                                      <name word="gs"/>
+                                    </exprs>
+                                  </exprList>
+                                </rightExpr>
+                              </exprs>
+                              <exprs xsi:type="circus:NumExpr">
+                                <numeral value="0"/>
+                              </exprs>
+                            </exprList>
+                          </rightExpr>
+                        </leftExpr>
+                        <rightExpr xsi:type="circus:SetExpr">
+                          <exprList>
+                            <exprs xsi:type="circus:RefExpr">
+                              <name word="True"/>
+                            </exprs>
+                          </exprList>
+                        </rightExpr>
+                      </pred>
+                    </circusAction>
+                    <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="get_gs_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList>
+                        <fields xsi:type="circus:InputField">
+                          <varialbeName word="gs_GasAnalysis_Chemical"/>
+                        </fields>
+                      </fieldList>
+                    </communication>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Behaviour"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Exiting"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Active"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="During"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="entered_GasDetected_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Behaviour"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:PrefixingAction">
+                  <circusAction xsi:type="circus:SkipAction"/>
+                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="interrupt_GasDetected_GasAnalysis_Chemical"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communication>
+                </rightAction>
+              </circusAction>
+              <name word="During"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:SkipAction"/>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exit_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="Inactive"/>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exited_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Exiting"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="node_proc_GasDetected_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="Inactive"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Activation"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Inactive"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Entering"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_j1_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Activation"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Termination"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Active"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="entered_j1_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Entering"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="Interrupted"/>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="interrupt_j1_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Active"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:PrefixingAction">
+                  <circusAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="Inactive"/>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exited_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </circusAction>
+                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="exit_GasAnalysis_Chemical"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communication>
+                </rightAction>
+              </circusAction>
+              <name word="Interrupted"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="node_proc_j1_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="Inactive"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Activation"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Inactive"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Active"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_Reading_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Activation"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Termination"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:SkipAction"/>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Behaviour"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Exiting"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Active"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="During"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="entered_Reading_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Behaviour"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:PrefixingAction">
+                  <circusAction xsi:type="circus:SkipAction"/>
+                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="interrupt_Reading_GasAnalysis_Chemical"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communication>
+                </rightAction>
+              </circusAction>
+              <name word="During"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:SkipAction"/>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exit_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="Inactive"/>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exited_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Exiting"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="node_proc_Reading_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="Inactive"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Activation"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Inactive"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Active"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_Analysis_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Activation"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Termination"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:SkipAction"/>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Behaviour"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Exiting"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Active"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="During"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="entered_Analysis_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Behaviour"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:InterruptAction">
+                    <leftAction xsi:type="circus:CallAction">
+                      <name word="SSTOP"/>
+                    </leftAction>
+                    <rightAction xsi:type="circus:PrefixingAction">
+                      <circusAction xsi:type="circus:GuardedAction">
+                        <circusAction xsi:type="circus:InterruptAction">
+                          <leftAction xsi:type="circus:CallAction">
+                            <name word="SSTOP"/>
+                          </leftAction>
+                          <rightAction xsi:type="circus:PrefixingAction">
+                            <circusAction xsi:type="circus:SkipAction"/>
+                            <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="set_sts_GasAnalysis_Chemical"/>
+                              </channelExpr>
+                              <fieldList>
+                                <fields xsi:type="circus:DotField" outputField="true">
+                                  <expr xsi:type="circus:ApplExpr">
+                                    <leftExpr xsi:type="circus:RefExpr">
+                                      <name word="analysis"/>
+                                    </leftExpr>
+                                    <rightExpr xsi:type="circus:TupleExpr">
+                                      <exprList>
+                                        <exprs xsi:type="circus:RefExpr">
+                                          <name word="gs_GasAnalysis_Chemical"/>
+                                        </exprs>
+                                      </exprList>
+                                    </rightExpr>
+                                  </expr>
+                                </fields>
+                              </fieldList>
+                            </communication>
+                          </rightAction>
+                        </circusAction>
+                        <pred xsi:type="circus:MemPred" mixFix="true">
+                          <leftExpr xsi:type="circus:ApplExpr" mixFix="true">
+                            <leftExpr xsi:type="circus:RefExpr">
+                              <name word="_greater_"/>
+                            </leftExpr>
+                            <rightExpr xsi:type="circus:TupleExpr">
+                              <exprList>
+                                <exprs xsi:type="circus:ApplExpr">
+                                  <leftExpr xsi:type="circus:RefExpr">
+                                    <name word="size"/>
+                                  </leftExpr>
+                                  <rightExpr xsi:type="circus:TupleExpr">
+                                    <exprList>
+                                      <exprs xsi:type="circus:RefExpr">
+                                        <name word="gs"/>
+                                      </exprs>
+                                    </exprList>
+                                  </rightExpr>
+                                </exprs>
+                                <exprs xsi:type="circus:NumExpr">
+                                  <numeral value="0"/>
+                                </exprs>
+                              </exprList>
+                            </rightExpr>
+                          </leftExpr>
+                          <rightExpr xsi:type="circus:SetExpr">
+                            <exprList>
+                              <exprs xsi:type="circus:RefExpr">
+                                <name word="True"/>
+                              </exprs>
+                            </exprList>
+                          </rightExpr>
+                        </pred>
+                      </circusAction>
+                      <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="get_gs_GasAnalysis_Chemical"/>
+                        </channelExpr>
+                        <fieldList>
+                          <fields xsi:type="circus:InputField">
+                            <varialbeName word="gs_GasAnalysis_Chemical"/>
+                          </fields>
+                        </fieldList>
+                      </communication>
+                    </rightAction>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:PrefixingAction">
+                  <circusAction xsi:type="circus:SkipAction"/>
+                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="interrupt_Analysis_GasAnalysis_Chemical"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communication>
+                </rightAction>
+              </circusAction>
+              <name word="During"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:SkipAction"/>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exit_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="Inactive"/>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exited_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Exiting"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="node_proc_Analysis_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="Inactive"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:CallAction">
+                  <name word="SSTOP"/>
+                </leftAction>
+                <rightAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Activation"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Termination"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Inactive"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="Active"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_NoGas_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Activation"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Termination"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:SkipAction"/>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="Behaviour"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Exiting"/>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Active"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <name word="During"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="entered_NoGas_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="Behaviour"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:InterruptAction">
+                <leftAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:PrefixingAction">
+                  <circusAction xsi:type="circus:SkipAction"/>
+                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="interrupt_NoGas_GasAnalysis_Chemical"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communication>
+                </rightAction>
+              </circusAction>
+              <name word="During"/>
+            </paras>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:SkipAction"/>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exit_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:SkipAction"/>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="Inactive"/>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exited_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </rightAction>
+              </circusAction>
+              <name word="Exiting"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="node_proc_NoGas_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:BasicProcess">
+          <mainAction xsi:type="circus:CallAction">
+            <name word="prefixedTransAction_GasAnalysis_Chemical"/>
+          </mainAction>
+          <paraList>
+            <paras xsi:type="circus:ActionPara">
+              <circusAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:PrefixingAction">
+                      <circusAction xsi:type="circus:ExtChoiceAction">
+                        <leftAction xsi:type="circus:SeqAction">
+                          <leftAction xsi:type="circus:ExtChoiceAction">
+                            <leftAction xsi:type="circus:ExtChoiceAction">
+                              <leftAction xsi:type="circus:ExtChoiceAction">
+                                <leftAction xsi:type="circus:ExtChoiceAction">
+                                  <leftAction xsi:type="circus:ExtChoiceAction">
+                                    <leftAction xsi:type="circus:ExtChoiceAction">
+                                      <leftAction xsi:type="circus:ExtChoiceAction">
+                                        <leftAction xsi:type="circus:SeqAction">
+                                          <leftAction xsi:type="circus:PrefixingAction">
+                                            <circusAction xsi:type="circus:SeqAction">
+                                              <leftAction xsi:type="circus:InterruptAction">
+                                                <leftAction xsi:type="circus:CallAction">
+                                                  <name word="SSTOP"/>
+                                                </leftAction>
+                                                <rightAction xsi:type="circus:PrefixingAction">
+                                                  <circusAction xsi:type="circus:SkipAction"/>
+                                                  <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                                    <channelExpr>
+                                                      <name word="set_gs_GasAnalysis_Chemical"/>
+                                                    </channelExpr>
+                                                    <fieldList>
+                                                      <fields xsi:type="circus:DotField" outputField="true">
+                                                        <expr xsi:type="circus:ApplExpr" mixFix="true">
+                                                          <leftExpr xsi:type="circus:RefExpr">
+                                                            <name word="&lt;,,>"/>
+                                                          </leftExpr>
+                                                          <rightExpr xsi:type="circus:SetExpr">
+                                                            <exprList/>
+                                                          </rightExpr>
+                                                        </expr>
+                                                      </fields>
+                                                    </fieldList>
+                                                  </communication>
+                                                </rightAction>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:InterruptAction">
+                                                <leftAction xsi:type="circus:CallAction">
+                                                  <name word="SSTOP"/>
+                                                </leftAction>
+                                                <rightAction xsi:type="circus:PrefixingAction">
+                                                  <circusAction xsi:type="circus:SkipAction"/>
+                                                  <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                                    <channelExpr>
+                                                      <name word="set_anl_GasAnalysis_Chemical"/>
+                                                    </channelExpr>
+                                                    <fieldList>
+                                                      <fields xsi:type="circus:DotField" outputField="true">
+                                                        <expr xsi:type="circus:SetExpr">
+                                                          <exprList>
+                                                            <exprs xsi:type="circus:RefExpr">
+                                                              <name word="Front"/>
+                                                            </exprs>
+                                                          </exprList>
+                                                        </expr>
+                                                      </fields>
+                                                    </fieldList>
+                                                  </communication>
+                                                </rightAction>
+                                              </rightAction>
+                                            </circusAction>
+                                            <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                              <channelExpr>
+                                                <name word="internal__GasAnalysis_Chemical"/>
+                                              </channelExpr>
+                                              <fieldList>
+                                                <fields xsi:type="circus:DotField" outputField="false">
+                                                  <expr xsi:type="circus:RefExpr">
+                                                    <name word="NID_i1_GasAnalysis_Chemical"/>
+                                                  </expr>
+                                                </fields>
+                                              </fieldList>
+                                            </communication>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:PrefixingAction">
+                                            <circusAction xsi:type="circus:SkipAction"/>
+                                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                              <channelExpr>
+                                                <name word="enter_Reading_GasAnalysis_Chemical"/>
+                                              </channelExpr>
+                                              <fieldList/>
+                                            </communication>
+                                          </rightAction>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:SeqAction">
+                                          <leftAction xsi:type="circus:PrefixingAction">
+                                            <circusAction xsi:type="circus:InterruptAction">
+                                              <leftAction xsi:type="circus:CallAction">
+                                                <name word="SSTOP"/>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:SkipAction"/>
+                                                <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="set_gs_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList>
+                                                    <fields xsi:type="circus:DotField" outputField="true">
+                                                      <expr xsi:type="circus:RefExpr">
+                                                        <name word="gs_GasAnalysis_Chemical"/>
+                                                      </expr>
+                                                    </fields>
+                                                  </fieldList>
+                                                </communication>
+                                              </rightAction>
+                                            </circusAction>
+                                            <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+                                              <channelExpr>
+                                                <name word="gas_GasAnalysis_Chemical__in"/>
+                                              </channelExpr>
+                                              <fieldList>
+                                                <fields xsi:type="circus:DotField" outputField="false">
+                                                  <expr xsi:type="circus:RefExpr">
+                                                    <name word="NID_Reading_GasAnalysis_Chemical"/>
+                                                  </expr>
+                                                </fields>
+                                                <fields xsi:type="circus:InputField">
+                                                  <varialbeName word="gs_GasAnalysis_Chemical"/>
+                                                </fields>
+                                              </fieldList>
+                                            </communication>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:SeqAction">
+                                            <leftAction xsi:type="circus:InterruptAction">
+                                              <leftAction xsi:type="circus:CallAction">
+                                                <name word="SSTOP"/>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:SkipAction"/>
+                                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="exit_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList/>
+                                                </communication>
+                                              </rightAction>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:InterruptAction">
+                                              <leftAction xsi:type="circus:CallAction">
+                                                <name word="SSTOP"/>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:SeqAction">
+                                                <leftAction xsi:type="circus:PrefixingAction">
+                                                  <circusAction xsi:type="circus:SkipAction"/>
+                                                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                    <channelExpr>
+                                                      <name word="exited_GasAnalysis_Chemical"/>
+                                                    </channelExpr>
+                                                    <fieldList/>
+                                                  </communication>
+                                                </leftAction>
+                                                <rightAction xsi:type="circus:PrefixingAction">
+                                                  <circusAction xsi:type="circus:SkipAction"/>
+                                                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                    <channelExpr>
+                                                      <name word="enter_Analysis_GasAnalysis_Chemical"/>
+                                                    </channelExpr>
+                                                    <fieldList/>
+                                                  </communication>
+                                                </rightAction>
+                                              </rightAction>
+                                            </rightAction>
+                                          </rightAction>
+                                        </rightAction>
+                                      </leftAction>
+                                      <rightAction xsi:type="circus:SeqAction">
+                                        <leftAction xsi:type="circus:PrefixingAction">
+                                          <circusAction xsi:type="circus:SkipAction"/>
+                                          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                            <channelExpr>
+                                              <name word="internal__GasAnalysis_Chemical"/>
+                                            </channelExpr>
+                                            <fieldList>
+                                              <fields xsi:type="circus:DotField" outputField="false">
+                                                <expr xsi:type="circus:RefExpr">
+                                                  <name word="NID_NoGas_GasAnalysis_Chemical"/>
+                                                </expr>
+                                              </fields>
+                                            </fieldList>
+                                          </communication>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:SeqAction">
+                                          <leftAction xsi:type="circus:InterruptAction">
+                                            <leftAction xsi:type="circus:CallAction">
+                                              <name word="SSTOP"/>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:PrefixingAction">
+                                              <circusAction xsi:type="circus:SkipAction"/>
+                                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                <channelExpr>
+                                                  <name word="exit_GasAnalysis_Chemical"/>
+                                                </channelExpr>
+                                                <fieldList/>
+                                              </communication>
+                                            </rightAction>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:InterruptAction">
+                                            <leftAction xsi:type="circus:CallAction">
+                                              <name word="SSTOP"/>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:SeqAction">
+                                              <leftAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:SkipAction"/>
+                                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="exited_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList/>
+                                                </communication>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:SkipAction"/>
+                                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="enter_Reading_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList/>
+                                                </communication>
+                                              </rightAction>
+                                            </rightAction>
+                                          </rightAction>
+                                        </rightAction>
+                                      </rightAction>
+                                    </leftAction>
+                                    <rightAction xsi:type="circus:GuardedAction">
+                                      <circusAction xsi:type="circus:SeqAction">
+                                        <leftAction xsi:type="circus:PrefixingAction">
+                                          <circusAction xsi:type="circus:SkipAction"/>
+                                          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                            <channelExpr>
+                                              <name word="internal__GasAnalysis_Chemical"/>
+                                            </channelExpr>
+                                            <fieldList>
+                                              <fields xsi:type="circus:DotField" outputField="false">
+                                                <expr xsi:type="circus:RefExpr">
+                                                  <name word="NID_Analysis_GasAnalysis_Chemical"/>
+                                                </expr>
+                                              </fields>
+                                            </fieldList>
+                                          </communication>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:SeqAction">
+                                          <leftAction xsi:type="circus:InterruptAction">
+                                            <leftAction xsi:type="circus:CallAction">
+                                              <name word="SSTOP"/>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:PrefixingAction">
+                                              <circusAction xsi:type="circus:SkipAction"/>
+                                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                <channelExpr>
+                                                  <name word="exit_GasAnalysis_Chemical"/>
+                                                </channelExpr>
+                                                <fieldList/>
+                                              </communication>
+                                            </rightAction>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:InterruptAction">
+                                            <leftAction xsi:type="circus:CallAction">
+                                              <name word="SSTOP"/>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:SeqAction">
+                                              <leftAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:InterruptAction">
+                                                  <leftAction xsi:type="circus:CallAction">
+                                                    <name word="SSTOP"/>
+                                                  </leftAction>
+                                                  <rightAction xsi:type="circus:PrefixingAction">
+                                                    <circusAction xsi:type="circus:SkipAction"/>
+                                                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                      <channelExpr>
+                                                        <name word="resume_GasAnalysis_Chemical_out"/>
+                                                      </channelExpr>
+                                                      <fieldList/>
+                                                    </communication>
+                                                  </rightAction>
+                                                </circusAction>
+                                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="exited_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList/>
+                                                </communication>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:SkipAction"/>
+                                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="enter_NoGas_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList/>
+                                                </communication>
+                                              </rightAction>
+                                            </rightAction>
+                                          </rightAction>
+                                        </rightAction>
+                                      </circusAction>
+                                      <pred xsi:type="circus:MemPred" mixFix="true">
+                                        <leftExpr xsi:type="circus:ApplExpr" mixFix="true">
+                                          <leftExpr xsi:type="circus:RefExpr">
+                                            <name word="_equals_"/>
+                                          </leftExpr>
+                                          <rightExpr xsi:type="circus:TupleExpr">
+                                            <exprList>
+                                              <exprs xsi:type="circus:RefExpr">
+                                                <name word="sts_GasAnalysis_Chemical"/>
+                                              </exprs>
+                                              <exprs xsi:type="circus:SetExpr">
+                                                <exprList>
+                                                  <exprs xsi:type="circus:RefExpr">
+                                                    <name word="noGas"/>
+                                                  </exprs>
+                                                </exprList>
+                                              </exprs>
+                                            </exprList>
+                                          </rightExpr>
+                                        </leftExpr>
+                                        <rightExpr xsi:type="circus:SetExpr">
+                                          <exprList>
+                                            <exprs xsi:type="circus:RefExpr">
+                                              <name word="True"/>
+                                            </exprs>
+                                          </exprList>
+                                        </rightExpr>
+                                      </pred>
+                                    </rightAction>
+                                  </leftAction>
+                                  <rightAction xsi:type="circus:GuardedAction">
+                                    <circusAction xsi:type="circus:SeqAction">
+                                      <leftAction xsi:type="circus:PrefixingAction">
+                                        <circusAction xsi:type="circus:SkipAction"/>
+                                        <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                          <channelExpr>
+                                            <name word="internal__GasAnalysis_Chemical"/>
+                                          </channelExpr>
+                                          <fieldList>
+                                            <fields xsi:type="circus:DotField" outputField="false">
+                                              <expr xsi:type="circus:RefExpr">
+                                                <name word="NID_Analysis_GasAnalysis_Chemical"/>
+                                              </expr>
+                                            </fields>
+                                          </fieldList>
+                                        </communication>
+                                      </leftAction>
+                                      <rightAction xsi:type="circus:SeqAction">
+                                        <leftAction xsi:type="circus:InterruptAction">
+                                          <leftAction xsi:type="circus:CallAction">
+                                            <name word="SSTOP"/>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:PrefixingAction">
+                                            <circusAction xsi:type="circus:SkipAction"/>
+                                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                              <channelExpr>
+                                                <name word="exit_GasAnalysis_Chemical"/>
+                                              </channelExpr>
+                                              <fieldList/>
+                                            </communication>
+                                          </rightAction>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:InterruptAction">
+                                          <leftAction xsi:type="circus:CallAction">
+                                            <name word="SSTOP"/>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:SeqAction">
+                                            <leftAction xsi:type="circus:PrefixingAction">
+                                              <circusAction xsi:type="circus:SkipAction"/>
+                                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                <channelExpr>
+                                                  <name word="exited_GasAnalysis_Chemical"/>
+                                                </channelExpr>
+                                                <fieldList/>
+                                              </communication>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:PrefixingAction">
+                                              <circusAction xsi:type="circus:SkipAction"/>
+                                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                <channelExpr>
+                                                  <name word="enter_GasDetected_GasAnalysis_Chemical"/>
+                                                </channelExpr>
+                                                <fieldList/>
+                                              </communication>
+                                            </rightAction>
+                                          </rightAction>
+                                        </rightAction>
+                                      </rightAction>
+                                    </circusAction>
+                                    <pred xsi:type="circus:MemPred" mixFix="true">
+                                      <leftExpr xsi:type="circus:ApplExpr" mixFix="true">
+                                        <leftExpr xsi:type="circus:RefExpr">
+                                          <name word="_equals_"/>
+                                        </leftExpr>
+                                        <rightExpr xsi:type="circus:TupleExpr">
+                                          <exprList>
+                                            <exprs xsi:type="circus:RefExpr">
+                                              <name word="sts_GasAnalysis_Chemical"/>
+                                            </exprs>
+                                            <exprs xsi:type="circus:SetExpr">
+                                              <exprList>
+                                                <exprs xsi:type="circus:RefExpr">
+                                                  <name word="gasD"/>
+                                                </exprs>
+                                              </exprList>
+                                            </exprs>
+                                          </exprList>
+                                        </rightExpr>
+                                      </leftExpr>
+                                      <rightExpr xsi:type="circus:SetExpr">
+                                        <exprList>
+                                          <exprs xsi:type="circus:RefExpr">
+                                            <name word="True"/>
+                                          </exprs>
+                                        </exprList>
+                                      </rightExpr>
+                                    </pred>
+                                  </rightAction>
+                                </leftAction>
+                                <rightAction xsi:type="circus:GuardedAction">
+                                  <circusAction xsi:type="circus:SeqAction">
+                                    <leftAction xsi:type="circus:PrefixingAction">
+                                      <circusAction xsi:type="circus:SkipAction"/>
+                                      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                        <channelExpr>
+                                          <name word="internal__GasAnalysis_Chemical"/>
+                                        </channelExpr>
+                                        <fieldList>
+                                          <fields xsi:type="circus:DotField" outputField="false">
+                                            <expr xsi:type="circus:RefExpr">
+                                              <name word="NID_GasDetected_GasAnalysis_Chemical"/>
+                                            </expr>
+                                          </fields>
+                                        </fieldList>
+                                      </communication>
+                                    </leftAction>
+                                    <rightAction xsi:type="circus:SeqAction">
+                                      <leftAction xsi:type="circus:InterruptAction">
+                                        <leftAction xsi:type="circus:CallAction">
+                                          <name word="SSTOP"/>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:PrefixingAction">
+                                          <circusAction xsi:type="circus:SkipAction"/>
+                                          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                            <channelExpr>
+                                              <name word="exit_GasAnalysis_Chemical"/>
+                                            </channelExpr>
+                                            <fieldList/>
+                                          </communication>
+                                        </rightAction>
+                                      </leftAction>
+                                      <rightAction xsi:type="circus:InterruptAction">
+                                        <leftAction xsi:type="circus:CallAction">
+                                          <name word="SSTOP"/>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:SeqAction">
+                                          <leftAction xsi:type="circus:PrefixingAction">
+                                            <circusAction xsi:type="circus:InterruptAction">
+                                              <leftAction xsi:type="circus:CallAction">
+                                                <name word="SSTOP"/>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:SkipAction"/>
+                                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="stop_GasAnalysis_Chemical_out"/>
+                                                  </channelExpr>
+                                                  <fieldList/>
+                                                </communication>
+                                              </rightAction>
+                                            </circusAction>
+                                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                              <channelExpr>
+                                                <name word="exited_GasAnalysis_Chemical"/>
+                                              </channelExpr>
+                                              <fieldList/>
+                                            </communication>
+                                          </leftAction>
+                                          <rightAction xsi:type="circus:PrefixingAction">
+                                            <circusAction xsi:type="circus:SkipAction"/>
+                                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                              <channelExpr>
+                                                <name word="enter_j1_GasAnalysis_Chemical"/>
+                                              </channelExpr>
+                                              <fieldList/>
+                                            </communication>
+                                          </rightAction>
+                                        </rightAction>
+                                      </rightAction>
+                                    </rightAction>
+                                  </circusAction>
+                                  <pred xsi:type="circus:MemPred" mixFix="true">
+                                    <leftExpr xsi:type="circus:ApplExpr">
+                                      <leftExpr xsi:type="circus:RefExpr">
+                                        <name word="goreq"/>
+                                      </leftExpr>
+                                      <rightExpr xsi:type="circus:TupleExpr">
+                                        <exprList>
+                                          <exprs xsi:type="circus:RefExpr">
+                                            <name word="ins_GasAnalysis_Chemical"/>
+                                          </exprs>
+                                          <exprs xsi:type="circus:RefExpr">
+                                            <name word="thr_GasAnalysis_Chemical"/>
+                                          </exprs>
+                                        </exprList>
+                                      </rightExpr>
+                                    </leftExpr>
+                                    <rightExpr xsi:type="circus:SetExpr">
+                                      <exprList>
+                                        <exprs xsi:type="circus:RefExpr">
+                                          <name word="True"/>
+                                        </exprs>
+                                      </exprList>
+                                    </rightExpr>
+                                  </pred>
+                                </rightAction>
+                              </leftAction>
+                              <rightAction xsi:type="circus:GuardedAction">
+                                <circusAction xsi:type="circus:SeqAction">
+                                  <leftAction xsi:type="circus:PrefixingAction">
+                                    <circusAction xsi:type="circus:SkipAction"/>
+                                    <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                      <channelExpr>
+                                        <name word="internal__GasAnalysis_Chemical"/>
+                                      </channelExpr>
+                                      <fieldList>
+                                        <fields xsi:type="circus:DotField" outputField="false">
+                                          <expr xsi:type="circus:RefExpr">
+                                            <name word="NID_GasDetected_GasAnalysis_Chemical"/>
+                                          </expr>
+                                        </fields>
+                                      </fieldList>
+                                    </communication>
+                                  </leftAction>
+                                  <rightAction xsi:type="circus:SeqAction">
+                                    <leftAction xsi:type="circus:InterruptAction">
+                                      <leftAction xsi:type="circus:CallAction">
+                                        <name word="SSTOP"/>
+                                      </leftAction>
+                                      <rightAction xsi:type="circus:PrefixingAction">
+                                        <circusAction xsi:type="circus:SkipAction"/>
+                                        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                          <channelExpr>
+                                            <name word="exit_GasAnalysis_Chemical"/>
+                                          </channelExpr>
+                                          <fieldList/>
+                                        </communication>
+                                      </rightAction>
+                                    </leftAction>
+                                    <rightAction xsi:type="circus:InterruptAction">
+                                      <leftAction xsi:type="circus:CallAction">
+                                        <name word="SSTOP"/>
+                                      </leftAction>
+                                      <rightAction xsi:type="circus:SeqAction">
+                                        <leftAction xsi:type="circus:PrefixingAction">
+                                          <circusAction xsi:type="circus:SeqAction">
+                                            <leftAction xsi:type="circus:InterruptAction">
+                                              <leftAction xsi:type="circus:CallAction">
+                                                <name word="SSTOP"/>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:GuardedAction">
+                                                  <circusAction xsi:type="circus:InterruptAction">
+                                                    <leftAction xsi:type="circus:CallAction">
+                                                      <name word="SSTOP"/>
+                                                    </leftAction>
+                                                    <rightAction xsi:type="circus:PrefixingAction">
+                                                      <circusAction xsi:type="circus:SkipAction"/>
+                                                      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                                        <channelExpr>
+                                                          <name word="set_anl_GasAnalysis_Chemical"/>
+                                                        </channelExpr>
+                                                        <fieldList>
+                                                          <fields xsi:type="circus:DotField" outputField="true">
+                                                            <expr xsi:type="circus:ApplExpr">
+                                                              <leftExpr xsi:type="circus:RefExpr">
+                                                                <name word="location"/>
+                                                              </leftExpr>
+                                                              <rightExpr xsi:type="circus:TupleExpr">
+                                                                <exprList>
+                                                                  <exprs xsi:type="circus:RefExpr">
+                                                                    <name word="gs_GasAnalysis_Chemical"/>
+                                                                  </exprs>
+                                                                </exprList>
+                                                              </rightExpr>
+                                                            </expr>
+                                                          </fields>
+                                                        </fieldList>
+                                                      </communication>
+                                                    </rightAction>
+                                                  </circusAction>
+                                                  <pred xsi:type="circus:MemPred" mixFix="true">
+                                                    <leftExpr xsi:type="circus:ApplExpr" mixFix="true">
+                                                      <leftExpr xsi:type="circus:RefExpr">
+                                                        <name word="_greater_"/>
+                                                      </leftExpr>
+                                                      <rightExpr xsi:type="circus:TupleExpr">
+                                                        <exprList>
+                                                          <exprs xsi:type="circus:ApplExpr">
+                                                            <leftExpr xsi:type="circus:RefExpr">
+                                                              <name word="size"/>
+                                                            </leftExpr>
+                                                            <rightExpr xsi:type="circus:TupleExpr">
+                                                              <exprList>
+                                                                <exprs xsi:type="circus:RefExpr">
+                                                                  <name word="gs"/>
+                                                                </exprs>
+                                                              </exprList>
+                                                            </rightExpr>
+                                                          </exprs>
+                                                          <exprs xsi:type="circus:NumExpr">
+                                                            <numeral value="0"/>
+                                                          </exprs>
+                                                        </exprList>
+                                                      </rightExpr>
+                                                    </leftExpr>
+                                                    <rightExpr xsi:type="circus:SetExpr">
+                                                      <exprList>
+                                                        <exprs xsi:type="circus:RefExpr">
+                                                          <name word="True"/>
+                                                        </exprs>
+                                                      </exprList>
+                                                    </rightExpr>
+                                                  </pred>
+                                                </circusAction>
+                                                <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="get_gs_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList>
+                                                    <fields xsi:type="circus:InputField">
+                                                      <varialbeName word="gs_GasAnalysis_Chemical"/>
+                                                    </fields>
+                                                  </fieldList>
+                                                </communication>
+                                              </rightAction>
+                                            </leftAction>
+                                            <rightAction xsi:type="circus:InterruptAction">
+                                              <leftAction xsi:type="circus:CallAction">
+                                                <name word="SSTOP"/>
+                                              </leftAction>
+                                              <rightAction xsi:type="circus:PrefixingAction">
+                                                <circusAction xsi:type="circus:InterruptAction">
+                                                  <leftAction xsi:type="circus:CallAction">
+                                                    <name word="SSTOP"/>
+                                                  </leftAction>
+                                                  <rightAction xsi:type="circus:PrefixingAction">
+                                                    <circusAction xsi:type="circus:SkipAction"/>
+                                                    <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                                                      <channelExpr>
+                                                        <name word="turn_GasAnalysis_Chemical_out"/>
+                                                      </channelExpr>
+                                                      <fieldList>
+                                                        <fields xsi:type="circus:DotField" outputField="true">
+                                                          <expr xsi:type="circus:RefExpr">
+                                                            <name word="anl_GasAnalysis_Chemical"/>
+                                                          </expr>
+                                                        </fields>
+                                                      </fieldList>
+                                                    </communication>
+                                                  </rightAction>
+                                                </circusAction>
+                                                <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                                                  <channelExpr>
+                                                    <name word="get_anl_GasAnalysis_Chemical"/>
+                                                  </channelExpr>
+                                                  <fieldList>
+                                                    <fields xsi:type="circus:InputField">
+                                                      <varialbeName word="anl_GasAnalysis_Chemical"/>
+                                                    </fields>
+                                                  </fieldList>
+                                                </communication>
+                                              </rightAction>
+                                            </rightAction>
+                                          </circusAction>
+                                          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                            <channelExpr>
+                                              <name word="exited_GasAnalysis_Chemical"/>
+                                            </channelExpr>
+                                            <fieldList/>
+                                          </communication>
+                                        </leftAction>
+                                        <rightAction xsi:type="circus:PrefixingAction">
+                                          <circusAction xsi:type="circus:SkipAction"/>
+                                          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                            <channelExpr>
+                                              <name word="enter_Reading_GasAnalysis_Chemical"/>
+                                            </channelExpr>
+                                            <fieldList/>
+                                          </communication>
+                                        </rightAction>
+                                      </rightAction>
+                                    </rightAction>
+                                  </rightAction>
+                                </circusAction>
+                                <pred xsi:type="circus:MemPred" mixFix="true">
+                                  <leftExpr xsi:type="circus:ApplExpr" mixFix="true">
+                                    <leftExpr xsi:type="circus:RefExpr">
+                                      <name word="Not_"/>
+                                    </leftExpr>
+                                    <rightExpr xsi:type="circus:ApplExpr">
+                                      <leftExpr xsi:type="circus:RefExpr">
+                                        <name word="goreq"/>
+                                      </leftExpr>
+                                      <rightExpr xsi:type="circus:TupleExpr">
+                                        <exprList>
+                                          <exprs xsi:type="circus:RefExpr">
+                                            <name word="ins_GasAnalysis_Chemical"/>
+                                          </exprs>
+                                          <exprs xsi:type="circus:RefExpr">
+                                            <name word="thr_GasAnalysis_Chemical"/>
+                                          </exprs>
+                                        </exprList>
+                                      </rightExpr>
+                                    </rightExpr>
+                                  </leftExpr>
+                                  <rightExpr xsi:type="circus:SetExpr">
+                                    <exprList>
+                                      <exprs xsi:type="circus:RefExpr">
+                                        <name word="True"/>
+                                      </exprs>
+                                    </exprList>
+                                  </rightExpr>
+                                </pred>
+                              </rightAction>
+                            </leftAction>
+                            <rightAction xsi:type="circus:PrefixingAction">
+                              <circusAction xsi:type="circus:SkipAction"/>
+                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="share"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communication>
+                            </rightAction>
+                          </leftAction>
+                          <rightAction xsi:type="circus:CallAction">
+                            <name word="prefixedTransAction_GasAnalysis_Chemical"/>
+                          </rightAction>
+                        </leftAction>
+                        <rightAction xsi:type="circus:ExtChoiceAction">
+                          <leftAction xsi:type="circus:SeqAction">
+                            <leftAction xsi:type="circus:PrefixingAction">
+                              <circusAction xsi:type="circus:InterruptAction">
+                                <leftAction xsi:type="circus:CallAction">
+                                  <name word="SSTOP"/>
+                                </leftAction>
+                                <rightAction xsi:type="circus:PrefixingAction">
+                                  <circusAction xsi:type="circus:SkipAction"/>
+                                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                    <channelExpr>
+                                      <name word="exit_GasAnalysis_Chemical"/>
+                                    </channelExpr>
+                                    <fieldList/>
+                                  </communication>
+                                </rightAction>
+                              </circusAction>
+                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="interrupt_GasAnalysis_Chemical"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communication>
+                            </leftAction>
+                            <rightAction xsi:type="circus:InterruptAction">
+                              <leftAction xsi:type="circus:CallAction">
+                                <name word="SSTOP"/>
+                              </leftAction>
+                              <rightAction xsi:type="circus:PrefixingAction">
+                                <circusAction xsi:type="circus:PrefixingAction">
+                                  <circusAction xsi:type="circus:SkipAction"/>
+                                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                    <channelExpr>
+                                      <name word="terminate"/>
+                                    </channelExpr>
+                                    <fieldList/>
+                                  </communication>
+                                </circusAction>
+                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                  <channelExpr>
+                                    <name word="exited_GasAnalysis_Chemical"/>
+                                  </channelExpr>
+                                  <fieldList/>
+                                </communication>
+                              </rightAction>
+                            </rightAction>
+                          </leftAction>
+                          <rightAction xsi:type="circus:PrefixingAction">
+                            <circusAction xsi:type="circus:SkipAction"/>
+                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="terminate"/>
+                              </channelExpr>
+                              <fieldList/>
+                            </communication>
+                          </rightAction>
+                        </rightAction>
+                      </circusAction>
+                      <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="get_ins_GasAnalysis_Chemical"/>
+                        </channelExpr>
+                        <fieldList>
+                          <fields xsi:type="circus:InputField">
+                            <varialbeName word="ins_GasAnalysis_Chemical"/>
+                          </fields>
+                        </fieldList>
+                      </communication>
+                    </circusAction>
+                    <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="get_sts_GasAnalysis_Chemical"/>
+                      </channelExpr>
+                      <fieldList>
+                        <fields xsi:type="circus:InputField">
+                          <varialbeName word="sts_GasAnalysis_Chemical"/>
+                        </fields>
+                      </fieldList>
+                    </communication>
+                  </rightAction>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_i1_GasAnalysis_Chemical"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </circusAction>
+              <name word="prefixedTransAction_GasAnalysis_Chemical"/>
+            </paras>
+          </paraList>
+        </circusProcess>
+        <name word="trans_proc_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_i1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Analysis_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="interrupt_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="setL_sts_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_NoGas_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="gas_GasAnalysis_Chemical__in\&lt;cdot>NID_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_j1_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_Reading_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_GasDetected_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exit_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="share"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="terminate"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="setL_ins_GasAnalysis_Chemical"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="parallel_chanset_ncCoreBeh_GasAnalysis_Chemical"/>
+      </paras>
+      <paras xsi:type="circus:ProcessPara" isBasicProcess="true">
+        <circusProcess xsi:type="circus:RenameProcess">
+          <circusProcess xsi:type="circus:HideProcess">
+            <circusProcess xsi:type="circus:RenameProcess">
+              <circusProcess xsi:type="circus:ParallelProcess">
+                <leftProcess xsi:type="circus:RenameProcess">
+                  <circusProcess xsi:type="circus:RenameProcess">
+                    <circusProcess xsi:type="circus:ParallelProcess">
+                      <leftProcess xsi:type="circus:ParallelProcess">
+                        <leftProcess xsi:type="circus:ParallelProcess">
+                          <leftProcess xsi:type="circus:ParallelProcess">
+                            <leftProcess xsi:type="circus:ParallelProcess">
+                              <leftProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                                <callExpr>
+                                  <name word="node_proc_j1_GasAnalysis_Chemical"/>
+                                </callExpr>
+                              </leftProcess>
+                              <rightProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                                <callExpr>
+                                  <name word="node_proc_Analysis_GasAnalysis_Chemical"/>
+                                </callExpr>
+                              </rightProcess>
+                              <channelSet xsi:type="circus:CircusChannelSet">
+                                <expr xsi:type="circus:BasicChannelSetExpr">
+                                  <communicationList>
+                                    <communications commUsage="Normal" multiSych="0">
+                                      <channelExpr>
+                                        <name word="share"/>
+                                      </channelExpr>
+                                      <fieldList/>
+                                    </communications>
+                                    <communications commUsage="Normal" multiSych="0">
+                                      <channelExpr>
+                                        <name word="terminate"/>
+                                      </channelExpr>
+                                      <fieldList/>
+                                    </communications>
+                                  </communicationList>
+                                </expr>
+                              </channelSet>
+                            </leftProcess>
+                            <rightProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                              <callExpr>
+                                <name word="node_proc_Reading_GasAnalysis_Chemical"/>
+                              </callExpr>
+                            </rightProcess>
+                            <channelSet xsi:type="circus:CircusChannelSet">
+                              <expr xsi:type="circus:BasicChannelSetExpr">
+                                <communicationList>
+                                  <communications commUsage="Normal" multiSych="0">
+                                    <channelExpr>
+                                      <name word="share"/>
+                                    </channelExpr>
+                                    <fieldList/>
+                                  </communications>
+                                  <communications commUsage="Normal" multiSych="0">
+                                    <channelExpr>
+                                      <name word="terminate"/>
+                                    </channelExpr>
+                                    <fieldList/>
+                                  </communications>
+                                </communicationList>
+                              </expr>
+                            </channelSet>
+                          </leftProcess>
+                          <rightProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                            <callExpr>
+                              <name word="node_proc_GasDetected_GasAnalysis_Chemical"/>
+                            </callExpr>
+                          </rightProcess>
+                          <channelSet xsi:type="circus:CircusChannelSet">
+                            <expr xsi:type="circus:BasicChannelSetExpr">
+                              <communicationList>
+                                <communications commUsage="Normal" multiSych="0">
+                                  <channelExpr>
+                                    <name word="share"/>
+                                  </channelExpr>
+                                  <fieldList/>
+                                </communications>
+                                <communications commUsage="Normal" multiSych="0">
+                                  <channelExpr>
+                                    <name word="terminate"/>
+                                  </channelExpr>
+                                  <fieldList/>
+                                </communications>
+                              </communicationList>
+                            </expr>
+                          </channelSet>
+                        </leftProcess>
+                        <rightProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                          <callExpr>
+                            <name word="node_proc_i1_GasAnalysis_Chemical"/>
+                          </callExpr>
+                        </rightProcess>
+                        <channelSet xsi:type="circus:CircusChannelSet">
+                          <expr xsi:type="circus:BasicChannelSetExpr">
+                            <communicationList>
+                              <communications commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="share"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communications>
+                              <communications commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="terminate"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communications>
+                            </communicationList>
+                          </expr>
+                        </channelSet>
+                      </leftProcess>
+                      <rightProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                        <callExpr>
+                          <name word="node_proc_NoGas_GasAnalysis_Chemical"/>
+                        </callExpr>
+                      </rightProcess>
+                      <channelSet xsi:type="circus:CircusChannelSet">
+                        <expr xsi:type="circus:BasicChannelSetExpr">
+                          <communicationList>
+                            <communications commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="share"/>
+                              </channelExpr>
+                              <fieldList/>
+                            </communications>
+                            <communications commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="terminate"/>
+                              </channelExpr>
+                              <fieldList/>
+                            </communications>
+                          </communicationList>
+                        </expr>
+                      </channelSet>
+                    </circusProcess>
+                    <assignmentPairs>
+                      <lhsElement>
+                        <names word="interrupt_i1_GasAnalysis_Chemical"/>
+                        <names word="interrupt_Reading_GasAnalysis_Chemical"/>
+                        <names word="interrupt_NoGas_GasAnalysis_Chemical"/>
+                        <names word="interrupt_Analysis_GasAnalysis_Chemical"/>
+                        <names word="interrupt_Analysis_GasAnalysis_Chemical"/>
+                        <names word="interrupt_GasDetected_GasAnalysis_Chemical"/>
+                        <names word="interrupt_GasDetected_GasAnalysis_Chemical"/>
+                        <names word="interrupt_Reading_GasAnalysis_Chemical"/>
+                        <names word="interrupt_GasDetected_GasAnalysis_Chemical"/>
+                        <names word="interrupt_j1_GasAnalysis_Chemical"/>
+                        <names word="interrupt_Analysis_GasAnalysis_Chemical"/>
+                        <names word="interrupt_NoGas_GasAnalysis_Chemical"/>
+                      </lhsElement>
+                      <rhsElement>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_i1_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="gas_GasAnalysis_Chemical__in\&lt;cdot>NID_Reading_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_NoGas_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_Analysis_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_Analysis_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_GasDetected_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="internal__GasAnalysis_Chemical\&lt;cdot>NID_GasDetected_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="interrupt_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="interrupt_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="interrupt_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="interrupt_GasAnalysis_Chemical"/>
+                        </exprs>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="interrupt_GasAnalysis_Chemical"/>
+                        </exprs>
+                      </rhsElement>
+                    </assignmentPairs>
+                  </circusProcess>
+                  <assignmentPairs>
+                    <lhsElement>
+                      <names word="share"/>
+                      <names word="set_sts_GasAnalysis_Chemical"/>
+                      <names word="set_ins_GasAnalysis_Chemical"/>
+                    </lhsElement>
+                    <rhsElement>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="share"/>
+                      </exprs>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="setL_sts_GasAnalysis_Chemical"/>
+                      </exprs>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="setL_ins_GasAnalysis_Chemical"/>
+                      </exprs>
+                    </rhsElement>
+                  </assignmentPairs>
+                </leftProcess>
+                <rightProcess xsi:type="circus:RenameProcess">
+                  <circusProcess xsi:type="circus:CallProcess" callUsage="Parameterised">
+                    <callExpr>
+                      <name word="trans_proc_GasAnalysis_Chemical"/>
+                    </callExpr>
+                  </circusProcess>
+                  <assignmentPairs>
+                    <lhsElement>
+                      <names word="share"/>
+                      <names word="share"/>
+                      <names word="share"/>
+                    </lhsElement>
+                    <rhsElement>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="share"/>
+                      </exprs>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="setL_sts_GasAnalysis_Chemical"/>
+                      </exprs>
+                      <exprs xsi:type="circus:RefExpr">
+                        <name word="setL_ins_GasAnalysis_Chemical"/>
+                      </exprs>
+                    </rhsElement>
+                  </assignmentPairs>
+                </rightProcess>
+                <channelSet xsi:type="circus:CircusChannelSet">
+                  <expr xsi:type="circus:RefExpr">
+                    <name word="parallel_chanset_ncCoreBeh_GasAnalysis_Chemical"/>
+                  </expr>
+                </channelSet>
+              </circusProcess>
+              <assignmentPairs>
+                <lhsElement>
+                  <names word="setL_sts_GasAnalysis_Chemical"/>
+                  <names word="setL_ins_GasAnalysis_Chemical"/>
+                </lhsElement>
+                <rhsElement>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="set_sts_GasAnalysis_Chemical"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="set_ins_GasAnalysis_Chemical"/>
+                  </exprs>
+                </rhsElement>
+              </assignmentPairs>
+            </circusProcess>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:RefExpr">
+                <name word="ncCoreBeh_hideset_GasAnalysis_Chemical"/>
+              </expr>
+            </channelSet>
+          </circusProcess>
+          <assignmentPairs>
+            <lhsElement>
+              <names word="gas_GasAnalysis_Chemical__in\&lt;cdot>x"/>
+            </lhsElement>
+            <rhsElement>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="gas_GasAnalysis_Chemical_in"/>
+              </exprs>
+            </rhsElement>
+          </assignmentPairs>
+        </circusProcess>
+        <name word="ncBehaviourProc_GasAnalysis_Chemical"/>
+      </paras>
+    </paraList>
+  </sects>
+</circus:Spec>

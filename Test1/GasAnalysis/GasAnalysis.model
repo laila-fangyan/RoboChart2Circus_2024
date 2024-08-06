@@ -24,42 +24,42 @@
   <types xsi:type="robochart:PrimitiveType" name="Intensity"/>
   <machines name="GasAnalysis">
     <variableList>
-      <vars name="sts">
+      <vars name="sts_GasAnalysis_Chemical">
         <type xsi:type="robochart:TypeRef" ref="//@types.0"/>
       </vars>
     </variableList>
     <variableList>
-      <vars name="gs">
+      <vars name="gs_GasAnalysis_Chemical">
         <type xsi:type="robochart:SeqType">
           <domain xsi:type="robochart:TypeRef" ref="//@types.2"/>
         </type>
       </vars>
     </variableList>
     <variableList>
-      <vars name="ins">
+      <vars name="ins_GasAnalysis_Chemical">
         <type xsi:type="robochart:TypeRef" ref="//@types.4"/>
       </vars>
     </variableList>
     <variableList>
-      <vars name="anl">
+      <vars name="anl_GasAnalysis_Chemical">
         <type xsi:type="robochart:TypeRef" ref="//@types.1"/>
       </vars>
     </variableList>
     <variableList modifier="CONST">
-      <vars name="thr">
+      <vars name="thr_GasAnalysis_Chemical">
         <type xsi:type="robochart:TypeRef" ref="//@types.4"/>
       </vars>
     </variableList>
-    <events name="gas">
+    <events name="gas_GasAnalysis_Chemical">
       <type xsi:type="robochart:SeqType">
         <domain xsi:type="robochart:TypeRef" ref="//@types.2"/>
       </type>
     </events>
-    <events name="resume"/>
-    <events name="turn">
+    <events name="resume_GasAnalysis_Chemical"/>
+    <events name="turn_GasAnalysis_Chemical">
       <type xsi:type="robochart:TypeRef" ref="//@types.1"/>
     </events>
-    <events name="stop"/>
+    <events name="stop_GasAnalysis_Chemical"/>
     <nodes xsi:type="robochart:Initial" name="i1"/>
     <nodes xsi:type="robochart:State" name="GasDetected">
       <actions xsi:type="robochart:EntryAction">
@@ -75,7 +75,7 @@
     <nodes xsi:type="robochart:Final" name="j1"/>
     <nodes xsi:type="robochart:State" name="Reading"/>
     <nodes xsi:type="robochart:State" name="Analysis">
-      <actions xsi:type="robochart:EntryAction">
+      <actions xsi:type="robochart:DuringAction">
         <action xsi:type="robochart:Assignment">
           <left xsi:type="robochart:VarRef" name="//@machines.0/@variableList.0/@vars.0"/>
           <right xsi:type="robochart:CallExp">
@@ -161,7 +161,7 @@
     <preconditions xsi:type="robochart:GreaterThan">
       <left xsi:type="robochart:CallExp">
         <function xsi:type="robochart:RefExp">
-          <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+          <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
         </function>
         <args xsi:type="robochart:RefExp" ref="//@functions.0/@parameters.0"/>
       </left>
@@ -170,7 +170,7 @@
     <postconditions xsi:type="robochart:Exists">
       <variables name="x">
         <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+          <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
         </type>
       </variables>
       <suchthat xsi:type="robochart:And">
@@ -183,7 +183,7 @@
             <left xsi:type="robochart:RefExp" ref="//@functions.0/@postconditions.0/@variables.0"/>
             <right xsi:type="robochart:CallExp">
               <function xsi:type="robochart:RefExp">
-                <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+                <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
               </function>
               <args xsi:type="robochart:RefExp" ref="//@functions.0/@parameters.0"/>
             </right>
@@ -207,7 +207,7 @@
     <postconditions xsi:type="robochart:Forall">
       <variables name="y">
         <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+          <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
         </type>
       </variables>
       <suchthat xsi:type="robochart:And">
@@ -220,7 +220,7 @@
             <left xsi:type="robochart:RefExp" ref="//@functions.0/@postconditions.1/@variables.0"/>
             <right xsi:type="robochart:CallExp">
               <function xsi:type="robochart:RefExp">
-                <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+                <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
               </function>
               <args xsi:type="robochart:RefExp" ref="//@functions.0/@parameters.0"/>
             </right>
@@ -244,7 +244,7 @@
   </functions>
   <functions name="goreq">
     <type xsi:type="robochart:TypeRef">
-      <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.3"/>
+      <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.3"/>
     </type>
     <parameters name="i1">
       <type xsi:type="robochart:TypeRef" ref="//@types.4"/>
@@ -272,7 +272,7 @@
     <preconditions xsi:type="robochart:GreaterThan">
       <left xsi:type="robochart:CallExp">
         <function xsi:type="robochart:RefExp">
-          <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+          <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
         </function>
         <args xsi:type="robochart:RefExp" ref="//@functions.2/@parameters.0"/>
       </left>
@@ -281,7 +281,7 @@
     <postconditions xsi:type="robochart:Forall">
       <variables name="x">
         <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+          <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
         </type>
       </variables>
       <suchthat xsi:type="robochart:And">
@@ -293,7 +293,7 @@
           <left xsi:type="robochart:RefExp" ref="//@functions.2/@postconditions.0/@variables.0"/>
           <right xsi:type="robochart:CallExp">
             <function xsi:type="robochart:RefExp">
-              <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+              <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
             </function>
             <args xsi:type="robochart:RefExp" ref="//@functions.2/@parameters.0"/>
           </right>
@@ -313,7 +313,7 @@
     <postconditions xsi:type="robochart:Exists">
       <variables name="y">
         <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+          <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
         </type>
       </variables>
       <suchthat xsi:type="robochart:And">
@@ -325,7 +325,7 @@
           <left xsi:type="robochart:RefExp" ref="//@functions.2/@postconditions.1/@variables.0"/>
           <right xsi:type="robochart:CallExp">
             <function xsi:type="robochart:RefExp">
-              <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+              <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
             </function>
             <args xsi:type="robochart:RefExp" ref="//@functions.2/@parameters.0"/>
           </right>
@@ -352,7 +352,7 @@
     <preconditions xsi:type="robochart:GreaterThan">
       <left xsi:type="robochart:CallExp">
         <function xsi:type="robochart:RefExp">
-          <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+          <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
         </function>
         <args xsi:type="robochart:RefExp" ref="//@functions.3/@parameters.0"/>
       </left>
@@ -361,7 +361,7 @@
     <postconditions xsi:type="robochart:Exists">
       <variables name="x">
         <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+          <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
         </type>
       </variables>
       <suchthat xsi:type="robochart:And">
@@ -373,7 +373,7 @@
           <left xsi:type="robochart:RefExp" ref="//@functions.3/@postconditions.0/@variables.0"/>
           <right xsi:type="robochart:CallExp">
             <function xsi:type="robochart:RefExp">
-              <ref xsi:type="robochart:Function" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
+              <ref xsi:type="robochart:Function" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/sequence_toolkit.rct#//@functions.2"/>
             </function>
             <args xsi:type="robochart:RefExp" ref="//@functions.3/@parameters.0"/>
           </right>
@@ -406,7 +406,7 @@
     <type xsi:type="robochart:TypeRef" ref="//@types.1"/>
     <parameters name="x">
       <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+        <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
       </type>
     </parameters>
     <postconditions xsi:type="robochart:IfExpression">
@@ -455,7 +455,7 @@
   </functions>
   <functions name="card">
     <type xsi:type="robochart:TypeRef">
-      <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+      <ref xsi:type="robochart:PrimitiveType" href="../../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
     </type>
     <parameters name="A">
       <type xsi:type="robochart:SetType">
