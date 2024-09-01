@@ -6,12 +6,15 @@ RoboChart elements into processes. This version is kept for record and no longer
 
 The principle for transformation as processes or actions
 
-- Process
+- ProcessPara
 R1
 R12
+R17
+R19 (Basic Process)
+- Process
 R14
 R15
-R17/18/19
+R18
 
 - R19 ControllerDef is a basic process, including several parts:
 	Defined operations as action: [[opdef]]stm
@@ -19,24 +22,36 @@ R17/18/19
 	Within part
 	main action is set as within part
 
-- Actions
-R13
-R20-22 
+- ActionPara
+R13 ?
+R20
 R25 stm
-R29 statefule
+R29 stateful
 R31 VarMemory
 R33 sharedVarMemory
 R35 Memory
 R37 sharedMemory(not yet implemented)
-R39 Node container
+R39/40 Node container
 R41 ncCoreBehaviour (including C.2.2)
 R52 composeNodes
 R53 transitions
 R54 transition ??
+R57-R60 a set of ActionParas
+
+The actions in the ActionParas are revoked using actionPara.name.word.CallAction()
+In this way, the actions in the ActionPara are presented standalone, and only their names are used in the higher level action/procss to enhance model readability.
 
 
 
-06.Aug.2024
+- Action
+Rule21
+Rule22
+Rule55
+Rule62-73
+
+only actions not actionparas are generated for these rule, so their complete model will be part of the higher level action/process model.
+
+01.Sep.2024
 ******************************/
 
 
@@ -61,10 +76,38 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0" or p.name = "Chemical");
 pkg.println();
 
+for(stm in RC!StateMachineDef.all().selectOne(s|s.name = "stm0")){
+	stm.nodes.println();
+//	for(nd in stm.nodes){
+//		if(nd.instanceOf(RC!Junction)){
+//			nd.createJunctionAsActionParas();
+//		}
+//		if(nd.instanceOf(RC!Final)){
+//			nd.createFinalAsActionParas();
+//		}
+//		if(nd.instanceOf(RC!State) and not nd.instanceOf(RC!Final)){
+//			nd.createSimpleStateAsActionParas();
+//		}
+//	}
+	
+//	composeNodes(stm.nodes);
+//	ncCoreBehaviour(stm);
+//	ncBehaviour(stm);
+//	stateful(stm);
+	createStateMachineDefAsActionPara(stm);
+}
 
+for(c in RC!ControllerDef.all().selectOne(c|c.name = "C1")){
+	for(op in c.lOperations){
+		("line 87, op = " + op).println();
+		if(op.nodes.size()>0){
+			createOperationDefAsActionPara(op);
+		}
+	}
+}
 //replaceRef();
 
-
+/** TEMPORARILY COMMENTTED OUT 
 //To transform RoboChart user defined types
 createTypeDeclPara(pkg);
 
@@ -88,6 +131,7 @@ for(stm in RC!StateMachineDef.all()){
 	}
 	
 	declareConstants(stm);
+	
 	ncBehaviour(stm);
 	
 	createCallOps(stm);//this is no more needed because I will use call definition directly in the process instead of using CALL__op
@@ -116,7 +160,8 @@ for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!
 
 
 createSpec(zsect);
-
+ END OF TEMPORARILY COMMENTTED OUT ***/
+ 
 /*
 
 //RC!StateMachineDef.all().println();
@@ -143,7 +188,7 @@ for (t in nc.transitions.select(t|t.name = "t1")){
 //
 //
 /**************************************************************
- Operations that supports the transformation procedures above 
+ EOL Operations that supports the transformation procedures above 
 
 ***************************************************************/
 //
@@ -606,6 +651,124 @@ operation createVarDecl(c: RC!Variable):Z!VarDecl{
 }
 
 
+//CSP Rule 1 
+operation createModuleAsProcessPara(m: RC!RCModule): Z!ProcessPara{
+	var ctrls = m.controllers.asSequence();
+	var cons = m.connections;
+	
+	var roboticPlatform = m.nodes.selectOne(n|n.instanceOf(RC!RoboticPlatform));
+	var asyncs = cons.select(c|c.`async` and Set{c.from, c.to}.excludes(roboticPlatform));
+	
+	var evasyncs = new Set<String>;
+	for(c in asyncs){
+		evasyncs.add(c.eto.name);
+		evasyncs.add(c.efrom.name);
+	}	
+	
+	//to create processpara for composeControllers(m,ctrls,cons),so that it can be called
+	var composeControllersPara = composeControllers(m,ctrls,cons).createProcessPara("composeControllers_" + m.FQN(), false);
+	
+	//step 1: parallel
+	//Manual: modMemory(m) |[memoryChannels1(m)]| composeControllers(m,ctrls,cons)
+	var action = createParallelAction(memoryChannels(m), modMemory(m).name.word.createCallProcess(), composeControllersPara.name.word.createCallProcess());
+	
+	//step 2: parallel with buffer(c)
+	var parallelActionSet;
+	for(c in evasyncs){
+		parallelActionSet.add(createParallelAction(evasyncs, buffer(c).name.word.createCallProcess(), action));
+	}
+	
+	//step 3: interleaving
+	if(parallelActionSet.size()=1){
+		action = parallelActionSet.at(0);
+	} else if(parallelActionSet.size()>1){
+		action = parallelActionSet.createInterleaveAction();
+	}
+	
+	//step 4: hide
+	action = action.createHideAction(hiddenModuleChannels(m));
+	
+	//step 5: exception
+	action = createExceptionAction(Set{"terminate"}, action, createSkipAction());  //TBC ??
+	
+	//step 6: hide terminate
+	action = action.createHideAction(Sequence{"terminate"});
+	
+	//step 7: processpara
+	action.createProcessPara("Module_" + m.FQN(), false);
+}
+
+
+
+operation Set<Z!CircusAction> createInterleaveAction(): Z!CircusAction{
+	var action;
+	var size = self.size();
+
+	var i = 0;
+	action = createAction2("InterleaveAction", self.at(0), self.at(1));
+	i = i + 2;
+	if(size > 2){
+	while(i<size){
+			action = createAction2("InterleaveAction", extchoiceAction, self.at(i));
+			i = i + 1;
+		}
+	}
+	return action;
+}
+
+//TO DO
+operation createExceptionAction(cs: Set<String>,
+								act1: Z!CircusAction,
+								act2: Z!CircusAction):
+								Z!CircusAction{
+								
+}
+
+
+//CSP Rule 2, the return type is different from the manual (Z!ChannelSet)
+operation hiddenModuleChannels(m: RC!RCModule): Sequence<String>{
+	var channelSeq = new Sequence<String>;
+	
+	var roboticPlatform = m.nodes.selectOne(n|n.instanceOf(RC!RoboticPlatform));
+	var asyncs = m.connections.select(c|c.`async` and Set{c.from, c.to}.excludes(roboticPlatform));
+	
+	for(c in asyncs){
+		channelSeq.add(c.eto.name);
+		channelSeq.add(c.efrom.name);
+	}
+	
+	channelSeq = channelSeq.includingAll(memoryChannels(m));
+
+	return channelSeq;
+}
+
+
+
+//CSP Rule 3, the return type is different from the manual (Z!ChannelSet)
+operation memoryChannels(m: RC!RCModule): Set<String>{
+	var channelSet = new Set<String>;
+	
+	var rp = m.nodes.selectOne(n|n.instanceOf(RC!RoboticPlatformDef));
+	
+	for(v in allVariables(rp)){
+		channelSet.add("set_" + v.name);
+	}
+	for(v in allConstants(rp)){
+		channelSet.add("set_" + v.name);
+	}
+	for(c in m.controllers){
+		for(v in requiredVariables(c)){
+			channelSet.add("set_EXT_" + v.name + "_" + c.FQN()); 
+			//Noted: vid(v,c)
+			//TBC: here v.name should be the simple one, not the FQN
+		}
+	}
+	
+	channelSet = channelSet.includingAll(memoryChannels(m));
+
+	return channelSet;
+}
+
 
 //CSP Rule 5
 operation allVariables(context: RC!Context): Set<RC!Variable>{
@@ -729,6 +892,29 @@ operation allLocalConstants(context: RC!Context): Set<RC!Variable>{
 	return varset;
 }
 
+//CSP Rule 11
+operation requiredOperations(c: RC!Context): Set<RC!Operation>{
+	var opset: Set<RC!Operation>; 
+	
+	for(i in c.rInterfaces){
+		opset = opset.includingAll(i.operations);
+	}
+	return opset;
+}
+
+
+//Rule 12
+operation modMemory(m: RC!RCModule): Z!ProcessPara{
+
+
+}
+
+
+//Rule 13 TO DO
+
+
+
+
 
 operation allLocalVariablesandConst(context: Any): Set<RC!Variable>{
 	var varset: Set<RC!Variable>; 
@@ -741,20 +927,582 @@ operation allLocalVariablesandConst(context: Any): Set<RC!Variable>{
 }
 
 
+//Rule 14
+operation composeControllers(
+						 	 m: RC!RCModule,
+						 	 ctrls: Sequence<RC!Controller>, 
+						  	 cons: Set<RC!Connection>): 
+							 Z!CircusProcess{
+						  
+	if(ctrls.size()=1){
+		return renamingController(m,ctrls.at(0),cons);
+	} else {
+	
+		var tail_ctrls = ctrls.clone();
+		tail_ctrls.removeAt(0);
+		
+		var renCtrlEvts_tail = new Set<String>;
+		for(c in tail_ctrls){
+			renCtrlEvts_tail = renCtrlEvts_tail.includingAll(renCtrlEvts(m,c,cons));
+		}
+		var connevts = intersect(renCtrlEvts(m,ctrls.at(0),cons), renCtrlEvts_tail);
+		
+		var proc = createParallelProcess(connevts, renamingController(m,ctrls.at(0),cons), composeControllers(m,tail_ctrls,cons));
+		
+		return proc;
+		/************************************
+		the ProcessPara should be created in Rule 1 when the function composeControllers is called.
+		we do not create ProcessPara because the function composeControllers might be called multiple times to create members of the ultimate composeControllers.*************/
+	}
+	
+						  
+}
 
+
+
+
+//Rule 15
+operation renamingController(m: RC!RCModule,
+							 c: RC!Controller,
+						 	 cons: Set<RC!Connection>): 
+						 	 Z!CircusProcess{
+						  
+	var internalConns = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.from.instanceOf(RC!Controller) and con.to.instanceOf(RC!Controller) and (not con.`async`) and  Set{con.from, con.to}.includes(c)){
+			internalConns.add(con);
+		}
+	}
+	
+	var toPlatform = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.from = c and RC!Platform.all().includes(con.to)){  //TBC: RC!Platform.all() is the right scope??
+			toPlatform.add(con);
+		}
+	}
+	
+	var fromPlatform = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.to = c and RC!Platform.all().includes(con.from)){ //TBC: RC!Platform.all() is the right scope??
+			fromPlatform.add(con);
+		}
+	}
+	
+	var renamepairL = new Sequence<String>;
+	var renamepairR = new Sequence<String>;
+	
+	for(con in internalConns){
+		 renamepairL.add(con.eto.name +"\\<cdot>in" );
+		 renamepairR.add(con.efrom.name +"\\<cdot>out");
+	}	
+	
+	for(con in internalConns){
+		 renamepairL.add(con.eto.name +"\\<cdot>out" );
+		 renamepairR.add(con.efrom.name +"\\<cdot>in");
+	}	
+	
+	for(con in fromPlatform){
+		 renamepairL.add(con.eto.name);
+		 renamepairR.add(con.efrom.name);
+	}				  
+						  
+	for(con in toPlatform){
+		 renamepairL.add(con.efrom.name);
+		 renamepairR.add(con.eto.name);
+	}					  
+	
+	for(v in requiredConstants(c)){
+		 renamepairL.add("set_" + v.name);
+		 renamepairR.add("set_" + v.name + "_" + m.FQN()); //TBC,vid(v,c):  v.name should be the simple name so that can be followed by m.FQN()s
+	}	
+	
+	var proc = createControllerAsProcessPara(c).name.word.createCallProcess().createRenameAction(renamepairL, renamepairR);
+	
+	return proc;
+}
+
+//Rule 16, the return type is different from the manual (Z!ChannelSet)
+operation renCtrlEvts(m: RC!RCModule,
+					  c: RC!Controller,
+					  cons: Set<RC!Connection>): 
+					 Set<String>{
+					 
+	var internalConns = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.from.instanceOf(RC!Controller) and con.to.instanceOf(RC!Controller) and (not con.`async`) and  Set{con.from, con.to}.includes(c)){
+			internalConns.add(con);
+		}
+	}
+	
+	var cs = new Set<String>;
+	for(con in internalConns){
+		cs.add(con.efrom.name);
+	}				 
+	
+	cs.add("terminate");
+	
+	for(v in requiredConstants(c)){
+		 cs.add("set_" + v.name + "_" + m.FQN());//TBC,vid(v,c):  v.name should be the simple name so that can be followed by m.FQN()s
+	}
+	
+	return cs;
+}
+
+
+
+//TBC c.mult = c.bidirect ?
+//Rule 17 
+operation buffer(c: RC!Connection): Z!ProcessPara{
+	var action;
+	if(c.bidirect){
+		action = Set{singleBuffer(c.efrom,c.eto),singleBuffer(c.eto,c.efrom)}.createInterleaveAction();
+	} else{
+		action = singleBuffer(c.efrom,c.eto);
+	}
+
+	return action.createProcessPara("buffer_" + c.FQN(), false);
+}
+
+
+//TO DO: as a function or process?
+//Rule 18
+operation singleBuffer(efrom: RC!Event,
+					   eto: RC!Event): Z!CircueProcess{
+	if(efrom.type != null){
+	
+	} else{
+	
+	}			   
+}
+
+//Rule 19
+operation createControllerAsProcessPara(c: RC!ControllerDef): Z!ProcessPara{
+	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+	//to create operation sematics for defined ops
+	for(op in c.lOperations){
+		if(op.nodes.isDefined()){
+			actionParaSeq.add(createOperationDefAsActionPara(op));
+		}
+	}
+	
+	//to create operation sematics for required ops
+	var requiredOperations = new Set<RC!OperationSig>;
+	for(ri in c.rInterfaces){
+		for(op in ri.operations){
+			requiredOperations.add(op);
+		}
+	}
+	
+	//eg.,
+	//CALL__move1(id__,
+//						    param_m,
+//						    param_m1) 	= move1Call.param_m.param_m1 -> SKIP
+//	createCallOpActionPara(op) = move1Call.param_m.param_m1 -> SKIP
+	
+	for(op in requiredOperations){
+		actionParaSeq.add(createCallOpActionPara(op));
+	}
+	
+	var lvars = new Set<RC!Variable>;
+	for(v in allLocalVariables(c)){
+		lvars.add("set_" + v.name);
+	}
+	
+	var rvars = new Set<RC!Variable>;
+	for(v in requiredVariables(c)){
+		rvars.add("set_EXT_" + v.name);
+	}
+	
+	var lconsts = new Set<RC!Variable>;
+	for(v in allLocalConstants(c)){
+		lconsts.add("set_" + v.name);
+	}
+	
+	var rconsts = new Set<RC!Variable>;
+	for(v in requiredConstants(c)){
+		rconsts.add("set_" + v.name);
+	}
+	
+	var cs = lvars.includingAll(rvars).includingAll(lconsts).includingAll(rconsts);
+	
+	var composeMachinePara = composeMachines(c,ms,cs).createActionPara("composeMachines_" + c.FQN());
+	var action = createParallelAction(cs, composeMachinePara.name.word.createCallAction(), crtlMemory(c).name.word.createCallAction());
+	
+	var hide_cs = lvars.includingAll(rvars).includingAll(lconsts).asSequence();
+	
+	action = action.createHideAction(hide_cs);
+	
+	/*************************
+	TO DO: EXCEPTION
+	*************************/
+//	action = createExceptionAction(Set{"terminate"}, action, createSkipAction());//EXCEPTION ??? TBC
+	
+	action.createActionPara("ctrl_mainaction_" + c.FQN());
+	
+	var mainActionname = "ctrl_mainaction_" + c.FQN();
+	
+	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+	
+	//is this a basic process? although actionParaSeq contains two actionparas
+	return basicProcess.createProcessPara("controller_" + c.FQN(), true);
+	
+}
+
+
+
+//Rule 20, Memory in the manual is factored out as a function "ctrl_memory"
+operation crtlMemory(c: RC!ControllerDef): Z!ActionPara{
+	var ms = c.machines;
+	var lvars = allLocalVariables(c);
+	var rvars = requiredVariables(c);
+	var vars = rvars.getNames().includingAll(rvars.getNames());
+	var varvalues = rvars.getInitialValues().includingAll(rvars.getInitialValues());
+	
+	return ctrl_memory(varvalues,lvars,rvars).createActionPara("crtlMemory_" + c.FQN());
+	//constInit(c) not covered as not shown in CSPM
+	
+}
+
+operation ctrl_memory(
+					  vars: Set<String>,
+					  lvars: Set<RC!Variable>,
+					  rvars:Set<RC!Variable>
+					  ) 
+					  :Z!CircusAction{	
+	
+	/******************************************************
+	Step 1: Iterated external choices for LOCAL variables in lvars
+	*******************************************************/
+	if(lvars.size>0){
+		var actionSeq_left_choice_lvars = new Sequence<Z!CircusAction>;
+		
+		for(v in lvars){
+			var rmachines_v = ms.select(m|requiredVariables(m).includes(v));
+			
+			var prefixAction;//(; m : rmachines(v) . set_EXT_vid(v,m)! x -> Skip))
+			if(rmachines_v.size()>0){
+						
+				if(rmachines_v.size() = 1){
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name is followed by rmachines_v.at(0).FQN(). If v.name is FQN, should be renamed as the simple name first.
+					prefixAction = createPrefixingAction(prefix, createSkipAction());
+				} else{
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name
+					prefixAction = createPrefixingAction(prefix, createSkipAction());
+					var i=1;
+					while(i< rmachines_v.size()){
+						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(i).FQN(), "x__", "OUTPUT");//To DO v.name
+						prefixAction = createPrefixingAction(prefix, prefixAction);
+						i++;
+					} 
+				}
+			
+			}
+			
+			var commu = createInputCommunication("set_" + v.name, "x__"); //set_vid(v)?x //TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names
+			var action;
+			
+			//to replace the name of v with "x__"
+			//RoboChart manual: Memory(vars[name(v):=x])
+			var new_vars = vars.clone();
+			for(vname in new_vars){
+				if(vname = v.name){
+					v.name = "x__";
+				}
+			}
+			
+			if(rmachines_v.size() >0){
+				action = createAction2("SeqAction", createPrefixingAction(commu, prefixAction), ctrl_memory(new_vars,lvars,rvars));
+			} else{
+				action = createPrefixingAction(commu, ctrl_memory(new_vars,lvars,rvars));
+			}
+			actionSeq_left_choice_lvars.add(action);
+		}
+		
+		var left_choice;
+		if(lvars.size()>1){
+			left_choice = actionSeq_left_choice_lvars.createSequenceAsExtchoiceAction();
+		} else {//lvars.size()=1
+			left_choice = actionSeq_left_choice_lvars.at(0);
+		}
+	}
+	
+	
+	
+	/******************************************************
+	Step 2: Iterated external choices for REQUIRED variables in rvars
+	*******************************************************/
+	if(rvars.size>0){
+		var actionSeq_right_choice_rvars = new Sequence<Z!CircusAction>;
+		
+		for(v in rvars){
+		
+			var rmachines_v = ms.select(m|requiredVariables(m).includes(v));
+			var prefixAction; //(; m : rmachines(v) . set_EXT_vid(v,m)! x -> Skip))
+			if(rmachines_v.size()>0){
+			
+				if(rmachines_v.size()=1){
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//TO DO v.name
+					prefixAction = createPrefixingAction(prefix, createSkipAction());
+				} else{
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name
+					prefixAction = createPrefixingAction(prefix, createSkipAction());
+					var i=1;
+					while(i< rmachines_v.size()){
+						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(i).FQN(), "x__", "OUTPUT");//To DO v.name
+						prefixAction = createPrefixingAction(prefix, prefixAction);
+						i++;
+					} 
+				}
+			
+			}
+			
+			var commu = createInputCommunication("set_Ext_" + v.name, "x__"); //set_Ext_vid(v)?x //TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names.
+			var action;
+			
+			//to replace the name of v with "x__"
+			//RoboChart manual: Memory(vars[name(v) := x])
+			var new_vars = vars.clone();
+			for(vname in new_vars){
+				if(vname = v.name){
+					v.name = "x__";
+				}
+			}
+			
+			if(rmachines_v.size() >0){
+				action = createAction2("SeqAction", createPrefixingAction(commu, prefixAction), ctrl_memory(new_vars,lvars,rvars));
+			} else{
+				action = createPrefixingAction(commu, ctrl_memory(new_vars,lvars,rvars));
+			}
+			actionSeq_right_choice_rvars.add(action);
+		}
+		
+		var right_choice;
+		if(rvars.size()>1){
+			right_choice = actionSeq_right_choice_rvars.createSequenceAsExtchoiceAction();
+		} else {//rvars.size()=1
+			right_choice = actionSeq_right_choice_rvars.at(0);
+		}
+	}
+	
+	/******************************************************
+	Step 3: external choices for lvars and rvars
+	*******************************************************/
+	var ctrlMemory;
+	if(left_choice.isDefined() and right_choice.isDefined()){
+		ctrlMemory = createAction2("ExtChoiceAction", left_choice, right_choice);
+	} else{
+		if(left_choice.isDefined()){
+			ctrlMemory = left_choice;
+		} else{//(right_choice.isDefined())
+			ctrlMemory = right_choice;
+		}
+	}
+	
+	return ctrlMemory;
+}
+
+
+
+operation Set<RC!Variable> getNames(): Set<String>{
+	var nameSet = new Set<String>;
+	for(v in self){
+		nameSet.add(v.name);		
+	}
+	return nameSet;
+}
+
+operation Set<RC!Variable> getInitialValues(): Set<String>{
+	var initSet = new Set<String>;
+	for(v in self){
+		initSet.add(v.initial.toString());		
+	}
+	return initSet;
+}
+
+//Rule 21
+operation composeMachines(c: RC!Controller, 
+						  ms: Sequence<RC!StateMachineDef>, 
+						  cons: Set<RC!Connection>): 
+//						  Z!ActionPara{
+						  Z!CircusAction{
+						  
+	if(ms.size()=1){
+		return renamingMachine(c,ms.at(0),cons);//TO DO, nops should be incorporated.		
+	} else {
+	
+		var tail_ms = ms.clone();
+		tail_ms.removeAt(0);
+		
+		var renStmEvts_tail = new Set<String>;
+		for(m in tail_ms){
+			renStmEvts_tail = renStmEvts_tail.includingAll(renStmEvts(c,m,cons));
+		}
+		var connevts = intersect(renStmEvts(c,ms.at(0),cons), renStmEvts_tail);
+		
+		var action = createParallelAction(connevts, renamingMachine(c,ms.at(0),cons), composeMachines(c,tail_ms,cons));//TO DO, nops should be incorporated.	
+		
+		return action;
+//		return action.createActionPara("composeMachines_" + c.FQN());
+		/************************************
+		the ActionPara will be created in Rule 19 when the function composeMachines is call.
+		we do not create ActionPara because the function composeMachines might be called multiple times to create members of the ultimate composeMachines.*************/
+	}
+	
+						  
+}
+
+//Rule 22
+operation renamingMachine(c: RC!Controller, 
+						  m: RC!StateMachineDef, 
+						  cons: Set<RC!Connection>): 
+//						  Z!ActionPara{
+						  Z!CircusAction{
+						  
+	var internalConns = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.from.instanceOf(RC!StateMachine) and con.to.instanceOf(RC!StateMachine) and Set{con.from, con.to}.includes(m)){
+		internalConns.add(con);
+		}
+	}
+	
+	var toController = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.from = m and RC!Controller.all().includes(con.to)){
+			toController.add(con);
+		}
+	}
+	
+	var fromController = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.to = m and RC!Controller.all().includes(con.from)){
+			fromController.add(con);
+		}
+	}
+	
+	var renamepairL = new Sequence<String>;
+	var renamepairR = new Sequence<String>;
+	
+	for(con in internalConns){
+		 renamepairL.add(con.eto.name +"\\<cdot>in" );
+		 renamepairR.add(con.efrom.name +"\\<cdot>out");
+	}	
+	
+	for(con in internalConns){
+		 renamepairL.add(con.eto.name +"\\<cdot>out" );
+		 renamepairR.add(con.efrom.name +"\\<cdot>in");
+	}	
+	
+	for(con in fromController){
+		 renamepairL.add(con.eto.name);
+		 renamepairR.add(con.efrom.name);
+	}				  
+						  
+	for(con in toController){
+		 renamepairL.add(con.efrom.name);
+		 renamepairR.add(con.eto.name);
+	}					  
+	
+	for(v in requiredConstants(m)){
+		 renamepairL.add("set_" + v.name);
+		 renamepairR.add("set_" + v.name); //TBC, "set_" + v.name should be replace by vid(v,c)?? but I don't know the definition of vid(v,c)
+	}	
+	
+	var action = createStateMachineDefAsActionPara(m).name.word.createCallAction().createRenameAction(renamepairL, renamepairR);
+	
+	return action;
+//	return action.createActionPara("renamingMachine_" + m.FQN());
+}
+
+//Rule 23
+operation renStmEvts(c: RC!Controller, 
+					 m: RC!StateMachineDef, 
+					 cons: Set<RC!Connection>): 
+					 Set<String>{
+					 
+	var internalConns = new Set<RC!Connection>;
+	for(con in RC!Connection.all()){
+		if(con.from.instanceOf(RC!StateMachine) and con.to.instanceOf(RC!StateMachine) and Set{con.from, con.to}.includes(m)){
+		internalConns.add(con);
+		}
+	}
+	
+	var cs = new Set<String>;
+	for(con in internalConns){
+		cs.add(con.efrom.name);
+	}				 
+	
+	cs.add("terminate");
+	
+	for(v in requiredConstants(m)){
+		 cs.add("set_" + v.name);//TBC vid(v,c)  ??
+	}
+	
+	return cs;
+}
 
 //Rule 25
-operation createStateMachineDefAsProcess(stm: RC!StateMachineDef): Z!ProcessPara{
+operation createStateMachineDefAsActionPara(stm: RC!StateMachineDef): Z!ActionPara{
+	var action = stateful(stm).name.word.createCallAction().createHideAction(Sequence{"terminate"});
+	action = createAction2("SeqAction", action, createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction())));
+	
+	var renamepairL = new Sequence<String>;
+	var renamepairR = new Sequence<String>;
+	for(v in requiredVariables(stm)){
+		 renamepairL.add("share");
+		 renamepairR.add("set_EXT_" + v.name);
+	}
+	//TBC the direction of renaming
+	
+	action = action.createRenameAction(renamepairL, renamepairR);
+	action = createParallelAction(Set{"shared"}, action, createSkipAction());
+	
+	var sharedVarSync = new Set<String>;
+	for(v in requiredVariables(stm)){
+		sharedVarSync.add("get_" + v.name);
+		sharedVarSync.add("set_" + v.name);
+		sharedVarSync.add("set_EXT_" + v.name);
+	}
+	
+	var sharedVarHide = new Set<String>;
+	for(v in requiredVariables(stm)){
+		sharedVarHide.add("get_" + v.name);
+	}
+	
+	var sharedConstSync = new Set<String>;
+	for(v in requiredVariables(stm)){
+		sharedVarHide.add("get_" + v.name);
+	}
+	
+	var cs = sharedVarSync.includingAll(sharedConstSync);
+	cs.add("terminate");
+	
+	action = createParallelAction(cs, action, sharedVarMemory(stm).name.word.createCallAction()).createHideAction(sharedVarHide.includingAll(sharedConstSync).asSequence());
+	
+	return action.createActionPara("stm_" + stm.FQN());
+}
 
+//Rule 26, the return type is different from the manual (Z!ChannelSet)
+operation getsetChannels(stm: RC!StateMachineDef): Set<String>{
+	var channelSet = new Set<String>;
+	for(v in allVariables(s)){
+		channelSet.add("get_" + v.name);
+		channelSet.add("set_" + v.name);
+	}
+	for(v in allConstants(s)){
+		channelSet.add("get_" + v.name);
+		channelSet.add("set_" + v.name);
+	}
+	return channelSet;
 }
 
 
 //Rule 27
-operation createOperationDefAsProcess(op: RC!OperationDef): Z!ProcessPara{
-	var proc = stateful(op).createHideProcess("terminate");
-	var para = proc.createProcessPara("OP_" + op.FQN(), false);
+operation createOperationDefAsActionPara(op: RC!OperationDef): Z!ActionPara{
+	var action = stateful(op).circusAction.createHideAction(Sequence{"terminate"});
+	"lin 797".println(); op.eContainer().println();
+	return action.createActionPara("stateful_op_" + op.FQN());
 	
-	return para;
 }
 
 //Rule 28
@@ -763,40 +1511,248 @@ operation createOperationDefAsProcess(op: RC!OperationDef): Z!ProcessPara{
 
 
 
-//TBC: are these below process or para??
-/* Rule 32, 34, 36, 38 for constants are not implemented because constants are processed as parameters*/
-//Rule 29
-operation stateful(stm: RC!StateMachineBody): Z!ProcessPara{
 
+/* Rule 32, 34, 36, 38 for constants are not implemented because constants are processed as parameters*/
+//Rule 29, different from the manual: machineBody is taken out as a standalone operation
+operation stateful(stm: RC!StateMachineBody): Z!ActionPara{
+	
+	var parallelL = machineBody(stm).name.word.createCallAction();
+	var parallelR = varMemory(stm).name.word.createCallAction();
+	var channelSet = getsetLocalChannels(stm);
+	channelSet.add("terminate");
+	var stateful = createParallelAction(channelSet, parallelL, parallelR).createHideAction(channelSet.asSequence());
+	
+	return stateful.createActionPara("stateful_"+ stm.FQN());
 }
 
+//Rule 29-2 - MachineBody
+operation machineBody(stm: RC!StateMachineBody): Z!ActionPara{
+	
+	var parallelL = ncBehaviour(stm).name.word.createCallAction();
+	var parallelR = createSkipAction();
+	var channelSet = Set{"interrupt_" + stm.FQN()};
+	var machineBody = createParallelAction(channelSet, parallelL,parallelR).createHideAction(Sequence{"enteredSS_"+stm.FQN()});
+	
+	return machineBody.createActionPara("machineBody_"+ stm.FQN());
+}
 
-//Rule 30
-operation getsetLocalChannels(s: RC!StateMachineBody): Z!ChannelSet{
-
+//Rule 30, the return type is different from the manual (Z!ChannelSet)
+operation getsetLocalChannels(s: RC!StateMachineBody): Set<String>{
+	var channelSet = new Set<String>;
+	for(v in allLocalVariables(s)){
+		channelSet.add("get_" + v.name);
+		channelSet.add("set_" + v.name);
+	}
+	return channelSet;
 }
 
 //Rule 31
-operation varMemory(stm: RC!Context): Z!ProcessPara{
+operation varMemory(stm: RC!Context): Z!ActionPara{
+	var varMemory;
+	var vars = allLocalVariables(stm);
+	if(vars.size()=0){
+		varMemory = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+		
+	} else if(vars.size()=1) {
+		varMemory = Memory(vars.at(0)).name.word.createCallAction();
+	} else if(vars.size()>1){
+		
+			varMemory = createParallelAction(Set{"terminate"}, Memory(vars.at(0)).name.word.createCallAction(),Memory(vars.at(1)).name.word.createCallAction());
+			vars.removeAt(0);
+			vars.removeAt(0);		
+			while(vars.size()>0){
+
+				varMemory = createParallelAction(Set{"terminate"}, varMemory, Memory(vars.at(0)).name.word.createCallAction());			
+				vars.removeAt(0);
+			}
+		}
+	
+	return varMemory.createActionPara("varMemory_"+ stm.FQN());
+}
+
+
+//Rule 33, follows the same pattern as Rule 31
+operation sharedVarMemory(stm: RC!Context): Z!ActionPara{
+	var sharedVarMemory;
+	var vars = requiredVariables(stm);
+	if(vars.size()=0){
+		sharedVarMemory = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+		
+	} else if(vars.size()=1) {
+		sharedVarMemory = sharedMemory(vars.at(0)).name.word.createCallAction();
+	} else if(vars.size()>1){
+		
+			sharedVarMemory = createParallelAction(Set{"terminate"}, sharedMemory(vars.at(0)).name.word.createCallAction(), sharedMemory(vars.at(1)).name.word.createCallAction());
+			vars.removeAt(0);
+			vars.removeAt(0);		
+			while(vars.size()>0){
+
+				sharedVarMemory = createParallelAction(Set{"terminate"}, sharedVarMemory, sharedMemory(vars.at(0)).name.word.createCallAction());			
+				vars.removeAt(0);
+			}
+		}
+	
+	return sharedVarMemory.createActionPara("sharedVarMemory_"+ stm.FQN());
 
 }
 
-//Rule 33 
-operation sharedVarMemory(c: RC!Context): Z!ProcessPara{
 
-
-}
 
 //Rule 35
-operation Memory(v: RC!Variable): Z!ProcessPara{
+/*e.g., Memory_a(0) where
+		Memory_a(value) =
+					get_a!value -> Memory_a(value)
+					[]
+					set_a?x__ -> Memory_a(x__)
+					[]
+					terminate -> SKIP
+		
+	so, Memory_a(0) =
+					get_a!0 -> Memory_a(0)
+					[]
+					set_a?x__ -> Memory_a(x__)
+					[]
+					terminate -> SKIP  ??
 
+TO DO: to confirm with Pedro
+*/
+operation Memory(v: RC!Variable): Z!ActionPara{
+	("line 860 v = " + v.name).println();
+	("line 860 v.type = " + v.type).println();
+	("line 860 v.typeref.ref = " + v.type.ref.name).println();
+	
+	/********************************************
+	// to be confirmed, so commented out temporarily: how to set initial in RoboChart?
+	if(v.initial != null){
+		"v.initial != null".println();
+		return memory(v, v.initial).createActionPara("Memory_"+ v.name);
+	} else{
+		"v.initial = null".println();
+		return memory(v, v.defaultValue()).createActionPara("Memory_"+ v.name);	
+	}
+	*******************************************/
+	return createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()).createActionPara("Memory_"+ v.name);
 }
 
-//Rule 37
-operation sharedMemory(v: RC!Variable): Z!ProcessPara{
-
+//TO be confirmed
+//Rule 35 auxilary 
+operation memory(v: RC!Variable, value: Any): Z!CircusAction{
+	
+	var commu1  = createOutputCommunicationFromString("get_" + v.name, value, "OUTPUT");//??
+	var choice1 = createPrefixingAction(commu1, memory(v, value)); 
+	
+	var commu2  = createInputCommunication("set_" + v.name, "x__");
+	var choice2 = createPrefixingAction(commu2, memory(v, "x__")); 
+	
+	var choice3 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	
+	var memory = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, choice3));
+	
+	return memory;
 }
 
+operation RC!Variable defaultValue(): Z!Expr{
+	if(self.type = TypeRef){
+		if(self.type.ref.name = "int"){
+			return createNumExpr(0);
+		}
+		if(self.type.ref.name = "float"){
+			return createNumExpr(0);//TO DO
+		}
+		if(self.type.ref.name = "String"){
+			return createNumExpr(0);//TO DO
+		}
+		if(self.type.ref.name = "Boolean"){
+			return createBooleanExpr(true);
+		} else {//TO DO
+		
+		}
+	}
+	/*
+	if(self.type = ProductType){
+	
+	}
+	if(self.type = RelationType){
+	
+	}
+	if(self.type = FunctionType){
+	
+	}
+	if(self.type = SetType){
+	
+	}
+	if(self.type = SeqType){
+	
+	}
+	if(self.type = AnyType){
+	
+	}
+	if(self.type = VectorType){
+	
+	}
+	if(self.type = MatrixType){
+	
+	}
+	*/
+}
+
+
+operation createNumExpr(value: int): Z!NumExpr{
+	var numExpr = new Z!NumExpr;
+	numExpr.numeral = new Z!ZNumeral;
+	numExpr.numeral.value = value;
+	
+	return numExpr;
+}
+
+operation createBooleanExpr(value: Boolean): Z!RefExpr{
+	var boolExpr = new Z!RefExpr;
+	boolExpr.mixFix = false;
+	boolExpr.explicit = false;
+	boolExpr.name = new Z!ZName;
+	if(value = true){
+		boolExpr.name.word ="True";
+	} else {
+		boolExpr.name.word ="False";
+	}
+	
+	return boolExpr;
+}
+
+//TO be confirmed
+//Rule 37, follows the same pattern of Rule 35
+operation sharedMemory(v: RC!Variable): Z!ActionPara{
+	/* to be confirmed, so commented out temporarily
+	if(v.initial != null){
+		"v.initial != null".println();
+		return sharedmemory(v, v.initial).createActionPara("Memory_"+ v.name);
+	} else{
+		"v.initial = null".println();
+		return sharedmemory(v, v.defaultValue()).createActionPara("Memory_"+ v.name);	
+	}
+*/
+	return createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()).createActionPara("sharedMemory_"+ v.name);
+}
+
+//TO be confirmed
+//Rule 37 auxilary 
+operation sharedmemory(v: RC!Variable, value: Any): Z!CircusAction{
+	
+	var commu1  = createOutputCommunicationFromString("get_" + v.name, value, "OUTPUT");//??
+	var choice1 = createPrefixingAction(commu1, memory(v, value)); 
+	
+	var commu2  = createInputCommunication("set_" + v.name, "x__");
+	var choice2 = createPrefixingAction(commu2, memory(v, "x__")); 
+	
+	var commu3  = createInputCommunication("set_EXT_" + v.name, "x__");
+	var choice3 = createPrefixingAction(commu3, memory(v, "x__")); 
+	
+	var choice4 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	
+	var memory = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, createAction2("ExtChoiceAction", choice3, choice4)));
+	
+	return memory;
+}
 
 
 operation nc(stmt: RC!Statement): RC!NodeContainer{
@@ -1110,9 +2066,18 @@ operation RC!Node FQN(): String{
 		}
 	}
 	
-	//Case 2: the node is contained in a composite node
-	for(nd in RC_model!Node.all()){
-		if(nd.nodes.size()>0){
+	var op_sets = RC!OperationDef.all();
+	//Case 2: the node is contained in a opdef
+	for(op in op_sets){
+		if(op.nodes.includes(self)){
+			return self.name+"_"+ op.FQN();
+		}
+	}
+	
+	//Case 3: the node is contained in a composite node
+//	for(nd in RC_model!Node.all()){
+	for(nd in RC!Node.all()){
+		if(nd.nodes.isDefined() and nd.nodes.size()>0){
 			if(nd.nodes.includes(self)){
 				return self.name+"_"+ nd.FQN();
 			}
@@ -1145,6 +2110,30 @@ operation RC!Event FQN(): String{
 }
 */
 
+
+//Fully Qualified Name for StateMachineDef
+operation RC!OperationDef FQN(): String{
+
+	//Case 1: the op is contained in a controllerdef
+	for(ctl in RC!ControllerDef.all()){
+		if(ctl.lOperations.includes(self)){
+			return self.name + "_" + ctl.FQN();
+		}
+	}
+	
+	//Case 2: the stm is contained in a package
+	for(pkg in RC!RCPackage.all()){
+		if(pkg.operations.includes(self)){
+			if(pkg.name.isDefined()){
+				return self.name + "_" + pkg.name;			
+			}else{
+				return self.name;	
+			}
+		}
+	}	
+	
+	//a module can not have a stm outside a controller
+}
 
 //Fully Qualified Name for StateMachineDef
 operation RC!StateMachineDef FQN(): String{
@@ -1636,12 +2625,7 @@ operation Sequence<String> createChannelDecl(type_expr: Z!Expr): Z!ChannelDecl{
 }
 
 
-/* Operation call RoboChart e.g.,
-CALL__move1(id__,
-			const_pkg0_M_C1_stm0_c2,
-			const_pkg0_M_C1_stm0_c1,
-			param_m,
-			param_m1) 	= move1Call.param_m.param_m1 -> SKIP  */
+
 operation createCallOps(nc: RC!NodeContainer){
 	for(ri in nc.rInterfaces){
 		for(op in ri.operations){
@@ -1650,13 +2634,18 @@ operation createCallOps(nc: RC!NodeContainer){
 	}
 }
 
+
+/* Operation call RoboChart e.g.,
+CALL__move1(id__,
+			const_pkg0_M_C1_stm0_c2,
+			const_pkg0_M_C1_stm0_c1,
+			param_m,
+			param_m1) 	= move1Call.param_m.param_m1 -> SKIP  */
 operation createCallOpActionPara(op: RC!OperationSig): Z!ActionPara{
 //	var action;
 	if(op.parameters.size() = 0){
-//		var action = new Z!PrefixingAction;
 		var commu = createSynchCommunication(op.name + "Call");
 		var action = createPrefixingAction(commu, createSkipAction());
-//		return action;
 		var actionPara = action.createActionPara(op.name + "Call");//TBC the FQN for stm opcall and ctrl opcall
 		return actionPara;
 	} else
@@ -1730,29 +2719,30 @@ operation createDotInputCommunication(
 
 //CSP Rule 40
 
-operation ncBehaviour(nc:RC!NodeContainer): Z!ProcessPara{
-	nc.createchanParaNC(); // HERE is the place to declare all the channels for a state machine
+operation ncBehaviour(nc:RC!NodeContainer): Z!ActionPara{
+	nc.createchanParaNC(); // HERE is to declare all the channels for a state machine
 	var hideset_string = enterSS(nc).includingAll(Sequence{"exit_" + nc.FQN(), "exited_" + nc.FQN(), "internal__"+nc.FQN()});
 	
-	var hidechannelset = createChannelSet(createBasicChannelSetExpr(hideset_string));
-	var hidechannelsetPara = hidechannelset.createChanSetPara("ncCoreBeh_hideset_"+nc.FQN());
+//	var hidechannelset = createChannelSet(createBasicChannelSetExpr(hideset_string));
+//	var hidechannelsetPara = hidechannelset.createChanSetPara("ncCoreBeh_hideset_"+nc.FQN());
 //	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hideset_string).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
 
 
-	var ncBehaviourProc = ncCoreBehaviour(nc).createHideProcess(hidechannelsetPara.name.word).createRenameProcess(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
+	var ncBehaviour = ncCoreBehaviour(nc).name.word.createCallAction().createHideAction(hideset_string).createRenameAction(renameTriggerEventsPairL(nc), renameTriggerEventsPairR(nc));
 	//TO DO: need to confirm the M2T part
 	
 
-	var ncBehaviourProcPara =  ncBehaviourProc.createProcessPara("ncBehaviourProc_"+nc.FQN(), false);
+//	var ncBehaviourProcPara =  ncBehaviourProc.createProcessPara("ncBehaviourProc_"+nc.FQN(), false);
 
-	return ncBehaviourProcPara;
+	return ncBehaviour.createActionPara("ncBehaviour_"+ nc.FQN());
 }
 
 
 
 
+
 //CSP Rule 41
-operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
+operation ncCoreBehaviour(nc: RC!NodeContainer): Z!ActionPara{
 
 	
 	/***************start of tidsR(nc) calculation************************/
@@ -1761,7 +2751,7 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	//firstly, to calculate the renaming pair for the transitions
 	var tidsR_trans_pairL = new Sequence<String>;
 	for(t in nc.transitions){
-		tidsR_trans_pairL.add("interrupt_"+t.source.FQN());
+		tidsR_trans_pairL.add("interrupt_" + t.source.FQN());
 	}
 	var tidsR_trans_pairR = new Sequence<String>;
 	for(t in nc.transitions){
@@ -1777,7 +2767,7 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	}
 	var tidsR_nodes_pairR = new Sequence<String>;
 	for(n in nc.nodes.select(m|m.instanceOf(State))){
-		tidsR_nodes_pairR.add("interrupt_"+nc.FQN());
+		tidsR_nodes_pairR.add("interrupt_" + nc.FQN());
 	}
 	
 
@@ -1789,15 +2779,21 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	
 	
 	
-	//Rename composedNodes(nc.nodes) with tidsR(nc)
-	var composedNodeProcTidsRenamed = composedNodes(nc.nodes).createRenameProcess(tidsR_pairL, tidsR_pairR);
+	//Rename composeNodes(nc.nodes) with tidsR(nc)
+	var composedNodeActionTidsRenamed = composeNodes(nc.nodes).name.word.createCallAction().createRenameAction(tidsR_pairL, tidsR_pairR);
+
 	
+	//create transition action: Q
+	var transActionPara = nc.createTransitionsAsActionPara();
 	
-	//create transition process: Q
-	var transProc = nc.createTransitionsAsCircusProcess();
+	var initial_name = nc.nodes.selectOne(n|n.instanceOf(Initial)).FQN();
+
+	var commu = createSynchCommunication("enter_" + initial_name);
 	
-	//a process paragraph is created for transProc because transProc is defined standalone in auto-gen CSPM 
-	var transProcPara = transProc.createProcessPara("trans_proc_" + nc.FQN(), true);
+	var prefixAction = createPrefixingAction(commu, transActionPara.name.word.createCallAction());
+	
+//	//a action paragraph is created for transAction because transAction is defined standalone in auto-gen CSPM 
+//	var transProcPara = transProc.createProcessPara("trans_proc_" + nc.FQN(), true);
 	
 	
 	//this step creates the string set, but not a channelset, because this can SIMPLIFY the coding. 
@@ -1809,22 +2805,20 @@ operation ncCoreBehaviour(nc:RC!NodeContainer): Z!CircusProcess{
 	
 	/***************begin of C.2.2 metanotatin************************/
 	
-	var ncCoreBehProc = createMetaParallelProcess(nc, 
-												  composedNodeProcTidsRenamed, 
+	var ncCoreBehaviour = createMetaParallelAction(nc, 
+												  composedNodeActionTidsRenamed, 
 												  vars(nc.nodes), 
 												  vars(nc.nodes), 
 												  cs_stringset, 
 												  vtguards(nc), 
 												  Set{}, 
-												  transProcPara.name.createCallProcess()
+												  prefixAction
 												  );
 	/***************end of C.2.2 metanotatin************************/
 	
 	
-	return ncCoreBehProc;
+	return ncCoreBehaviour.createActionPara("ncCoreBehaviour_"+ nc.FQN());
 }
-
-
 
 //used inCSP Rule 41 - operation ncCoreBehaviour  
 operation vtguards(nc: RC!NodeContainer):  Set<String>{
@@ -1981,16 +2975,16 @@ operation vars(seq: Sequence<RC!Statement>):Set<String>{
 }
 
 //CSP C.2.2 metanotation
-operation createMetaParallelProcess(
+operation createMetaParallelAction(
 	nc: RC!NodeContainer, 
-	P: Z!CircusProcess, 
+	P: Z!CircusAction, 
 	pr: Set<String>, 
 	pw: Set<String>, 
 	cs: Set<String>, 
 	qr: Set<String>, 
 	qw: Set<String>, 
-	Q: Z!CircusProcess
-	): Z!CircusProcess{
+	Q: Z!CircusAction
+	): Z!CircusAction{
 
 
 	
@@ -2023,7 +3017,7 @@ operation createMetaParallelProcess(
 		//the drawback is that we need to be careful to not omit any places that needs FQN
 	}
 	
-	var PRenamed = P.createRenameProcess(PRenaming_pairR, PRenaming_pairL);
+	var PRenamed = P.createRenameAction(PRenaming_pairR, PRenaming_pairL);
 	/****************************************************************
 	TO DO, this renaming above is WRONG, as it should be RELATIONAL renaming
 	e.g.,  [[ share__ <- x__ | x__ <- {| share__,setR_a,setR_a1 |} ]] 
@@ -2055,7 +3049,7 @@ operation createMetaParallelProcess(
 		PRenaming_pairL.add("setR_"+v);//R207 setR(v)
 	}
 	
-	var QRenamed = Q.createRenameProcess(QRenaming_pairR, QRenaming_pairL);
+	var QRenamed = Q.createRenameAction(QRenaming_pairR, QRenaming_pairL);
 	
 	
 	//step 3 - create parallel process: (1) define channel set 
@@ -2067,13 +3061,13 @@ operation createMetaParallelProcess(
 	//TO DO, each channel in channelset_stringSet needs to be declared as a channel.
 	//channelset_stringSet.createChannel();
 	
-	var channelset = createChannelSet(createBasicChannelSetExpr(channel_names)).createChanSetPara("parallel_chanset_ncCoreBeh_" + nc.FQN());
+//	var channelset = createChannelSet(createBasicChannelSetExpr(channel_names)).createChanSetPara("parallel_chanset_ncCoreBeh_" + nc.FQN());
 	//this channelset is the one in CSPM: [| union(union(union(flowevts,transSync),{terminate}),{|share__,setL_a,setR_a|}) |]
 	
 	//step 4 - create parallel process	P{|channelset|}Q
 	
-	var PparQ = createParallelProcess("parallel_chanset_ncCoreBeh_" + nc.FQN(), PRenamed,QRenamed);
-	
+	var PparQ = createParallelAction(channel_names, PRenamed, QRenamed);
+//	var PparQ = createParallelAction("parallel_chanset_ncCoreBeh_" + nc.FQN(), PRenamed,QRenamed);
 	
 	//step 5 - rename parallel process: (1) create assigementpairs, (2) rename P{|channelset|}Q
 	
@@ -2090,7 +3084,7 @@ operation createMetaParallelProcess(
 			PQRenaming_pairL.add("set_"+v);
 		}
 		
-		var PparQRenamed = PparQ.createRenameProcess(PQRenaming_pairR, PQRenaming_pairL);
+		var PparQRenamed = PparQ.createRenameAction(PQRenaming_pairR, PQRenaming_pairL);
 		
 		return PparQRenamed;
 	} else {
@@ -2099,7 +3093,7 @@ operation createMetaParallelProcess(
 }
 
 
-//used in  C.2.2 metanotation's operation "createMetaParallelProcess"
+//used in  C.2.2 metanotation's operation "createMetaParallelAction"
 operation intersect(
 	setA: Set<Any>, 
 	setB: Set<Any>
@@ -2267,6 +3261,28 @@ operation Z!CircusProcess createHideProcess(
  	return hideProc;
 }
 
+//channelset is not declared, and is declared within hideAction, but has no name (BasicChannelSetExpr)
+operation Z!CircusAction createHideAction(
+	channel_names: Sequence<String>
+	):Z!HideAction{
+
+	var hideAction = new Z!HideAction;
+	hideAction.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
+	
+	hideAction.circusAction = self;
+ 	return hideAction;
+}
+
+operation Z!CircusAction createHideAction(
+	cs_name: String
+	):Z!HideAction{
+
+	var hideAction = new Z!HideAction;
+	hideAction.channelSet =  createChannelSet(cs_name.createRefExpr(false,false));
+	
+	hideAction.circusAction = self;
+ 	return hideAction;
+}
 
 //the parameter is a channelset instead of string set
 operation Z!CircusProcess createHideProcess(
@@ -2278,6 +3294,18 @@ operation Z!CircusProcess createHideProcess(
 	hideProc.channelSet = cs;
 	hideProc.circusProcess = self;
  	return hideProc;
+}
+
+
+operation Z!CircusAction createRenameAction(
+	nameSetL: Sequence<String>, 
+	nameSetR: Sequence<String>
+	): Z!RenameAction{
+	var action = new Z!RenameAction;
+	action.circusAction = self;
+	action.assignmentPairs = createAssignmentPairs(nameSetL, nameSetR);
+	
+	return action;
 }
 
 operation Z!CircusProcess createRenameProcess(
@@ -2482,48 +3510,47 @@ operation usedVariablesInExpr(expr:RC!Expression, container: Any): Set<String>{
 
 
 
-
 //CSP Rule 52
-operation composedNodes(nodes: Set<Node>): Z!CircusProcess{
+operation composeNodes(nodes: Set<Node>): Z!ActionPara{
 	
-	var procForComposeNodes;
-	
-	if(nodes.size()=0){//SStop /\ terminate -> Skip, this is an action, need to be converted into process
-		var action = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()));
-		
-		var actionParaSeq = new Sequence<Z!ActionPara>;
-		actionParaSeq = Sequence{action.createActionPara("action")};
-		procForComposeNodes = actionParaSeq.createBasicProcess("action");
+//	var procForComposeNodes;
+	var composeNodesAction;
+	if(nodes.size()=0){//SStop /\ terminate -> Skip, this is an action
+		composeNodesAction = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()));
+		return composeNodesAction.createActionPara("composeNodes");
+//		var actionParaSeq = new Sequence<Z!ActionPara>;
+//		actionParaSeq = Sequence{action.createActionPara("action")};
+//		procForComposeNodes = actionParaSeq.createBasicProcess("action");
 	}else{
 		
 //		var ndProcSet = new Set<CircusProcess>;
-		var ndProcNameSet = new Set<String>;
+//		var ndProcNameSet = new Set<String>;
+	
 		
 		for(nd in nodes){
-			var proc_name = "node_proc_" + nd.FQN() ;//TO DO: need to give the fully qualified name?
+//			var proc_name = "node_proc_" + nd.FQN();
 			if(nd.instanceOf(Junction)){
 				
-				//to create the process for this node as a standalone process paragraph
-				nd.createJunctionAsBasicProcess().createProcessPara(proc_name, true);
-				ndProcNameSet.add(proc_name);
+//				nd.createJunctionAsBasicProcess().createProcessPara(proc_name, true);
+				nd.createJunctionAsActionParas();
+//				ndProcNameSet.add(proc_name);
 				
-				//we don't need the process set, but the name set of the processes
-				//because the parallel process is for callProcess, so the line below is commented out.
-				//ndProcSet.add(nd.createJunctionAsBasicProcess());
+
 			} else
 			if(nd.instanceOf(Final)){
-				
-				nd.createFinalAsBasicProcess().createProcessPara(proc_name, true);
-				ndProcNameSet.add(proc_name);
+				nd.createFinalAsActionParas();
+//				nd.createFinalAsBasicProcess().createProcessPara(proc_name, true);
+//				ndProcNameSet.add(proc_name);
 //				ndProcSet.add(nd.createFinalAsBasicProcess());
 			} else
 			if(nd.instanceOf(State)){
 				if(nd.nodes.size()=0){
-					nd.createSimpleStateAsBasicProcess().createProcessPara(proc_name, true);
-					ndProcNameSet.add(proc_name);
+					nd.createSimpleStateAsActionParas();
+//					nd.createSimpleStateAsBasicProcess().createProcessPara(proc_name, true);
+//					ndProcNameSet.add(proc_name);
 //					ndProcSet.add(nd.createSimpleStateAsBasicProcess());
 				} else{
-					//TO DO: to uncomment when createCompositeStateAsBasicProcess is defined
+					nd.createCompositeStateAsActionParas();
 					//ndProcSet.add(nd.createCompositeStateAsBasicProcess()); 
 				}
 				
@@ -2536,23 +3563,35 @@ operation composedNodes(nodes: Set<Node>): Z!CircusProcess{
 		if(nodes.size()<2){
 			throw "There are less than 2 nodes, so the parallel process can not be composed.";
 		} else{
-		
+			var ndActionNameSet = getNodeActionNameSet(nodes);
 			//we can directly use the node process ndProcSet.at(0),ndProcSet.at(1) to create parallel process directly, but to be consistent with the auto-gen CSPM, we use callProcess here
-			procForComposeNodes = createParallelProcess(Set{"share", "terminate"}, ndProcNameSet.at(0).createCallProcess(),ndProcNameSet.at(1).createCallProcess());
-			ndProcNameSet.removeAt(0);
-			ndProcNameSet.removeAt(0);
-						
-			while(ndProcNameSet.size()>0){
+//			procForComposeNodes = createParallelProcess(Set{"share", "terminate"}, ndProcNameSet.at(0).createCallProcess(),ndProcNameSet.at(1).createCallProcess());
+//			ndProcNameSet.removeAt(0);
+//			ndProcNameSet.removeAt(0);
+			
+			composeNodesAction = createParallelAction(Set{"share", "terminate"}, ndActionNameSet.at(0).createCallAction(),ndActionNameSet.at(1).createCallAction());
+			ndActionNameSet.removeAt(0);
+			ndActionNameSet.removeAt(0);		
+			while(ndActionNameSet.size()>0){
 
-				procForComposeNodes = createParallelProcess(Set{"share", "terminate"}, procForComposeNodes,ndProcNameSet.at(0).createCallProcess());			
-				ndProcNameSet.removeAt(0);
+				composeNodesAction = createParallelAction(Set{"share", "terminate"}, composeNodesAction,ndActionNameSet.at(0).createCallAction());			
+				ndActionNameSet.removeAt(0);
 			}
 
 		}
 		
+		return composeNodesAction.createActionPara("composeNodes");
 	}
-	
-	return procForComposeNodes;
+		
+}
+
+
+operation getNodeActionNameSet(nodes: Set<RC!Node>): Set<String>{
+	var nameSet = new Set<String>;
+	for(nd in nodes){
+		nameSet.add("Inactive_"+nd.FQN());
+	}
+	return nameSet;
 }
 
 operation String createCallProcess(): Z!CallProcess{
@@ -2571,6 +3610,9 @@ operation Z!ZName createCallProcess(): Z!CallProcess{
 	return proc;
 }
 
+
+//BasicProcss is formed by a (possibly empty) set of process paragraphs, an optional process state given as a schema and a mandatory main action definition.
+//so isBasicProc = true if it is a BasicProcss
 operation Z!CircusProcess createProcessPara(name: String, isBasicProc: Boolean): Z!ProcessPara{
 	var para = new Z!ProcessPara;
 	para.name = name.createZName();
@@ -2580,6 +3622,52 @@ operation Z!CircusProcess createProcessPara(name: String, isBasicProc: Boolean):
 	return para;
 }
 
+
+//channelset is a reference to a channelset name, therefore it is an RefExpr
+operation createParallelAction(
+	cs_name: String, 
+	left: Z!CircusAction, 
+	right: Z!CircusAction
+	):Z!ParallelAction{
+	
+	var action = new Z!ParallelAction;
+	action.channelSet = createChannelSet(cs_name.createRefExpr(false,false));
+	action.leftAction = left;
+	action.rightAction = right;
+	
+	action.leftNameSet = createNameSet(Set{});//the name set is empty
+	action.rightNameSet = createNameSet(Set{});
+	
+	return action;
+}
+
+
+//channelset is declared in the process directly using the channel names, so has no channelset name
+//therefore it is an BasicChannelSetExpr
+operation createParallelAction(
+	channel_names: Set<String>, 
+	left: Z!CircusAction, 
+	right: Z!CircusAction
+	):Z!ParallelAction{
+	
+	var action = new Z!ParallelAction;
+	action.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
+	action.leftAction = left;
+	action.rightAction = right;
+	
+	action.leftNameSet = createNameSet(Set{});//the name set is empty
+	action.rightNameSet = createNameSet(Set{});
+	
+	return action;
+}
+
+
+operation createNameSet(names: Set<String>): Z!CircusNameSet{
+	var nameSet = new Z!CircusNameSet;
+	nameSet.expr = names.createSetExpr();
+	
+	return nameSet;
+}
 
 
 //channelset is a reference to a channelset name, therefore it is an RefExpr
@@ -2596,7 +3684,6 @@ operation createParallelProcess(
 	
 	return proc;
 }
-
 
 //channelset is declared in the process directly using the channel names, so has no channelset name
 //therefore it is an BasicChannelSetExpr
@@ -2677,27 +3764,31 @@ operation Z!CircusChannelSet createChanSetPara(name: String): Z!ChannelSetPara{
 
 
 //CSP Rule 53, modified: 1. update action Trans into a prefixingaction, then 2. updated as a process: (enter.initial(nc.nodes) -> Trans)
-operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
+operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 	
 	var trans;
 
-	var tran_seq = Sequence<Z!CircusAction>;
+	
+	var tran_seq = new Sequence<Z!CircusAction>;
 	tran_seq = Sequence{};
 	for(t in self.transitions){
-		"line188".println();
-		("tran_seq = " + tran_seq).println();
 		tran_seq.add(t.createTransitionAsCircusAction());
 	}
-	var choice1_action1_left = tran_seq.createSequenceAsExtchoiceAction();
+	
+	var choice1_action1_left;
+	if(tran_seq.size() = 1){
+		choice1_action1_left = tran_seq.at(0);
+	} else if(tran_seq.size() > 1) {
+		choice1_action1_left = tran_seq.createSequenceAsExtchoiceAction();
+	}
 
 	
 	var choice1_action1_right = createPrefixingAction(createSynchCommunication("share"), createSkipAction());
 	
  	var choice1_action1 = createAction2("ExtChoiceAction", choice1_action1_left, choice1_action1_right);
-	"line 199".println();
-	("trans " + trans).println();
+
 //	var choice1 = createAction2("SeqAction", choice1_action1, "trans".createCallAction());
-	var choice1 = createAction2("SeqAction", choice1_action1, ("prefixedTransAction_"+self.FQN()).createCallAction());
+	var choice1 = createAction2("SeqAction", choice1_action1, ("Trans_"+self.FQN()).createCallAction());
 	
 	/* Start of Choice 2 creation*/
 	//Stop /\ (exit -> Skip)
@@ -2724,10 +3815,14 @@ operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
 	"line309".println();
 	vguards.println();
 	var Trans = readStateA(vguards, trans);
+	return Trans.createActionPara("Trans_"+self.FQN());
+	
+	
 	//Trans is an actioin and can not be a process, because it will be prefixed.
 	//end of CSP Rule53
 	
-	
+	/***********************************
+	To be moved to Rule 41
 	//to integrate the prefix "enter.initial"
 	//and to convert the action into a Process
 	var initial_name = self.nodes.selectOne(n|n.instanceOf(Initial)).FQN();
@@ -2735,12 +3830,17 @@ operation RC!NodeContainer createTransitionsAsCircusProcess(): Z!CircusProcess{
 	var commu = createSynchCommunication("enter_" + initial_name);
 	
 	var prefixAction = createPrefixingAction(commu, Trans);
+	prefixAction.createActionPara("prefixedTransAction_"+self.FQN());
+	//?? THIS ACTIONPARA SHOULD BE USED IN RULE 41 THROUGH A CALLACTION, THUS THE STRUCTURE IS MORE READABLE
+	//TO DO, REMOVE PREFIX IN THIS OPERATION TO RULE 41 SO THAT CONSISTENT WITH MANUAL.
+	**********************************/
 	
-	var actionParaSeq = new Sequence<Z!ActionPara>;
-	actionParaSeq = Sequence{prefixAction.createActionPara("prefixedTransAction_"+self.FQN())};
-	var proc = actionParaSeq.createBasicProcess("prefixedTransAction_"+ self.FQN());
+//	var actionParaSeq = new Sequence<Z!ActionPara>;
+//	actionParaSeq = Sequence{prefixAction.createActionPara("prefixedTransAction_"+self.FQN())};
+//	var proc = actionParaSeq.createBasicProcess("prefixedTransAction_"+ self.FQN());
 		
-	return proc;
+//	return proc;
+
 }
 
 
@@ -2908,120 +4008,250 @@ operation trigger(t: RC!Transition): Z!PrefixingAction{
 
 
 //CSP Rule 57
-operation RC!Junction createJunctionAsBasicProcess(): Z!BasicProcess{
-	var actionParaSeq = new Sequence<Z!ActionPara>;
+operation RC!Junction createJunctionAsActionParas() {
+//	var actionParaSeq = new Sequence<Z!ActionPara>;
 	
 		
-	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
-	
-	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", ("Activation_"+self.FQN()).createCallAction(), ("Termination_"+self.FQN()).createCallAction()));
+	Inactive.createActionPara("Inactive_"+self.FQN());
+//	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
 	
 		
-	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), "Active".createCallAction());
-	actionParaSeq.add(Activation.createActionPara("Activation"));
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), ("Active_"+self.FQN()).createCallAction());
+	Activation.createActionPara("Activation_"+self.FQN());
+//	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
 	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
-	actionParaSeq.add(Termination.createActionPara("Termination"));
+	Termination.createActionPara("Termination_"+self.FQN());
+//	actionParaSeq.add(Termination.createActionPara("Termination"));
 	
 	var seqAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), createSkipAction()));
 	
-	var Active = createAction2("SeqAction", seqAction1, "Inactive".createCallAction());
-	actionParaSeq.add(Active.createActionPara("Active"));
+	var Active = createAction2("SeqAction", seqAction1, ("Inactive_"+self.FQN()).createCallAction());
+	Active.createActionPara("Active_"+self.FQN());
+//	actionParaSeq.add(Active.createActionPara("Active"));
 	
-	var mainActionname = "Inactive";
+//	var mainActionname = "Inactive";
 	
-	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
-	return basicProcess;
+//	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+//	return basicProcess;
 }
 
 
 
 
 //CSP Rule 58
-operation RC!Final createFinalAsBasicProcess(): Z!BasicProcess{
-	var actionParaSeq = new Sequence<Z!ActionPara>;
+operation RC!Final createFinalAsActionParas() {
+//	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", ("Activation_"+self.FQN()).createCallAction(), ("Termination_"+self.FQN()).createCallAction()));
+	Inactive.createActionPara("Inactive_"+self.FQN());
+//	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
 	
 		
-	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), ("Entering_"+self.FQN()).createCallAction());
+	Activation.createActionPara("Activation_"+self.FQN());
+//	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
-	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
-	
-		
-	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), "Entering".createCallAction());
-	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
 	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
-	actionParaSeq.add(Termination.createActionPara("Termination"));
+	Termination.createActionPara("Termination_"+self.FQN());
+//	actionParaSeq.add(Termination.createActionPara("Termination"));
 	
-	var Entering = createPrefixingAction(createSynchCommunication("entered_" + self.FQN()), "Active".createCallAction());
-	actionParaSeq.add(Entering.createActionPara("Entering"));
+		
+	var Entering = createPrefixingAction(createSynchCommunication("entered_" + self.FQN()), ("Active_"+self.FQN()).createCallAction());
+	Entering.createActionPara("Entering_"+self.FQN());
+//	actionParaSeq.add(Entering.createActionPara("Entering"));
 	
 	
-	
-	var rightAction = createAction2("ExtChoiceAction", "Termination".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), "Interrupted".createCallAction()));
+	var rightAction = createAction2("ExtChoiceAction", ("Termination_"+self.FQN()).createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), ("Interrupted_"+self.FQN()).createCallAction()));
 	
 	var Active = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction);
-	actionParaSeq.add(Active.createActionPara("Active"));
+	Active.createActionPara("Active_"+self.FQN());
+//	actionParaSeq.add(Active.createActionPara("Active"));
 	
 	var rightAction2 = createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), "Inactive".createCallAction()));
 	
 	var Interrupted = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction2);
-	actionParaSeq.add(Interrupted.createActionPara("Interrupted"));
+	Interrupted.createActionPara("Interrupted_"+self.FQN());
+//	actionParaSeq.add(Interrupted.createActionPara("Interrupted_"+self.FQN()));
 	
-	var mainActionname = "Inactive";
-	
-	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
-	return basicProcess;
+//	var mainActionname = "Inactive";
+//	
+//	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+//	return basicProcess;
 }
 
 
 
 
 //CSP Rule 59
-operation RC!State createSimpleStateAsBasicProcess(): Z!BasicProcess{
-	var actionParaSeq = new Sequence<Z!ActionPara>;
+operation RC!State createSimpleStateAsActionParas() {
+//	var actionParaSeq = new Sequence<Z!ActionPara>;
 	
-	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", "Activation".createCallAction(), "Termination".createCallAction()));
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", ("Activation_"+self.FQN()).createCallAction(), ("Termination_"+self.FQN()).createCallAction()));
+	Inactive.createActionPara("Inactive_"+self.FQN());
+//	actionParaSeq.add(InactivePara);
 	
-	var InactivePara = Inactive.createActionPara("Inactive");
-	actionParaSeq.add(InactivePara);
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), ("Active_"+self.FQN()).createCallAction());
+	Activation.createActionPara("Activation_"+self.FQN());
+//	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
-
-	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), "Active".createCallAction());
-	actionParaSeq.add(Activation.createActionPara("Activation"));
 	
 	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
-	actionParaSeq.add(Termination.createActionPara("Termination"));
+	Termination.createActionPara("Termination_"+self.FQN());
+//	actionParaSeq.add(Termination.createActionPara("Termination"));
 	
-	var Active = createAction2("SeqAction", self.createStateActionAsCircusAction("EntryAction"), createAction2("SeqAction", "Behaviour".createCallAction(), "Exiting".createCallAction()));
-	actionParaSeq.add(Active.createActionPara("Active"));
+	var Active = createAction2("SeqAction", self.createStateActionAsCircusAction("EntryAction"), createAction2("SeqAction", ("Behaviour_"+self.FQN()).createCallAction(), ("Exiting_"+self.FQN()).createCallAction()));
+	Active.createActionPara("Active_"+self.FQN());
+//	actionParaSeq.add(Active.createActionPara("Active"));
 	
 	
-	var Behaviour = createPrefixingAction(createSynchCommunication("entered_" + self.FQN()), "During".createCallAction());
-	actionParaSeq.add(Behaviour.createActionPara("Behaviour"));
+	var Behaviour = createPrefixingAction(createSynchCommunication("entered_" + self.FQN()), ("During_"+self.FQN()).createCallAction());
+	Behaviour.createActionPara("Behaviour_" + self.FQN());
+//	actionParaSeq.add(Behaviour.createActionPara("Behaviour"));
 	
 	var duringLeft = createAction2("SeqAction", self.createStateActionAsCircusAction("DuringAction"), "SSTOP".createCallAction());
 	var duringRight = createPrefixingAction(createSynchCommunication("interrupt_" + self.FQN()), createSkipAction());
 	var During = createAction2("InterruptAction", duringLeft, duringRight);
-	"line328".println();
-	actionParaSeq.add(During.createActionPara("During"));
+	During.createActionPara("During_" + self.FQN());
+//	actionParaSeq.add(During.createActionPara("During"));
 	
 	
 	
 	var exitingAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createSkipAction()));
 	var exitingAction2 = self.createStateActionAsCircusAction("ExitAction");
-	var exitingAction3 = createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), "Inactive".createCallAction());
+	var exitingAction3 = createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), ("Inactive_" + self.FQN()).createCallAction());
 	var Exiting = createAction2("SeqAction", exitingAction1, createAction2("SeqAction", exitingAction2, exitingAction3));
-	actionParaSeq.add(Exiting.createActionPara("Exiting"));
+	Exiting.createActionPara("Exiting_" + self.FQN());
+//	actionParaSeq.add(Exiting.createActionPara("Exiting"));
 	
-	var mainActionname = "Inactive";
-	
-	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
-	return basicProcess;
+//	var mainActionname = "Inactive";
+//	
+//	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+//	return basicProcess;
 }
 
 
+//Rule 60
+operation RC!State createCompositeStateAsActionParas(){
+	
+	
+	/*******************************
+	Inactive
+	*******************************/
+	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", ("Activation_"+self.FQN()).createCallAction(), ("Termination_"+self.FQN()).createCallAction()));
+	Inactive.createActionPara("Inactive_"+self.FQN());
+	
+	
+	
+	/*******************************
+	Activation
+	*******************************/
+	var Activation = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), ("Active_"+self.FQN()).createCallAction());
+	Activation.createActionPara("Activation_"+self.FQN());
+	
+	
+	/*******************************
+	Termination
+	*******************************/
+	var Termination = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	Termination.createActionPara("Termination_"+self.FQN());
+	
+	
+	/*******************************
+	Active
+	*******************************/
+	var Active = createAction2("SeqAction", self.createStateActionAsCircusAction("EntryAction"), createAction2("SeqAction", ("Behaviour_"+self.FQN()).createCallAction(), ("Exiting_"+self.FQN()).createCallAction()));
+	Active.createActionPara("Active_"+self.FQN());
+	
+	
+	/*******************************
+	Behaviour
+	*******************************/
+	var cs = enteredSS(self).asSet().includingAll(Set{"terminate", "interrupt_" + nc(self).FQN()});//TBC
+	var ns1 = vars(self.nodes);
+	var ns2 = vars(s.actions.selectOne(a|a.instanceOf(RC!DuringAction)).action); //Manual: vars(s.during) TBC: s.during.type = statement? 
+	var Beh_act1 = ncbehaviour(self);
+	var Behaviour = createParallelAction(cs,ns1,ns2,Beh_act1.name.word.createCallAction(),"During_"+self.FQN().createCallAction());
+	Behaviour.createActionPara("Behaviour_" + self.FQN());
+	
+	
+	/*******************************
+	During
+	*******************************/
+	//step 1: [] e: enteredSS(s) . e -> Skip
+	var extchoiceSeq = new Sequence<Z!CircusAction>;
+	for(e in enteredSS(self)){
+		extchoiceSeq.add(createPrefixingAction(createSynchCommunication(e.name), createSkipAction()));
+	}
+	var ext_choice;
+	if(extchoiceSeq.size()>1){
+		ext_choice = extchoiceSeq.createSequenceAsExtchoiceAction();
+	} else if(extchoiceSeq.size()=1) {//lvars.size()=1
+		ext_choice = extchoiceSeq.at(0);
+	}
+	
+	//step 2: SStop /\ (step 1)
+	var During_act1 = createAction2("InterruptAction", "SSTOP".createCallAction(), ext_choice);
+	
+	
+	//step 3: RUN(enteredSS(s))
+	var run = createRunAction(enteredSS(self)); 
+	
+	//step 4 [s.during]action ; SStop
+	var During_act2 = createAction2("SeqAction", self.createStateActionAsCircusAction("DuringAction"), "SSTOP".createCallAction());
+	
+	//step 5: RUN ||| (during;SStop)
+	var During_act3  = createAction2("InterleaveAction", run, During_act2);
+	
+	
+	//step 6: interrupt.id(s) -> (SStop /\ end -> Skip)
+	var stopInterruptByEnd = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()));
+	var During_act4 = createPrefixingAction(createSynchCommunication("interrupt_" + self.FQN()), stopInterruptByEnd);
+	
+	
+	//step 7: interruption 
+	var During_act5 = createAction2("InterruptAction", During_act3, During_act4);
+	
+	
+	//step 8: entered.id(s) -> ()
+	During_act5 = createPrefixingAction(createSynchCommunication("enter_"+self.FQN()), During_act5);
+	
+	//step 9: sequential
+	var During = createAction2("SeqAction", During_act1, During_act5);
+	
+	During.createActionPara("During_" + self.FQN());
+	
+	
+	/*******************************
+	Exiting
+	*******************************/
+	var exitingAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("exit_" + nc(self).FQN()), createSkipAction()));
+	var exitingAction2 = self.createStateActionAsCircusAction("ExitAction");
+	var exitingAction3 = createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), ("Inactive_" + self.FQN()).createCallAction());
+	var Exiting = createAction2("SeqAction", exitingAction1, createAction2("SeqAction", exitingAction2, exitingAction3));
+	Exiting.createActionPara("Exiting_" + self.FQN());
 
+}
+
+
+operation createParallelAction(cs: Set<String>,
+							   ns1: Set<String>,
+							   ns2: Set<String>,
+							   left:Z!CircusAction,
+							   right:Z!CircusAction): Z!CircusAction{
+	
+	var action = new Z!ParallelAction;
+	action.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
+	action.leftAction = left;
+	action.rightAction = right;
+	
+	action.leftNameSet = createNameSet(ns1);
+	action.rightNameSet = createNameSet(ns2);
+	
+	return action;
+}
 
 
 operation Z!CircusAction createActionPara(name: String): Z!ActionPara{
@@ -4148,6 +5378,7 @@ operation String createRefExpr(explicit: Boolean, mixFix: Boolean): Z!RefExpr{
 	return refExpr;
 
 }
+
 operation RC!BooleanExp createBooleanExpr(): Z!RefExpr{
 	var boolExpr = new Z!RefExpr;
 	boolExpr.mixFix = false;
