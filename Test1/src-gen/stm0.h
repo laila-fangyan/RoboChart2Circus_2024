@@ -16,8 +16,8 @@
 #include "DataTypes.h"
 #include <assert.h>
 #include <set>
-#include "move2.h"
 #include "move.h"
+#include "move2.h"
 
 using namespace robocalc;
 using namespace robocalc::functions;
@@ -28,8 +28,9 @@ class stm0_StateMachine : public StateMachine<P1, ControllerType, stm0_StateMach
 	public:
 		ControllerType& controller;
 		int l;
-		int a;
+		const int c6;
 		const int c1;
+		int a;
 	public:
 		class S0_State_t : public robocalc::State<ControllerType>
 		{
@@ -43,6 +44,7 @@ class stm0_StateMachine : public StateMachine<P1, ControllerType, stm0_StateMach
 			
 				void enter() override
 				{
+					this->controller.a = 3;
 					this->controller.platform->move4();
 					this->controller.a1 = std::get<0>(this->controller.event1_in._args);
 					this->controller.event1_in.reset();
@@ -100,7 +102,7 @@ class stm0_StateMachine : public StateMachine<P1, ControllerType, stm0_StateMach
 	public:
 		stm0_StateMachine(P1& _platform, ControllerType& _controller, stm0_StateMachine<ControllerType>* topLevel = nullptr) 
 			: StateMachine<P1, ControllerType, stm0_StateMachine<ControllerType>>(_platform, _controller, topLevel), controller{_controller},
-			l(0), a(0), c1(0),
+			l(c6), c6(8), c1(0), a(0),
 			s0_State{_controller, this}, f0_State{_controller, this}
 			{};
 		stm0_StateMachine() = delete;
@@ -274,7 +276,7 @@ class stm0_StateMachine : public StateMachine<P1, ControllerType, stm0_StateMach
 					{
 						s0_State.exit();
 						event2_in.reset();
-						this->tryEmitTrigger1(std::tuple<int>{(this->a3) + (this->c2)});
+						this->tryEmitTrigger1(std::tuple<int>{((this->a3) + (this->c2)) + (this->c3)});
 						s0_State.enter();
 						currentState = s_s0;
 						return true;	

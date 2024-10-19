@@ -92,6 +92,7 @@ definition "[%= chansetpara.name.word%] = \<lbrace>
 
 definition relu :: "real \<Rightarrow> real" where
 	"relu x = max 0 x"
+
 [%var procparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ProcessPara));
 //procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.type().println();
 //
@@ -105,6 +106,7 @@ begin
 
 actions  is "(mychan, unit) action" where 
 "SSTOP = share  \<rightarrow>  SSTOP" |
+
 [%if(procpara.circusProcess.instanceOf(Z!BasicProcess)){%]
 [%=procpara.circusProcess.parseProc()%]
 [%} else {%]
@@ -123,6 +125,7 @@ end
 [%}%]
  
 end
+
 
 
 
@@ -174,7 +177,7 @@ end
 		str = str + "\"" + actpara.nameWithSig() + " = " + actpara.circusAction.parseAction() + "\"";
 		if(hasMore){
 
-			str = str +  " | "  + "\r\n";
+			str = str +  " | "  + "\r\n" + "\r\n";
 		}
 	}
 	return str;
@@ -547,7 +550,7 @@ end
 		} 
 		//refExpr is a function type expr
 		if(self.name.word = "_->_"){
-			return self.exprList.exprs.at(0).parseExpr() + " \\<RightArrow> " + self.exprList.exprs.at(1).parseExpr();
+			return self.exprList.exprs.at(0).parseExpr() + " \\<Rightarrow> " + self.exprList.exprs.at(1).parseExpr();
 		} 
 	} //else	
 	

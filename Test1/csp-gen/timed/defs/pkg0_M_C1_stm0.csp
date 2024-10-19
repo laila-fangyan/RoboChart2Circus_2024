@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 06-08-2024 22:28:39
+-- Automatically generated on 16-10-2024 16:09:50
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -56,8 +56,8 @@ exports
 	channel trigger1: InOut.core_int
 	
 	-- Declaring call and ret events for undefined operations
-	channel move2Call: core_real.core_int
 	channel move5Call: core_real.core_int
+	channel move2Call: core_real.core_int
 	channel move4Call
 	channel moveCall: core_real.core_int
 	
@@ -91,8 +91,8 @@ exports
 		event1,
 		event2,
 		trigger1
-	,	move2Call,
-		move5Call,
+	,	move5Call,
+		move2Call,
 		move4Call,
 		moveCall
 		|}
@@ -108,6 +108,8 @@ exports
 	
 	CLID_f0_clock_type(id__,
 			          const_pkg0_M_C1_stm0_c2,
+			          const_pkg0_M_C1_stm0_c3,
+			          const_pkg0_M_C1_stm0_c6,
 			          const_pkg0_M_C1_stm0_c1) = 
 		let
 			max = (clock_type_max(Union({
@@ -119,6 +121,8 @@ exports
 	
 	CLID_s0_clock_type(id__,
 			          const_pkg0_M_C1_stm0_c2,
+			          const_pkg0_M_C1_stm0_c3,
+			          const_pkg0_M_C1_stm0_c6,
 			          const_pkg0_M_C1_stm0_c1) = 
 		let
 			max = (clock_type_max(Union({
@@ -143,6 +147,8 @@ exports
 			Timed(OneStep) {
 				D__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) = 
 					dbisim(let
 						Inactive 	= share__choice(enter -> SKIP [] terminate -> SKIP) ; Active
@@ -155,8 +161,12 @@ exports
 				
 				VS_O__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) = D__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1)
 			}
 		
@@ -194,6 +204,8 @@ exports
 				-- 	if using a different recursion pattern.
 				D__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) = 
 				dbisim(let
 					-- IMPLEMENTATION NOTE: 
@@ -205,20 +217,26 @@ exports
 					
 					Termination = terminate -> SKIP
 					
-					Active 		= true&CALL__move4(
+					Active 		= share__choice(true & (share__choice(set_a!3 -> SKIP)));true&CALL__move4(
 								id__,
 							    const_pkg0_M_C1_stm0_c2,
+							    const_pkg0_M_C1_stm0_c3,
+							    const_pkg0_M_C1_stm0_c6,
 							    const_pkg0_M_C1_stm0_c1
 							);true&(share__choice(event1.in?a1 -> (SStop /\ set_a1!a1 -> SKIP)));true&(share__choice(event2.in?a3 -> (SStop /\ set_a3!a3 -> SKIP)));share__choice(share__choice(get_m?m -> true & (share__choice(set_m!Plus(m, const_pkg0_M_C1_stm0_c1, core_int) -> SKIP)))) ; 
 							 	  Behaviour ; 
 							 	  share__choice(exit -> SKIP) ; true&CALL__move1(
 							 	  			id__,
 							 	  		    const_pkg0_M_C1_stm0_c2,
+							 	  		    const_pkg0_M_C1_stm0_c3,
+							 	  		    const_pkg0_M_C1_stm0_c6,
 							 	  		    const_pkg0_M_C1_stm0_c1,
 							 	  			5
 							 	  		);true&CALL__move(
 							 	  			id__,
 							 	  		    const_pkg0_M_C1_stm0_c2,
+							 	  		    const_pkg0_M_C1_stm0_c3,
+							 	  		    const_pkg0_M_C1_stm0_c6,
 							 	  		    const_pkg0_M_C1_stm0_c1,
 							 	  			1,
 							 	  			2
@@ -229,6 +247,8 @@ exports
 					During 		= ((share__choice(share__choice(get_l?l -> share__choice(get_a3?a3 -> true & (share__choice(set_a!Plus(Plus(a3, l, core_int), 1, core_int) -> SKIP)))));true&CALL__move2(
 								id__,
 							    const_pkg0_M_C1_stm0_c2,
+							    const_pkg0_M_C1_stm0_c3,
+							    const_pkg0_M_C1_stm0_c6,
 							    const_pkg0_M_C1_stm0_c1,
 								4,
 								5
@@ -238,26 +258,34 @@ exports
 					
 				VS_O__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) = 
 				dbisim(let
 					Inactive 	= share__choice(enter -> SKIP [] terminate -> SKIP) ; Active
 					
 					Termination = terminate -> SKIP
 					
-					Active 		= true&CALL__move4(
+					Active 		= share__choice(true & (share__choice(set_a!3 -> SKIP)));true&CALL__move4(
 								id__,
 							    const_pkg0_M_C1_stm0_c2,
+							    const_pkg0_M_C1_stm0_c3,
+							    const_pkg0_M_C1_stm0_c6,
 							    const_pkg0_M_C1_stm0_c1
 							);true&(share__choice(event1.in?a1 -> (SStop /\ set_a1!a1 -> SKIP)));true&(share__choice(event2.in?a3 -> (SStop /\ set_a3!a3 -> SKIP)));share__choice(share__choice(get_m?m -> true & (share__choice(set_m!Plus(m, const_pkg0_M_C1_stm0_c1, core_int) -> SKIP)))) ; 
 							 	  Behaviour ; 
 							 	  share__choice(exit -> SKIP) ; true&CALL__move1(
 							 	  			id__,
 							 	  		    const_pkg0_M_C1_stm0_c2,
+							 	  		    const_pkg0_M_C1_stm0_c3,
+							 	  		    const_pkg0_M_C1_stm0_c6,
 							 	  		    const_pkg0_M_C1_stm0_c1,
 							 	  			5
 							 	  		);true&CALL__move(
 							 	  			id__,
 							 	  		    const_pkg0_M_C1_stm0_c2,
+							 	  		    const_pkg0_M_C1_stm0_c3,
+							 	  		    const_pkg0_M_C1_stm0_c6,
 							 	  		    const_pkg0_M_C1_stm0_c1,
 							 	  			1,
 							 	  			2
@@ -268,6 +296,8 @@ exports
 					During 		= ((share__choice(share__choice(get_l?l -> share__choice(get_a3?a3 -> true & (share__choice(set_a!Plus(Plus(a3, l, core_int), 1, core_int) -> SKIP)))));true&CALL__move2(
 								id__,
 							    const_pkg0_M_C1_stm0_c2,
+							    const_pkg0_M_C1_stm0_c3,
+							    const_pkg0_M_C1_stm0_c6,
 							    const_pkg0_M_C1_stm0_c1,
 								4,
 								5
@@ -280,6 +310,8 @@ exports
 				
 				StateClocks(id__,
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1) = terminate -> SKIP
 				
 				stateClockSync = {||}
@@ -302,6 +334,8 @@ exports
 				--	Rule: behaviours(Node)
 				D__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) = 
 					dbisim(let
 						Inactive 	= share__choice(enter -> SKIP [] terminate -> SKIP) ; Entering
@@ -314,8 +348,12 @@ exports
 					
 				VS_O__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) = D__(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1)
 			}
 		
@@ -331,21 +369,29 @@ exports
 		-- If it is in the context of a controller, the required operations not provided by the
 		-- controller will be declared here, and the defined operations will be defined in the
 		-- context of the Controller module, and therefore within scope of the state machine module.
-		CALL__move2(id__,
-				    const_pkg0_M_C1_stm0_c2,
-				    const_pkg0_M_C1_stm0_c1,
-					param_lv,
-					param_a) = EDeadline(move2Call.param_lv.param_a,0)
 		CALL__move5(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1,
 					param_lv,
 					param_a) = EDeadline(move5Call.param_lv.param_a,0)
+		CALL__move2(id__,
+				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
+				    const_pkg0_M_C1_stm0_c1,
+					param_lv,
+					param_a) = EDeadline(move2Call.param_lv.param_a,0)
 		CALL__move4(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = EDeadline(move4Call,0)
 		CALL__move(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1,
 					param_lv,
 					param_a) = EDeadline(moveCall.param_lv.param_a,0)
@@ -355,12 +401,16 @@ exports
 		-- STM processes
 		STM(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = -- RULE: [[stm:StateMachineDef]]_STM^nops : CSPProcess
 		( 
 			(
 				(
 					(IteratedStateful(id__,
 							    const_pkg0_M_C1_stm0_c2,
+							    const_pkg0_M_C1_stm0_c3,
+							    const_pkg0_M_C1_stm0_c6,
 							    const_pkg0_M_C1_stm0_c1) \ {terminate} ; share__choice(terminate -> SKIP))
 				 	[[ share__ <- x__ | x__ <- {|set_EXT_m,set_EXT_a1,set_EXT_a3|} ]]
 				)
@@ -370,17 +420,23 @@ exports
 			[| union(sharedVarSync,{terminate}) |]
 			dbisim(sharedVarMemory(id__,
 					    const_pkg0_M_C1_stm0_c2,
+					    const_pkg0_M_C1_stm0_c3,
+					    const_pkg0_M_C1_stm0_c6,
 					    const_pkg0_M_C1_stm0_c1))
 		)\sharedVarHide
 		
 		STM_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = -- RULE: [[stm:StateMachineDef]]_STM^nops : CSPProcess
 		( 
 			(
 				(
 					(IteratedStateful_VS_O(id__,
 							    const_pkg0_M_C1_stm0_c2,
+							    const_pkg0_M_C1_stm0_c3,
+							    const_pkg0_M_C1_stm0_c6,
 							    const_pkg0_M_C1_stm0_c1) \ {terminate} ; share__choice(terminate -> SKIP))
 				 	[[ share__ <- x__ | x__ <- {|set_EXT_m,set_EXT_a1,set_EXT_a3|} ]]
 				)
@@ -390,18 +446,22 @@ exports
 			[| union(sharedVarSync,{terminate}) |]
 			dbisim(sharedVarMemory(id__,
 					    const_pkg0_M_C1_stm0_c2,
+					    const_pkg0_M_C1_stm0_c3,
+					    const_pkg0_M_C1_stm0_c6,
 					    const_pkg0_M_C1_stm0_c1))
 		)\sharedVarHide
 		
 		-- Transitions
 		Transitions(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = ((let
 			Trans = share__choice(get_a3?a3 -> TimeOut_1(
 				 (share__ -> SKIP
 				 [] dbisim((true)&(internal__!NID_i0 -> SKIP ;  ((SKIP ; s0::enter -> SKIP))))
 				 [] dbisim((true)&(stop__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; f0::enter -> SKIP)))
-				 [] dbisim((event2__!NID_s0.in?a:{a|a <- core_int, (a3>4)} -> share__choice(set_a!a -> SKIP) ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; share__choice(get_a3?a3 -> true&(share__choice(trigger1.out!(Plus(a3, const_pkg0_M_C1_stm0_c2, core_int)) -> SKIP))) ; s0::enter -> SKIP)))
+				 [] dbisim((event2__!NID_s0.in?a:{a|a <- core_int, (a3>4)} -> share__choice(set_a!a -> SKIP) ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; share__choice(get_a3?a3 -> true&(share__choice(trigger1.out!(Plus(Plus(a3, const_pkg0_M_C1_stm0_c2, core_int), const_pkg0_M_C1_stm0_c3, core_int)) -> SKIP))) ; s0::enter -> SKIP)))
 				 []
 				 (interrupt -> share__choice(exit -> SKIP) ; share__choice(exited -> terminate -> SKIP))
 				 []
@@ -420,6 +480,8 @@ exports
 		-- Named process definitions
 		MachineBody(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((
 			let
@@ -446,14 +508,20 @@ exports
 						 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
 						   i0::D__(id__,
 						   		    const_pkg0_M_C1_stm0_c2,
+						   		    const_pkg0_M_C1_stm0_c3,
+						   		    const_pkg0_M_C1_stm0_c6,
 						   		    const_pkg0_M_C1_stm0_c1)
 						   [| { share__, terminate } |] (
 						   s0::D__(id__,
 						   		    const_pkg0_M_C1_stm0_c2,
+						   		    const_pkg0_M_C1_stm0_c3,
+						   		    const_pkg0_M_C1_stm0_c6,
 						   		    const_pkg0_M_C1_stm0_c1)
 						   [| { share__, terminate } |] (
 						   f0::D__(id__,
 						   		    const_pkg0_M_C1_stm0_c2,
+						   		    const_pkg0_M_C1_stm0_c3,
+						   		    const_pkg0_M_C1_stm0_c6,
 						   		    const_pkg0_M_C1_stm0_c1)
 						   )
 						   )
@@ -471,6 +539,8 @@ exports
 						 			|}) |]
 						 ((i0::enter -> Transitions(id__,
 						 		    const_pkg0_M_C1_stm0_c2,
+						 		    const_pkg0_M_C1_stm0_c3,
+						 		    const_pkg0_M_C1_stm0_c6,
 						 		    const_pkg0_M_C1_stm0_c1))
 						  [[ share__ <- x__ | x__ <- {| share__,setL_a3 |} ]]
 						  [[set_a <- setR_a]]
@@ -493,6 +563,8 @@ exports
 				 [| union(stateClockSync,{terminate}) |]
 				 StateClocks(id__,
 				 		          const_pkg0_M_C1_stm0_c2,
+				 		          const_pkg0_M_C1_stm0_c3,
+				 		          const_pkg0_M_C1_stm0_c6,
 				 		          const_pkg0_M_C1_stm0_c1)
 				)\diff(stateClockSync,enteredSS))
 				 [| {| interrupt |} |] SKIP)
@@ -501,20 +573,28 @@ exports
 		
 		Behaviour(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((let
 				stateClockSync = {|get_CLID_s0,s0::entered|}
 			 within
 				(MachineBody(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) [| union(stateClockSync,{terminate}) |] StateClocks(id__,
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1)) \ union(stateClockSync,enteredSS)
 			)
 			)
 		
 		IteratedBehaviour(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((let
 				stateClockSync = {|get_CLID_s0,s0::entered|}
@@ -523,10 +603,14 @@ exports
 					sbisim(
 						MachineBody(id__,
 								    const_pkg0_M_C1_stm0_c2,
+								    const_pkg0_M_C1_stm0_c3,
+								    const_pkg0_M_C1_stm0_c6,
 								    const_pkg0_M_C1_stm0_c1)
 						[| {|get_CLID_s0,s0::entered,terminate|} |]
 						dbisim(Clock_CLID_s0(id__,0,
 								          const_pkg0_M_C1_stm0_c2,
+								          const_pkg0_M_C1_stm0_c3,
+								          const_pkg0_M_C1_stm0_c6,
 								          const_pkg0_M_C1_stm0_c1))
 					)\{|get_CLID_s0|}
 				)
@@ -536,6 +620,8 @@ exports
 		
 		Stateful(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			((let
 				getsetLocalChannels = {|get_l,set_l,
@@ -544,12 +630,18 @@ exports
 			within
 				(Behaviour(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) 
 				 [| union(union(getsetLocalChannels,clockSync),{terminate}) |] 
 				 (varMemory(id__,
 				 		    const_pkg0_M_C1_stm0_c2,
+				 		    const_pkg0_M_C1_stm0_c3,
+				 		    const_pkg0_M_C1_stm0_c6,
 				 		    const_pkg0_M_C1_stm0_c1) [| {terminate} |] Clocks(id__,
 				 		          const_pkg0_M_C1_stm0_c2,
+				 		          const_pkg0_M_C1_stm0_c3,
+				 		          const_pkg0_M_C1_stm0_c6,
 				 		          const_pkg0_M_C1_stm0_c1))
 			 	)\union(getsetLocalChannels,clockSync)
 			)
@@ -557,6 +649,8 @@ exports
 		
 		IteratedStateful(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) =
 			(dbisim(
 				sbisim(
@@ -564,13 +658,15 @@ exports
 						sbisim(
 							IteratedBehaviour(id__,
 									    const_pkg0_M_C1_stm0_c2,
+									    const_pkg0_M_C1_stm0_c3,
+									    const_pkg0_M_C1_stm0_c6,
 									    const_pkg0_M_C1_stm0_c1)
 							[| {|get_a,set_a,terminate|} |]
 							Memory_a(0)
 						)\{|get_a,set_a|}
 					)
 					[| {|get_l,set_l,terminate|} |]
-					Memory_l(0)
+					Memory_l(const_pkg0_M_C1_stm0_c6)
 				)\{|get_l,set_l|}
 			)
 			)
@@ -578,6 +674,8 @@ exports
 		-- Visible counterparts
 		MachineBody_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((
 			let
@@ -604,14 +702,20 @@ exports
 						 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
 						   i0::VS_O__(id__,
 						   		    const_pkg0_M_C1_stm0_c2,
+						   		    const_pkg0_M_C1_stm0_c3,
+						   		    const_pkg0_M_C1_stm0_c6,
 						   		    const_pkg0_M_C1_stm0_c1)
 						   [| { share__, terminate } |] (
 						   s0::VS_O__(id__,
 						   		    const_pkg0_M_C1_stm0_c2,
+						   		    const_pkg0_M_C1_stm0_c3,
+						   		    const_pkg0_M_C1_stm0_c6,
 						   		    const_pkg0_M_C1_stm0_c1)
 						   [| { share__, terminate } |] (
 						   f0::VS_O__(id__,
 						   		    const_pkg0_M_C1_stm0_c2,
+						   		    const_pkg0_M_C1_stm0_c3,
+						   		    const_pkg0_M_C1_stm0_c6,
 						   		    const_pkg0_M_C1_stm0_c1)
 						   )
 						   )
@@ -629,6 +733,8 @@ exports
 						 			|}) |]
 						 ((i0::enter -> Transitions(id__,
 						 		    const_pkg0_M_C1_stm0_c2,
+						 		    const_pkg0_M_C1_stm0_c3,
+						 		    const_pkg0_M_C1_stm0_c6,
 						 		    const_pkg0_M_C1_stm0_c1))
 						  [[ share__ <- x__ | x__ <- {| share__,setL_a3 |} ]]
 						  [[set_a <- setR_a]]
@@ -651,6 +757,8 @@ exports
 				 [| union(stateClockSync,{terminate}) |]
 				 StateClocks(id__,
 				 		          const_pkg0_M_C1_stm0_c2,
+				 		          const_pkg0_M_C1_stm0_c3,
+				 		          const_pkg0_M_C1_stm0_c6,
 				 		          const_pkg0_M_C1_stm0_c1)
 				)\diff(stateClockSync,enteredSS))
 				 [| {| interrupt |} |] SKIP)
@@ -659,20 +767,28 @@ exports
 		
 		Behaviour_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((let
 				stateClockSync = {|get_CLID_s0,s0::entered|}
 			 within
 				(MachineBody_VS_O(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) [| union(stateClockSync,{terminate}) |] StateClocks(id__,
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1)) \ diff(union(stateClockSync,enteredSS),enteredSS)
 			)
 			)
 		
 		IteratedBehaviour_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((let
 				stateClockSync = {|get_CLID_s0,s0::entered|}
@@ -681,10 +797,14 @@ exports
 					sbisim(
 						MachineBody_VS_O(id__,
 								    const_pkg0_M_C1_stm0_c2,
+								    const_pkg0_M_C1_stm0_c3,
+								    const_pkg0_M_C1_stm0_c6,
 								    const_pkg0_M_C1_stm0_c1)
 						[| {|get_CLID_s0,s0::entered,terminate|} |]
 						dbisim(Clock_CLID_s0(id__,0,
 								          const_pkg0_M_C1_stm0_c2,
+								          const_pkg0_M_C1_stm0_c3,
+								          const_pkg0_M_C1_stm0_c6,
 								          const_pkg0_M_C1_stm0_c1))
 					)\{|get_CLID_s0|}
 				)
@@ -694,6 +814,8 @@ exports
 		
 		Stateful_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = 
 			dbisim((let
 				getsetLocalChannels = {|get_l,set_l,
@@ -702,12 +824,18 @@ exports
 			within
 				(Behaviour_VS_O(id__,
 						    const_pkg0_M_C1_stm0_c2,
+						    const_pkg0_M_C1_stm0_c3,
+						    const_pkg0_M_C1_stm0_c6,
 						    const_pkg0_M_C1_stm0_c1) 
 				 [| union(union(getsetLocalChannels,clockSync),{terminate}) |] 
 				 (varMemory(id__,
 				 		    const_pkg0_M_C1_stm0_c2,
+				 		    const_pkg0_M_C1_stm0_c3,
+				 		    const_pkg0_M_C1_stm0_c6,
 				 		    const_pkg0_M_C1_stm0_c1) [| {terminate} |] Clocks(id__,
 				 		          const_pkg0_M_C1_stm0_c2,
+				 		          const_pkg0_M_C1_stm0_c3,
+				 		          const_pkg0_M_C1_stm0_c6,
 				 		          const_pkg0_M_C1_stm0_c1))
 			 	)\union(getsetLocalChannels,clockSync)
 			)
@@ -715,6 +843,8 @@ exports
 		
 		IteratedStateful_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) =
 			(dbisim(
 				sbisim(
@@ -722,13 +852,15 @@ exports
 						sbisim(
 							IteratedBehaviour_VS_O(id__,
 									    const_pkg0_M_C1_stm0_c2,
+									    const_pkg0_M_C1_stm0_c3,
+									    const_pkg0_M_C1_stm0_c6,
 									    const_pkg0_M_C1_stm0_c1)
 							[| {|get_a,set_a,terminate|} |]
 							Memory_a(0)
 						)\{|get_a,set_a|}
 					)
 					[| {|get_l,set_l,terminate|} |]
-					Memory_l(0)
+					Memory_l(const_pkg0_M_C1_stm0_c6)
 				)\{|get_l,set_l|}
 			)
 			)
@@ -753,7 +885,9 @@ exports
 		-- varMemory process
 		varMemory(id__,
 				    const_pkg0_M_C1_stm0_c2,
-				    const_pkg0_M_C1_stm0_c1) = Memory_l(0)
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
+				    const_pkg0_M_C1_stm0_c1) = Memory_l(const_pkg0_M_C1_stm0_c6)
 		[| { terminate } |] (
 		Memory_a(0)
 		)
@@ -763,75 +897,123 @@ exports
 		-- Definition of the behaviour of state machines (default, optimised, visible, visible and optimised)
 		FVS__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = STM_VS_O(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) \ localClockResets
 		D__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = timed_priority(STM(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) \ union(internal_events,localClockResets))
 		O__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = dbisim(D__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1))
 		VS__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = FVS__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1)
 		VS_O__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = dbisim(FVS__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1))
 		HEXT__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = O__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) [|shared_variable_events|] SKIP
 		FVS_C__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = dbisim(timed_priority(STM(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) \ internal_events))
 		HUP__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = timed_priority(O__(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) [|{share__}|] SKIP)
 		
 		-- Clocks
 		
 		Clocks(id__,
 				          const_pkg0_M_C1_stm0_c2,
+				          const_pkg0_M_C1_stm0_c3,
+				          const_pkg0_M_C1_stm0_c6,
 				          const_pkg0_M_C1_stm0_c1) = terminate -> SKIP
 		
 		clockSync = {||}
 		
 		Clock_CLID_s0(id__,x__,
 				          const_pkg0_M_C1_stm0_c2,
+				          const_pkg0_M_C1_stm0_c3,
+				          const_pkg0_M_C1_stm0_c6,
 				          const_pkg0_M_C1_stm0_c1) = 
 			TimeOut_1(
 				s0::entered -> Clock_CLID_s0(id__,0,
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1)
 				[]
 				get_CLID_s0!x__ -> Clock_CLID_s0(id__,x__,
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1)
 				[]
 				terminate -> SKIP,Clock_CLID_s0(id__,clock_type_plus(x__,1,CLID_s0_clock_type(id__,
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1)),
 						          const_pkg0_M_C1_stm0_c2,
+						          const_pkg0_M_C1_stm0_c3,
+						          const_pkg0_M_C1_stm0_c6,
 						          const_pkg0_M_C1_stm0_c1))
 		
 		StateClocks(id__,
 				          const_pkg0_M_C1_stm0_c2,
+				          const_pkg0_M_C1_stm0_c3,
+				          const_pkg0_M_C1_stm0_c6,
 				          const_pkg0_M_C1_stm0_c1) = dbisim(Clock_CLID_s0(id__,0,
 				          const_pkg0_M_C1_stm0_c2,
+				          const_pkg0_M_C1_stm0_c3,
+				          const_pkg0_M_C1_stm0_c6,
 				          const_pkg0_M_C1_stm0_c1))
 		
 		stateClockSync = {|get_CLID_s0,s0::entered|}
@@ -866,6 +1048,8 @@ exports
 		-- sharedVarMemory process
 		sharedVarMemory(id__,
 				    const_pkg0_M_C1_stm0_c2,
+				    const_pkg0_M_C1_stm0_c3,
+				    const_pkg0_M_C1_stm0_c6,
 				    const_pkg0_M_C1_stm0_c1) = Memory_m(0)
 		[| { terminate } |] (
 		Memory_a1((0,0))

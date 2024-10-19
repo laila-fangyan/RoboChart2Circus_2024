@@ -35,7 +35,7 @@ R39/40 Node container
 R41 ncCoreBehaviour (including C.2.2)
 R52 composeNodes
 R53 transitions
-R54 transition ??
+
 R57-R60 a set of ActionParas
 
 The actions in the ActionParas are revoked using actionPara.name.word.CallAction()
@@ -44,14 +44,36 @@ In this way, the actions in the ActionPara are presented standalone, and only th
 
 
 - Action
-Rule21
-Rule22
-Rule55
-Rule62-73
+R21
+R22
+R54 transition 
+R55
+R62-73
 
 only actions not actionparas are generated for these rule, so their complete model will be part of the higher level action/process model.
 
 01.Sep.2024
+******************************/
+
+
+/****************************
+All memories are PARAMITERIZED 
+
+R12 modMemory
+R18 SingleBuffer
+R20 ctrlMemory
+R35 individual variable memory
+R37 individual shared variable memory
+
+
+
+CSP Exception in Rule 1 and Rule 19
+option 1: to create Exception action/process in Circus metamodel.
+		  This is not adopted as we wish to keep the work be consistent with Circus AST
+
+option 2: to remove Exception by pushing end event into the process
+
+06.Sep.2024
 ******************************/
 
 
@@ -76,38 +98,57 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0" or p.name = "Chemical");
 pkg.println();
 
-for(stm in RC!StateMachineDef.all().selectOne(s|s.name = "stm0")){
-	stm.nodes.println();
-//	for(nd in stm.nodes){
-//		if(nd.instanceOf(RC!Junction)){
-//			nd.createJunctionAsActionParas();
-//		}
-//		if(nd.instanceOf(RC!Final)){
-//			nd.createFinalAsActionParas();
-//		}
-//		if(nd.instanceOf(RC!State) and not nd.instanceOf(RC!Final)){
-//			nd.createSimpleStateAsActionParas();
-//		}
+//for(stm in RC!StateMachineDef.all().selectOne(s|s.name = "stm0" or s.name = "GasAnalysis_stm")){
+//	stm.nodes.println();
+////	for(nd in stm.nodes){
+////		if(nd.instanceOf(RC!Junction)){
+////			nd.createJunctionAsActionParas();
+////		}
+////		if(nd.instanceOf(RC!Final)){
+////			nd.createFinalAsActionParas();
+////		}
+////		if(nd.instanceOf(RC!State) and not nd.instanceOf(RC!Final)){
+////			nd.createSimpleStateAsActionParas();
+////		}
+////	}
+//	
+////	composeNodes(stm.nodes);
+////	ncCoreBehaviour(stm);
+////	ncBehaviour(stm);
+////	stateful(stm);
+////	varMemory(stm);
+////sharedVarMemory(stm);
+//
+//
+//
+//	for(p in Z!ActionPara.all){
+//		actionParaSeq.add(createCallOpActionPara(op));
 //	}
-	
-//	composeNodes(stm.nodes);
-//	ncCoreBehaviour(stm);
-//	ncBehaviour(stm);
-//	stateful(stm);
-	createStateMachineDefAsActionPara(stm);
-}
+//	createStateMachineDefAsActionPara(stm);
+//	
+//	var actionParaSeq = new Sequence<Z!ActionPara>;
+//	for(p in Z!Para.all().select(p| p.instanceOf(Z!ActionPara))){
+//		actionParaSeq.add(p);
+//	}
+//
+//	var mainActionname = "stm_mainaction_" + stm.FQN();
+//	
+//	var basicProcess = actionParaSeq.createBasicProcess(mainActionname).createProcessPara("stm_" + stm.FQN(), false);
+//}
+
 
 for(c in RC!ControllerDef.all().selectOne(c|c.name = "C1")){
-	for(op in c.lOperations){
-		("line 87, op = " + op).println();
-		if(op.nodes.size()>0){
-			createOperationDefAsActionPara(op);
-		}
-	}
-}
-//replaceRef();
+//	for(op in c.lOperations){
+//		("line 87, op = " + op).println();
+//		if(op.nodes.size()>0){
+//			createOperationDefAsActionPara(op);
+//		}
+//	}
 
-/** TEMPORARILY COMMENTTED OUT 
+	createControllerAsProcessPara(c);
+}
+replaceRef();
+
 //To transform RoboChart user defined types
 createTypeDeclPara(pkg);
 
@@ -115,6 +156,7 @@ createTypeDeclPara(pkg);
 createFunctionDefsAsAxParas(pkg);
 
 
+/** TEMPORARILY COMMENTTED OUT 
 //To copy the shared vardecls as local vardecls, then replace all the shared with local, then FQN in localdecls
 
 
@@ -138,29 +180,22 @@ for(stm in RC!StateMachineDef.all()){
 }
 
 
-
-
-
-
-
-
-
-
 //var nc = RC!StateMachineDef.all().at(0);
 
 
 
 //ncBehaviour(nc);
-
+ END OF TEMPORARILY COMMENTTED OUT ***/
 var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators"});
 	
-for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!FreePara)  or p.instanceOf(Z!GivenPara)  or p.instanceOf(Z!AxPara) or p.instanceOf(Z!ProcessPara) )){
+for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or p.instanceOf(Z!ChannelPara) or p.instanceOf(Z!FreePara)  or p.instanceOf(Z!GivenPara)  or p.instanceOf(Z!AxPara) or p.instanceOf(Z!ProcessPara) //or p.instanceOf(Z!ActionPara)
+)){
 	zsect.addPara2ZSect(p);	
 }
 
 
 createSpec(zsect);
- END OF TEMPORARILY COMMENTTED OUT ***/
+
  
 /*
 
@@ -640,15 +675,18 @@ operation createGenOpApplForFuncDecl(
 }
 
 
-//used in declareConstants
+//used in declareConstants and Rule 35
 operation createVarDecl(c: RC!Variable):Z!VarDecl{
 	var varDecl = new Z!VarDecl;
-	
+	("line 670, c = " + c).println();
 	varDecl.nameList = createNameList(Sequence{c.name});
+	("line 671, c.type = " + c.type).println();
 	varDecl.expr = c.type.createTypeExpr();
 
 	return varDecl;
 }
+
+
 
 
 //CSP Rule 1 
@@ -664,40 +702,74 @@ operation createModuleAsProcessPara(m: RC!RCModule): Z!ProcessPara{
 		evasyncs.add(c.eto.name);
 		evasyncs.add(c.efrom.name);
 	}	
+	evasyncs.add("terminate");
 	
 	//to create processpara for composeControllers(m,ctrls,cons),so that it can be called
 	var composeControllersPara = composeControllers(m,ctrls,cons).createProcessPara("composeControllers_" + m.FQN(), false);
 	
-	//step 1: parallel
+		
+	
+	//step1: paralleled buffers
+	//Manual modifiey: [| terminate |] c: asyncs . buffer(c)
+	//Manual original: it is interleaving buffers, terminate is added to deal with EXCEPTION operator issue
+	
+	var bufferSet;
+	for(c in asyncs){
+		bufferSet.add(buffer(c).name.word.createCallProcess());
+	}
+	var proc1 = createParallelProcessFromProcSet(Set{"terminate"},
+											 bufferSet);
+	// terminate is added to deal with EXCEPTION operator issue
+	
+	//step 2: parallel
 	//Manual: modMemory(m) |[memoryChannels1(m)]| composeControllers(m,ctrls,cons)
-	var action = createParallelAction(memoryChannels(m), modMemory(m).name.word.createCallProcess(), composeControllersPara.name.word.createCallProcess());
+	var memoryChannels = memoryChannels(m);
+	memoryChannels.add("terminate");
+	//this terminate is added to deal with the EXCEPTION operator issue
+	var proc2 = createParallelProcess(memoryChannels(m), 
+									  modMemory(m).name.word.createCallProcess(), 
+									  composeControllersPara.name.word.createCallProcess()
+									  );
 	
-	//step 2: parallel with buffer(c)
-	var parallelActionSet;
-	for(c in evasyncs){
-		parallelActionSet.add(createParallelAction(evasyncs, buffer(c).name.word.createCallProcess(), action));
-	}
-	
-	//step 3: interleaving
-	if(parallelActionSet.size()=1){
-		action = parallelActionSet.at(0);
-	} else if(parallelActionSet.size()>1){
-		action = parallelActionSet.createInterleaveAction();
-	}
+	//step 3: parallel
+	//Manual: proc1 [|evasyncs union {terminate}|]  proc2
+	var proc = createParallelProcess(evasyncs.
+									 proc1,
+									 proc2);
 	
 	//step 4: hide
-	action = action.createHideAction(hiddenModuleChannels(m));
+	var hiddenModuleChannels = hiddenModuleChannels(m);
+	hiddenModuleChannels.add("terminate");	
+	//this terminate is added to deal with the EXCEPTION operator issue
+	
+	proc = proc.createHideProcess(hiddenModuleChannels);
 	
 	//step 5: exception
-	action = createExceptionAction(Set{"terminate"}, action, createSkipAction());  //TBC ??
+//	proc = createExceptionProcess(Set{"terminate"}, proc, createSkipAction());  //TBC ??
 	
 	//step 6: hide terminate
-	action = action.createHideAction(Sequence{"terminate"});
+//	proc = proc.createHideProcess(Sequence{"terminate"});
 	
-	//step 7: processpara
-	action.createProcessPara("Module_" + m.FQN(), false);
+	//step 5: processpara
+	proc.createProcessPara("RCModule_" + m.FQN(), false);
 }
 
+
+operation Set<Z!CircusProcess> createInterleaveProcess(): Z!CircusProcess{
+	var proc;
+	var size = self.size();
+
+	var i = 0;
+	proc = createProcess2("InterleaveProcess", self.at(0), self.at(1));
+	i = i + 2;
+	if(size > 2){
+	while(i<size){
+			proc = createProcess2("InterleaveProcess", proc, self.at(i));
+			i = i + 1;
+		}
+	}
+	return proc;
+}
 
 
 operation Set<Z!CircusAction> createInterleaveAction(): Z!CircusAction{
@@ -709,7 +781,7 @@ operation Set<Z!CircusAction> createInterleaveAction(): Z!CircusAction{
 	i = i + 2;
 	if(size > 2){
 	while(i<size){
-			action = createAction2("InterleaveAction", extchoiceAction, self.at(i));
+			action = createAction2("InterleaveAction", action, self.at(i));
 			i = i + 1;
 		}
 	}
@@ -903,14 +975,181 @@ operation requiredOperations(c: RC!Context): Set<RC!Operation>{
 }
 
 
-//Rule 12
+
+
+//Rule 12, Memory in the manual is factored out as a function "mod_memory"
 operation modMemory(m: RC!RCModule): Z!ProcessPara{
+	var rp = m.nodes.select(n|n.instanceOf(RC!RoboticPlatform));
+	var ctrls = m.nodes.select(n|n.instanceOf(RC!Controller));
+	var lvars = allLocalVariables(rp).asSequence();
 
-
+	var varsAndconts = lvars.includingAll(allConstants(rp));
+	
+	return mod_memory(varsAndconts,lvars,rp,ctrls,m);
+	//mod_memory returns a processPara, not a process. TBC
+//	return mod_memory(varsAndconts,lvars,rp,ctrls,m).createProcessPara("modMemory_" + m.FQN());
+	//constInit(c) not covered as not shown in CSPM, constant c is processed as a parameter in CSPM.
+	
 }
 
 
-//Rule 13 TO DO
+//mod_memory is a function that returns a Process
+//this is a Baisc Process take a ParamAction as the mainAction because it involves prefix action
+operation mod_memory(
+					  varsAndconts:  Sequence<RC!Variable>,
+					  lvars: Sequence<RC!Variable>,
+					  rp:    RC!RoboticPlatform,
+					  ctrls: Set<RC!Controller>,
+					  m:     RC!RCModule
+					  ) 
+					  :Z!ProcessPara{	
+	
+	
+		
+	/******************************************************
+	Step 1: implementation of definition of Memory(vars) in the manual
+	*******************************************************/
+	
+	//1.1 (; c : rcontrollers(v) . set_EXT_vid(v,c)! x -> Skip))
+	if(lvars.size>0){
+		var actionSeq_lvars = new Sequence<Z!CircusAction>;
+		
+		for(v in lvars){
+			var rcontrollers_v = ctrls.select(c|requiredVariables(c).includes(v));
+			
+			var prefixAction;//(; c : rcontrollers(v) . set_EXT_vid(v,c)! x -> Skip))
+			if(rcontrollers_v.size()>0){
+						
+				if(rcontrollers_v.size() = 1){
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name is followed by rcontrollers_v.at(0).FQN(). If v.name is FQN, should be renamed as the simple name first.
+					prefixAction = createPrefixingAction(prefix, createSkipAction());
+				} else{
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name
+					prefixAction = createPrefixingAction(prefix, createSkipAction());
+					var i=1;
+					while(i< rcontrollers_v.size()){
+						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(i).FQN(), "x__", "OUTPUT");//To DO v.name
+						prefixAction = createPrefixingAction(prefix, prefixAction);
+						i++;
+					} 
+				}
+			
+			}
+			
+			//1.2 (set_v -> prefixaction );Mmory(vars)
+			//prefixaction = (set_Ext_v1 ->set_Ext_v2 -> ..-> Skip)  from 1.1
+			var commu = createInputCommunication("set_" + v.name, "x__"); 
+			//set_vid(v)?x 
+			//TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names
+			
+			var action;
+			
+			//to replace the name of v with "x__"
+			//RoboChart manual: Memory(vars[name(v):=x])
+			var new_varsAndconts_names = new Sequence<String>;
+			var varsAndconts_names = varsAndconts.getNames();
+			
+
+			var new_varsAndconts_names = new Sequence<String>;
+			var size = varsAndconts.size();
+			var i=0;
+			var elem = new String;
+			while(i<size){
+				
+				if(varsAndconts_names.at(i) = v.name){
+					new_varsAndconts_names.add("x__");
+				}
+				else{
+					elem = varsAndconts_names.at(i);
+					new_varsAndconts_names.add(elem);				
+				}
+				i++;
+			}
+			
+			("line 1069, new_varsAndconts_names = " + new_varsAndconts_names).println();
+			("line 1070, varsAndconts_names = " + varsAndconts_names).println();
+			
+			
+			
+			if(rcontrollers_v.size() >0){
+				action = createAction2("SeqAction", 
+										createPrefixingAction(commu, prefixAction), 
+										("modMemory_"+ m.FQN()).createCallAction(new_varsAndconts_names.createRefExprSeq(false,false)));
+			} else{
+				action = createPrefixingAction(commu, 
+											   ("modMemory_"+ m.FQN()).createCallAction(new_varsAndconts_names.createRefExprSeq(false,false))
+											  );
+			}
+			actionSeq_lvars.add(action);
+		}
+		
+		
+		//1.3 extchoices among all the actions in actionSeq_lvars
+		var modMemory;
+		if(lvars.size()>1){
+			modMemory = actionSeq_lvars.createSequenceAsExtchoiceAction();
+		} else {//lvars.size()=1
+			modMemory = actionSeq_lvars.at(0);
+		}
+	}
+	
+	
+	
+	/******************************************************
+	Step 2: external choices with end -> Skip
+	 end -> Skip is not part of the manual, it is added to deal with
+	the issue of exception operator
+	*******************************************************/
+	modMemory = createAction2("ExtChoiceAction", 
+								modMemory, 
+								createPrefixingAction(createSynchCommunication("terminate"), createSkipAction())
+							   );
+	
+	
+	
+	/******************************************************
+	Step 3: create ParamAction on top of ctrlMemory
+	*******************************************************/
+//	return ctrlMemory;
+	var paramaction = new Z!ParamAction;
+	paramaction.isParamCommand = true;
+	paramaction.circusAction = modMemory;
+	paramaction.declList = new Z!ZDeclList;
+	
+	
+	/* action.declList  is the list of parameters, including variables and constants
+	   e.g., Memory(id__, cv1, x, m, a1, a3, c2, c3) 
+	   c2 and c3 are constants  	*/
+	
+	//add all the variables and constants as parameters
+	for(v in varsAndconts){
+//		var value = new RC!Variable;
+//		value.name = v.name;
+//		value.type = clone(v.type);
+//		action.declList.decls.add(createVarDecl(value));
+		action.declList.decls.add(createVarDecl(v));
+	}
+	//e.g., Memory(id__, 0, 0, 0, (0,0), 0, const_pkg0_M_C1_c2, const_pkg0_M_C1_c3)
+	
+	var paramaction_actpara = paramaction.createActionPara("modMemory_action_" + m.FQN());
+	
+
+	/*************************************************************
+	Step 4: create Basic process taking modMemory as main action
+	**************************************************************/
+	
+	var mainActionName = paramaction_actpara.name.word;
+	var basicProcess = Sequence{paramaction_actpara}.createBasicProcess(mainActionName);
+	/* there is only one action in this Basic process */
+
+	return basicProcess.createProcessPara("modMemory_" + m.FQN(), true);		
+	
+	
+}
+
+
+//Rule 13
+// not to be implemented as a standalone operation, and has been embedded in Rule 19
 
 
 
@@ -946,6 +1185,8 @@ operation composeControllers(
 			renCtrlEvts_tail = renCtrlEvts_tail.includingAll(renCtrlEvts(m,c,cons));
 		}
 		var connevts = intersect(renCtrlEvts(m,ctrls.at(0),cons), renCtrlEvts_tail);
+		connevts.add("teminate");
+		//this terminate is added to deal with the EXCEPTION operator issue
 		
 		var proc = createParallelProcess(connevts, renamingController(m,ctrls.at(0),cons), composeControllers(m,tail_ctrls,cons));
 		
@@ -1050,30 +1291,198 @@ operation renCtrlEvts(m: RC!RCModule,
 
 
 
-//TBC c.mult = c.bidirect ?
-//Rule 17 
+//TBC c.mult = c.bidirect 
+//Rule 17 modified: parallel synchronize on terminate
+
 operation buffer(c: RC!Connection): Z!ProcessPara{
-	var action;
+	var proc;
 	if(c.bidirect){
-		action = Set{singleBuffer(c.efrom,c.eto),singleBuffer(c.eto,c.efrom)}.createInterleaveAction();
+		proc = createParallelProcess(Set{"terminate"},
+							    	 singleBuffer(c.efrom,c.eto, c).name.word.createCallProcess(),
+				   					 singleBuffer(c.eto,c.efrom, c).name.word.createCallProcess());
+				
 	} else{
-		action = singleBuffer(c.efrom,c.eto);
+		proc = singleBuffer(c.efrom,c.eto, c).name.word.createCallProcess();
 	}
 
-	return action.createProcessPara("buffer_" + c.FQN(), false);
+	return proc.createProcessPara("buffer_connct_" + c.FQN(), false);//TBD: c.FQN or controllerDefOfC(c).FQN?
 }
 
-
-//TO DO: as a function or process?
-//Rule 18
-operation singleBuffer(efrom: RC!Event,
-					   eto: RC!Event): Z!CircueProcess{
-	if(efrom.type != null){
-	
+//Rule 17 original: interleave
+//this version not used because need to synchronize on terminate for dealing with exception operation
+/*
+operation buffer(c: RC!Connection): Z!ProcessPara{
+	var proc;
+	if(c.bidirect){
+		proc = Set{singleBuffer(c.efrom,c.eto).name.word.createCallProcess(),
+				   singleBuffer(c.eto,c.efrom).name.word.createCallProcess()}
+				.createInterleaveProcess();
 	} else{
-	
+		proc = singleBuffer(c.efrom,c.eto).name.word.createCallProcess();
+	}
+
+	return proc.createProcessPara("buffer_connct_" + c.FQN(), false);
+}
+*/
+
+
+
+//e.g.,
+/*Buffer0(<v>) = 
+			ctrl_ref1::turn.out?x -> Buffer0(<x>)
+			[]
+			ctrl_ref0::turn.in!v -> Buffer0(<>)
+  Buffer0(<>) = ctrl_ref1::turn.out?x -> Buffer0(<x>)
+
+  within Buffer0(<>)
+*/
+//Rule 18
+//TBC: the naming convention of all the prefixes
+operation singleBuffer(efrom: RC!Event,
+					   eto: RC!Event,
+					   c: RC!Connection): Z!ProcessPara{
+	if(efrom.type != null){
+		return Buffer_empty(efrom, eto, c).createProcessPara("single_buffer_" + efrom.name + "_to_" + eto.name, false);
+	} else{
+		return Buffer_false(c).createProcessPara("single_buffer_" + efrom.name + "_to_" + eto.name, false);
 	}			   
 }
+
+operation Buffer_empty(efrom: RC!Event,
+					   eto: RC!Event,
+					   c: RC!Connection): Z!CircueProcess{
+		
+	var prefix1 = createInputCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out", "x__");  
+	//e.g., ctrl_ref1::turn_out ? x
+	
+	var choice1 = createPrefixingAction(prefix1, 
+										buffer_x_actpara.name.word.createCallAction(Sequence{"x__".createRefExpr(false, false)})
+										);	//Might 'x' conflict with other'x' used as the name of the RoboChart variable, shall we use 'x__'here? Yes
+	
+	var choice2 = createPrefixingAction(createSynchCommunication("terminate"), 
+										createSkipAction()
+									   );
+	//choice2: terminate -> SKIP, this is added for dealing with exception operator					   
+	
+	var buffer_empty = createAction2("ExtChoiceAction", 
+									  choice1,
+									  choice2); 
+	
+	//create main action para
+	var buffer_empty_actpara = buffer_empty.createActionPara("singleBuf_empty_" + efrom.name + "_to_" + eto.name);
+	
+	
+	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+	actionParaSeq.add(buffer_empty_actpara);
+		
+	
+	var prefix3 = createInputCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out", "x__"); 
+	var choice3 = createPrefixingAction(prefix3, 
+										buffer_x_actpara.name.word.createCallAction(Sequence{"x__".createRefExpr(false, false)})
+									   );
+	var prefix4 = createOutputCommunicationFromString(eto.name + "_" + controllerDefOfCon(c).FQN() + "_in", "v");
+	var choice4 = createPrefixingAction(prefix4, 
+										buffer_empty_actpara.name.word.createCallAction()
+									   );
+	var choice5 = createPrefixingAction(createSynchCommunication("terminate"), 
+										createSkipAction()
+									   );
+	//choice5: terminate -> SKIP, this is added for dealing with exception operator
+	
+	var buffer_x = createAction2("ExtChoiceAction", 
+								  createAction2("ExtChoiceAction", choice3, choice4),
+								  choice5); 
+
+	var buffer_x_param = new Z!ParamAction;
+	buffer_x_param.isParamCommand = true;
+	buffer_x_param.circusAction = buffer_x;
+	buffer_x_param.declList = new Z!ZDeclList;
+	buffer_x_param.declList.decls.add("v".createRefExpr(false, false));
+	//Is parameter v or <v>? v
+	
+
+	var buffer_x_actpara = buffer_x_param.createActionPara("singleBuf_x_" + efrom.name + "_to_" + eto.name);
+	actionParaSeq.add(buffer_x_actpara);
+	
+	var mainActionName = buffer_empty_actpara.name.word;
+	var basicProcess = actionParaSeq.createBasicProcess(mainActionName);
+	
+
+	return basicProcess.createProcessPara("singleBuffer_proc_" + efrom.name + "_to_" + eto.name, true);			   
+					   
+}
+
+
+
+//TO DO
+//return the controllerDef that contains this connection
+operation controllerDefOfCon(c:RC!Connection): RC!ControllerDef{
+
+}
+
+
+//TBC: the naming convention of all the prefixes
+operation Buffer_false(c: RC!Connection): Z!CircueProcess{
+		
+	var prefix1 = createSynchCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out");  
+
+	var choice1 = createPrefixingAction(prefix1, 
+										buffer_true_actpara.name.word.createCallAction()
+										);	
+	
+	var choice2 = createPrefixingAction(createSynchCommunication("terminate"), 
+										createSkipAction()
+									   );
+	//choice2: terminate -> SKIP, this is added for dealing with exception operator					   
+	
+	var buffer_false = createAction2("ExtChoiceAction", 
+										    choice1,
+										    choice2); 
+										    
+	//create main action para
+	var buffer_false_actpara = buffer_fasle.createActionPara("singleBuf_false_" + efrom.name + "_to_" + eto.name);
+	
+	
+	var actionParaSeq = new Sequence<Z!ActionPara>;
+	
+	actionParaSeq.add(buffer_false_actpara);
+		
+	
+	var prefix3 = createSynchCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out"); 
+	var choice3 = createPrefixingAction(prefix3, 
+										buffer_true_actpara.name.word.createCallAction()
+									   );
+	var prefix4 = createSynchCommunication(eto.name + "_" + controllerDefOfCon(c).FQN() + "_in");
+	var choice4 = createPrefixingAction(prefix4, 
+										buffer_fasle_actpara.name.word.createCallAction()
+									   );
+	var choice5 = createPrefixingAction(createSynchCommunication("terminate"), 
+										createSkipAction()
+									   );
+										
+	var buffer_true = createAction2("ExtChoiceAction", 
+										createAction2("ExtChoiceAction", choice3, choice4),
+										choice5); //choice5: terminate -> SKIP, this is added for dealing with exception operator
+	
+	var buffer_true_actpara = buffer_true.createActionPara("singleBuf_true_" + efrom.name + "_to_" + eto.name);
+	actionParaSeq.add(buffer_true_actpara);
+	
+	var mainActionname = "singleBuf_false_" + efrom.name + "_to_" + eto.name;
+	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
+	
+	
+	//is this a basic process? although actionParaSeq contains two actionparas
+	return basicProcess.createProcessPara("singleBuffer_proc_" + efrom.name + "_to_" + eto.name, true);			   
+					   
+}
+
+/*******************************************
+//TO DO: HOW TO DECLARE EVENTS OF CTRLS????
+//						Vars
+//						Consts
+//what is the syntax for these regarding fully-qualified names?
+********************************************/
 
 //Rule 19
 operation createControllerAsProcessPara(c: RC!ControllerDef): Z!ProcessPara{
@@ -1082,7 +1491,8 @@ operation createControllerAsProcessPara(c: RC!ControllerDef): Z!ProcessPara{
 	//to create operation sematics for defined ops
 	for(op in c.lOperations){
 		if(op.nodes.isDefined()){
-			actionParaSeq.add(createOperationDefAsActionPara(op));
+//			actionParaSeq.add(createOperationDefAsActionPara(op));
+			createOperationDefAsActionPara(op);
 		}
 	}
 	
@@ -1101,80 +1511,137 @@ operation createControllerAsProcessPara(c: RC!ControllerDef): Z!ProcessPara{
 //	createCallOpActionPara(op) = move1Call.param_m.param_m1 -> SKIP
 	
 	for(op in requiredOperations){
-		actionParaSeq.add(createCallOpActionPara(op));
+//		actionParaSeq.add(createCallOpActionPara(op));
+		createCallOpActionPara(op);
 	}
 	
-	var lvars = new Set<RC!Variable>;
+	
+	
+	var lvars = new Set<String>;
 	for(v in allLocalVariables(c)){
 		lvars.add("set_" + v.name);
 	}
 	
-	var rvars = new Set<RC!Variable>;
+	var rvars = new Set<String>;
 	for(v in requiredVariables(c)){
 		rvars.add("set_EXT_" + v.name);
 	}
 	
-	var lconsts = new Set<RC!Variable>;
+	var lconsts = new Set<String>;
 	for(v in allLocalConstants(c)){
 		lconsts.add("set_" + v.name);
 	}
 	
-	var rconsts = new Set<RC!Variable>;
+	var rconsts = new Set<String>;
 	for(v in requiredConstants(c)){
 		rconsts.add("set_" + v.name);
 	}
 	
 	var cs = lvars.includingAll(rvars).includingAll(lconsts).includingAll(rconsts);
+	cs.add("terminate");
+	//"terminate" is added to deal with the issue of EXCEPTION operator
 	
-	var composeMachinePara = composeMachines(c,ms,cs).createActionPara("composeMachines_" + c.FQN());
-	var action = createParallelAction(cs, composeMachinePara.name.word.createCallAction(), crtlMemory(c).name.word.createCallAction());
+	var cons = c.connections;
+	var ms = c.machines.select(m|m.instanceOf(RC!StateMachineDef)).asSequence();
+	var composeMachinePara = composeMachines(c,ms,cons).createActionPara("composeMachines_" + c.FQN());
+//	var crtlMemoryPara = crtlMemory(c).createActionPara("crtlMemory_" + c.FQN());
 	
-	var hide_cs = lvars.includingAll(rvars).includingAll(lconsts).asSequence();
+	/* to create sequence of varaible initials/default as Z!Expr */
+	var vars =  requiredVariables(c).asSequence().includingAll(allLocalVariables(c).asSequence());
 	
+	var initialSeq = new Sequence<Z!Expr>;
+	for(v in vars){
+		initialSeq.add(v.getInitialOrDefaultValueAsExpr());
+		//in the manual: intial only, but it should be 'intial or default'
+		//this paramter is presented in Rule 20 in the manual
+		//Here we use this paramter initialSeq when we call the funciton crtlMemory in the below
+	}
+	
+	//the following is derived from R20: constInit(c)
+	//because we treat constants as paramters, so they are added into initialSeq as part of the paramter of crtlMemory
+	for(const in allConstants(c)){
+		if(const.initial.isDefined()){
+			initialSeq.add(const.initial.createExpr());//parameter is the initial value of constant
+			//TBC need to confirm with Pedro, should we always use const's name or we can use the value of it if exists?
+		} else{
+			initialSeq.add(createVarDecl(const));//parameter is the name of constant
+			//e.g., Memory(id__, 0, 0, 0, (0,0), 0, const_pkg0_M_C1_c2, const_pkg0_M_C1_c3)
+		}
+	}
+		
+	var action = createParallelAction(cs, 
+									  composeMachinePara.name.word.createCallAction(), 
+									  crtlMemory(c).name.word.createCallAction(initialSeq) 
+									  //call ctrlMemory with initials as parameters
+									  );
+	
+	var hide_cs = lvars.asSequence().includingAll(rvars.asSequence()).includingAll(lconsts.asSequence());
+	("hide_cs = " + hide_cs).println();
+	("hide_cs.type() = " + hide_cs.type()).println();
+	("action.type() = " + action.type()).println();
 	action = action.createHideAction(hide_cs);
 	
-	/*************************
-	TO DO: EXCEPTION
-	*************************/
-//	action = createExceptionAction(Set{"terminate"}, action, createSkipAction());//EXCEPTION ??? TBC
 	
-	action.createActionPara("ctrl_mainaction_" + c.FQN());
 	
-	var mainActionname = "ctrl_mainaction_" + c.FQN();
+	//create main action
+	action.createActionPara("controller_action_" + c.FQN());
+	
+	//add every actionpara including the main action para into the sequence
+	for(action_para in Z!ActionPara.all()){
+		actionParaSeq.add(action_para);
+	}
+	
+	
+	var mainActionname = "controller_action_" + c.FQN();
+	
 	
 	var basicProcess = actionParaSeq.createBasicProcess(mainActionname);
 	
+	
 	//is this a basic process? although actionParaSeq contains two actionparas
-	return basicProcess.createProcessPara("controller_" + c.FQN(), true);
+	return basicProcess.createProcessPara("controller_proc_" + c.FQN(), true);
+	//true means it is a BasicProcss
 	
 }
+
 
 
 
 //Rule 20, Memory in the manual is factored out as a function "ctrl_memory"
 operation crtlMemory(c: RC!ControllerDef): Z!ActionPara{
-	var ms = c.machines;
-	var lvars = allLocalVariables(c);
-	var rvars = requiredVariables(c);
-	var vars = rvars.getNames().includingAll(rvars.getNames());
-	var varvalues = rvars.getInitialValues().includingAll(rvars.getInitialValues());
+	var ms = c.machines.select(m|m.instanceOf(RC!StateMachineDef));
+	var lvars = allLocalVariables(c).asSequence();
+	var rvars = requiredVariables(c).asSequence();
+
+	var vars = rvars.includingAll(lvars) ;
+//	var vars_names = vars.getNames();
+//	var varvalues = rvars.getInitialValues().asSequence().includingAll(lvars.getInitialValues().asSequence());
+	var varsAndconts = vars.includingAll(allConstants(c));
 	
-	return ctrl_memory(varvalues,lvars,rvars).createActionPara("crtlMemory_" + c.FQN());
-	//constInit(c) not covered as not shown in CSPM
+	return ctrl_memory(varsAndconts,lvars,rvars,ms,c).createActionPara("crtlMemory_" + c.FQN());
+	//constInit(c) not covered as not shown in CSPM, constant c is processed as a parameter in CSPM.
 	
 }
 
+
+//ctrl_memory is a function that returns a ParamAction 
 operation ctrl_memory(
-					  vars: Set<String>,
-					  lvars: Set<RC!Variable>,
-					  rvars:Set<RC!Variable>
+					  varsAndconts:  Sequence<RC!Variable>,
+					  lvars: Sequence<RC!Variable>,
+					  rvars: Sequence<RC!Variable>,
+					  ms:    Set<RC!StateMachineDef>,
+					  c:     RC!ControllerDef
 					  ) 
-					  :Z!CircusAction{	
+					  :Z!ParamAction{	
+	
 	
 	/******************************************************
 	Step 1: Iterated external choices for LOCAL variables in lvars
 	*******************************************************/
-	if(lvars.size>0){
+	
+		var left_choice;
+		
+		if(lvars.size>0){
 		var actionSeq_left_choice_lvars = new Sequence<Z!CircusAction>;
 		
 		for(v in lvars){
@@ -1204,22 +1671,46 @@ operation ctrl_memory(
 			
 			//to replace the name of v with "x__"
 			//RoboChart manual: Memory(vars[name(v):=x])
-			var new_vars = vars.clone();
-			for(vname in new_vars){
-				if(vname = v.name){
-					v.name = "x__";
+			var new_varsAndconts_names = new Sequence<String>;
+			var varsAndconts_names = varsAndconts.getNames();
+			
+
+			var new_varsAndconts_names = new Sequence<String>;
+			var size = varsAndconts.size();
+			var i=0;
+			var elem = new String;
+			while(i<size){
+				
+				if(varsAndconts_names.at(i) = v.name){
+					new_varsAndconts_names.add("x__");
 				}
+				else{
+//					("line 1322, ss.at(i) = " + ss.at(i)).println();
+//					("line 1322, ss.at(i).type = " + ss.at(i).type()).println();
+					elem = varsAndconts_names.at(i);
+					new_varsAndconts_names.add(elem);				
+				}
+				i++;
 			}
 			
+			("line 1321, new_varsAndconts_names = " + new_varsAndconts_names).println();
+			("line 1321, varsAndconts_names = " + varsAndconts_names).println();
+			
+			
+			
 			if(rmachines_v.size() >0){
-				action = createAction2("SeqAction", createPrefixingAction(commu, prefixAction), ctrl_memory(new_vars,lvars,rvars));
+				action = createAction2("SeqAction", 
+										createPrefixingAction(commu, prefixAction), 
+										("ctrlMemory_"+ c.FQN()).createCallAction(new_varsAndconts_names.createRefExprSeq(false,false))
+										);
 			} else{
-				action = createPrefixingAction(commu, ctrl_memory(new_vars,lvars,rvars));
+				action = createPrefixingAction(commu, 
+											   ("ctrlMemory_"+ c.FQN()).createCallAction(new_varsAndconts_names.createRefExprSeq(false,false))
+											  );
 			}
 			actionSeq_left_choice_lvars.add(action);
 		}
 		
-		var left_choice;
 		if(lvars.size()>1){
 			left_choice = actionSeq_left_choice_lvars.createSequenceAsExtchoiceAction();
 		} else {//lvars.size()=1
@@ -1232,6 +1723,8 @@ operation ctrl_memory(
 	/******************************************************
 	Step 2: Iterated external choices for REQUIRED variables in rvars
 	*******************************************************/
+	
+	var right_choice;
 	if(rvars.size>0){
 		var actionSeq_right_choice_rvars = new Sequence<Z!CircusAction>;
 		
@@ -1262,22 +1755,45 @@ operation ctrl_memory(
 			
 			//to replace the name of v with "x__"
 			//RoboChart manual: Memory(vars[name(v) := x])
-			var new_vars = vars.clone();
-			for(vname in new_vars){
-				if(vname = v.name){
-					v.name = "x__";
+			//to replace the name of v with "x__"
+			//RoboChart manual: Memory(vars[name(v):=x])
+			var new_varsAndconts_names = new Sequence<String>;
+			var varsAndconts_names = varsAndconts.getNames();
+			
+
+			var new_varsAndconts_names = new Sequence<String>;
+			var size = varsAndconts.size();
+			var i=0;
+			var elem = new String;
+			while(i<size){
+				
+				if(varsAndconts_names.at(i) = v.name){
+					new_varsAndconts_names.add("x__");
 				}
+				else{
+					elem = varsAndconts_names.at(i);
+					new_varsAndconts_names.add(elem);				
+				}
+				i++;
 			}
 			
+			("line 1414, new_varsAndconts_names = " + new_varsAndconts_names).println();
+			("line 1415, varsAndconts_names = " + varsAndconts_names).println();
+			
+					
 			if(rmachines_v.size() >0){
-				action = createAction2("SeqAction", createPrefixingAction(commu, prefixAction), ctrl_memory(new_vars,lvars,rvars));
+				action = createAction2("SeqAction", 
+									    createPrefixingAction(commu, prefixAction), 
+									    ("ctrlMemory_"+ c.FQN()).createCallAction(new_varsAndconts_names.createRefExprSeq(false,false))
+									   );
 			} else{
-				action = createPrefixingAction(commu, ctrl_memory(new_vars,lvars,rvars));
+				action = createPrefixingAction(commu, 
+											   ("ctrlMemory_"+ c.FQN()).createCallAction(new_varsAndconts_names.createRefExprSeq(false,false))
+											  );
 			}
 			actionSeq_right_choice_rvars.add(action);
 		}
 		
-		var right_choice;
 		if(rvars.size()>1){
 			right_choice = actionSeq_right_choice_rvars.createSequenceAsExtchoiceAction();
 		} else {//rvars.size()=1
@@ -1299,13 +1815,53 @@ operation ctrl_memory(
 		}
 	}
 	
-	return ctrlMemory;
+	
+	
+	/******************************************************
+	Step 4: external choices with end -> Skip
+	 end -> Skip is not part of the manual, it is added to deal with
+	the issue of exception operator
+	*******************************************************/
+	
+	ctrlMemory = createAction2("ExtChoiceAction", 
+								ctrlMemory, 
+								createPrefixingAction(createSynchCommunication("terminate"), createSkipAction())
+							   );
+	
+	
+	
+	/******************************************************
+	Step 5: create ParamAction on top of ctrlMemory
+	*******************************************************/
+//	return ctrlMemory;
+	var action = new Z!ParamAction;
+	action.isParamCommand = true;
+	action.circusAction = ctrlMemory;
+	action.declList = new Z!ZDeclList;
+	
+	
+	/* action.declList  is the list of parameters, including variables and constants
+	   e.g., Memory(id__, cv1, x, m, a1, a3, c2, c3) 
+	   c2 and c3 are constants  	*/
+	
+	//add all the variables and constants as parameters
+	for(v in varsAndconts){
+//		var value = new RC!Variable;
+//		value.name = v.name;
+//		value.type = clone(v.type);
+//		action.declList.decls.add(createVarDecl(value));
+		action.declList.decls.add(createVarDecl(v));
+	}
+	//e.g., Memory(id__, 0, 0, 0, (0,0), 0, const_pkg0_M_C1_c2, const_pkg0_M_C1_c3)
+	
+	
+	return action;
+	
 }
 
 
-
-operation Set<RC!Variable> getNames(): Set<String>{
-	var nameSet = new Set<String>;
+operation Sequence<RC!Variable> getNames(): Sequence<String>{
+	var nameSet = new Sequence<String>;
 	for(v in self){
 		nameSet.add(v.name);		
 	}
@@ -1321,10 +1877,12 @@ operation Set<RC!Variable> getInitialValues(): Set<String>{
 }
 
 //Rule 21
+//Difference from manual: we use connevts.including(terminate) instead of connevts
 operation composeMachines(c: RC!Controller, 
 						  ms: Sequence<RC!StateMachineDef>, 
 						  cons: Set<RC!Connection>): 
-//						  Z!ActionPara{
+//						  Z!ActionPara{ //this function recursively revoke itself, it returns ActionPara, the code will be too complicated.
+//the correspoinding ActionPara shall be created in Rule 19 when composeMachines() is called.
 						  Z!CircusAction{
 						  
 	if(ms.size()=1){
@@ -1335,12 +1893,14 @@ operation composeMachines(c: RC!Controller,
 		tail_ms.removeAt(0);
 		
 		var renStmEvts_tail = new Set<String>;
+		("line 1453, tail_ms = " + tail_ms).println();
 		for(m in tail_ms){
 			renStmEvts_tail = renStmEvts_tail.includingAll(renStmEvts(c,m,cons));
 		}
 		var connevts = intersect(renStmEvts(c,ms.at(0),cons), renStmEvts_tail);
 		
-		var action = createParallelAction(connevts, renamingMachine(c,ms.at(0),cons), composeMachines(c,tail_ms,cons));//TO DO, nops should be incorporated.	
+		var action = createParallelAction(connevts.including(terminate), renamingMachine(c,ms.at(0),cons), composeMachines(c,tail_ms,cons));//TO DO, nops should be incorporated.	
+//		connevts.including(terminate) = connevts union {terminate}. terminate is added to slove the issue with exception operator
 		
 		return action;
 //		return action.createActionPara("composeMachines_" + c.FQN());
@@ -1444,6 +2004,7 @@ operation renStmEvts(c: RC!Controller,
 //Rule 25
 operation createStateMachineDefAsActionPara(stm: RC!StateMachineDef): Z!ActionPara{
 	var action = stateful(stm).name.word.createCallAction().createHideAction(Sequence{"terminate"});
+	
 	action = createAction2("SeqAction", action, createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("terminate"), createSkipAction())));
 	
 	var renamepairL = new Sequence<String>;
@@ -1520,6 +2081,7 @@ operation stateful(stm: RC!StateMachineBody): Z!ActionPara{
 	var parallelR = varMemory(stm).name.word.createCallAction();
 	var channelSet = getsetLocalChannels(stm);
 	channelSet.add("terminate");
+	
 	var stateful = createParallelAction(channelSet, parallelL, parallelR).createHideAction(channelSet.asSequence());
 	
 	return stateful.createActionPara("stateful_"+ stm.FQN());
@@ -1548,57 +2110,181 @@ operation getsetLocalChannels(s: RC!StateMachineBody): Set<String>{
 
 //Rule 31
 operation varMemory(stm: RC!Context): Z!ActionPara{
-	var varMemory;
+
+
 	var vars = allLocalVariables(stm);
+	
+	//to generate Individual variable memory as ActionPara for each variable in vars
+	for(v in vars){
+		("line 1581, v = " + v + ", type.type.NAME = " + v.type.type.name  + ", v.type.type()" + v.type.type()).println();
+		//,  type.ref.name =  + v.type.ref.name
+		Memory(v);
+	}
+	
+	
+	var varMemory;
 	if(vars.size()=0){
 		varMemory = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	} 
+	
+	else if(vars.size()=1) {
 		
-	} else if(vars.size()=1) {
-		varMemory = Memory(vars.at(0)).name.word.createCallAction();
-	} else if(vars.size()>1){
+		var action_name = "Memory_"+ vars.at(0).name;
+		var ParaSeq = Sequence{vars.at(0).getInitialOrDefaultValueAsExpr()};
+		varMemory = action_name.createCallAction(ParaSeq);
+		//By assigning initial or default value as parameter of this CallAction, 
+		//Memory(x) is instantiated.
+	} 
+	
+	else if(vars.size()>1){
+		("line 1600, vars = " + vars).println();
+		var action_name0 = "Memory_"+ vars.at(0).name;
+		var ParaSeq0 = Sequence{vars.at(0).getInitialOrDefaultValueAsExpr()};	("line 1602, ParaSeq0 = " + ParaSeq0).println();
+		var action0 = action_name0.createCallAction(ParaSeq0);
 		
-			varMemory = createParallelAction(Set{"terminate"}, Memory(vars.at(0)).name.word.createCallAction(),Memory(vars.at(1)).name.word.createCallAction());
+		var action_name1 = "Memory_"+ vars.at(1).name;
+		("line 1606, vars.at(1) = " + vars.at(1)).println();
+		("line 1606, vars.at(1).type = " + vars.at(1).type).println();		
+		("line 1606, vars.at(1).type.type() = " + vars.at(1).type.type().name).println();		
+//		("line 1606, vars.at(1).type.ref = " + vars.at(1).type.ref).println();
+		var ParaSeq1 = Sequence{vars.at(1).getInitialOrDefaultValueAsExpr()};
+		("ParaSeq1 = " + ParaSeq1).println();
+		var action1 = action_name1.createCallAction(ParaSeq1);
+		
+		
+		varMemory = createParallelAction(
+						Set{"terminate"}, 
+						action0, 
+						action1
+					);
+		
+		vars.removeAt(0);
+		vars.removeAt(0);		
+		while(vars.size()>0){
+			("line 1627, v = " + vars.at(0) + ", type.type.NAME = " + vars.at(0).type.type.name  + ", v.type.type()" + vars.at(0).type.type()).println();
+		
+			var action_name = "Memory_"+ vars.at(0).name;
+			var ParaSeq = Sequence{vars.at(0).getInitialOrDefaultValueAsExpr()};
+			var action = action_name.createCallAction(ParaSeq);
+		
+			varMemory = createParallelAction(Set{"terminate"}, varMemory, action);			
 			vars.removeAt(0);
-			vars.removeAt(0);		
-			while(vars.size()>0){
-
-				varMemory = createParallelAction(Set{"terminate"}, varMemory, Memory(vars.at(0)).name.word.createCallAction());			
-				vars.removeAt(0);
-			}
 		}
+	}
 	
 	return varMemory.createActionPara("varMemory_"+ stm.FQN());
 }
 
 
-//Rule 33, follows the same pattern as Rule 31
-operation sharedVarMemory(stm: RC!Context): Z!ActionPara{
-	var sharedVarMemory;
-	var vars = requiredVariables(stm);
-	if(vars.size()=0){
-		sharedVarMemory = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
-		
-	} else if(vars.size()=1) {
-		sharedVarMemory = sharedMemory(vars.at(0)).name.word.createCallAction();
-	} else if(vars.size()>1){
-		
-			sharedVarMemory = createParallelAction(Set{"terminate"}, sharedMemory(vars.at(0)).name.word.createCallAction(), sharedMemory(vars.at(1)).name.word.createCallAction());
-			vars.removeAt(0);
-			vars.removeAt(0);		
-			while(vars.size()>0){
+operation RC!Variable getInitialOrDefaultValueAsExpr(): Z!Expr{
 
-				sharedVarMemory = createParallelAction(Set{"terminate"}, sharedVarMemory, sharedMemory(vars.at(0)).name.word.createCallAction());			
-				vars.removeAt(0);
-			}
-		}
-	
-	return sharedVarMemory.createActionPara("sharedVarMemory_"+ stm.FQN());
-
+	("line 1643, var = " + self).println();
+	if(self.initial != null){
+		"self.initial != null".println();
+		return self.initial.createExpr();
+	} else{
+		
+		"self.initial = null".println();
+		return self.type.defaultValueAsZExpr();			
+	}
 }
 
 
 
-//Rule 35
+//Rule 33, follows the same pattern as Rule 31
+
+
+operation sharedVarMemory(stm: RC!Context): Z!ActionPara{
+
+
+	var vars = requiredVariables(stm);
+	
+	//to generate Individual shared variable memory as ActionPara for each variable in vars
+	for(v in vars){
+		("line 1566, v = " + v + ", v.type = " + v.type   +  ", v.type.type = " + v.type.type  + ", type.type.NAME = " + v.type.type.name  + ", v.type.type()= " + v.type.type()).println();
+		//,  type.ref.name =  + v.type.ref.name
+		sharedMemory(v);
+	}
+	
+	
+	var sharedVarMemory;
+	if(vars.size()=0){
+		sharedVarMemory = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
+	} 
+	
+	else if(vars.size()=1) {
+		
+		var action_name = "sharedMemory_"+ vars.at(0).name;
+		var ParaSeq = Sequence{vars.at(0).getInitialOrDefaultValueAsExpr()};
+		sharedVarMemory = action_name.createCallAction(ParaSeq);
+		//By assigning initial or default value as parameter of this CallAction, 
+		//Memory(x) is instantiated.
+	} 
+	
+	else if(vars.size()>1){
+		("line 1600, vars = " + vars).println();
+		var action_name0 = "sharedMemory_"+ vars.at(0).name;
+		var ParaSeq0 = Sequence{vars.at(0).getInitialOrDefaultValueAsExpr()};	//("line 1602, ParaSeq0 = " + ParaSeq0).println();
+		var action0 = action_name0.createCallAction(ParaSeq0);
+		
+		var action_name1 = "sharedMemory_"+ vars.at(1).name;
+//		("line 1606, vars.at(1) = " + vars.at(1)).println();
+//		("line 1606, vars.at(1).type = " + vars.at(1).type).println();		
+//		("line 1606, vars.at(1).type.type() = " + vars.at(1).type.type().name).println();		
+//		("line 1606, vars.at(1).type.ref = " + vars.at(1).type.ref).println();
+		var ParaSeq1 = Sequence{vars.at(1).getInitialOrDefaultValueAsExpr()};
+		("ParaSeq1 = " + ParaSeq1).println();
+		var action1 = action_name1.createCallAction(ParaSeq1);
+		
+		
+		sharedVarMemory = createParallelAction(
+						Set{"terminate"}, 
+						action0, 
+						action1
+					);
+		
+		vars.removeAt(0);
+		vars.removeAt(0);		
+		while(vars.size()>0){
+
+			var action_name = "sharedMemory_"+ vars.at(0).name;
+			var ParaSeq = Sequence{vars.at(0).getInitialOrDefaultValueAsExpr()};
+			var action = action_name.createCallAction(ParaSeq);
+		
+			sharedVarMemory = createParallelAction(Set{"terminate"}, sharedVarMemory, action);			
+			vars.removeAt(0);
+		}
+	}
+	
+	return sharedVarMemory.createActionPara("sharedVarMemory_"+ stm.FQN());
+}
+
+
+
+//Rule 35 
+/*this is different from the manual in two ways
+1. the main body is moved to function IndividualVarMemory
+2. the initial or default value of the variable is assigned in Rule according to the manual, but in CSPM code, it is assigned when Memory(v) is called in varMemory; So to be consistent with CSPM, the within part in Rule 35 of manual is moved to Rule 31 here above.
+
+In fact, there is no need to have a ParamAction, because the parameter value is
+only assigned as initial or default, that is a one time thing, so it can be done directly in IndividualVarMemory. However, to be consistent with manual, the implementation still uses ParamAction.
+*/
+operation Memory(v: RC!Variable): Z!ActionPara{
+
+	return IndividualVarMemory(v).createActionPara("Memory_" + v.name);
+
+}
+
+/*
+	so, Memory_a(0) =
+					get_a!0 -> Memory_a(0)
+					[]
+					set_a?x__ -> Memory_a(x__)
+					[]
+					terminate -> SKIP  ??
+Memory_a(0) is an action whose name is Memory_a, parameter is a RC!Expression 0 in this case
+*/
+
 /*e.g., Memory_a(0) where
 		Memory_a(value) =
 					get_a!value -> Memory_a(value)
@@ -1606,98 +2292,125 @@ operation sharedVarMemory(stm: RC!Context): Z!ActionPara{
 					set_a?x__ -> Memory_a(x__)
 					[]
 					terminate -> SKIP
-		
-	so, Memory_a(0) =
-					get_a!0 -> Memory_a(0)
-					[]
-					set_a?x__ -> Memory_a(x__)
-					[]
-					terminate -> SKIP  ??
-
-TO DO: to confirm with Pedro
-*/
-operation Memory(v: RC!Variable): Z!ActionPara{
-	("line 860 v = " + v.name).println();
-	("line 860 v.type = " + v.type).println();
-	("line 860 v.typeref.ref = " + v.type.ref.name).println();
+here we need ParamAction  */
+//Rule 35 auxilary
+/*IndividualVarMemory is a function taking variable v as its paramter
+ *it returns a ParamAction whose paramter is value of type RC!Expression
+ *we do not create AcitonPara in this function because IndividualVarMemory is 
+ *recursive, it makes code simple if we create ActionPara at the final step
+ *i.e., in Rule 35*/
+operation IndividualVarMemory(v: RC!Variable): Z!ParamAction{
 	
-	/********************************************
-	// to be confirmed, so commented out temporarily: how to set initial in RoboChart?
-	if(v.initial != null){
-		"v.initial != null".println();
-		return memory(v, v.initial).createActionPara("Memory_"+ v.name);
-	} else{
-		"v.initial = null".println();
-		return memory(v, v.defaultValue()).createActionPara("Memory_"+ v.name);	
-	}
-	*******************************************/
-	return createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()).createActionPara("Memory_"+ v.name);
-}
-
-//TO be confirmed
-//Rule 35 auxilary 
-operation memory(v: RC!Variable, value: Any): Z!CircusAction{
 	
-	var commu1  = createOutputCommunicationFromString("get_" + v.name, value, "OUTPUT");//??
-	var choice1 = createPrefixingAction(commu1, memory(v, value)); 
+	var commu1  = createOutputCommunicationFromString("get_" + v.name, "value", "OUTPUT");
+	var choice1 = createPrefixingAction(
+						commu1, 
+						("Memory_"+v.name).createCallAction(Sequence{"value".createRefExpr(false, false)})
+						); 
+	
+	
 	
 	var commu2  = createInputCommunication("set_" + v.name, "x__");
-	var choice2 = createPrefixingAction(commu2, memory(v, "x__")); 
+	var choice2 = createPrefixingAction(
+						commu2, 
+						("Memory_"+v.name).createCallAction(Sequence{"x__".createRefExpr(false, false)})
+						);  
 	
 	var choice3 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
 	
 	var memory = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, choice3));
 	
-	return memory;
+	var action = new Z!ParamAction;
+	action.isParamCommand = true;
+	action.circusAction = memory;
+	
+	var value = new RC!Variable;
+	value.name = "value";
+	("line 1745,  v.type = " + v.type).println();
+	("line 1746,  v.type.type() = " + v.type.type()).println();
+	("line 1738,  v.type.type = " + v.type.type).println();
+//	("line 1739,  v.type.ref = " + v.type.ref).println();
+	value.type = clone(v.type);
+//	param.type.ref = clone(v.type.ref);
+//	("line 1741,  v.type = " + v.type.type.ref).println();
+//	("line 1742,  v.type = " + v.type.type.ref).println();
+	("line 1750, value.type = " + value.type).println();
+//	("line 1750, value.type.ref = " + value.type.ref).println();
+	action.declList = new Z!ZDeclList;
+	action.declList.decls.add(createVarDecl(value));
+	
+	return action;
 }
 
-operation RC!Variable defaultValue(): Z!Expr{
-	if(self.type = TypeRef){
-		if(self.type.ref.name = "int"){
+//TO DO
+operation RC!Type defaultValueAsZExpr(): Z!Expr{
+("line 1807, self.type().name = " + self.type().name).println();
+
+	if(self.type().name = "TypeRef"){
+		"self.type = TypeRef" .println();
+		self.ref.name.println();
+		if(self.ref.name = "int"){
 			return createNumExpr(0);
 		}
-		if(self.type.ref.name = "float"){
-			return createNumExpr(0);//TO DO
-		}
-		if(self.type.ref.name = "String"){
-			return createNumExpr(0);//TO DO
-		}
-		if(self.type.ref.name = "Boolean"){
+//		if(self.ref.name = "float"){
+//			return createNumExpr(0);//TO DO
+//		}
+//		if(self.ref.name = "String"){
+//			return createNumExpr(0);//TO DO
+//		}
+		if(self.ref.name = "Boolean"){
 			return createBooleanExpr(true);
-		} else {//TO DO
+		} 
+		
+		if(self.ref.name != "Boolean" and self.ref.name != "int") {
+			return createNumExpr(0);
+		}
+		
+		else {//TO DO
 		
 		}
 	}
+	
+	if(self.type().name = "SeqType"){
+	
+	("line 1830, self = "  + self).println();
+	("line 1831, self.values = "  + self.values).println();
+		
+	}
+
+	if(self.type().name = "ProductType"){
+		var typeSeq = new Sequence<Z!Expr>;
+		for(tp in self.types){
+			("line 1840, tp = " + tp).println();
+			typeSeq.add(tp.defaultValueAsZExpr());
+		}
+		return typeSeq.createTupleExpr();
+		
+	}
 	/*
-	if(self.type = ProductType){
+	if(self.type().name = "RelationType"){
 	
 	}
-	if(self.type = RelationType){
+	if(self.type().name = "FunctionType"){
 	
 	}
-	if(self.type = FunctionType){
+	if(self.type().name = "SetType"){
 	
 	}
-	if(self.type = SetType){
+	
+	if(self.type().name = "AnyType"){
 	
 	}
-	if(self.type = SeqType){
+	if(self.type().name = "VectorType"){
 	
 	}
-	if(self.type = AnyType){
-	
-	}
-	if(self.type = VectorType){
-	
-	}
-	if(self.type = MatrixType){
+	if(self.type().name = "MatrixType"){
 	
 	}
 	*/
 }
 
-
-operation createNumExpr(value: int): Z!NumExpr{
+operation createNumExpr(value: Integer): Z!NumExpr{
 	var numExpr = new Z!NumExpr;
 	numExpr.numeral = new Z!ZNumeral;
 	numExpr.numeral.value = value;
@@ -1721,38 +2434,63 @@ operation createBooleanExpr(value: Boolean): Z!RefExpr{
 
 //TO be confirmed
 //Rule 37, follows the same pattern of Rule 35
+
 operation sharedMemory(v: RC!Variable): Z!ActionPara{
-	/* to be confirmed, so commented out temporarily
-	if(v.initial != null){
-		"v.initial != null".println();
-		return sharedmemory(v, v.initial).createActionPara("Memory_"+ v.name);
-	} else{
-		"v.initial = null".println();
-		return sharedmemory(v, v.defaultValue()).createActionPara("Memory_"+ v.name);	
-	}
-*/
-	return createPrefixingAction(createSynchCommunication("terminate"), createSkipAction()).createActionPara("sharedMemory_"+ v.name);
+
+	return IndividualSharedVarMemory(v).createActionPara("sharedMemory_" + v.name);
+
 }
 
-//TO be confirmed
-//Rule 37 auxilary 
-operation sharedmemory(v: RC!Variable, value: Any): Z!CircusAction{
+//Rule 37 auxilary
+operation IndividualSharedVarMemory(v: RC!Variable): Z!ParamAction{
 	
-	var commu1  = createOutputCommunicationFromString("get_" + v.name, value, "OUTPUT");//??
-	var choice1 = createPrefixingAction(commu1, memory(v, value)); 
+	
+	var commu1  = createOutputCommunicationFromString("get_" + v.name, "value", "OUTPUT");
+	var choice1 = createPrefixingAction(
+						commu1, 
+						("sharedMemory_"+v.name).createCallAction(Sequence{"value".createRefExpr(false, false)})
+						); 
+	
+	
 	
 	var commu2  = createInputCommunication("set_" + v.name, "x__");
-	var choice2 = createPrefixingAction(commu2, memory(v, "x__")); 
-	
+	var choice2 = createPrefixingAction(
+						commu2, 
+						("sharedMemory_"+v.name).createCallAction(Sequence{"x__".createRefExpr(false, false)})
+						);  
+						
 	var commu3  = createInputCommunication("set_EXT_" + v.name, "x__");
-	var choice3 = createPrefixingAction(commu3, memory(v, "x__")); 
+	var choice3 = createPrefixingAction(
+						commu3, 
+						("sharedMemory_"+v.name).createCallAction(Sequence{"x__".createRefExpr(false, false)})
+						);  
 	
 	var choice4 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
 	
-	var memory = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, createAction2("ExtChoiceAction", choice3, choice4)));
+	var sharedMemory = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, createAction2("ExtChoiceAction", choice3, choice4)));
 	
-	return memory;
+	var action = new Z!ParamAction;
+	action.isParamCommand = true;
+	action.circusAction = sharedMemory;
+	
+	var value = new RC!Variable;
+	value.name = "value";
+//	("line 1745,  v.type = " + v.type).println();
+//	("line 1746,  v.type.type() = " + v.type.type()).println();
+//	("line 1738,  v.type.type = " + v.type.type).println();
+//	("line 1739,  v.type.ref = " + v.type.ref).println();
+	value.type = clone(v.type);
+//	param.type.ref = clone(v.type.ref);
+//	("line 1741,  v.type = " + v.type.type.ref).println();
+//	("line 1742,  v.type = " + v.type.type.ref).println();
+	("line 1931, value.type = " + value.type).println();
+//	("line 1750, param.type.ref = " + param.type.ref).println();
+	action.declList = new Z!ZDeclList;
+	action.declList.decls.add(createVarDecl(value));
+	
+	return action;
 }
+
 
 
 operation nc(stmt: RC!Statement): RC!NodeContainer{
@@ -1774,6 +2512,38 @@ operation nc(stmt: RC!Statement): RC!NodeContainer{
 			}			
 		}
 	}
+}
+
+
+operation clone(type : RC!Type) : RC!Type   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	var cloned = ecoreUtil.copy(type);
+	return cloned;
+}
+
+
+operation clone(i : Integer) : Integer   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	var cloned = ecoreUtil.copy(i);
+	return cloned;
+}
+
+
+
+operation clone(i : String) : String   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	var cloned = ecoreUtil.copy(i);
+	return cloned;
+}
+
+operation clone(typeref : RC!TypeRef) : RC!TypeRef   {
+	var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+	var ecoreUtil = emfTool.ecoreUtil;
+	var cloned = ecoreUtil.copy(typeref);
+	return cloned;
 }
 
 
@@ -3702,6 +4472,32 @@ operation createParallelProcess(
 }
 
 
+operation createParallelProcessFromProcSet(
+	channel_set: Set<String>, 
+	proc_set: Set<Z!CircusProcess> 
+	): Z!ParallelProcess{
+	
+	var proc;
+	var size = proc_set.size();
+
+	var i = 0;
+	proc = createParallelProcess(channel_set, proc_set.at(0), proc_set.at(1));
+	i = i + 2;
+	if(size > 2){
+	while(i<size){
+			proc = createParallelProcess(channel_set, proc, proc_set.at(i));
+			i = i + 1;
+		}
+	}
+	return proc;
+}
+
+/*
+channel set to be synchronized in a parallel action/process is shown as ‘Enumerated channel set’ in CZT tool.
+It is BaiscChannelSetExpr in CZT AST, which contains a set of communications. 
+So it is not a channelset, but an expr.
+So in the channel set, it’s a list of communications, instead of a list of channels
+*/
 //to create BasicChannelSetExpr used in channel set declaration
 operation createBasicChannelSetExpr(channel_names:Sequence<String>): Z!BasicChannelSetExpr{
 	var expr = new Z!BasicChannelSetExpr;
@@ -4070,7 +4866,7 @@ operation RC!Final createFinalAsActionParas() {
 	Active.createActionPara("Active_"+self.FQN());
 //	actionParaSeq.add(Active.createActionPara("Active"));
 	
-	var rightAction2 = createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), "Inactive".createCallAction()));
+	var rightAction2 = createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), ("Inactive"+self.FQN()).createCallAction()));
 	
 	var Interrupted = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction2);
 	Interrupted.createActionPara("Interrupted_"+self.FQN());
@@ -4243,7 +5039,7 @@ operation createParallelAction(cs: Set<String>,
 							   right:Z!CircusAction): Z!CircusAction{
 	
 	var action = new Z!ParallelAction;
-	action.channelSet = createChannelSet(createBasicChannelSetExpr(channel_names));
+	action.channelSet = createChannelSet(createBasicChannelSetExpr(cs));
 	action.leftAction = left;
 	action.rightAction = right;
 	
@@ -4476,14 +5272,16 @@ operation createAction2(
 	if(type = "InterruptAction"){
 		//action2 = createInterruptAction(fst_action, snd_action);
 		action2 = new Z!InterruptAction;
-	} else
+	} 
 	if(type = "SeqAction"){
 		action2 = new Z!SeqAction;
-	} else
+	} 
 	if(type = "ExtChoiceAction"){
 		action2 = new Z!ExtChoiceAction;
 	} 	
-	
+	if(type = "InterleaveAction"){
+		action2 = new Z!InterleaveAction;
+	} 
 	action2.leftAction = fst_action;
 
 	action2.rightAction = snd_action;
@@ -4494,6 +5292,36 @@ operation createAction2(
 	return action2;
 }
 
+
+operation createProcess2(
+	type: String, 
+	fst_proc: Z!CircusProcess, 
+	snd_proc: Z!CircusProcess
+	): Z!Process2{
+	
+	var proc;
+	
+	if(type = "SeqProcess"){
+		proc = new Z!SeqProcess;
+	} 
+	if(type = "ExtChoiceProcess"){
+		proc = new Z!ExtChoiceProcess;
+	} 	
+	if(type = "InterleaveProcess"){
+		proc = new Z!InterleaveProcess;
+	} 
+	if(type = "Process"){
+		proc = new Z!InterleaveProcess;
+	} 
+	proc.leftProcess = fst_proc;
+
+	proc.rightProcess = snd_proc;
+//	action2.actionList = new Z!CircusActionList;
+	
+//	action2.actionList.circusActions = Sequence{action2.leftAction, action2.rightAction};
+		
+	return proc;
+}
 
 operation String createCallAction(): Z!CallAction{
 	var callAction = new Z!CallAction;
@@ -5379,6 +6207,21 @@ operation String createRefExpr(explicit: Boolean, mixFix: Boolean): Z!RefExpr{
 
 }
 
+operation Sequence<String> createRefExprSeq(explicit: Boolean, mixFix: Boolean): Sequence<Z!RefExpr>{
+	var seq = new Sequence<Z!RefExpr>;
+	for (name in self){
+	
+		var refExpr = new Z!RefExpr;
+		refExpr.mixFix = mixFix;
+		refExpr.explicit = explicit;
+		refExpr.name = name.createZName();
+		seq.add(refExpr);
+	}
+		
+	return seq;
+
+}
+
 operation RC!BooleanExp createBooleanExpr(): Z!RefExpr{
 	var boolExpr = new Z!RefExpr;
 	boolExpr.mixFix = false;
@@ -5604,8 +6447,16 @@ operation RC!SeqExp createSeqExpr(): Z!ApplExpr{
 	var exprList = new Z!ZExprList;
 	var exprs = new Sequence<Z!Expr>;
 	exprs = Sequence{};
+	
+	//to do
+	var i = 1;//in CZT, this index starts from 1, why?
 	for(v in self.values){
-		exprs.add(v.createExpr());
+
+		var seq = new Sequence<Z!Expr>;
+		seq.add(createNumExpr(i));//index of the element
+		seq.add(v.createExpr());//element
+		exprs.add(seq.createTupleExpr());//Z list is a list of tupleExpr (index and value)
+		i++;
 	}
 	exprList.exprs = exprs;
 	setExpr.exprList = exprList;
@@ -5730,8 +6581,8 @@ operation RC!Expression createExpr():Z!Expr{
 }
 
 
-
-operation Sequence<Any> createTupleExpr(): Z!TupleExpr{
+//TupleExpr is tuple extension expression
+operation Sequence<Z!Expr> createTupleExpr(): Z!TupleExpr{
 	var tupleExpr = new Z!TupleExpr;
 	tupleExpr.exprList = new Z!ZExprList;
 	("line 4044 self = " + self).println();

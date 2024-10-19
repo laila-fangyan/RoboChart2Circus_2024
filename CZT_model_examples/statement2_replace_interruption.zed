@@ -1,0 +1,749 @@
+\documentclass{article}
+\usepackage{czt}
+
+\begin{document}
+
+\begin{zsection}
+  \SECTION statement2\_replace\_extchoiceion \parents Boolean\_operators
+  %\SECTION statement2\_replace\_extchoiceion \parents circus\_toolkit
+  \end{zsection}
+
+
+
+
+
+
+
+
+
+\begin{circus}
+
+\circchannel share, sharea, shareb, sharec; group2: \num\\
+\circchannel set\_input: \num \\
+\circchannel set\_input8: \num \cross \num \\
+
+\circprocess test\_assignment\_stmt \circdef \\
+ \circbegin
+
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice (set\_input8.2?a \then set\_input8.2?a \then set\_input8.2?a \then \Skip)\\
+%\circspot SStop \extchoice (\Semi x : \num \circspot set\_input8.2?x \then \Skip)\\
+%the above line is to implment R20, but is NOT CORRECT, need James' help
+
+\circend
+\end{circus}
+
+
+\begin{circus}
+
+\circprocess test\_assignment\_stmt\_seperated\_version \circdef \\
+ \circbegin
+\end{circus}
+
+\begin{circusaction}
+SStop \circdef share \then SStop \\
+\end{circusaction}
+
+\begin{circusaction}
+\circspot SStop \extchoice (set\_input!2 \then \Skip)\\
+\end{circusaction}
+
+\begin{circus}
+\circend
+\end{circus}
+
+%an enum type
+\begin{zed}
+  NCID ::= stm0 | stm1 | stm2
+\end{zed}
+
+%a given type
+\begin{zed}
+[Chem]
+\end{zed}
+
+
+
+\begin{zed}
+[Intensity]
+\end{zed}
+
+%schema for record type
+\begin{schema}{GasSensor}
+c: Chem\\
+i: Intensity
+\end{schema}
+
+%a constant
+\begin{axdef}
+  delta : \num
+\where
+  delta > 5
+\end{axdef}
+
+
+%list:  <2,3>
+\begin{axdef}
+  intList : \seq_1 \num
+\where
+  intList = \langle 2, 3 \rangle
+\end{axdef}
+
+
+
+%list:  <>
+\begin{axdef}
+  emptyList : \seq_1 \num
+\where
+  emptyList = \langle  \rangle
+\end{axdef}
+
+%product
+\begin{axdef}
+  intPair : \num \cross \num
+\where
+  intPair = (2, 3)
+\end{axdef}
+
+
+
+\begin{axdef}
+  c1 : \num
+\end{axdef}
+
+\begin{zed}enumtyp1 ::= d0 | d1 | d2
+\end{zed}
+
+\begin{zed}
+  NID ::= s0 | s1 | s2
+\end{zed}
+
+
+\begin{circus}
+\circchannel set\_gs: \seq GasSensor\\
+%\circchannel set\_gs: \seq NID\\
+\circprocess empty\_seq \circdef \\
+ \circbegin
+SStop \circdef share \then SStop \\
+
+\circspot set\_gs ! (\langle  \rangle) \then \Skip\\  %TBC: empty seq; how to assign value for GasSensor type banana bracket
+
+\circend
+
+\end{circus}
+
+
+% function
+%function goreq(  i1 : Intensity , i2 : Intensity) : boolean
+\begin{axdef}
+goreq: Intensity \cross Intensity \fun Boolean\\
+%\where %postcondition result == (i1 > i2)
+%\forall i1: Intensity; i2: Intensity @ goreq(i1,i2) = (i1>i2 ) = True 
+%\forall i1: Intensity; i2: Intensity @ goreq(i1,i2) = (i1~_ greater _~i2 ) = True 
+ 
+% \forall params | PRE(params) @ POST(params)
+\end{axdef}
+
+\begin{axdef}
+toZero: \num\\
+\end{axdef}
+
+
+\begin{circus}
+\circchannel moveCall: \num \cross \num\\
+\circprocess test\_call\_stmt \circdef \\
+ \circbegin
+
+CALLmove \circdef lv: \num ; a: \num \circspot moveCall.lv.a \then \Skip  \\
+
+\circspot CALLmove(0,1) \\
+
+\circend
+
+\end{circus}
+
+
+
+\begin{circus}
+\circchannel set\_var: \num\\
+\circprocess self\_recursive\_parametrized\_call\_action \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+ctrlMemory \circdef a1: \num ; a2: \num  ; a3: \num \circspot set\_var ? x \then ctrlMemory(a1,x,a3)  \\
+
+\circspot ctrlMemory(0,1,2) \\
+
+\circend
+
+\end{circus}
+
+
+
+Buffer0(<v>) = 
+			ctrl_ref1::turn.out?x -> Buffer0(<x>)
+			[]
+			ctrl_ref0::turn.in!v -> Buffer0(<>)
+		Buffer0(<>) = ctrl_ref1::turn.out?x -> Buffer0(<x>)
+
+%Rule 18 as funciton
+\begin{axdef}
+%singleBuffer: channel  \cross Intensity \fun Boolean\\
+%\where %postcondition result == (i1 > i2)
+%\forall i1: Intensity; i2: Intensity @ goreq(i1,i2) = (i1>i2 ) = True 
+%\forall i1: Intensity; i2: Intensity @ goreq(i1,i2) = (i1~_ greater _~i2 ) = True 
+ 
+% \forall params | PRE(params) @ POST(params)
+\end{axdef}
+
+% RULE 18 efrom.type != null
+\begin{circus}
+\circchannel turn\_out: \num\\
+\circchannel turn\_in: \num\\
+\circprocess proc\_singlebuf\_has\_type \circdef \\
+ \circbegin
+
+%????????? Buffer(<>), Buffer(<v>)
+%Buffer0 \circdef v: \num \circspot turn\_out ? x \then Buffer0(\langle x \rangle)
+
+Buffer0 \circdef v: \num \circspot turn\_out ? x \then Buffer0( x ) 
+									\extchoice
+								   turn\_in ! v \then Buffer0\_empty\\
+								   
+
+Buffer0\_empty \circdef turn\_out ? x \then Buffer0(x)\\
+
+\circspot Buffer0\_empty \\
+\circend
+\end{circus}
+
+
+
+% RULE 18 efrom.type = null
+\begin{circus}
+\circchannel turn1\_out\\
+\circchannel turn1\_in\\
+
+\circprocess proc\_singlebuf\_notype \circdef \\
+ \circbegin
+
+
+Buffer\_false \circdef turn1\_out \then Buffer\_true\\
+Buffer\_true  \circdef turn1\_out \then Buffer\_true 
+						\extchoice
+						turn1\_in \then Buffer\_true\\
+								   
+
+\circspot Buffer\_false \\
+\circend
+\end{circus}
+
+
+
+
+% RULE 17 ORIGINAL, c.mult = true, INTERLEAVE PROCESS
+\begin{circus}
+\circprocess interleave\_proc \circdef proc\_singlebuf\_notype \interleave proc\_singlebuf\_has\_type
+
+\end{circus}
+
+
+% RULE 17 modified, c.mult = true, PARALLEL PROCESS
+
+%\circchannelset cs3 == \lchanset terminate \rchanset\\
+%\begin{circus}
+%\circprocess paralle\_proc \circdef proc\_singlebuf\_notype \lpar cs3 \rpar proc\_singlebuf
+
+%\end{circus}
+
+
+% RULE 17, c.mult = false,  Equal PROCESS
+\begin{circus}
+\circprocess equivalent\_proc \circdef proc\_singlebuf\_has\_type
+
+\end{circus}
+
+
+
+\begin{circus}
+\circchannel moveCall2\\
+\circprocess test\_call2\_stmt \circdef \\
+ \circbegin
+
+CALLmove2 \circdef  moveCall2 \then \Skip  \\
+
+\circspot CALLmove2 \\
+
+\circend
+
+\end{circus}
+
+\circbegin
+\begin{circus}
+
+\circchannel move1: NID \cross \num \\
+
+\circchannel moveCall1: NID \cross \num \cross NID\\
+%\circchannelset cs9 == \lchanset moveCall \rchanset\\
+
+\circprocess test\_call1\_stmt \circdef \\
+\circbegin
+
+move1 \circdef lv: NID  \circspot moveCall?lv \then \Skip  \\
+
+\circspot move1(s1) \\
+
+\circend
+
+\end{circus}
+
+
+
+
+\begin{circus}
+
+\circchannel status\_in: \num \cross \num\\
+\circchannel status\_out: \num \\
+
+
+\circprocess test\_commustmt\_input \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+%\circspot SStop \extchoice status\_in ? a ? b \\
+
+\circspot \circvar input2 : \num; a: \num; b: \num \circspot SStop \extchoice status\_in ? a. b
+%\then ( \Skip)\\
+\then (SStop \extchoice set\_input ! input2 \then \Skip)\\
+
+\circend
+\end{circus}
+
+
+
+\begin{circus}
+
+\circchannel chan: \num \cross \num\\
+
+\circprocess product\_test \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot  chan ! (2,3) \then SStop\\
+
+
+\circend
+\end{circus}
+
+\begin{circus}
+
+\circchannel chan1: \seq \num\\
+
+\circprocess seqtype\_test \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot  chan1 ! (\langle 20,30,40,50,60 \rangle )\then SStop\\
+
+\circend
+\end{circus}
+
+
+\begin{circus}
+\circchannel get\_l: \num \\
+\circchannel set\_l: \num \\
+\circprocess param\_action \circdef \\
+ \circbegin
+
+
+Memory\_l \circdef param: \num \circspot get\_l ! param \then Memory\_l(param)  \\
+act1 \circdef lv: \num  \circspot share \then status\_out ! lv \then \Skip  \\
+
+act2 \circdef share \then act1(3) \\
+
+act3 \circdef  set\_l ? xx \then Memory\_l(xx)  \\
+
+\circspot Memory\_l(0)
+%\circspot act2
+% also works: \circspot act1(delta)
+
+\circend
+\end{circus}
+
+
+
+\begin{circus}
+\circchannel get\_input: \num \\
+
+\circprocess test\_commustmt\_output\_refexp\_s1\_during \circdef \\
+ \circbegin
+ 
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice get\_input ? input 
+\then (SStop \extchoice status\_out ! input \then \Skip)\\
+
+\circend
+\end{circus}
+
+
+
+\begin{circus}
+
+\circprocess test\_commustmt\_sync_refexp \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice get\_input ? input 
+\then (SStop \extchoice status\_out.input \then \Skip)\\
+
+\circend
+\end{circus}
+
+
+\begin{circus}
+
+\circprocess test\_commustmt\_output\_concrete\_value \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice (status\_out!3 \then  \Skip)\\
+
+\circend
+\end{circus}
+
+
+
+\begin{circus}
+
+\circprocess test\_commustmt\_sync\_concrete\_value \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice (status\_out.3 \then  \Skip)\\
+
+\circend
+\end{circus}
+
+
+
+
+
+\begin{circus}
+\circchannel stop\_in, stop\_out \\
+\circprocess test\_commustmt\_simple \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice stop\_out 
+\then  \Skip\\
+
+\circend
+\end{circus}
+
+
+
+
+
+
+\begin{circus}
+
+\circprocess test\_skip\_stmt \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot SStop \extchoice \Skip\\
+
+\circend
+\end{circus}
+
+
+
+
+\begin{circus}
+
+\circprocess test\_seq\_stmt \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+\circspot (SStop \extchoice (set\_input ! (4-1) \then \Skip)) \circseq (SStop \extchoice \Skip) \\
+
+\circend
+\end{circus}
+
+
+
+\begin{circus}
+
+\circprocess test\_ifthenelse \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+
+\circspot \circif True~AND~True = True \circthen (SStop \extchoice \Skip)  
+\circelse false \circthen (SStop \extchoice (stop\_out \then \Skip) )\circfi\\
+
+
+\circend
+\end{circus}
+
+
+\begin{circus}
+\circchannel enter\_stm0\_j0, terminate, interrupt\_stm0\_j0 \\
+
+\circprocess junction \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+Inactive    \circdef SStop \extchoice (Activation \extchoice Termination)\\
+Activation  \circdef enter\_stm0\_j0 \then Active\\
+Termination \circdef terminate   \then \Skip \\
+Active      \circdef ( SStop \extchoice (interrupt\_stm0\_j0  \then \Skip)) \circseq Inactive\\
+
+\circspot Inactive 
+
+\circend
+\end{circus}
+
+
+
+\begin{circus}
+
+\circchannel exit, exited, enter\_stm0\_f0, entered\_stm0\_f0, interrupt\_stm0\_f0\\
+\circprocess final \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+Inactive    \circdef SStop \extchoice (Activation \extchoice Termination)\\
+Activation  \circdef enter\_stm0\_f0 \then Entering\\
+Termination \circdef terminate   \then \Skip \\
+Entering    \circdef entered\_stm0\_f0 \then Active\\ 
+Active       \circdef SStop \extchoice (Termination \extchoice (interrupt\_stm0\_f0 \then Interrupted)) \\
+Interrupted  \circdef SStop \extchoice (exit \then exited \then Inactive)\\
+
+
+\circspot Inactive 
+
+\circend
+\end{circus}
+
+
+
+
+
+
+\begin{circus}
+
+\circchannel  enter\_stm0\_s0, entered\_stm0\_s0, interrupt\_stm0\_s0\\
+\circchannel trigger2\_out: \num \\
+\circprocess simple\_state\_s0 \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+Inactive    \circdef SStop \extchoice (Activation \extchoice Termination)\\
+Activation  \circdef enter\_stm0\_s0 \then Active\\
+Termination \circdef terminate   \then \Skip \\
+Active       \circdef 
+			(SStop \extchoice (set\_input!2 \then \Skip) ) \circseq (SStop \extchoice (trigger2\_out!3 \then  \Skip)) 
+				\circseq Behaviour 
+				\circseq Exiting \\
+Behaviour    \circdef  entered\_stm0\_s0 \then During \\
+During 		 \circdef  ((SStop \extchoice \Skip) \circseq SStop) 
+				\extchoice 
+				(interrupt\_stm0\_s0 \then \Skip)\\
+Exiting      \circdef (SStop \extchoice (exit \then \Skip)) \circseq (SStop \extchoice (trigger2\_out!3 \then  \Skip))  \circseq exited \then  Inactive\\
+
+
+\circspot Inactive 
+
+\circend
+\end{circus}
+
+
+
+
+
+\begin{circus}
+
+\circchannel trigger1\_NID\_s2\_in, internal\_NID\_i0, interrupt\_stm0,enter\_stm0\_s2, enter\_f0, stop \\
+\circchannel get\_input3, get\_input2, trigger2\_NID\_s0\_in, set\_input2 : \num \\
+\circchannel get\_input4 : Boolean \\
+\circchannel enter : NCID \cross NID\\
+\circprocess test\_transitions \circdef \\
+\circbegin
+
+
+SStop \circdef share \then SStop \\
+
+
+Trans \circdef SStop \extchoice get\_input3?input3 \then get\_input2?input2 \then get\_input4?input4 \then 
+		(
+			(
+				( (   (internal\_NID\_i0 \then \Skip) \circseq (enter.stm0.s0 \then \Skip)\\
+						\extchoice\\
+						
+					  (\lcircguard input3 > 4 \land input2 <2 \land (input4~AND~(Not~input4)  =  True)\\
+					  \rcircguard \circguard  (trigger1\_NID\_s2\_in \then \Skip)  \circseq (SStop \extchoice (exit \then \Skip)) \circseq (SStop \extchoice ((exited \then (SStop \extchoice (stop\_out \then \Skip))) \\
+					   \circseq (enter\_f0 \then \Skip))))\\
+						\extchoice\\
+						
+					  ( ( trigger2\_NID\_s0\_in?input2 \then ( SStop \extchoice (set\_input2!input2 \then \Skip)))
+					  		\circseq\\
+					  	(SStop \extchoice (exit \then \Skip))
+					  		\circseq\\
+					  	(SStop \extchoice (exited \then (SStop \extchoice (set\_input!(5+2) \then \Skip))))
+							\circseq\\
+						(enter\_stm0\_s2 \then \Skip)\\
+					  )\\
+				
+				
+				   )\\
+				   
+					\extchoice		\\
+				   (share \then \Skip)\\
+				)
+					\circseq\\
+				Trans\\		
+			
+			)\\
+		
+		
+		\extchoice\\
+			( interrupt\_stm0 \then (SStop \extchoice (exit \then \Skip))\\
+			 	\circseq\\
+			(SStop \extchoice (exited \then terminate \then \Skip))\\
+			)\\
+		\extchoice\\
+			(terminate \then \Skip)\\
+		)\\
+
+
+
+
+\circspot Trans 
+
+\circend
+\end{circus}
+
+
+\begin{circus}
+ \circchannel get\_b2, get\_b1: Boolean\\
+\circchannel get\_v: NID\\
+\circprocess transition\_t1 \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+Tran    \circdef SStop \extchoice (get\_b2?b2 \then get\_b1?b1 \then get\_input2?input2 \then get\_input3?input3 \then (
+\lcircguard input2>3 \lor input3<4  \rcircguard 
+\circguard (enter.stm0.s1 \then \Skip)  
+)  )
+
+
+\circspot Tran 
+
+\circend
+\end{circus}
+
+
+\begin{circus}
+
+%\circchannel get\_v: NID\\
+\circprocess transition\_t2 \circdef \\
+\circbegin
+
+SStop \circdef share \then SStop \\
+
+%TBC v = NID::s0 or v = s0 for enum type
+Tran    \circdef SStop \extchoice (get\_v?v  \then (
+\lcircguard v = s0 \rcircguard 
+\circguard (enter.stm0.s1 \then \Skip)  
+)  )
+
+\circspot Tran 
+
+\circend
+\end{circus}
+
+
+
+
+
+
+\begin{circus}
+
+\circprocess composeNode\_noNode \circdef \\
+ \circbegin
+
+SStop \circdef share \then SStop \\
+
+Main \circdef SStop \extchoice terminate \then \Skip\\
+
+\circspot Main\\
+
+
+\circend
+\end{circus}
+
+
+
+
+\begin{circus}
+
+\circchannelset cs == \lchanset share, terminate \rchanset\\
+\circprocess composeNode \circdef \\
+
+(final \lpar cs \rpar simple\_state\_s0 ) \lpar cs \rpar junction\\
+
+
+\end{circus}
+
+
+
+
+\begin{circus}
+\circchannel share1\\
+\circchannel share2: \num\\
+\circchannelset cs == \lchanset share, terminate, share1 \rchanset\\
+\circprocess proc\_renaming \circdef \\
+
+%simple\_state\_s0 \lcircrename share,set\_input := share1,share2 \rcircrename\\
+
+ simple\_state\_s0 \lcircrename share2 := set\_input
+  \rcircrename\\
+\end{circus}
+
+
+
+
+
+
+\begin{circus}
+ 
+\circchannelset cs2 == \lchanset share, terminate, share1 \rchanset\\
+\circprocess proc\_hide \circdef \\
+
+simple\_state\_s0 \circhide  cs2 \\
+
+
+\end{circus}
+
+
+(3+2*7)/5
+\end{document}

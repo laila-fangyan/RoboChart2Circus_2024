@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 06-08-2024 22:28:39
+-- Automatically generated on 16-10-2024 16:09:50
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -20,12 +20,17 @@ P_pkg0_M_C1 = let
 	
 	
 	
+	const_pkg0_M_C1_stm0_c6 = 8
+	const_pkg0_M_C1_stm1_c6 = 8
 	const_pkg0_M_C1_stm1_c1 = const_pkg0_M_C1_stm0_c1
 		
 within
 	pkg0_M_C1::O__(id__,
 			    const_pkg0_M_C1_c2,
+			    const_pkg0_M_C1_c3,
+			    const_pkg0_M_C1_stm0_c6,
 			    const_pkg0_M_C1_stm0_c1,
+			    const_pkg0_M_C1_stm1_c6,
 			    const_pkg0_M_C1_stm1_c1)
 
 assert P_pkg0_M_C1 :[deadlock-free]	
@@ -38,12 +43,16 @@ P_pkg0_M_C1_stm0 = let
 	id__ = 0
 	
 	const_pkg0_M_C1_stm0_c2 = 0
+	const_pkg0_M_C1_stm0_c3 = 0
 	
+	const_pkg0_M_C1_stm0_c6 = 8
 	
 within
 	pkg0_M_C1::stm0::O__(
 		id__,
 		const_pkg0_M_C1_stm0_c2,
+		const_pkg0_M_C1_stm0_c3,
+		const_pkg0_M_C1_stm0_c6,
 		const_pkg0_M_C1_stm0_c1
 	)
 assert P_pkg0_M_C1_stm0 :[deadlock-free]	
@@ -55,12 +64,16 @@ P_pkg0_M_C1_stm1 = let
 	id__ = 0
 	
 	const_pkg0_M_C1_stm0_c2 = 0
+	const_pkg0_M_C1_stm0_c3 = 0
 	
+	const_pkg0_M_C1_stm0_c6 = 8
 	
 within
 	pkg0_M_C1::stm1::O__(
 		id__,
 		const_pkg0_M_C1_stm0_c2,
+		const_pkg0_M_C1_stm0_c3,
+		const_pkg0_M_C1_stm0_c6,
 		const_pkg0_M_C1_stm0_c1
 	)
 assert P_pkg0_M_C1_stm1 :[deadlock-free]	

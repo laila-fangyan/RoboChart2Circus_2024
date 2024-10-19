@@ -2,7 +2,7 @@ package pkg0
 interface  I1{
 //	var a : int
 	const c2 : int
-
+const c3 : int
 }
 interface  I2{
 	var a1: int*int
@@ -85,7 +85,7 @@ operation move2 ( lv : real, a : int ) {
  controller C1{
 
  	uses Ivar // i.e. "define interface" in the manual
- 	//everyting is local, equivalent to declare locally the vars and events
+ 	//everyting is LOCAL, equivalent to declare locally the vars and events
  	//interface is used to group things 
  	
 //	provides I5
@@ -119,8 +119,10 @@ operation move2 ( lv : real, a : int ) {
 	requires I1
 	requires moveIF//provided by ctrl
 	requires moveIF1
-	var l: int 
+	const c6: int =8
+	var l: int = c6
 	var a: int
+
 //	var a:int, m:int, a1:int
 
 	event mv_evt1: int
@@ -134,7 +136,7 @@ operation move2 ( lv : real, a : int ) {
 	
 	initial i0
 	state s0 {		
-		entry  move4();event1  ? a1; event2 ?a3; m = m + c1 
+		entry  a = 3; move4();event1  ? a1; event2 ?a3; m = m + c1 
 		
 		during a = a3 + l + 1;move2(4,5)
 		
@@ -161,12 +163,13 @@ operation move2 ( lv : real, a : int ) {
 		trigger 
 		event2 ? a
 		condition a3 > 4
-		action trigger1 ! ( a3 + c2 )
+		action trigger1 ! ( a3 + c2  + c3)
 			}
 		}
  	
  	sref stm1 = stm0
  	
+//	connection stm0 on stop to stm1 on stop
 	}
 	
 }

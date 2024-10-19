@@ -1,0 +1,4 @@
+To show the structure in EMF model, open the file in CZT.
+language option: Circus
+
+To build CZT model, use Eclipse based CZT

@@ -16,11 +16,11 @@ type Intensity
 //Analyze whether there is gas or not
 import Location::*
 
-stm GasAnalysis {
-	var sts : Status
-	var gs : Seq(GasSensor)
-	var ins : Intensity
-	var anl : Angle
+stm GasAnalysis_stm {
+	var sts : Status = noGas
+	var gs : Seq(GasSensor) = <>
+	var ins : Intensity   
+	var anl : Angle = Front
 	event gas : Seq(GasSensor) //Seq can be treated as vector
 	event resume
 	

@@ -1,5 +1,16 @@
+-- generate const_pkg0_M_C1_c3
+const_pkg0_M_C1_c3 = 0
+
+-- STATEMACHINE CONSTANTS
+
 -- generate string
 nametype core_string = LSeq(Char,2)
+
+-- generate Chemical2_goreq
+Chemical2_goreq(i1,i2) = true
+
+-- generate const_Chemical2_GasAnalysis_stm_thr
+const_Chemical2_GasAnalysis_stm_thr = 0
 
 -- generate pkg0_move1_BOUND
 pkg0_move1_BOUND = 2
@@ -13,12 +24,20 @@ nametype Chemical_Chem = {0,1}
 
 -- MODULE CONSTANTS
 
+-- generate Chemical2_angle
+Chemical2_angle(x) = Chemical2_Angle_Left
+
 -- generate const_pkg0_M_C1_stm1_c1
 const_pkg0_M_C1_stm1_c1 = 0
 
 -- OPERATION CONSTANTS
 
 -- BASIC TYPES
+
+-- generate const_pkg0_M_P1_c3
+const_pkg0_M_P1_c3 = 0
+
+-- CONTROLLER CONSTANTS
 
 -- generate const_pkg0_M_P1_c2
 const_pkg0_M_P1_c2 = 0
@@ -35,6 +54,9 @@ const_pkg0_M_C1_c2 = 0
 
 -- generate Chemical_location
 Chemical_location(gs) = Chemical_Angle_Left
+
+-- generate const_Chemical_GasAnalysis_stm_thr
+const_Chemical_GasAnalysis_stm_thr = 0
 
 -- generate --
 
@@ -74,8 +96,14 @@ Chemical_goreq(i1,i2) = true
 nametype core_int = union({ -2..2},{calc_type_min(Union(
 			{{(Plus(a3, c2, { -2..2}))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, { -2..2})|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{(Plus(a3, c2, { -2..2}))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, { -2..2})|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))})
 
+-- generate Chemical2_card
+Chemical2_card(A) = 0
+
 -- generate Div
 Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
+
+-- generate Chemical2_location
+Chemical2_location(gs) = Chemical2_Angle_Left
 
 -- generate const_pkg0_M_C1_stm0_c1
 const_pkg0_M_C1_stm0_c1 = 0
@@ -86,14 +114,20 @@ Neg(e1,T) = if member(-e1,T) then -e1 else e1
 -- generate Chemical_card
 Chemical_card(A) = 0
 
+-- generate Chemical2_intensity
+Chemical2_intensity(gs) = 0
+
 -- generate const_pkg0_M_C1_stm0_c2
 const_pkg0_M_C1_stm0_c2 = 0
 
--- generate const_Chemical_GasAnalysis_thr
-const_Chemical_GasAnalysis_thr = 0
+-- generate const_pkg0_M_C1_stm0_c3
+const_pkg0_M_C1_stm0_c3 = 0
 
 -- generate boolean
 nametype core_boolean = Bool
+
+-- generate const_Chemical_GasAnalysis_thr
+const_Chemical_GasAnalysis_thr = 0
 
 -- generate Mult
 Mult(e1,e2,T) = if member(e1*e2,T) then e1*e2 else e1
@@ -109,4 +143,7 @@ Chemical_intensity(gs) = 0
 
 -- generate Minus
 Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
+
+-- generate Chemical2_analysis
+Chemical2_analysis(gs) = Chemical2_Status_noGas
 
