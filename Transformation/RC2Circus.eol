@@ -92,12 +92,23 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 30.06.2024
 ******************************/
 
+/****************************
+Ziggy: 
+I have just added the createTupleExpr() from a tuple in RoboChart to a tuple in Z, and I have added this to the createExpr() function as well.
+
+16.01.2025
+******************************/
+
 
 
 //var pkg =  RC!RCPackage.all().selectOne(p|p.name = "Chemical");
-var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0" or p.name = "Chemical");
+RC!RCPackage.all().println();
+var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0" or p.name = "Chemical" or p.name = "BalanceSTM");
 pkg.println();
 
+for(stm in RC!StateMachineDef.all()){
+	createStateMachineDefAsActionPara(stm);
+}
 //for(stm in RC!StateMachineDef.all().selectOne(s|s.name = "stm0" or s.name = "GasAnalysis_stm")){
 //	stm.nodes.println();
 ////	for(nd in stm.nodes){
@@ -137,16 +148,16 @@ pkg.println();
 //}
 
 
-for(c in RC!ControllerDef.all().selectOne(c|c.name = "C1")){
-//	for(op in c.lOperations){
-//		("line 87, op = " + op).println();
-//		if(op.nodes.size()>0){
-//			createOperationDefAsActionPara(op);
-//		}
-//	}
-
-	createControllerAsProcessPara(c);
-}
+//for(c in RC!ControllerDef.all().selectOne(c|c.name = "SegwayController")){
+////	for(op in c.lOperations){
+////		("line 87, op = " + op).println();
+////		if(op.nodes.size()>0){
+////			createOperationDefAsActionPara(op);
+////		}
+////	}
+//
+//	createControllerAsProcessPara(c);
+//}
 replaceRef();
 
 //To transform RoboChart user defined types
@@ -1489,6 +1500,7 @@ operation createControllerAsProcessPara(c: RC!ControllerDef): Z!ProcessPara{
 	var actionParaSeq = new Sequence<Z!ActionPara>;
 	
 	//to create operation sematics for defined ops
+	c.lOperations.println();
 	for(op in c.lOperations){
 		if(op.nodes.isDefined()){
 //			actionParaSeq.add(createOperationDefAsActionPara(op));
@@ -4493,10 +4505,10 @@ operation createParallelProcessFromProcSet(
 }
 
 /*
-channel set to be synchronized in a parallel action/process is shown as ‘Enumerated channel set’ in CZT tool.
+channel set to be synchronized in a parallel action/process is shown as ï¿½Enumerated channel setï¿½ in CZT tool.
 It is BaiscChannelSetExpr in CZT AST, which contains a set of communications. 
 So it is not a channelset, but an expr.
-So in the channel set, it’s a list of communications, instead of a list of channels
+So in the channel set, itï¿½s a list of communications, instead of a list of channels
 */
 //to create BasicChannelSetExpr used in channel set declaration
 operation createBasicChannelSetExpr(channel_names:Sequence<String>): Z!BasicChannelSetExpr{
@@ -6474,7 +6486,20 @@ operation RC!Neg createNegExpr():Z!ApplExpr{
 	return self.createUnaryApplExpr("-_");
 }	
 
-
+operation RC!TupleExp createTupleExpr():Z!TupleExpr{
+    var expr = new Z!TupleExpr;
+	var exprList = new Z!ZExprList;
+	var exprs = new Sequence<Z!Expr>;
+	exprs = Sequence{};
+	
+	for(v in self.values){
+		exprs.add(v.createExpr());
+	}
+	exprList.exprs = exprs;
+	expr.exprList = exprList;
+	
+	return expr;
+}
 
 
 
@@ -6572,6 +6597,10 @@ operation RC!Expression createExpr():Z!Expr{
 	
 	if(self.isTypeOf(RC!SeqExp)){
 		return self.createSeqExpr();
+	} 
+	
+	if(self.isTypeOf(RC!TupleExp)){
+		return self.createTupleExpr();
 	} 
 	
 //	//TO DO
