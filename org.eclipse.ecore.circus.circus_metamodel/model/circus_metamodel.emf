@@ -1208,15 +1208,16 @@ enum ParamQualifier {
 }
 
 class QualifiedDecl extends Decl {
-	val Expr expr;
 	val ZNameList nameList;
+	val Expr expr;
 	attr ParamQualifier paramQualifier;
 }
 
 class VarDecl extends Decl {
-	val Expr expr;
-	val ZNameList nameList;
+		val ZNameList nameList; //set of names
+		val Expr expr; //type of the variable
 }
+
 
 
 /********************************
@@ -1346,10 +1347,11 @@ class NumExpr extends Expr {
 
 @GenModel(documentation="C.6.21 - Generic Operator Application. For example: S \rel T.  mixfix and explicit are  true; C.6.28 - Reference. For example: \arithmos, mixfix and explicit are false; C.6.29 - Generic Instantiation. For example: \emptyset[T], mixfix is always false")
 class RefExpr extends Expr {
-	attr boolean explicit;
-	val ZExprList exprList;
-	attr boolean mixFix;
 	val ZName name;
+	val ZExprList exprList;
+	attr boolean explicit;
+	attr boolean mixFix;
+
 }
 
 class SigmaExpr extends Expr {
