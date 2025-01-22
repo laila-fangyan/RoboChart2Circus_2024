@@ -5094,6 +5094,20 @@ operation createBasicChannelSetExpr(channel_names:Set<String>): Z!BasicChannelSe
 }
 
 
+
+operation createBasicChannelSetExpr(channels:Sequence<Z!Communication>): Z!BasicChannelSetExpr{
+	var expr = new Z!BasicChannelSetExpr;
+//	var commuList = new Sequence<Z!Communication>;
+//	for(n in channel_names){
+//		commuList.add(createChannelSetCommunication(n));
+//	} 
+	var communicationList = new Z!CircusCommunicationList;
+	expr.communicationList = communicationList;
+	expr.communicationList.communications = channels;
+	return expr;
+}
+
+
 //to create communication of channelset type to be used in the BasicChannelSetExpr
 operation createChannelSetCommunication(
 	channel_name:String
