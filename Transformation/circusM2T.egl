@@ -617,7 +617,7 @@ end
 	var seq_str : String;
 	
 	if(self.rightExpr.exprList.exprs.size()>0){
-		seq_str = "[" + self.rightExpr.parseSetExpr() + "]";
+		seq_str = "[" + self.rightExpr.parseSetExprOfSeq() + "]";
 	} else { 
 		seq_str = "[]";
 	}
@@ -625,6 +625,21 @@ end
 	return seq_str;
 }%]
 
+[%operation Z!SetExpr parseSetExprOfSeq(): String{
+	var seq_str : String;
+	
+	for(tup_expr in self.exprList.exprs){
+		seq_str = seq_str + tup_expr.exprList.exprs.at(1).parseExpr();
+		if(hasMore){
+			seq_str = seq_str + ",";
+		}
+	}
+	return seq_str;
+
+
+
+
+}%]
 [%operation Z!SetExpr parseSetExpr(): String{
 	var set_str : String;
 	
@@ -663,7 +678,7 @@ end
 		}
 	}
 
-	return tup_str;
+	return "(" + tup_str + ")";
 }%]
 
 
