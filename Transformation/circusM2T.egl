@@ -241,6 +241,9 @@ end
 	if(self.instanceOf(Z!SeqAction)){
 		return self.parseSeqAction();
 	} //else
+	if(self.instanceOf(Z!SeqActionIte)){
+		return self.parseSeqActionIte();
+	}
 	if(self.instanceOf(Z!GuardedAction)){
 		return self.parseGuardedAction();
 	} //else
@@ -262,6 +265,9 @@ end
 	if(self.instanceOf(Z!InterleaveActionIte)){
 		return self.parseInterleaveActionIte();
 	} //else
+	if(self.instanceOf(Z!InterleaveAction)){
+		return self.parseInterleaveAction();
+	} 
 	if(self.instanceOf(Z!RenameAction)){
 		return self.parseRenameAction();
 	} 
@@ -291,6 +297,10 @@ end
 
 [%operation Z!SeqAction parseSeqAction(): String{
 	return  "(" + self.leftAction.parseAction() + ";; " + self.rightAction.parseAction() + ")";
+}%]
+
+[%operation Z!SeqActionIte parseSeqActionIte(): String{
+	return  "( ;; "  +  self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<bullet>  " + self.circusAction.parseAction() + " )";
 }%]
 
 [%operation Z!GuardedAction parseGuardedAction(): String{
@@ -348,6 +358,10 @@ end
 	return  "( \\<interleave> "  +  self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<bullet>  " + self.circusAction.parseAction() + " )";
 }%]
 [*suppose there is only one parameter for iteration*]
+
+[%operation Z!InterleaveAction parseInterleaveAction(): String{
+	return  "(" + self.leftAction.parseAction() + " \\<interleave> " +	self.rightAction.parseAction() + ")";
+}%]
 
 
 [%operation Z!RenameAction parseRenameAction(): String{
