@@ -96,8 +96,12 @@ definition "[%= chansetpara.name.word%] = \<lbrace>
 [%}%]
 
 definition relu :: "real \<Rightarrow> real" where
-	"relu x = max 0 x"
+		   "relu x = max 0 x"
 
+definition norm :: "real \<Rightarrow> (real \<times> real) \<Rightarrow> (real \<times> real) \<Rightarrow> real" where
+		   "norm x r r' = (((x - fst(r)) / (snd(r) - fst(r))) 
+                              * (snd(r') - fst(r'))) + fst(r')"
+                              
 [%var procparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ProcessPara));
 //procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.type().println();
 //
