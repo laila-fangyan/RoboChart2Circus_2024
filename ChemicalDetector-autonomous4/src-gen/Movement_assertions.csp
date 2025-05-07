@@ -1,0 +1,5 @@
+-- generate include
+include "Movement.csp"
+
+-- generate customAssertions
+

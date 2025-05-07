@@ -1,0 +1,6 @@
+Timed(OneStep) {
+move(lv,a) = let
+AUX(N) = if (N == 0) then SKIP else
+	  SKIP
+            within AUX(move_BOUND)
+}

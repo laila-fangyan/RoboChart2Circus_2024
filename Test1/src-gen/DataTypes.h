@@ -5,11 +5,11 @@
 #include <set>
 #include <tuple>
  
-enum Angle {
-	Left, Right, Back, Front
-};
 enum Status {
 	noGas, gasD
+};
+enum Angle {
+	Left, Right, Back, Front
 };
 
 #endif

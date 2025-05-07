@@ -1,0 +1,5 @@
+-- generate customAssertions not
+
+-- generate include
+include "Location.csp"
+

@@ -1,0 +1,3856 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:circus="http://www.robocalc.circus/Circus">
+  <circus:FreePara>
+    <freetypeList xsi:type="circus:ZFreetypeList">
+      <freeTypes>
+        <name word="Status"/>
+        <branchList>
+          <branches>
+            <name word="noGas"/>
+          </branches>
+          <branches>
+            <name word="gasD"/>
+          </branches>
+        </branchList>
+      </freeTypes>
+    </freetypeList>
+  </circus:FreePara>
+  <circus:FreePara>
+    <freetypeList xsi:type="circus:ZFreetypeList">
+      <freeTypes>
+        <name word="Angle"/>
+        <branchList>
+          <branches>
+            <name word="Left"/>
+          </branches>
+          <branches>
+            <name word="Right"/>
+          </branches>
+          <branches>
+            <name word="Back"/>
+          </branches>
+          <branches>
+            <name word="Front"/>
+          </branches>
+        </branchList>
+      </freeTypes>
+    </freetypeList>
+  </circus:FreePara>
+  <circus:AxPara box="SchBox">
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:ConstDecl">
+          <name word="GasSensor"/>
+          <expr xsi:type="circus:SchExpr">
+            <schText>
+              <declList>
+                <decls xsi:type="circus:VarDecl">
+                  <nameList>
+                    <names word="c"/>
+                  </nameList>
+                  <expr xsi:type="circus:RefExpr">
+                    <name word="Chem"/>
+                  </expr>
+                </decls>
+                <decls xsi:type="circus:VarDecl">
+                  <nameList>
+                    <names word="i"/>
+                  </nameList>
+                  <expr xsi:type="circus:RefExpr">
+                    <name word="Intensity"/>
+                  </expr>
+                </decls>
+              </declList>
+            </schText>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:GivenPara>
+    <nameList>
+      <names word="Chem"/>
+    </nameList>
+  </circus:GivenPara>
+  <circus:GivenPara>
+    <nameList>
+      <names word="Intensity"/>
+    </nameList>
+  </circus:GivenPara>
+  <circus:FreePara>
+    <freetypeList xsi:type="circus:ZFreetypeList">
+      <freeTypes>
+        <name word="Loc"/>
+        <branchList>
+          <branches>
+            <name word="left"/>
+          </branches>
+          <branches>
+            <name word="right"/>
+          </branches>
+          <branches>
+            <name word="front"/>
+          </branches>
+        </branchList>
+      </freeTypes>
+    </freetypeList>
+  </circus:FreePara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="angle"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+            <name word="_->_"/>
+            <exprList>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="nat"/>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="Angle"/>
+              </exprs>
+            </exprList>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="location"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+            <name word="_->_"/>
+            <exprList>
+              <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <name word="seq_"/>
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="GasSensor"/>
+                  </exprs>
+                </exprList>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="Angle"/>
+              </exprs>
+            </exprList>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="goreq"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+            <name word="_->_"/>
+            <exprList>
+              <exprs xsi:type="circus:ProdExpr">
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="Intensity"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="Intensity"/>
+                  </exprs>
+                </exprList>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="boolean"/>
+              </exprs>
+            </exprList>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="analysis"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+            <name word="_->_"/>
+            <exprList>
+              <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <name word="seq_"/>
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="GasSensor"/>
+                  </exprs>
+                </exprList>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="Status"/>
+              </exprs>
+            </exprList>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="intensity"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+            <name word="_->_"/>
+            <exprList>
+              <exprs xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+                <name word="seq_"/>
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="GasSensor"/>
+                  </exprs>
+                </exprList>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="Intensity"/>
+              </exprs>
+            </exprList>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="terminate"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="terminate_channel"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="flag_in"/>
+          <names word="flag_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="gas_in"/>
+          <names word="gas_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr" explicit="true" mixFix="true">
+          <name word="seq_"/>
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="GasSensor"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="obstacle_in"/>
+          <names word="obstacle_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Loc"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="odometer_in"/>
+          <names word="odometer_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="real"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="event_channel_pltf_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="moveCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:ProdExpr">
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="real"/>
+            </exprs>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="Angle"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="randomWalkCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="shortRandomWalkCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="undefined_op_channel_pltf_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList/>
+    <name word="var_channels_pltf_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList/>
+    <name word="var_channels_ctrl_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="turn_in"/>
+          <names word="turn_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Angle"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="obstacle_in"/>
+          <names word="obstacle_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Loc"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="flag_in"/>
+          <names word="flag_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="stop_in"/>
+          <names word="stop_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="resume_in"/>
+          <names word="resume_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="odometer_in"/>
+          <names word="odometer_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="real"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="event_channel_ctrl_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="moveCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:ProdExpr">
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="real"/>
+            </exprs>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="Angle"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="randomWalkCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="shortRandomWalkCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="undefined_op_channel_ctrl_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelSetPara>
+    <channelSet xsi:type="circus:CircusChannelSet">
+      <expr xsi:type="circus:BasicChannelSetExpr">
+        <communicationList/>
+      </expr>
+    </channelSet>
+    <name word="shared_variable_events_ctrl_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelSetPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="randomWalkCall"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="randomWalkCall"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="shortRandomWalkCall"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="shortRandomWalkCall"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:ParamAction">
+      <circusAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="moveCall"/>
+          </channelExpr>
+          <fieldList>
+            <fields xsi:type="circus:DotField" outputField="false">
+              <expr xsi:type="circus:RefExpr">
+                <name word="param_lv"/>
+              </expr>
+            </fields>
+            <fields xsi:type="circus:DotField" outputField="false">
+              <expr xsi:type="circus:RefExpr">
+                <name word="param_a"/>
+              </expr>
+            </fields>
+          </fieldList>
+        </communication>
+      </circusAction>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="lv"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="real"/>
+          </expr>
+        </decls>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="a"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="Angle"/>
+          </expr>
+        </decls>
+      </declList>
+    </circusAction>
+    <name word="moveCall"/>
+  </circus:ActionPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="lv"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="real"/>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="stuckDist"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="real"/>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="outPeriod"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="nat"/>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="evadeTime"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="nat"/>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:AxPara>
+    <zSchText>
+      <declList>
+        <decls xsi:type="circus:VarDecl">
+          <nameList>
+            <names word="stuckPeriod"/>
+          </nameList>
+          <expr xsi:type="circus:RefExpr">
+            <name word="nat"/>
+          </expr>
+        </decls>
+      </declList>
+    </zSchText>
+  </circus:AxPara>
+  <circus:FreePara>
+    <freetypeList xsi:type="circus:ZFreetypeList">
+      <freeTypes>
+        <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <branchList>
+          <branches>
+            <name word="NID_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+          <branches>
+            <name word="NID_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </branches>
+        </branchList>
+      </freeTypes>
+    </freetypeList>
+  </circus:FreePara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="internal__stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="internal_channel_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="flowchannel_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="get_a"/>
+          <names word="set_a"/>
+          <names word="setL_a"/>
+          <names word="setR_a"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Angle"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="get_d0"/>
+          <names word="set_d0"/>
+          <names word="setL_d0"/>
+          <names word="setR_d0"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="real"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="get_d1"/>
+          <names word="set_d1"/>
+          <names word="setL_d1"/>
+          <names word="setR_d1"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="real"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="get_l"/>
+          <names word="set_l"/>
+          <names word="setL_l"/>
+          <names word="setR_l"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Loc"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="var_channel_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="obstacle_in"/>
+          <names word="obstacle_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Loc"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="odometer_in"/>
+          <names word="odometer_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="real"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="resume_in"/>
+          <names word="resume_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="turn_in"/>
+          <names word="turn_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Angle"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="stop_in"/>
+          <names word="stop_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="flag_in"/>
+          <names word="flag_out"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="obstacle__in"/>
+        </channelNameList>
+        <expr xsi:type="circus:ProdExpr">
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </exprs>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="Loc"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="odometer__in"/>
+        </channelNameList>
+        <expr xsi:type="circus:ProdExpr">
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </exprs>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="real"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="resume__in"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="turn__in"/>
+        </channelNameList>
+        <expr xsi:type="circus:ProdExpr">
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </exprs>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="Angle"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="stop__in"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="flag__in"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="NIDS_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="event_channel_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="moveCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:ProdExpr">
+          <exprList>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="real"/>
+            </exprs>
+            <exprs xsi:type="circus:RefExpr">
+              <name word="Angle"/>
+            </exprs>
+          </exprList>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="randomWalkCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="shortRandomWalkCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="changeDirectionCall"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="Loc"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="undefined_op_channel_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="junction_channel_in_stmbd_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelPara>
+    <declList>
+      <decls xsi:type="circus:ChannelDecl">
+        <genFormals/>
+        <channelNameList>
+          <names word="enter_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="entered_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="interrupt_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredL_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          <names word="enteredR_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelNameList>
+        <expr xsi:type="circus:RefExpr">
+          <name word="SYNCH"/>
+        </expr>
+      </decls>
+    </declList>
+    <name word="state_channel_in_stmbd_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelPara>
+  <circus:ChannelSetPara>
+    <channelSet xsi:type="circus:CircusChannelSet">
+      <expr xsi:type="circus:BasicChannelSetExpr">
+        <communicationList>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+        </communicationList>
+      </expr>
+    </channelSet>
+    <name word="enterSS_in_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelSetPara>
+  <circus:ChannelSetPara>
+    <channelSet xsi:type="circus:CircusChannelSet">
+      <expr xsi:type="circus:BasicChannelSetExpr">
+        <communicationList>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+        </communicationList>
+      </expr>
+    </channelSet>
+    <name word="enteredSS_in_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelSetPara>
+  <circus:ChannelSetPara>
+    <channelSet xsi:type="circus:CircusChannelSet">
+      <expr xsi:type="circus:BasicChannelSetExpr">
+        <communicationList>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+        </communicationList>
+      </expr>
+    </channelSet>
+    <name word="internal_events_in_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelSetPara>
+  <circus:ChannelSetPara>
+    <channelSet xsi:type="circus:CircusChannelSet">
+      <expr xsi:type="circus:BasicChannelSetExpr">
+        <communicationList/>
+      </expr>
+    </channelSet>
+    <name word="shared_variable_events_in_stmbd_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelSetPara>
+  <circus:ChannelSetPara>
+    <channelSet xsi:type="circus:CircusChannelSet">
+      <expr xsi:type="circus:BasicChannelSetExpr">
+        <communicationList>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="obstacle_in"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="obstacle_out"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="odometer_in"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="odometer_out"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="resume_in"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="resume_out"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="turn_in"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="turn_out"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="stop_in"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="stop_out"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="flag_in"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="flag_out"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="moveCall"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="randomWalkCall"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="shortRandomWalkCall"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+          <communications commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="changeDirectionCall"/>
+            </channelExpr>
+            <fieldList/>
+          </communications>
+        </communicationList>
+      </expr>
+    </channelSet>
+    <name word="sem__events_stm_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ChannelSetPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="interrupt_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:CallAction">
+        <name word="Inactive_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </rightAction>
+    </circusAction>
+    <name word="Active_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:SkipAction"/>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <exprList/>
+          <name word="CALL__randomWalk"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <exprList>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="lv"/>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="a"/>
+              </exprs>
+            </exprList>
+            <name word="CALL__move"/>
+          </circusAction>
+          <communication commPattern="Input" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="get_a"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:InputField">
+                <varialbeName word="a"/>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <exprList>
+            <exprs xsi:type="circus:NumExpr">
+              <numeral value="0"/>
+            </exprs>
+            <exprs xsi:type="circus:SetExpr">
+              <exprList>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="Front"/>
+                </exprs>
+              </exprList>
+            </exprs>
+          </exprList>
+          <name word="CALL__move"/>
+        </leftAction>
+        <rightAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="flag_out"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Entering_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Entering_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Termination_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Interrupted_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="interrupt_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactivej1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="Interrupted_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:InterruptAction">
+              <leftAction xsi:type="circus:CallAction">
+                <name word="SSTOP"/>
+              </leftAction>
+              <rightAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="set_d0"/>
+                  </channelExpr>
+                  <fieldList>
+                    <fields xsi:type="circus:DotField" outputField="true">
+                      <expr xsi:type="circus:RefExpr">
+                        <name word="d0"/>
+                      </expr>
+                    </fields>
+                  </fieldList>
+                </communication>
+              </rightAction>
+            </circusAction>
+            <communication commPattern="Input" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="odometer_in"/>
+              </channelExpr>
+              <fieldList>
+                <fields xsi:type="circus:InputField">
+                  <varialbeName word="d0"/>
+                </fields>
+              </fieldList>
+            </communication>
+          </rightAction>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:InterruptAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="SSTOP"/>
+            </leftAction>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:CallAction">
+                <exprList>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="l"/>
+                  </exprs>
+                </exprList>
+                <name word="CALL__changeDirection"/>
+              </circusAction>
+              <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="get_l"/>
+                </channelExpr>
+                <fieldList>
+                  <fields xsi:type="circus:InputField">
+                    <varialbeName word="l"/>
+                  </fields>
+                </fieldList>
+              </communication>
+            </rightAction>
+          </leftAction>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <exprList>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="lv"/>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="a"/>
+              </exprs>
+            </exprList>
+            <name word="CALL__move"/>
+          </circusAction>
+          <communication commPattern="Input" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="get_a"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:InputField">
+                <varialbeName word="a"/>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:SkipAction"/>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:CallAction">
+        <name word="SSTOP"/>
+      </leftAction>
+      <rightAction xsi:type="circus:ExtChoiceAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Activation_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Termination_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Inactive_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="Active_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Activation_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="terminate"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Termination_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <exprList/>
+          <name word="CALL__shortRandomWalk"/>
+        </leftAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="Behaviour_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Exiting_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Active_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:CallAction">
+        <name word="During_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </circusAction>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="entered_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </circusAction>
+    <name word="Behaviour_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:InterruptAction">
+      <leftAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:PrefixingAction">
+        <circusAction xsi:type="circus:SkipAction"/>
+        <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+          <channelExpr>
+            <name word="interrupt_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </channelExpr>
+          <fieldList/>
+        </communication>
+      </rightAction>
+    </circusAction>
+    <name word="During_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:SeqAction">
+        <leftAction xsi:type="circus:SkipAction"/>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Inactive_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </rightAction>
+    </circusAction>
+    <name word="Exiting_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:ActionPara>
+    <circusAction xsi:type="circus:ParallelAction">
+      <leftAction xsi:type="circus:ParallelAction">
+        <leftAction xsi:type="circus:ParallelAction">
+          <leftAction xsi:type="circus:ParallelAction">
+            <leftAction xsi:type="circus:ParallelAction">
+              <leftAction xsi:type="circus:ParallelAction">
+                <leftAction xsi:type="circus:ParallelAction">
+                  <leftAction xsi:type="circus:ParallelAction">
+                    <leftAction xsi:type="circus:CallAction">
+                      <name word="Inactive_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+                    </leftAction>
+                    <rightAction xsi:type="circus:CallAction">
+                      <name word="Inactive_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+                    </rightAction>
+                    <leftNameSet xsi:type="circus:CircusNameSet">
+                      <expr xsi:type="circus:SetExpr">
+                        <exprList/>
+                      </expr>
+                    </leftNameSet>
+                    <rightNameSet xsi:type="circus:CircusNameSet">
+                      <expr xsi:type="circus:SetExpr">
+                        <exprList/>
+                      </expr>
+                    </rightNameSet>
+                    <channelSet xsi:type="circus:CircusChannelSet">
+                      <expr xsi:type="circus:BasicChannelSetExpr">
+                        <communicationList>
+                          <communications commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="share"/>
+                            </channelExpr>
+                            <fieldList/>
+                          </communications>
+                          <communications commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="terminate"/>
+                            </channelExpr>
+                            <fieldList/>
+                          </communications>
+                        </communicationList>
+                      </expr>
+                    </channelSet>
+                  </leftAction>
+                  <rightAction xsi:type="circus:CallAction">
+                    <name word="Inactive_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+                  </rightAction>
+                  <leftNameSet xsi:type="circus:CircusNameSet">
+                    <expr xsi:type="circus:SetExpr">
+                      <exprList/>
+                    </expr>
+                  </leftNameSet>
+                  <rightNameSet xsi:type="circus:CircusNameSet">
+                    <expr xsi:type="circus:SetExpr">
+                      <exprList/>
+                    </expr>
+                  </rightNameSet>
+                  <channelSet xsi:type="circus:CircusChannelSet">
+                    <expr xsi:type="circus:BasicChannelSetExpr">
+                      <communicationList>
+                        <communications commUsage="Normal" multiSych="0">
+                          <channelExpr>
+                            <name word="share"/>
+                          </channelExpr>
+                          <fieldList/>
+                        </communications>
+                        <communications commUsage="Normal" multiSych="0">
+                          <channelExpr>
+                            <name word="terminate"/>
+                          </channelExpr>
+                          <fieldList/>
+                        </communications>
+                      </communicationList>
+                    </expr>
+                  </channelSet>
+                </leftAction>
+                <rightAction xsi:type="circus:CallAction">
+                  <name word="Inactive_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+                </rightAction>
+                <leftNameSet xsi:type="circus:CircusNameSet">
+                  <expr xsi:type="circus:SetExpr">
+                    <exprList/>
+                  </expr>
+                </leftNameSet>
+                <rightNameSet xsi:type="circus:CircusNameSet">
+                  <expr xsi:type="circus:SetExpr">
+                    <exprList/>
+                  </expr>
+                </rightNameSet>
+                <channelSet xsi:type="circus:CircusChannelSet">
+                  <expr xsi:type="circus:BasicChannelSetExpr">
+                    <communicationList>
+                      <communications commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="share"/>
+                        </channelExpr>
+                        <fieldList/>
+                      </communications>
+                      <communications commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="terminate"/>
+                        </channelExpr>
+                        <fieldList/>
+                      </communications>
+                    </communicationList>
+                  </expr>
+                </channelSet>
+              </leftAction>
+              <rightAction xsi:type="circus:CallAction">
+                <name word="Inactive_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </rightAction>
+              <leftNameSet xsi:type="circus:CircusNameSet">
+                <expr xsi:type="circus:SetExpr">
+                  <exprList/>
+                </expr>
+              </leftNameSet>
+              <rightNameSet xsi:type="circus:CircusNameSet">
+                <expr xsi:type="circus:SetExpr">
+                  <exprList/>
+                </expr>
+              </rightNameSet>
+              <channelSet xsi:type="circus:CircusChannelSet">
+                <expr xsi:type="circus:BasicChannelSetExpr">
+                  <communicationList>
+                    <communications commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="share"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communications>
+                    <communications commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="terminate"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communications>
+                  </communicationList>
+                </expr>
+              </channelSet>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Inactive_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </rightAction>
+            <leftNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </leftNameSet>
+            <rightNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </rightNameSet>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:BasicChannelSetExpr">
+                <communicationList>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="share"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="terminate"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                </communicationList>
+              </expr>
+            </channelSet>
+          </leftAction>
+          <rightAction xsi:type="circus:CallAction">
+            <name word="Inactive_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+          </rightAction>
+          <leftNameSet xsi:type="circus:CircusNameSet">
+            <expr xsi:type="circus:SetExpr">
+              <exprList/>
+            </expr>
+          </leftNameSet>
+          <rightNameSet xsi:type="circus:CircusNameSet">
+            <expr xsi:type="circus:SetExpr">
+              <exprList/>
+            </expr>
+          </rightNameSet>
+          <channelSet xsi:type="circus:CircusChannelSet">
+            <expr xsi:type="circus:BasicChannelSetExpr">
+              <communicationList>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="share"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+              </communicationList>
+            </expr>
+          </channelSet>
+        </leftAction>
+        <rightAction xsi:type="circus:CallAction">
+          <name word="Inactive_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </rightAction>
+        <leftNameSet xsi:type="circus:CircusNameSet">
+          <expr xsi:type="circus:SetExpr">
+            <exprList/>
+          </expr>
+        </leftNameSet>
+        <rightNameSet xsi:type="circus:CircusNameSet">
+          <expr xsi:type="circus:SetExpr">
+            <exprList/>
+          </expr>
+        </rightNameSet>
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="share"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="terminate"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+      </leftAction>
+      <rightAction xsi:type="circus:CallAction">
+        <name word="Inactive_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </rightAction>
+      <leftNameSet xsi:type="circus:CircusNameSet">
+        <expr xsi:type="circus:SetExpr">
+          <exprList/>
+        </expr>
+      </leftNameSet>
+      <rightNameSet xsi:type="circus:CircusNameSet">
+        <expr xsi:type="circus:SetExpr">
+          <exprList/>
+        </expr>
+      </rightNameSet>
+      <channelSet xsi:type="circus:CircusChannelSet">
+        <expr xsi:type="circus:BasicChannelSetExpr">
+          <communicationList>
+            <communications commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="share"/>
+              </channelExpr>
+              <fieldList/>
+            </communications>
+            <communications commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="terminate"/>
+              </channelExpr>
+              <fieldList/>
+            </communications>
+          </communicationList>
+        </expr>
+      </channelSet>
+    </circusAction>
+    <name word="composeNodes_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+  </circus:ActionPara>
+  <circus:RenameAction>
+    <circusAction xsi:type="circus:CallAction">
+      <name word="composeNodes_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+    </circusAction>
+    <assignmentPairs>
+      <lhsElement>
+        <names word="interrupt_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        <names word="interrupt_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+      </lhsElement>
+      <rhsElement>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector\&lt;cdot>NID_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="turn__in\&lt;cdot>NID_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="turn__in\&lt;cdot>NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="stop__in\&lt;cdot>NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector\&lt;cdot>NID_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="obstacle__in\&lt;cdot>NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="turn__in\&lt;cdot>NID_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="turn__in\&lt;cdot>NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="stop__in\&lt;cdot>NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="resume__in\&lt;cdot>NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="obstacle__in\&lt;cdot>NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector\&lt;cdot>NID_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector\&lt;cdot>NID_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="turn__in\&lt;cdot>NID_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="resume__in\&lt;cdot>NID_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="stop__in\&lt;cdot>NID_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="stop__in\&lt;cdot>NID_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="stop__in\&lt;cdot>NID_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="stop__in\&lt;cdot>NID_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="resume__in\&lt;cdot>NID_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="resume__in\&lt;cdot>NID_GettingOut_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="resume__in\&lt;cdot>NID_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="resume__in\&lt;cdot>NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+        <exprs xsi:type="circus:RefExpr">
+          <name word="interrupt_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </exprs>
+      </rhsElement>
+    </assignmentPairs>
+  </circus:RenameAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_i1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="enter_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList/>
+      </communication>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="set_a"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:DotField" outputField="true">
+                <expr xsi:type="circus:RefExpr">
+                  <name word="a"/>
+                </expr>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </circusAction>
+      <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="turn__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+          <fields xsi:type="circus:InputField">
+            <varialbeName word="a"/>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="set_a"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:DotField" outputField="true">
+                <expr xsi:type="circus:RefExpr">
+                  <name word="a"/>
+                </expr>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </circusAction>
+      <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="turn__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+          <fields xsi:type="circus:InputField">
+            <varialbeName word="a"/>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="stop__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_j1_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="set_l"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:DotField" outputField="true">
+                <expr xsi:type="circus:RefExpr">
+                  <name word="l"/>
+                </expr>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </circusAction>
+      <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="obstacle__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_Going_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+          <fields xsi:type="circus:InputField">
+            <varialbeName word="l"/>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="set_a"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:DotField" outputField="true">
+                <expr xsi:type="circus:RefExpr">
+                  <name word="a"/>
+                </expr>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </circusAction>
+      <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="turn__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+          <fields xsi:type="circus:InputField">
+            <varialbeName word="a"/>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="set_a"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:DotField" outputField="true">
+                <expr xsi:type="circus:RefExpr">
+                  <name word="a"/>
+                </expr>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </circusAction>
+      <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="turn__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+          <fields xsi:type="circus:InputField">
+            <varialbeName word="a"/>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="stop__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Found_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="resume__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Waiting_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="set_l"/>
+            </channelExpr>
+            <fieldList>
+              <fields xsi:type="circus:DotField" outputField="true">
+                <expr xsi:type="circus:RefExpr">
+                  <name word="l"/>
+                </expr>
+              </fields>
+            </fieldList>
+          </communication>
+        </rightAction>
+      </circusAction>
+      <communication commPattern="Mixed" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="obstacle__in"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_TryingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+          <fields xsi:type="circus:InputField">
+            <varialbeName word="l"/>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:InterruptAction">
+              <leftAction xsi:type="circus:CallAction">
+                <name word="SSTOP"/>
+              </leftAction>
+              <rightAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:SkipAction"/>
+                    <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="set_d1"/>
+                      </channelExpr>
+                      <fieldList>
+                        <fields xsi:type="circus:DotField" outputField="true">
+                          <expr xsi:type="circus:RefExpr">
+                            <name word="d1"/>
+                          </expr>
+                        </fields>
+                      </fieldList>
+                    </communication>
+                  </rightAction>
+                </circusAction>
+                <communication commPattern="Input" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="odometer_in"/>
+                  </channelExpr>
+                  <fieldList>
+                    <fields xsi:type="circus:InputField">
+                      <varialbeName word="d1"/>
+                    </fields>
+                  </fieldList>
+                </communication>
+              </rightAction>
+            </circusAction>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:SeqAction>
+    <leftAction xsi:type="circus:PrefixingAction">
+      <circusAction xsi:type="circus:SkipAction"/>
+      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+        <channelExpr>
+          <name word="internal__stm_ref0_ctrl_ref0_ChemicalDetector"/>
+        </channelExpr>
+        <fieldList>
+          <fields xsi:type="circus:DotField" outputField="false">
+            <expr xsi:type="circus:RefExpr">
+              <name word="NID_AvoidingAgain_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </expr>
+          </fields>
+        </fieldList>
+      </communication>
+    </leftAction>
+    <rightAction xsi:type="circus:SeqAction">
+      <leftAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="exit_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </rightAction>
+      </leftAction>
+      <rightAction xsi:type="circus:InterruptAction">
+        <leftAction xsi:type="circus:CallAction">
+          <name word="SSTOP"/>
+        </leftAction>
+        <rightAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exited_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="enter_Avoiding_stm_ref0_ctrl_ref0_ChemicalDetector"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </rightAction>
+      </rightAction>
+    </rightAction>
+  </circus:SeqAction>
+  <circus:ApplExpr mixFix="true"/>
+  <circus:ApplExpr mixFix="true">
+    <leftExpr xsi:type="circus:RefExpr">
+      <name word="_less_"/>
+    </leftExpr>
+  </circus:ApplExpr>
+  <circus:RefExpr>
+    <name word="stuckPeriod"/>
+  </circus:RefExpr>
+  <circus:TupleExpr>
+    <exprList/>
+  </circus:TupleExpr>
+</xmi:XMI>

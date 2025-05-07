@@ -1,0 +1,78 @@
+-- generate intensity not
+intensity(gs) = let 
+aux(<>,max) = max
+aux(<g>^gs,max) = if GasSensor_i(g) > max then aux(gs,GasSensor_i(g)) else aux(gs,max)
+within
+aux(gs,0)
+
+-- generate goreq not
+goreq(x,y) = x >= y
+
+-- generate angle not
+angle(x) = if (x > 0) then Right else Front
+
+-- generate location not
+location(gs) = let
+aux(<>,max,n) = Front
+aux(<g>^gs,max,n) = if GasSensor_i(g) == max then angle(n) else aux(gs,max,n+1)
+within
+aux(gs,intensity(gs),0)
+
+-- generate analysis not
+analysis(<>) = noGas
+analysis(<g>^gs) = if (analysis(gs) == noGas and GasSensor_c(g) == 0) then noGas else gasD
+
+-- generate GasAnalysis_thr not
+GasAnalysis_thr = 1
+
+-- generate nat
+nametype nat = {0..2}
+
+-- generate Movement_evadeTime
+Movement_evadeTime = 0
+
+-- generate Movement_outPeriod
+Movement_outPeriod = 0
+
+-- generate shortRandomWalk_BOUND
+shortRandomWalk_BOUND = 2
+
+-- generate move_BOUND
+move_BOUND = 2
+
+-- generate string
+nametype string = LSeq(Char,2)
+
+-- generate Intensity
+nametype Intensity = {0,1}
+
+-- generate real
+nametype real = {0,1}
+
+-- generate Chem
+nametype Chem = {0,1}
+
+-- generate int
+nametype int = { -2..2}
+
+-- generate Location_changeDirection_lv
+Location_changeDirection_lv = 0
+
+-- generate Movement_lv
+Movement_lv = 0
+
+-- generate Movement_stuckDist
+Movement_stuckDist = 0
+
+-- generate boolean
+nametype boolean = Bool
+
+-- generate srw_BOUND
+srw_BOUND = 2
+
+-- generate Movement_stuckPeriod
+Movement_stuckPeriod = 0
+
+-- generate card
+card(A) = 0
+

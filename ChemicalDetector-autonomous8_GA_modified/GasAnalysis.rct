@@ -1,0 +1,139 @@
+import Chemical::*
+import Location::*
+//
+//stm GasAnalysis {
+//	
+//	var gs : Seq( GasSensor )
+//	event gas : Seq( GasSensor ) //Seq can be treated as vector
+//	event resume
+//	
+//	
+//	const thr : Intensity
+//	
+//	event turn : Angle
+//	event stop
+//initial i1
+//	state NoGas {
+//	}
+//	state Analysis {
+//	}
+//	state GasDetected {
+//	}
+//	transition t1 {
+//		from i1
+//		to NoGas
+//	}
+//	transition t2 {
+//		from NoGas
+//		to Analysis
+//		trigger gas ? gs
+//	}
+//	transition t3 {
+//		from Analysis
+//		to NoGas
+//		condition analysis ( gs ) == Status::noGas
+//		action 
+//	send resume
+//	}
+//	transition t4 {
+//		from Analysis
+//		to GasDetected
+//		condition analysis ( gs ) == Status::gasD
+//	}
+//	final j1
+//	state Reading {
+//	}
+//	transition t8 {
+//		from GasDetected
+//		to j1
+//		condition goreq ( intensity ( gs ) , thr )
+//		action 
+//	send stop
+//	}
+//	transition t9a {
+//		from GasDetected
+//		to Reading
+//		condition 
+//		not goreq ( intensity ( gs ) , thr )
+//		action 
+//	send turn ! location ( gs )
+//	}
+//	transition t0 {
+//		from Reading
+//		to Analysis
+//		trigger gas ? gs
+//	}
+//}
+
+
+import sequence_toolkit::*
+
+stm GasAnalysis {
+	var sts : Status
+	var gs : Seq(GasSensor)=<> //= <GasSensor(|c=0, i=0|)>
+	var ins : Intensity   
+	var anl : Angle
+	event gas : Seq(GasSensor) //Seq can be treated as vector
+	event resume
+	
+	
+	const thr : Intensity
+	
+	event turn : Angle
+	event stop
+	initial i1
+
+	state GasDetected {
+		entry ins = intensity ( gs )
+	}
+		final j1
+	state Reading {
+	}
+	state Analysis {
+		during sts = analysis ( gs )
+	}
+	state NoGas {
+	}
+	
+	transition t1 {
+		from i1
+		to Reading
+		action gs = < > ; anl = Angle :: Front
+	}
+	transition t0 {
+		from Reading
+		to Analysis
+		trigger gas ? gs
+	}
+	transition t2 {
+		from NoGas
+		to Reading
+	}
+	transition t3 {
+		from Analysis
+		to NoGas
+		condition sts==Status::noGas
+		action send resume
+	}
+	transition t4 {
+		from Analysis
+		to GasDetected
+		condition sts == Status::gasD
+	}
+
+	transition t8 {
+		from GasDetected
+		to j1
+		condition goreq ( ins , thr )
+		action send stop
+	}
+	transition t9a {
+		from GasDetected
+		to Reading
+		condition not goreq (ins, thr)
+		action anl=location(gs); turn!anl
+	}
+
+
+	
+}

@@ -1,0 +1,24 @@
+Timed(OneStep) {
+	
+-- declaring controller memory
+
+MainController_visibleMemoryEvents = {||}
+		
+Memory_MainController = SKIP
+	
+MainController = prioritise(wbisim(GasAnalysis[[GasAnalysis_terminate <- MainController_terminate, GasAnalysis_gas <- MainController_gas, GasAnalysis_turn <- MainController_turn, GasAnalysis_stop <- MainController_stop, GasAnalysis_resume <- MainController_resume]]
+			[|union({||},
+			{||})|]
+			Memory_MainController
+			)\union({||},
+			{||})
+			[|{|MainController_terminate|}|>SKIP,<MainController_visibleMemoryEvents,{MainController_terminate},{tock}>)
+-- VS version
+MainController_VS = prioritise(wbisim(GasAnalysis_VS[[GasAnalysis_terminate <- MainController_terminate, GasAnalysis_gas <- MainController_gas, GasAnalysis_turn <- MainController_turn, GasAnalysis_stop <- MainController_stop, GasAnalysis_resume <- MainController_resume]]
+			[|union({||},
+			{||})|]
+			Memory_MainController
+			)\union({||},
+			{||})
+			[|{|MainController_terminate|}|>SKIP,<MainController_visibleMemoryEvents,{MainController_terminate},{tock}>)
+}

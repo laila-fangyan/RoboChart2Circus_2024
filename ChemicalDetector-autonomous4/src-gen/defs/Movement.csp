@@ -1,0 +1,1055 @@
+channel Movement_internal__: Movement_TIDS
+
+ShowEvents_Movement(P,E) = P[[ Movement_entered.x.y <- Movement_enteredV.y | Movement_entered.x.y <- E]]
+							 [[	Movement_enter.x.y <- Movement_enterV.y | Movement_enter.x.y <- E]]
+							 [[ Movement_exit.x.y <- Movement_exitV.y | Movement_exit.x.y <- E]]
+							 [[ Movement_exited.x.y <- Movement_exitedV.y | Movement_exited.x.y <- E ]]
+
+channel Movement_enteredV, Movement_enterV, Movement_exitV, Movement_exitedV : Movement_SIDS
+channel Movement_enter, Movement_entered: Movement_SIDS.Movement_SIDS
+channel Movement_exit,Movement_exited: Movement_SIDS.Movement_SIDS
+
+channel get_Movement_a, set_Movement_a: Angle
+channel get_Movement_d0, set_Movement_d0: real
+channel get_Movement_d1, set_Movement_d1: real
+channel get_Movement_l, set_Movement_l: Loc
+
+
+-- declaring identifiers of state and final states
+Movement_SIDS = {
+	"Movement",
+	"Movement_Waiting",
+	"Movement_Going",
+	"Movement_Found",
+	"Movement_j1",
+	"Movement_Avoiding",
+	"Movement_TryingAgain",
+	"Movement_AvoidingAgain",
+	"Movement_GettingOut"
+}
+
+-- declaring identifiers of transitions
+Movement_TIDS = {
+	"__NULLTRANSITION__",
+	"Movement_t2",
+	"Movement_t3",
+	"Movement_t4",
+	"Movement_t5",
+	"Movement_t6",
+	"Movement_t7",
+	"Movement_t8",
+	"Movement_t9",
+	"Movement_t10",
+	"Movement_t11",
+	"Movement_t12",
+	"Movement_t13",
+	"Movement_t14",
+	"Movement_t0",
+	"Movement_t15",
+	"Movement_t16",
+	"Movement_t17",
+	"Movement_t18",
+	"Movement_t19",
+	"Movement_t20",
+	"Movement_t21",
+	"Movement_t22"
+}
+
+-- declaring state machine events
+channel Movement_obstacle__:Movement_TIDS.Loc
+channel Movement_obstacle:Loc
+channel Movement_odometer__:Movement_TIDS.real
+channel Movement_odometer:real
+channel Movement_resume__:Movement_TIDS
+channel Movement_resume
+channel Movement_turn__:Movement_TIDS.Angle
+channel Movement_turn:Angle
+channel Movement_stop__:Movement_TIDS
+channel Movement_stop
+channel Movement_flag__:Movement_TIDS
+channel Movement_flag
+
+channel Movement_terminate
+
+-- declaring all states
+CS_Movement_Waiting_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_Waiting"}
+|}
+
+
+
+Movement_Waiting_triggers = {|
+	Movement_turn__."Movement_t2",
+	Movement_resume__."Movement_t0",
+	Movement_stop__."Movement_t15"
+|}
+		   
+S_Movement_Waiting = let
+	T_Movement_t2	= Movement_turn__!"Movement_t2"?a -> set_Movement_a!a ->  (Movement_exit!"Movement_Waiting"!"Movement_Waiting" -> SKIP;
+						SKIP;Movement_exited!"Movement_Waiting"!"Movement_Waiting" -> SKIP;
+						Movement_enter!"Movement_Waiting"!"Movement_Going" -> Movement_entered!"Movement_Waiting"!"Movement_Going" ->
+						S_Movement_Waiting
+	)
+	T_Movement_t0	= Movement_resume__!"Movement_t0" ->  (Movement_exit!"Movement_Waiting"!"Movement_Waiting" -> SKIP;
+						SKIP;Movement_exited!"Movement_Waiting"!"Movement_Waiting" -> SKIP;
+						Movement_enter!"Movement_Waiting"!"Movement_Waiting" -> S_Movement_Waiting_execute("Movement_Waiting")
+	)
+	T_Movement_t15	= Movement_stop__!"Movement_t15" ->  (Movement_exit!"Movement_Waiting"!"Movement_Waiting" -> SKIP;
+						SKIP;Movement_exited!"Movement_Waiting"!"Movement_Waiting" -> SKIP;
+						Movement_enter!"Movement_Waiting"!"Movement_Found" -> Movement_entered!"Movement_Waiting"!"Movement_Found" ->
+						S_Movement_Waiting
+	)
+	
+
+	S_Movement_Waiting_execute(o__) = 
+	SKIP; 
+	Movement_entered!o__!"Movement_Waiting" ->
+	   ((randomWalkCall -> (SKIP |~| STOP); randomWalkRet -> SKIP)
+	   										; STOP /\ (
+	   											    T_Movement_t2[]
+	   											    T_Movement_t0[]
+	   											    T_Movement_t15
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t2","Movement_t0","Movement_t15"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Waiting" -> SKIP);
+	   											      	S_Movement_Waiting
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_Waiting"})!"Movement_Waiting" -> ( 
+	S_Movement_Waiting_execute(x)) 
+CS_Movement_Going_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_Going"}
+|}
+
+
+
+Movement_Going_triggers = {|
+	Movement_turn__."Movement_t3",
+	Movement_stop__."Movement_t4",
+	Movement_obstacle__."Movement_t6"
+|}
+		   
+S_Movement_Going = let
+	T_Movement_t3	= Movement_turn__!"Movement_t3"?a -> set_Movement_a!a ->  (Movement_exit!"Movement_Going"!"Movement_Going" -> SKIP;
+						SKIP;Movement_exited!"Movement_Going"!"Movement_Going" -> SKIP;
+						Movement_enter!"Movement_Going"!"Movement_Going" -> S_Movement_Going_execute("Movement_Going")
+	)
+	T_Movement_t4	= Movement_stop__!"Movement_t4" ->  (Movement_exit!"Movement_Going"!"Movement_Going" -> SKIP;
+						SKIP;Movement_exited!"Movement_Going"!"Movement_Going" -> SKIP;
+						Movement_enter!"Movement_Going"!"Movement_Found" -> Movement_entered!"Movement_Going"!"Movement_Found" ->
+						S_Movement_Going
+	)
+	T_Movement_t6	= Movement_obstacle__!"Movement_t6"?l -> set_Movement_l!l ->  (Movement_exit!"Movement_Going"!"Movement_Going" -> SKIP;
+						SKIP;Movement_exited!"Movement_Going"!"Movement_Going" -> SKIP;
+						Movement_enter!"Movement_Going"!"Movement_Avoiding" -> Movement_entered!"Movement_Going"!"Movement_Avoiding" ->
+						S_Movement_Going
+	)
+	
+
+	S_Movement_Going_execute(o__) = 
+	get_Movement_a?a -> (moveCall -> move(Movement_lv,a); moveRet -> SKIP); 
+	Movement_entered!o__!"Movement_Going" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Movement_t3[]
+	   											    T_Movement_t4[]
+	   											    T_Movement_t6
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t3","Movement_t4","Movement_t6"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Going" -> SKIP);
+	   											      	S_Movement_Going
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_Going"})!"Movement_Going" -> ( 
+	S_Movement_Going_execute(x)) 
+CS_Movement_Found_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_Found"}
+|}
+
+
+
+Movement_Found_triggers = {|
+	Movement_internal__."Movement_t5"
+|}
+		   
+S_Movement_Found = let
+	T_Movement_t5	= Movement_internal__!"Movement_t5" ->  Movement_exit!"Movement_Found"!"Movement_Found" -> SKIP;
+						SKIP;Movement_exited!"Movement_Found"!"Movement_Found" -> SKIP;
+						Movement_enter!"Movement_Found"!"Movement_j1" -> Movement_entered!"Movement_Found"!"Movement_j1" ->
+						S_Movement_Found
+	
+
+	S_Movement_Found_execute(o__) = 
+	(moveCall -> move(0,Front); moveRet -> SKIP);Movement_flag -> SKIP; 
+	Movement_entered!o__!"Movement_Found" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Movement_t5
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t5"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Found" -> SKIP);
+	   											      	S_Movement_Found
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_Found"})!"Movement_Found" -> ( 
+	S_Movement_Found_execute(x)) 
+CS_Movement_j1_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_j1"}
+|}
+
+
+
+Movement_j1_triggers = {||}
+		   
+S_Movement_j1 = let
+	
+
+	S_Movement_j1_execute(o__) = 
+	SKIP; 
+	Movement_entered!o__!"Movement_j1" ->
+	   Movement_terminate -> SKIP
+	   within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_j1"})!"Movement_j1" -> ( 
+	S_Movement_j1_execute(x)) 
+CS_Movement_Avoiding_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_Avoiding"}
+|}
+
+
+
+Movement_Avoiding_triggers = {|
+	Movement_turn__."Movement_t7",
+	Movement_stop__."Movement_t18",
+	Movement_resume__."Movement_t19",
+	Movement_resume__."Movement_t21"
+|}
+		   
+S_Movement_Avoiding = let
+	T_Movement_t7	= Movement_turn__!"Movement_t7"?a -> set_Movement_a!a ->  (Movement_exit!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						SKIP;Movement_exited!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						Movement_enter!"Movement_Avoiding"!"Movement_TryingAgain" -> Movement_entered!"Movement_Avoiding"!"Movement_TryingAgain" ->
+						S_Movement_Avoiding
+	)
+	T_Movement_t18	= Movement_stop__!"Movement_t18" ->  (Movement_exit!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						SKIP;Movement_exited!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						Movement_enter!"Movement_Avoiding"!"Movement_Found" -> Movement_entered!"Movement_Avoiding"!"Movement_Found" ->
+						S_Movement_Avoiding
+	)
+	T_Movement_t19	= Movement_resume__!"Movement_t19" ->  (Movement_exit!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						SKIP;Movement_exited!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						Movement_enter!"Movement_Avoiding"!"Movement_Waiting" -> Movement_entered!"Movement_Avoiding"!"Movement_Waiting" ->
+						S_Movement_Avoiding
+	)
+	T_Movement_t21	= Movement_resume__!"Movement_t21" ->  (Movement_exit!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						SKIP;Movement_exited!"Movement_Avoiding"!"Movement_Avoiding" -> SKIP;
+						Movement_enter!"Movement_Avoiding"!"Movement_Going" -> Movement_entered!"Movement_Avoiding"!"Movement_Going" ->
+						S_Movement_Avoiding
+	)
+	
+
+	S_Movement_Avoiding_execute(o__) = 
+	Movement_odometer?d0 -> set_Movement_d0!d0 -> SKIP;SKIP;SKIP; 
+	Movement_entered!o__!"Movement_Avoiding" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Movement_t7[]
+	   											    T_Movement_t18[]
+	   											    T_Movement_t19[]
+	   											    T_Movement_t21
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t7","Movement_t18","Movement_t19","Movement_t21"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_Avoiding" -> SKIP);
+	   											      	S_Movement_Avoiding
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_Avoiding"})!"Movement_Avoiding" -> ( 
+	S_Movement_Avoiding_execute(x)) 
+CS_Movement_TryingAgain_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_TryingAgain"}
+|}
+
+
+
+Movement_TryingAgain_triggers = {|
+	Movement_turn__."Movement_t8",
+	Movement_stop__."Movement_t9",
+	Movement_resume__."Movement_t10",
+	Movement_obstacle__."Movement_t11"
+|}
+		   
+S_Movement_TryingAgain = let
+	T_Movement_t8	= Movement_turn__!"Movement_t8"?a -> set_Movement_a!a ->  (Movement_exit!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						Movement_enter!"Movement_TryingAgain"!"Movement_TryingAgain" -> S_Movement_TryingAgain_execute("Movement_TryingAgain")
+	)
+	T_Movement_t9	= Movement_stop__!"Movement_t9" ->  (Movement_exit!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						Movement_enter!"Movement_TryingAgain"!"Movement_Found" -> Movement_entered!"Movement_TryingAgain"!"Movement_Found" ->
+						S_Movement_TryingAgain
+	)
+	T_Movement_t10	= Movement_resume__!"Movement_t10" ->  (Movement_exit!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						Movement_enter!"Movement_TryingAgain"!"Movement_Waiting" -> Movement_entered!"Movement_TryingAgain"!"Movement_Waiting" ->
+						S_Movement_TryingAgain
+	)
+	T_Movement_t11	= Movement_obstacle__!"Movement_t11"?l -> set_Movement_l!l ->  (Movement_exit!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_TryingAgain"!"Movement_TryingAgain" -> SKIP;
+						Movement_odometer?d1 -> set_Movement_d1!d1 -> SKIP;Movement_enter!"Movement_TryingAgain"!"Movement_AvoidingAgain" -> Movement_entered!"Movement_TryingAgain"!"Movement_AvoidingAgain" ->
+						S_Movement_TryingAgain
+	)
+	
+
+	S_Movement_TryingAgain_execute(o__) = 
+	get_Movement_a?a -> (moveCall -> move(Movement_lv,a); moveRet -> SKIP); 
+	Movement_entered!o__!"Movement_TryingAgain" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Movement_t8[]
+	   											    T_Movement_t9[]
+	   											    T_Movement_t10[]
+	   											    T_Movement_t11
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t8","Movement_t9","Movement_t10","Movement_t11"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_TryingAgain" -> SKIP);
+	   											      	S_Movement_TryingAgain
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_TryingAgain"})!"Movement_TryingAgain" -> ( 
+	S_Movement_TryingAgain_execute(x)) 
+CS_Movement_AvoidingAgain_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_AvoidingAgain"}
+|}
+
+
+
+Movement_AvoidingAgain_triggers = {|
+	Movement_internal__."Movement_t12",
+	Movement_internal__."Movement_t13",
+	Movement_stop__."Movement_t17",
+	Movement_resume__."Movement_t22"
+|}
+		   
+S_Movement_AvoidingAgain = let
+	T_Movement_t12	= Movement_internal__!"Movement_t12" ->  Movement_exit!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						Movement_enter!"Movement_AvoidingAgain"!"Movement_Avoiding" -> Movement_entered!"Movement_AvoidingAgain"!"Movement_Avoiding" ->
+						S_Movement_AvoidingAgain
+	T_Movement_t13	= Movement_internal__!"Movement_t13" ->  Movement_exit!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						Movement_enter!"Movement_AvoidingAgain"!"Movement_GettingOut" -> Movement_entered!"Movement_AvoidingAgain"!"Movement_GettingOut" ->
+						S_Movement_AvoidingAgain
+	T_Movement_t17	= Movement_stop__!"Movement_t17" ->  (Movement_exit!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						Movement_enter!"Movement_AvoidingAgain"!"Movement_Found" -> Movement_entered!"Movement_AvoidingAgain"!"Movement_Found" ->
+						S_Movement_AvoidingAgain
+	)
+	T_Movement_t22	= Movement_resume__!"Movement_t22" ->  (Movement_exit!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						SKIP;Movement_exited!"Movement_AvoidingAgain"!"Movement_AvoidingAgain" -> SKIP;
+						Movement_enter!"Movement_AvoidingAgain"!"Movement_Waiting" -> Movement_entered!"Movement_AvoidingAgain"!"Movement_Waiting" ->
+						S_Movement_AvoidingAgain
+	)
+	
+
+	S_Movement_AvoidingAgain_execute(o__) = 
+	SKIP; 
+	Movement_entered!o__!"Movement_AvoidingAgain" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Movement_t12[]
+	   											    T_Movement_t13[]
+	   											    T_Movement_t17[]
+	   											    T_Movement_t22
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t12","Movement_t13","Movement_t17","Movement_t22"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_AvoidingAgain" -> SKIP);
+	   											      	S_Movement_AvoidingAgain
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_AvoidingAgain"})!"Movement_AvoidingAgain" -> ( 
+	S_Movement_AvoidingAgain_execute(x)) 
+CS_Movement_GettingOut_sync = {|
+	Movement_enter.y.x, 
+	Movement_entered.y.x, 
+	Movement_exit.y.x, 
+	Movement_exited.y.x,
+	Movement_enter.x.y, 
+	Movement_entered.x.y, 
+	Movement_exit.x.y, 
+	Movement_exited.x.y |
+	x <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"},
+	y <- {"Movement_GettingOut"}
+|}
+
+
+
+Movement_GettingOut_triggers = {|
+	Movement_turn__."Movement_t14",
+	Movement_stop__."Movement_t16",
+	Movement_resume__."Movement_t20"
+|}
+		   
+S_Movement_GettingOut = let
+	T_Movement_t14	= Movement_turn__!"Movement_t14"?a -> set_Movement_a!a ->  (Movement_exit!"Movement_GettingOut"!"Movement_GettingOut" -> SKIP;
+						SKIP;Movement_exited!"Movement_GettingOut"!"Movement_GettingOut" -> SKIP;
+						Movement_enter!"Movement_GettingOut"!"Movement_Going" -> Movement_entered!"Movement_GettingOut"!"Movement_Going" ->
+						S_Movement_GettingOut
+	)
+	T_Movement_t16	= Movement_stop__!"Movement_t16" ->  (Movement_exit!"Movement_GettingOut"!"Movement_GettingOut" -> SKIP;
+						SKIP;Movement_exited!"Movement_GettingOut"!"Movement_GettingOut" -> SKIP;
+						Movement_enter!"Movement_GettingOut"!"Movement_Found" -> Movement_entered!"Movement_GettingOut"!"Movement_Found" ->
+						S_Movement_GettingOut
+	)
+	T_Movement_t20	= Movement_resume__!"Movement_t20" ->  (Movement_exit!"Movement_GettingOut"!"Movement_GettingOut" -> SKIP;
+						SKIP;Movement_exited!"Movement_GettingOut"!"Movement_GettingOut" -> SKIP;
+						Movement_enter!"Movement_GettingOut"!"Movement_Waiting" -> Movement_entered!"Movement_GettingOut"!"Movement_Waiting" ->
+						S_Movement_GettingOut
+	)
+	
+
+	S_Movement_GettingOut_execute(o__) = 
+	(shortRandomWalkCall -> shortRandomWalk; shortRandomWalkRet -> SKIP);SKIP; 
+	Movement_entered!o__!"Movement_GettingOut" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Movement_t14[]
+	   											    T_Movement_t16[]
+	   											    T_Movement_t20
+	   											    []
+	   											    Movement_internal__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    [] Movement_obstacle__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    [] Movement_odometer__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    [] Movement_resume__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    [] Movement_turn__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"})?x__ ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    [] Movement_stop__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    [] Movement_flag__?x:diff(Movement_TIDS,{"__NULLTRANSITION__","Movement_t14","Movement_t16","Movement_t20"}) ->
+	   											      Movement_exit?y:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> (
+	   											      	SKIP;
+	   											      	Movement_exited!y!"Movement_GettingOut" -> SKIP);
+	   											      	S_Movement_GettingOut
+	   											    )
+	   										)
+within
+Movement_enter?x:diff(Movement_SIDS,{"Movement_GettingOut"})!"Movement_GettingOut" -> ( 
+	S_Movement_GettingOut_execute(x)) 
+
+I_Movement_i1 = T_Movement_t1
+
+
+
+Movement_int_int = {|
+	Movement_obstacle__."Movement_t2",
+	Movement_odometer__."Movement_t2",
+	Movement_resume__."Movement_t2",
+	Movement_turn__."Movement_t2",
+	Movement_stop__."Movement_t2",
+	Movement_flag__."Movement_t2",
+Movement_internal__."Movement_t2",
+	Movement_obstacle__."Movement_t3",
+	Movement_odometer__."Movement_t3",
+	Movement_resume__."Movement_t3",
+	Movement_turn__."Movement_t3",
+	Movement_stop__."Movement_t3",
+	Movement_flag__."Movement_t3",
+Movement_internal__."Movement_t3",
+	Movement_obstacle__."Movement_t4",
+	Movement_odometer__."Movement_t4",
+	Movement_resume__."Movement_t4",
+	Movement_turn__."Movement_t4",
+	Movement_stop__."Movement_t4",
+	Movement_flag__."Movement_t4",
+Movement_internal__."Movement_t4",
+	Movement_obstacle__."Movement_t5",
+	Movement_odometer__."Movement_t5",
+	Movement_resume__."Movement_t5",
+	Movement_turn__."Movement_t5",
+	Movement_stop__."Movement_t5",
+	Movement_flag__."Movement_t5",
+Movement_internal__."Movement_t5",
+	Movement_obstacle__."Movement_t6",
+	Movement_odometer__."Movement_t6",
+	Movement_resume__."Movement_t6",
+	Movement_turn__."Movement_t6",
+	Movement_stop__."Movement_t6",
+	Movement_flag__."Movement_t6",
+Movement_internal__."Movement_t6",
+	Movement_obstacle__."Movement_t7",
+	Movement_odometer__."Movement_t7",
+	Movement_resume__."Movement_t7",
+	Movement_turn__."Movement_t7",
+	Movement_stop__."Movement_t7",
+	Movement_flag__."Movement_t7",
+Movement_internal__."Movement_t7",
+	Movement_obstacle__."Movement_t8",
+	Movement_odometer__."Movement_t8",
+	Movement_resume__."Movement_t8",
+	Movement_turn__."Movement_t8",
+	Movement_stop__."Movement_t8",
+	Movement_flag__."Movement_t8",
+Movement_internal__."Movement_t8",
+	Movement_obstacle__."Movement_t9",
+	Movement_odometer__."Movement_t9",
+	Movement_resume__."Movement_t9",
+	Movement_turn__."Movement_t9",
+	Movement_stop__."Movement_t9",
+	Movement_flag__."Movement_t9",
+Movement_internal__."Movement_t9",
+	Movement_obstacle__."Movement_t10",
+	Movement_odometer__."Movement_t10",
+	Movement_resume__."Movement_t10",
+	Movement_turn__."Movement_t10",
+	Movement_stop__."Movement_t10",
+	Movement_flag__."Movement_t10",
+Movement_internal__."Movement_t10",
+	Movement_obstacle__."Movement_t11",
+	Movement_odometer__."Movement_t11",
+	Movement_resume__."Movement_t11",
+	Movement_turn__."Movement_t11",
+	Movement_stop__."Movement_t11",
+	Movement_flag__."Movement_t11",
+Movement_internal__."Movement_t11",
+	Movement_obstacle__."Movement_t12",
+	Movement_odometer__."Movement_t12",
+	Movement_resume__."Movement_t12",
+	Movement_turn__."Movement_t12",
+	Movement_stop__."Movement_t12",
+	Movement_flag__."Movement_t12",
+Movement_internal__."Movement_t12",
+	Movement_obstacle__."Movement_t13",
+	Movement_odometer__."Movement_t13",
+	Movement_resume__."Movement_t13",
+	Movement_turn__."Movement_t13",
+	Movement_stop__."Movement_t13",
+	Movement_flag__."Movement_t13",
+Movement_internal__."Movement_t13",
+	Movement_obstacle__."Movement_t14",
+	Movement_odometer__."Movement_t14",
+	Movement_resume__."Movement_t14",
+	Movement_turn__."Movement_t14",
+	Movement_stop__."Movement_t14",
+	Movement_flag__."Movement_t14",
+Movement_internal__."Movement_t14",
+	Movement_obstacle__."Movement_t0",
+	Movement_odometer__."Movement_t0",
+	Movement_resume__."Movement_t0",
+	Movement_turn__."Movement_t0",
+	Movement_stop__."Movement_t0",
+	Movement_flag__."Movement_t0",
+Movement_internal__."Movement_t0",
+	Movement_obstacle__."Movement_t15",
+	Movement_odometer__."Movement_t15",
+	Movement_resume__."Movement_t15",
+	Movement_turn__."Movement_t15",
+	Movement_stop__."Movement_t15",
+	Movement_flag__."Movement_t15",
+Movement_internal__."Movement_t15",
+	Movement_obstacle__."Movement_t16",
+	Movement_odometer__."Movement_t16",
+	Movement_resume__."Movement_t16",
+	Movement_turn__."Movement_t16",
+	Movement_stop__."Movement_t16",
+	Movement_flag__."Movement_t16",
+Movement_internal__."Movement_t16",
+	Movement_obstacle__."Movement_t17",
+	Movement_odometer__."Movement_t17",
+	Movement_resume__."Movement_t17",
+	Movement_turn__."Movement_t17",
+	Movement_stop__."Movement_t17",
+	Movement_flag__."Movement_t17",
+Movement_internal__."Movement_t17",
+	Movement_obstacle__."Movement_t18",
+	Movement_odometer__."Movement_t18",
+	Movement_resume__."Movement_t18",
+	Movement_turn__."Movement_t18",
+	Movement_stop__."Movement_t18",
+	Movement_flag__."Movement_t18",
+Movement_internal__."Movement_t18",
+	Movement_obstacle__."Movement_t19",
+	Movement_odometer__."Movement_t19",
+	Movement_resume__."Movement_t19",
+	Movement_turn__."Movement_t19",
+	Movement_stop__."Movement_t19",
+	Movement_flag__."Movement_t19",
+Movement_internal__."Movement_t19",
+	Movement_obstacle__."Movement_t20",
+	Movement_odometer__."Movement_t20",
+	Movement_resume__."Movement_t20",
+	Movement_turn__."Movement_t20",
+	Movement_stop__."Movement_t20",
+	Movement_flag__."Movement_t20",
+Movement_internal__."Movement_t20",
+	Movement_obstacle__."Movement_t21",
+	Movement_odometer__."Movement_t21",
+	Movement_resume__."Movement_t21",
+	Movement_turn__."Movement_t21",
+	Movement_stop__."Movement_t21",
+	Movement_flag__."Movement_t21",
+Movement_internal__."Movement_t21",
+	Movement_obstacle__."Movement_t22",
+	Movement_odometer__."Movement_t22",
+	Movement_resume__."Movement_t22",
+	Movement_turn__."Movement_t22",
+	Movement_stop__."Movement_t22",
+	Movement_flag__."Movement_t22",
+Movement_internal__."Movement_t22"
+|}
+
+Movement_internal_events = {|Movement_enter,Movement_entered,
+			 				  Movement_exit,Movement_exited|}
+
+T_Movement_t1	= Movement_enter!"Movement"!"Movement_Waiting" -> Movement_entered!"Movement"!"Movement_Waiting" ->
+SKIP
+
+S_Movement_Waiting_R = S_Movement_Waiting
+ 		[|diff(Movement_int_int,Movement_Waiting_triggers)|]
+ 		SKIP
+ 		
+S_Movement_Going_R = S_Movement_Going
+ 		[|diff(Movement_int_int,Movement_Going_triggers)|]
+ 		SKIP
+ 		
+S_Movement_Found_R = S_Movement_Found
+ 		[|diff(Movement_int_int,Movement_Found_triggers)|]
+ 		SKIP
+ 		
+S_Movement_j1_R = S_Movement_j1
+ 		[|diff(Movement_int_int,Movement_j1_triggers)|]
+ 		SKIP
+ 		
+S_Movement_Avoiding_R = S_Movement_Avoiding
+ 		[|diff(Movement_int_int,Movement_Avoiding_triggers)|]
+ 		SKIP
+ 		
+S_Movement_TryingAgain_R = S_Movement_TryingAgain
+ 		[|diff(Movement_int_int,Movement_TryingAgain_triggers)|]
+ 		SKIP
+ 		
+S_Movement_AvoidingAgain_R = S_Movement_AvoidingAgain
+ 		[|diff(Movement_int_int,Movement_AvoidingAgain_triggers)|]
+ 		SKIP
+ 		
+S_Movement_GettingOut_R = S_Movement_GettingOut
+ 		[|diff(Movement_int_int,Movement_GettingOut_triggers)|]
+ 		SKIP
+ 		
+STM_Movement = ShowEvents_Movement(I_Movement_i1
+[|{|Movement_enter.x.y,
+		Movement_entered.x.y,
+		Movement_exit.x.y,
+		Movement_exited.x.y |
+		x <- diff(Movement_SIDS,{"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"}),
+		y <- {"Movement_Waiting","Movement_Going","Movement_Found","Movement_j1","Movement_Avoiding","Movement_TryingAgain","Movement_AvoidingAgain","Movement_GettingOut"}
+|}|]
+ShowEvents_Movement(S_Movement_Waiting_R
+  [|inter(CS_Movement_Waiting_sync,union(union(union(union(union(union(CS_Movement_Going_sync,CS_Movement_Found_sync),CS_Movement_j1_sync),CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))|]
+ ShowEvents_Movement(S_Movement_Going_R
+   [|inter(CS_Movement_Going_sync,union(union(union(union(union(CS_Movement_Found_sync,CS_Movement_j1_sync),CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))|]
+  ShowEvents_Movement(S_Movement_Found_R
+    [|inter(CS_Movement_Found_sync,union(union(union(union(CS_Movement_j1_sync,CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))|]
+   ShowEvents_Movement(S_Movement_j1_R
+     [|inter(CS_Movement_j1_sync,union(union(union(CS_Movement_Avoiding_sync,CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))|]
+    ShowEvents_Movement(S_Movement_Avoiding_R
+      [|inter(CS_Movement_Avoiding_sync,union(union(CS_Movement_TryingAgain_sync,CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))|]
+     ShowEvents_Movement(S_Movement_TryingAgain_R
+       [|inter(CS_Movement_TryingAgain_sync,union(CS_Movement_AvoidingAgain_sync,CS_Movement_GettingOut_sync))|]
+      ShowEvents_Movement(S_Movement_AvoidingAgain_R
+        [|inter(CS_Movement_AvoidingAgain_sync,CS_Movement_GettingOut_sync)|]
+       S_Movement_GettingOut_R,inter(CS_Movement_AvoidingAgain_sync,CS_Movement_GettingOut_sync))\inter(CS_Movement_AvoidingAgain_sync,CS_Movement_GettingOut_sync)
+      ,inter(CS_Movement_TryingAgain_sync,union(CS_Movement_AvoidingAgain_sync,CS_Movement_GettingOut_sync)))\inter(CS_Movement_TryingAgain_sync,union(CS_Movement_AvoidingAgain_sync,CS_Movement_GettingOut_sync))
+     ,inter(CS_Movement_Avoiding_sync,union(union(CS_Movement_TryingAgain_sync,CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync)))\inter(CS_Movement_Avoiding_sync,union(union(CS_Movement_TryingAgain_sync,CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))
+    ,inter(CS_Movement_j1_sync,union(union(union(CS_Movement_Avoiding_sync,CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync)))\inter(CS_Movement_j1_sync,union(union(union(CS_Movement_Avoiding_sync,CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))
+   ,inter(CS_Movement_Found_sync,union(union(union(union(CS_Movement_j1_sync,CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync)))\inter(CS_Movement_Found_sync,union(union(union(union(CS_Movement_j1_sync,CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))
+  ,inter(CS_Movement_Going_sync,union(union(union(union(union(CS_Movement_Found_sync,CS_Movement_j1_sync),CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync)))\inter(CS_Movement_Going_sync,union(union(union(union(union(CS_Movement_Found_sync,CS_Movement_j1_sync),CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))
+ ,inter(CS_Movement_Waiting_sync,union(union(union(union(union(union(CS_Movement_Going_sync,CS_Movement_Found_sync),CS_Movement_j1_sync),CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync)))\inter(CS_Movement_Waiting_sync,union(union(union(union(union(union(CS_Movement_Going_sync,CS_Movement_Found_sync),CS_Movement_j1_sync),CS_Movement_Avoiding_sync),CS_Movement_TryingAgain_sync),CS_Movement_AvoidingAgain_sync),CS_Movement_GettingOut_sync))
+ 	,{|Movement_enter,Movement_entered,
+ 	Movement_exit,Movement_exited|})\
+ 	Movement_internal_events
+-- memory process
+Memory_Movement(a,d0,d1,l) = (
+  get_Movement_a!a -> Memory_Movement(a,d0,d1,l)
+  []
+  set_Movement_a?x__ -> Memory_Movement(x__,d0,d1,l)
+  []
+  get_Movement_d0!d0 -> Memory_Movement(a,d0,d1,l)
+  []
+  set_Movement_d0?x__ -> Memory_Movement(a,x__,d1,l)
+  []
+  get_Movement_d1!d1 -> Memory_Movement(a,d0,d1,l)
+  []
+  set_Movement_d1?x__ -> Memory_Movement(a,d0,x__,l)
+  []
+  get_Movement_l!l -> Memory_Movement(a,d0,d1,l)
+  []
+  set_Movement_l?x__ -> Memory_Movement(a,d0,d1,x__)
+	  []
+	Movement_turn__!"Movement_t2"?a -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_turn__!"Movement_t3"?a -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_stop__!"Movement_t4" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_internal__!"Movement_t5" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_obstacle__!"Movement_t6"?l -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_turn__!"Movement_t7"?a -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_turn__!"Movement_t8"?a -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_stop__!"Movement_t9" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_resume__!"Movement_t10" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_obstacle__!"Movement_t11"?l -> Memory_Movement(a,d0,d1,l)
+	  []
+	(((true or ((d1 - d0)>Movement_stuckDist)))&(Movement_internal__!"Movement_t12" -> Memory_Movement(a,d0,d1,l)) |~| STOP)
+	  []
+	(((true and ((d1 - d0)<=Movement_stuckDist)))&(Movement_internal__!"Movement_t13" -> Memory_Movement(a,d0,d1,l)) |~| STOP)
+	  []
+	Movement_turn__!"Movement_t14"?a -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_resume__!"Movement_t0" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_stop__!"Movement_t15" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_stop__!"Movement_t16" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_stop__!"Movement_t17" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_stop__!"Movement_t18" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_resume__!"Movement_t19" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_resume__!"Movement_t20" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_resume__!"Movement_t21" -> Memory_Movement(a,d0,d1,l)
+	  []
+	Movement_resume__!"Movement_t22" -> Memory_Movement(a,d0,d1,l)
+	)
+-- main process
+Movement_aux = ((STM_Movement
+	[|union(
+		{|get_Movement_a,set_Movement_a,
+		get_Movement_d0,set_Movement_d0,
+		get_Movement_d1,set_Movement_d1,
+		get_Movement_l,set_Movement_l|},
+		{|Movement_turn__."Movement_t2",
+		Movement_turn__."Movement_t3",
+		Movement_stop__."Movement_t4",
+		Movement_internal__."Movement_t5",
+		Movement_obstacle__."Movement_t6",
+		Movement_turn__."Movement_t7",
+		Movement_turn__."Movement_t8",
+		Movement_stop__."Movement_t9",
+		Movement_resume__."Movement_t10",
+		Movement_obstacle__."Movement_t11",
+		Movement_internal__."Movement_t12",
+		Movement_internal__."Movement_t13",
+		Movement_turn__."Movement_t14",
+		Movement_resume__."Movement_t0",
+		Movement_stop__."Movement_t15",
+		Movement_stop__."Movement_t16",
+		Movement_stop__."Movement_t17",
+		Movement_stop__."Movement_t18",
+		Movement_resume__."Movement_t19",
+		Movement_resume__."Movement_t20",
+		Movement_resume__."Movement_t21",
+		Movement_resume__."Movement_t22"|}
+	)|]
+	Memory_Movement(Left,0,0,left)
+)[[Movement_obstacle__.x <- Movement_obstacle, Movement_odometer__.x <- Movement_odometer, Movement_resume__.x <- Movement_resume, Movement_turn__.x <- Movement_turn, Movement_stop__.x <- Movement_stop, Movement_flag__.x <- Movement_flag| x<-Movement_TIDS]]
+\{|get_Movement_a,set_Movement_a,
+get_Movement_d0,set_Movement_d0,
+get_Movement_d1,set_Movement_d1,
+get_Movement_l,set_Movement_l|})
+[|{|Movement_terminate|}|>SKIP\{|Movement_internal__|}
+
+Movement = Movement_aux \ {|Movement_enteredV, Movement_enterV, Movement_exitV, Movement_exitedV|}
+Movement_VS = Movement_aux
+
+Movement_O = sbisim(diamond(Movement))
+Movement_VS_O = sbisim(diamond(Movement_VS))

@@ -1,0 +1,43 @@
+include "defs/timed_definitions.csp"
+include "../defs/GasAnalysis_defs.csp"
+include "../instantiations.csp"
+include "../defs/robochart_defs.csp"
+
+-- untimed definitions
+
+include "../defs/MainController_defs.csp"
+include "../defs/Module_defs.csp"
+include "../defs/Location_defs.csp"
+include "../defs/Chemical_defs.csp"
+include "../defs/Movement_defs.csp"
+include "../defs/core_defs.csp"
+include "../defs/shortRandomWalk.csp"
+include "../defs/MicroController_defs.csp"
+include "../defs/GasAnalysis.csp"
+include "../defs/move.csp"
+channel moveCall, moveRet
+channel shortRandomWalkCall, shortRandomWalkRet
+channel randomWalkCall, randomWalkRet
+
+module timed
+exports
+
+-- timed definitions
+
+include "defs/GasAnalysis.csp"
+include "defs/move.csp"
+include "defs/shortRandomWalk.csp"
+endmodule
+
+transparent diamond
+transparent sbisim
+transparent wbisim
+transparent chase
+
+-- declare timed names of all controllers, modules and state-machines
+-- and include assertions
+
+T_GasAnalysis = timed::GasAnalysis
+T_GasAnalysis_VS = timed::GasAnalysis_VS
+
+include "defs/GasAnalysis_assertions.csp"

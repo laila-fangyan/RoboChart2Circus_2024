@@ -1,0 +1,33 @@
+//package ex1
+stm stm0 {
+	event a
+	event b
+	initial i0
+	state s0 {
+	}
+	state s1 {
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to s1
+		trigger a
+	}
+	transition t2 {
+		from s1
+		to s0
+		trigger b
+	}
+event c
+	state s2 {
+	}
+	transition t3 {
+		from s0
+		to s2
+		trigger a
+	}
+}
+

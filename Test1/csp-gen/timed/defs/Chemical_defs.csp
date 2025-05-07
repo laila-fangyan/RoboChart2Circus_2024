@@ -1,13 +1,13 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 17-10-2024 20:37:24
+-- Automatically generated on 01-05-2025 09:52:22
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
 --
 
--- data definitions used by platform:/resource/Test1/GasAnalysis/GasAnalysis2.rct
+-- data definitions used by platform:/resource/Test1/GasAnalysis/GasAnalysis.rct
 datatype Chemical_Status = Chemical_Status_noGas | Chemical_Status_gasD
 Chemical_Status_is(Chemical_Status_noGas,Chemical_Status_noGas) = true
 Chemical_Status_is(_,Chemical_Status_noGas) = false

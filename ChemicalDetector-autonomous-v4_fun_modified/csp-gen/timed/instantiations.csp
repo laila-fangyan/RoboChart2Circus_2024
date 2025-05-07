@@ -1,0 +1,243 @@
+-- generate function_toolkit_isFinite
+function_toolkit_isFinite(s) = true
+
+-- generate move_BOUND
+move_BOUND = 2
+
+-- generate const_MicroController_stm_ref0_evadeTime
+const_MicroController_stm_ref0_evadeTime = 0
+
+-- generate relation_toolkit_ran
+relation_toolkit_ran(r) = {}
+
+-- generate relation_toolkit_maplet
+relation_toolkit_maplet(x,y) = (0,0)
+
+-- generate relation_toolkit_rsub
+relation_toolkit_rsub(r,b) = 0
+
+-- generate Plus
+Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
+
+-- generate set_toolkit_notin
+set_toolkit_notin(m,s) = true
+
+-- generate const_GasAnalysis_thr
+const_GasAnalysis_thr = 0
+
+-- generate function_toolkit_partitions
+function_toolkit_partitions(f,a) = true
+
+-- generate --
+
+-- generate nat
+nametype core_nat = union({0..2},{calc_type_min(Union(
+			{Object,Object,Object,{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,{tuple2_2(q)|q <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_2(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{0},{x|x <- Object},{x|x <- Object}}))..calc_type_max(Union({Object,Object,Object,{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,{tuple2_2(q)|q <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_2(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{0},{x|x <- Object},{x|x <- Object}}))})
+
+-- generate core_clock_type
+nametype core_clock_type = {0..10}
+
+-- BASIC FUNCTIONS
+
+-- generate shortRandomWalk_BOUND
+shortRandomWalk_BOUND = 2
+
+-- generate relation_toolkit_refl_tr_closure
+relation_toolkit_refl_tr_closure(r) = 0
+
+-- generate Intensity
+nametype Chemical_Intensity = {0,1}
+
+-- generate function_toolkit_isFiniteFunction
+function_toolkit_isFiniteFunction(f) = true
+
+-- generate const_Movement_stuckPeriod
+const_Movement_stuckPeriod = 0
+
+-- generate const_MicroController_stm_ref0_outPeriod
+const_MicroController_stm_ref0_outPeriod = 0
+
+-- generate real
+nametype core_real = union({ -2..2},{calc_type_min(Union(
+			{Object,Object,Object,{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{ -2..2},Object,Object,Object,Object,Object,Object,Object,Object,{ -2..2},{ -2..2},{ -2..2},Object,Object,Object,{tuple2_2(q)|q <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{lv|lv <- { -2..2}},{tuple2_2(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{lv|lv <- { -2..2}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{lv|lv <- { -2..2}},{lv|lv <- { -2..2}},{lv|lv <- { -2..2}},{0},{x|x <- Object},{x|x <- Object}}))..calc_type_max(Union({Object,Object,Object,{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{ -2..2},Object,Object,Object,Object,Object,Object,Object,Object,{ -2..2},{ -2..2},{ -2..2},Object,Object,Object,{tuple2_2(q)|q <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{lv|lv <- { -2..2}},{tuple2_2(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{lv|lv <- { -2..2}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{lv|lv <- { -2..2}},{lv|lv <- { -2..2}},{lv|lv <- { -2..2}},{0},{x|x <- Object},{x|x <- Object}}))}) 
+
+-- VECTOR TYPES AND OPERATIONS
+
+
+-- CLOCKS
+
+-- generate Chemical_goreq
+Chemical_goreq(i1,i2) = true
+
+-- generate set_toolkit_symetric_diff
+set_toolkit_symetric_diff(s1,s2) = {}
+
+-- generate const_Movement_outPeriod
+const_Movement_outPeriod = 0
+
+-- generate relation_toolkit_tr_closure
+relation_toolkit_tr_closure(r) = 0
+
+-- generate relation_toolkit_funcomp
+relation_toolkit_funcomp(s,r) = 0
+
+-- generate Modulus
+Modulus(e1,e2,T) = if member(e1%e2,T) then e1%e2 else e1
+
+-- generate relation_toolkit_dom
+relation_toolkit_dom(r) = {}
+
+-- generate set_toolkit_Union
+set_toolkit_Union(A) = {}
+
+-- generate function_toolkit_isFiniteInjection
+function_toolkit_isFiniteInjection(f) = true
+
+-- generate const_Movement_stuckDist
+const_Movement_stuckDist = 0
+
+-- generate set_toolkit_subset
+set_toolkit_subset(ss,s) = true
+
+-- generate const_MicroController_stm_ref0_stuckDist
+const_MicroController_stm_ref0_stuckDist = 0
+
+-- generate Minus
+Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
+
+-- generate relation_toolkit_second
+relation_toolkit_second(p) = 0
+
+-- generate relation_toolkit_relcomp
+relation_toolkit_relcomp(r,s) = 0
+
+-- generate function_toolkit_isTotalSurjection
+function_toolkit_isTotalSurjection(f) = true
+
+-- generate relation_toolkit_dres
+relation_toolkit_dres(a,r) = 0
+
+-- generate const_Location_changeDirection_lv
+const_Location_changeDirection_lv = 0
+
+-- BASIC TYPES
+
+-- generate string
+nametype core_string = LSeq(Char,2)
+
+-- generate const_MicroController_stm_ref0_lv
+const_MicroController_stm_ref0_lv = 0
+
+-- generate relation_toolkit_rinv
+relation_toolkit_rinv(r) = 0
+
+-- generate const_Movement_evadeTime
+const_Movement_evadeTime = 0
+
+-- generate Chem
+nametype Chemical_Chem = {0,1}
+
+-- generate -- OPERATION BOUNDS
+
+-- generate function_toolkit_isTotal
+function_toolkit_isTotal(f) = true
+
+-- generate relation_toolkit_id
+relation_toolkit_id() = 0
+
+-- generate const_Movement_lv
+const_Movement_lv = 0
+
+-- generate set_toolkit_union
+set_toolkit_union(s1,s2) = {}
+
+-- generate Chemical_location
+Chemical_location(gs) = Chemical_Angle_Left
+
+-- generate function_toolkit_isInjection
+function_toolkit_isInjection(f) = true
+
+-- generate set_toolkit_diff
+set_toolkit_diff(s1,s2) = {}
+
+-- generate relation_toolkit_dsub
+relation_toolkit_dsub(a,r) = 0
+
+-- generate relation_toolkit_rimage
+relation_toolkit_rimage(r,a) = {}
+
+-- generate set_toolkit_Inter
+set_toolkit_Inter(A) = {}
+
+-- generate Chemical_analysis
+Chemical_analysis(gs) = Chemical_Status_noGas
+
+-- generate Chemical_angle
+Chemical_angle(x) = Chemical_Angle_Left
+
+-- generate int
+nametype core_int = union({ -2..2},{calc_type_min(Union(
+			{Object,Object,Object,{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,{tuple2_2(q)|q <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_2(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{0},{x|x <- Object},{x|x <- Object}}))..calc_type_max(Union({Object,Object,Object,{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,{tuple2_2(q)|q <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_2(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{tuple2_1(p)|p <- {(x0__,x1__) | x0__ <- Object,x1__ <- Object}},{0},{x|x <- Object},{x|x <- Object}}))})
+
+-- generate relation_toolkit_override
+relation_toolkit_override(r,s) = 0
+
+-- generate Div
+Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
+
+-- generate randomWalk_BOUND
+randomWalk_BOUND = 2
+
+-- MODULE CONSTANTS
+
+-- CONTROLLER CONSTANTS
+
+-- STATEMACHINE CONSTANTS
+
+-- generate const_MainController_stm_ref0_thr
+const_MainController_stm_ref0_thr = 0
+
+-- OPERATION CONSTANTS
+
+-- generate Neg
+Neg(e1,T) = if member(-e1,T) then -e1 else e1
+
+-- generate Chemical_card
+Chemical_card(A) = 0
+
+-- generate function_toolkit_disjoint
+function_toolkit_disjoint(f) = true
+
+-- generate boolean
+nametype core_boolean = Bool
+
+-- generate Mult
+Mult(e1,e2,T) = if member(e1*e2,T) then e1*e2 else e1
+
+-- generate function_toolkit_isBijection
+function_toolkit_isBijection(f) = true
+
+-- generate function_toolkit_isTotalInjection
+function_toolkit_isTotalInjection(f) = true
+
+-- generate const_MicroController_stm_ref0_stuckPeriod
+const_MicroController_stm_ref0_stuckPeriod = 0
+
+-- generate set_toolkit_subseteq
+set_toolkit_subseteq(ss,s) = true
+
+-- generate relation_toolkit_first
+relation_toolkit_first(p) = 0
+
+-- generate relation_toolkit_rres
+relation_toolkit_rres(r,b) = 0
+
+-- generate Chemical_intensity
+Chemical_intensity(gs) = 0
+
+-- generate set_toolkit_inter
+set_toolkit_inter(s1,s2) = {}
+
+-- generate function_toolkit_isSurjection
+function_toolkit_isSurjection(f) = true
+

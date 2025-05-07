@@ -1,354 +1,707 @@
 <?xml version="1.0" encoding="ASCII"?>
-<robochart:RCPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:robochart="http://www.robocalc.circus/RoboChart" name="pkg0">
-  <interfaces name="I1">
-    <variableList modifier="CONST">
-      <vars name="c2">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </vars>
-    </variableList>
-    <variableList modifier="CONST">
-      <vars name="c3">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </vars>
-    </variableList>
-  </interfaces>
-  <interfaces name="I2">
-    <variableList>
-      <vars name="a1">
-        <type xsi:type="robochart:ProductType">
-          <types xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-          </types>
-          <types xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-          </types>
-        </type>
-      </vars>
-    </variableList>
-    <variableList>
-      <vars name="a3">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </vars>
-    </variableList>
-  </interfaces>
-  <interfaces name="I3">
-    <variableList>
-      <vars name="m">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </vars>
-    </variableList>
-    <operations name="move2">
-      <parameters name="lv">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
-        </type>
-      </parameters>
-      <parameters name="a">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </parameters>
-    </operations>
-    <operations name="move4"/>
-  </interfaces>
-  <interfaces name="I4">
-    <events name="evt1">
-      <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-      </type>
-    </events>
-  </interfaces>
-  <interfaces name="I5">
-    <operations name="move1">
-      <parameters name="m">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </parameters>
-    </operations>
-  </interfaces>
-  <interfaces name="Ivar">
-    <variableList>
-      <vars name="x">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </vars>
-    </variableList>
-    <events name="evta">
-      <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-      </type>
-    </events>
-  </interfaces>
-  <interfaces name="moveIF">
-    <operations name="move">
-      <parameters name="lv">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
-        </type>
-      </parameters>
-      <parameters name="a">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </parameters>
-    </operations>
-  </interfaces>
-  <interfaces name="moveIF1">
-    <operations name="move5">
-      <parameters name="lv">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
-        </type>
-      </parameters>
-      <parameters name="a">
-        <type xsi:type="robochart:TypeRef">
-          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-        </type>
-      </parameters>
-    </operations>
-  </interfaces>
-  <modules name="M">
-    <nodes xsi:type="robochart:RoboticPlatformDef" pInterfaces="//@interfaces.0 //@interfaces.1 //@interfaces.2 //@interfaces.4 //@interfaces.7" name="P1">
-      <variableList>
-        <vars name="pv1">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:robochart="http://www.robocalc.circus/RoboChart">
+  <robochart:RCPackage name="pkg0">
+    <interfaces name="I1">
+      <variableList modifier="CONST">
+        <vars name="c2">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
           </type>
         </vars>
       </variableList>
-    </nodes>
-    <nodes xsi:type="robochart:ControllerDef" rInterfaces="//@interfaces.2 //@interfaces.1 //@interfaces.0 //@interfaces.7" interfaces="//@interfaces.5" name="C1">
-      <variableList>
-        <vars name="cv1">
+      <variableList modifier="CONST">
+        <vars name="c3">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
           </type>
         </vars>
       </variableList>
-      <machines xsi:type="robochart:StateMachineDef" rInterfaces="//@interfaces.2 //@interfaces.1 //@interfaces.0 //@interfaces.6 //@interfaces.7" name="stm0">
-        <variableList>
-          <vars name="l">
-            <type xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-            </type>
-            <initial xsi:type="robochart:IntegerExp" value="3"/>
-          </vars>
-        </variableList>
-        <variableList>
-          <vars name="a">
-            <type xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-            </type>
-          </vars>
-        </variableList>
-        <variableList modifier="CONST">
-          <vars name="c1">
-            <type xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-            </type>
-          </vars>
-        </variableList>
-        <events name="mv_evt1">
-          <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-          </type>
-        </events>
-        <events name="stop"/>
-        <events name="event1">
+    </interfaces>
+    <interfaces name="I2">
+      <variableList>
+        <vars name="a1">
           <type xsi:type="robochart:ProductType">
             <types xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
             </types>
             <types xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
             </types>
           </type>
-        </events>
-        <events name="event2">
+        </vars>
+      </variableList>
+      <variableList>
+        <vars name="a3">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
           </type>
-        </events>
-        <events name="trigger1">
+        </vars>
+      </variableList>
+    </interfaces>
+    <interfaces name="I3">
+      <variableList>
+        <vars name="m">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
           </type>
-        </events>
-        <nodes xsi:type="robochart:Initial" name="i0"/>
-        <nodes xsi:type="robochart:State" name="s0">
-          <actions xsi:type="robochart:EntryAction">
-            <action xsi:type="robochart:SeqStatement">
-              <statements xsi:type="robochart:Assignment">
-                <left xsi:type="robochart:VarRef" name="//@modules.0/@nodes.1/@machines.0/@variableList.1/@vars.0"/>
-                <right xsi:type="robochart:IntegerExp" value="3"/>
-              </statements>
-              <statements xsi:type="robochart:Call" operation="//@interfaces.2/@operations.1"/>
-              <statements xsi:type="robochart:CommunicationStmt">
-                <communication event="//@modules.0/@nodes.1/@machines.0/@events.2" parameter="//@interfaces.1/@variableList.0/@vars.0" _type="INPUT"/>
-              </statements>
-              <statements xsi:type="robochart:CommunicationStmt">
-                <communication event="//@modules.0/@nodes.1/@machines.0/@events.3" parameter="//@interfaces.1/@variableList.1/@vars.0" _type="INPUT"/>
-              </statements>
-              <statements xsi:type="robochart:Assignment">
-                <left xsi:type="robochart:VarRef" name="//@interfaces.2/@variableList.0/@vars.0"/>
-                <right xsi:type="robochart:Plus">
-                  <left xsi:type="robochart:RefExp" ref="//@interfaces.2/@variableList.0/@vars.0"/>
-                  <right xsi:type="robochart:RefExp" ref="//@modules.0/@nodes.1/@machines.0/@variableList.2/@vars.0"/>
-                </right>
-              </statements>
-            </action>
-          </actions>
-          <actions xsi:type="robochart:DuringAction">
-            <action xsi:type="robochart:SeqStatement">
-              <statements xsi:type="robochart:Assignment">
-                <left xsi:type="robochart:VarRef" name="//@modules.0/@nodes.1/@machines.0/@variableList.1/@vars.0"/>
-                <right xsi:type="robochart:Plus">
-                  <left xsi:type="robochart:Plus">
-                    <left xsi:type="robochart:RefExp" ref="//@interfaces.1/@variableList.1/@vars.0"/>
-                    <right xsi:type="robochart:RefExp" ref="//@modules.0/@nodes.1/@machines.0/@variableList.0/@vars.0"/>
-                  </left>
-                  <right xsi:type="robochart:IntegerExp" value="1"/>
-                </right>
-              </statements>
-              <statements xsi:type="robochart:Call" operation="//@interfaces.2/@operations.0">
-                <args xsi:type="robochart:IntegerExp" value="4"/>
-                <args xsi:type="robochart:IntegerExp" value="5"/>
-              </statements>
-            </action>
-          </actions>
-          <actions xsi:type="robochart:ExitAction">
-            <action xsi:type="robochart:SeqStatement">
-              <statements xsi:type="robochart:Call" operation="//@operations.0">
-                <args xsi:type="robochart:IntegerExp" value="5"/>
-              </statements>
-              <statements xsi:type="robochart:Call" operation="//@interfaces.6/@operations.0">
-                <args xsi:type="robochart:IntegerExp" value="1"/>
-                <args xsi:type="robochart:IntegerExp" value="2"/>
-              </statements>
-            </action>
-          </actions>
-        </nodes>
-        <nodes xsi:type="robochart:Final" name="f0"/>
-        <transitions name="t0" source="//@modules.0/@nodes.1/@machines.0/@nodes.0" target="//@modules.0/@nodes.1/@machines.0/@nodes.1"/>
-        <transitions name="t1" source="//@modules.0/@nodes.1/@machines.0/@nodes.1" target="//@modules.0/@nodes.1/@machines.0/@nodes.2">
-          <trigger event="//@modules.0/@nodes.1/@machines.0/@events.1"/>
-        </transitions>
-        <transitions name="t2" source="//@modules.0/@nodes.1/@machines.0/@nodes.1" target="//@modules.0/@nodes.1/@machines.0/@nodes.1">
-          <trigger event="//@modules.0/@nodes.1/@machines.0/@events.3" parameter="//@modules.0/@nodes.1/@machines.0/@variableList.1/@vars.0" _type="INPUT"/>
-          <condition xsi:type="robochart:GreaterThan">
-            <left xsi:type="robochart:RefExp" ref="//@interfaces.1/@variableList.1/@vars.0"/>
-            <right xsi:type="robochart:IntegerExp" value="4"/>
-          </condition>
-          <action xsi:type="robochart:CommunicationStmt">
-            <communication event="//@modules.0/@nodes.1/@machines.0/@events.4" _type="OUTPUT">
-              <value xsi:type="robochart:ParExp">
-                <exp xsi:type="robochart:Plus">
-                  <left xsi:type="robochart:Plus">
-                    <left xsi:type="robochart:RefExp" ref="//@interfaces.1/@variableList.1/@vars.0"/>
-                    <right xsi:type="robochart:RefExp" ref="//@interfaces.0/@variableList.0/@vars.0"/>
-                  </left>
-                  <right xsi:type="robochart:RefExp" ref="//@interfaces.0/@variableList.1/@vars.0"/>
-                </exp>
-              </value>
-            </communication>
-          </action>
-        </transitions>
-      </machines>
-      <machines xsi:type="robochart:StateMachineRef" name="stm1" ref="//@modules.0/@nodes.1/@machines.0"/>
-      <lOperations xsi:type="robochart:OperationDef" name="move">
+        </vars>
+      </variableList>
+      <operations name="move2">
         <parameters name="lv">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
           </type>
         </parameters>
         <parameters name="a">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
           </type>
         </parameters>
-        <variableList>
-          <vars name="mv_var1">
-            <type xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-            </type>
-          </vars>
-        </variableList>
-        <variableList>
-          <vars name="mv_var2">
-            <type xsi:type="robochart:TypeRef">
-              <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-            </type>
-          </vars>
-        </variableList>
-        <events name="mv_evt1">
+      </operations>
+      <operations name="move4"/>
+    </interfaces>
+    <interfaces name="I4">
+      <events name="evt1">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </events>
+    </interfaces>
+    <interfaces name="I5">
+      <operations name="move1">
+        <parameters name="m">
           <type xsi:type="robochart:TypeRef">
-            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
           </type>
-        </events>
-        <nodes xsi:type="robochart:Initial" name="i0"/>
-        <nodes xsi:type="robochart:Final" name="f0"/>
-        <transitions name="t0" source="//@modules.0/@nodes.1/@lOperations.0/@nodes.0" target="//@modules.0/@nodes.1/@lOperations.0/@nodes.1">
-          <action xsi:type="robochart:SeqStatement">
-            <statements xsi:type="robochart:CommunicationStmt">
-              <communication event="//@modules.0/@nodes.1/@lOperations.0/@events.0" _type="OUTPUT">
-                <value xsi:type="robochart:IntegerExp" value="3"/>
+        </parameters>
+      </operations>
+    </interfaces>
+    <interfaces name="Ivar">
+      <variableList>
+        <vars name="x">
+          <type xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+          </type>
+        </vars>
+      </variableList>
+      <events name="evta">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </events>
+    </interfaces>
+    <interfaces name="moveIF">
+      <operations name="move">
+        <parameters name="lv">
+          <type xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+          </type>
+        </parameters>
+        <parameters name="a">
+          <type xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+          </type>
+        </parameters>
+      </operations>
+    </interfaces>
+    <interfaces name="moveIF1">
+      <operations name="move5">
+        <parameters name="lv">
+          <type xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+          </type>
+        </parameters>
+        <parameters name="a">
+          <type xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+          </type>
+        </parameters>
+      </operations>
+    </interfaces>
+    <modules name="M">
+      <nodes xsi:type="robochart:RoboticPlatformDef" pInterfaces="/0/@interfaces.0 /0/@interfaces.1 /0/@interfaces.2 /0/@interfaces.4 /0/@interfaces.7" name="P1">
+        <variableList>
+          <vars name="pv1">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </vars>
+        </variableList>
+        <events name="p1"/>
+      </nodes>
+      <nodes xsi:type="robochart:ControllerDef" rInterfaces="/0/@interfaces.2 /0/@interfaces.1 /0/@interfaces.0 /0/@interfaces.7" interfaces="/0/@interfaces.5" name="C1">
+        <variableList>
+          <vars name="cv1">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </vars>
+        </variableList>
+        <variableList modifier="CONST">
+          <vars name="c61">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+            <initial xsi:type="robochart:IntegerExp" value="8"/>
+          </vars>
+        </variableList>
+        <machines xsi:type="robochart:StateMachineDef" rInterfaces="/0/@interfaces.2 /0/@interfaces.1 /0/@interfaces.0 /0/@interfaces.6 /0/@interfaces.7" name="stm0">
+          <variableList modifier="CONST">
+            <vars name="c6">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+              <initial xsi:type="robochart:IntegerExp" value="8"/>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c_list1">
+              <type xsi:type="robochart:SeqType">
+                <domain xsi:type="robochart:TypeRef">
+                  <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+                </domain>
+              </type>
+              <initial xsi:type="robochart:SeqExp">
+                <values xsi:type="robochart:IntegerExp" value="20"/>
+                <values xsi:type="robochart:IntegerExp" value="30"/>
+              </initial>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c_list2">
+              <type xsi:type="robochart:SeqType">
+                <domain xsi:type="robochart:SeqType">
+                  <domain xsi:type="robochart:TypeRef">
+                    <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+                  </domain>
+                </domain>
+              </type>
+              <initial xsi:type="robochart:SeqExp">
+                <values xsi:type="robochart:SeqExp">
+                  <values xsi:type="robochart:IntegerExp" value="20"/>
+                  <values xsi:type="robochart:IntegerExp" value="21"/>
+                </values>
+                <values xsi:type="robochart:SeqExp">
+                  <values xsi:type="robochart:IntegerExp" value="30"/>
+                </values>
+              </initial>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c_list3">
+              <type xsi:type="robochart:SeqType">
+                <domain xsi:type="robochart:ProductType">
+                  <types xsi:type="robochart:TypeRef">
+                    <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+                  </types>
+                  <types xsi:type="robochart:TypeRef">
+                    <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+                  </types>
+                </domain>
+              </type>
+              <initial xsi:type="robochart:SeqExp">
+                <values xsi:type="robochart:TupleExp">
+                  <values xsi:type="robochart:Neg">
+                    <exp xsi:type="robochart:FloatExp" value="30.0"/>
+                  </values>
+                  <values xsi:type="robochart:FloatExp" value="30.0"/>
+                </values>
+                <values xsi:type="robochart:TupleExp">
+                  <values xsi:type="robochart:Neg">
+                    <exp xsi:type="robochart:FloatExp" value="250.0"/>
+                  </values>
+                  <values xsi:type="robochart:FloatExp" value="250.0"/>
+                </values>
+              </initial>
+            </vars>
+          </variableList>
+          <variableList>
+            <vars name="l">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+              <initial xsi:type="robochart:RefExp" ref="/0/@modules.0/@nodes.1/@machines.0/@variableList.0/@vars.0"/>
+            </vars>
+          </variableList>
+          <variableList>
+            <vars name="a">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c1">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+            </vars>
+          </variableList>
+          <events name="mv_evt1">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </events>
+          <events name="stop"/>
+          <events name="event1">
+            <type xsi:type="robochart:ProductType">
+              <types xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </types>
+              <types xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </types>
+            </type>
+          </events>
+          <events name="event2">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </events>
+          <events name="trigger1">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </events>
+          <nodes xsi:type="robochart:Initial" name="i0"/>
+          <nodes xsi:type="robochart:State" name="s0">
+            <actions xsi:type="robochart:EntryAction">
+              <action xsi:type="robochart:SeqStatement">
+                <statements xsi:type="robochart:Assignment">
+                  <left xsi:type="robochart:VarRef" name="/0/@modules.0/@nodes.1/@machines.0/@variableList.5/@vars.0"/>
+                  <right xsi:type="robochart:IntegerExp" value="3"/>
+                </statements>
+                <statements xsi:type="robochart:Call" operation="/0/@interfaces.2/@operations.1"/>
+                <statements xsi:type="robochart:CommunicationStmt">
+                  <communication event="/0/@modules.0/@nodes.1/@machines.0/@events.2" parameter="/0/@interfaces.1/@variableList.0/@vars.0" _type="INPUT"/>
+                </statements>
+                <statements xsi:type="robochart:CommunicationStmt">
+                  <communication event="/0/@modules.0/@nodes.1/@machines.0/@events.3" parameter="/0/@interfaces.1/@variableList.1/@vars.0" _type="INPUT"/>
+                </statements>
+                <statements xsi:type="robochart:Assignment">
+                  <left xsi:type="robochart:VarRef" name="/0/@interfaces.2/@variableList.0/@vars.0"/>
+                  <right xsi:type="robochart:Plus">
+                    <left xsi:type="robochart:RefExp" ref="/0/@interfaces.2/@variableList.0/@vars.0"/>
+                    <right xsi:type="robochart:RefExp" ref="/0/@modules.0/@nodes.1/@machines.0/@variableList.6/@vars.0"/>
+                  </right>
+                </statements>
+              </action>
+            </actions>
+            <actions xsi:type="robochart:DuringAction">
+              <action xsi:type="robochart:SeqStatement">
+                <statements xsi:type="robochart:Assignment">
+                  <left xsi:type="robochart:VarRef" name="/0/@modules.0/@nodes.1/@machines.0/@variableList.5/@vars.0"/>
+                  <right xsi:type="robochart:Plus">
+                    <left xsi:type="robochart:Plus">
+                      <left xsi:type="robochart:RefExp" ref="/0/@interfaces.1/@variableList.1/@vars.0"/>
+                      <right xsi:type="robochart:RefExp" ref="/0/@modules.0/@nodes.1/@machines.0/@variableList.4/@vars.0"/>
+                    </left>
+                    <right xsi:type="robochart:IntegerExp" value="1"/>
+                  </right>
+                </statements>
+                <statements xsi:type="robochart:Call" operation="/0/@interfaces.2/@operations.0">
+                  <args xsi:type="robochart:IntegerExp" value="4"/>
+                  <args xsi:type="robochart:IntegerExp" value="5"/>
+                </statements>
+              </action>
+            </actions>
+            <actions xsi:type="robochart:ExitAction">
+              <action xsi:type="robochart:SeqStatement">
+                <statements xsi:type="robochart:Call" operation="/0/@operations.0">
+                  <args xsi:type="robochart:IntegerExp" value="5"/>
+                </statements>
+                <statements xsi:type="robochart:Call" operation="/0/@interfaces.6/@operations.0">
+                  <args xsi:type="robochart:IntegerExp" value="1"/>
+                  <args xsi:type="robochart:IntegerExp" value="2"/>
+                </statements>
+              </action>
+            </actions>
+          </nodes>
+          <nodes xsi:type="robochart:Final" name="f0"/>
+          <transitions name="t0" source="/0/@modules.0/@nodes.1/@machines.0/@nodes.0" target="/0/@modules.0/@nodes.1/@machines.0/@nodes.1"/>
+          <transitions name="t1" source="/0/@modules.0/@nodes.1/@machines.0/@nodes.1" target="/0/@modules.0/@nodes.1/@machines.0/@nodes.2">
+            <trigger event="/0/@modules.0/@nodes.1/@machines.0/@events.1"/>
+          </transitions>
+          <transitions name="t2" source="/0/@modules.0/@nodes.1/@machines.0/@nodes.1" target="/0/@modules.0/@nodes.1/@machines.0/@nodes.1">
+            <trigger event="/0/@modules.0/@nodes.1/@machines.0/@events.3" parameter="/0/@modules.0/@nodes.1/@machines.0/@variableList.5/@vars.0" _type="INPUT"/>
+            <condition xsi:type="robochart:GreaterThan">
+              <left xsi:type="robochart:RefExp" ref="/0/@interfaces.1/@variableList.1/@vars.0"/>
+              <right xsi:type="robochart:IntegerExp" value="4"/>
+            </condition>
+            <action xsi:type="robochart:CommunicationStmt">
+              <communication event="/0/@modules.0/@nodes.1/@machines.0/@events.4" _type="OUTPUT">
+                <value xsi:type="robochart:ParExp">
+                  <exp xsi:type="robochart:Plus">
+                    <left xsi:type="robochart:Plus">
+                      <left xsi:type="robochart:RefExp" ref="/0/@interfaces.1/@variableList.1/@vars.0"/>
+                      <right xsi:type="robochart:RefExp" ref="/0/@interfaces.0/@variableList.0/@vars.0"/>
+                    </left>
+                    <right xsi:type="robochart:RefExp" ref="/0/@interfaces.0/@variableList.1/@vars.0"/>
+                  </exp>
+                </value>
               </communication>
-            </statements>
-            <statements xsi:type="robochart:Call" operation="//@operations.0">
+            </action>
+          </transitions>
+        </machines>
+        <machines xsi:type="robochart:StateMachineRef" name="stm1" ref="/0/@modules.0/@nodes.1/@machines.0"/>
+        <machines xsi:type="robochart:StateMachineDef" rInterfaces="/0/@interfaces.2 /0/@interfaces.1 /0/@interfaces.0 /0/@interfaces.6 /0/@interfaces.7" name="stm1">
+          <variableList modifier="CONST">
+            <vars name="c6">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+              <initial xsi:type="robochart:IntegerExp" value="8"/>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c_list1">
+              <type xsi:type="robochart:SeqType">
+                <domain xsi:type="robochart:TypeRef">
+                  <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+                </domain>
+              </type>
+              <initial xsi:type="robochart:SeqExp">
+                <values xsi:type="robochart:IntegerExp" value="20"/>
+                <values xsi:type="robochart:IntegerExp" value="30"/>
+              </initial>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c_list2">
+              <type xsi:type="robochart:SeqType">
+                <domain xsi:type="robochart:SeqType">
+                  <domain xsi:type="robochart:TypeRef">
+                    <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+                  </domain>
+                </domain>
+              </type>
+              <initial xsi:type="robochart:SeqExp">
+                <values xsi:type="robochart:SeqExp">
+                  <values xsi:type="robochart:IntegerExp" value="20"/>
+                  <values xsi:type="robochart:IntegerExp" value="21"/>
+                </values>
+                <values xsi:type="robochart:SeqExp">
+                  <values xsi:type="robochart:IntegerExp" value="30"/>
+                </values>
+              </initial>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c_list3">
+              <type xsi:type="robochart:SeqType">
+                <domain xsi:type="robochart:ProductType">
+                  <types xsi:type="robochart:TypeRef">
+                    <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+                  </types>
+                  <types xsi:type="robochart:TypeRef">
+                    <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+                  </types>
+                </domain>
+              </type>
+              <initial xsi:type="robochart:SeqExp">
+                <values xsi:type="robochart:TupleExp">
+                  <values xsi:type="robochart:Neg">
+                    <exp xsi:type="robochart:FloatExp" value="30.0"/>
+                  </values>
+                  <values xsi:type="robochart:FloatExp" value="30.0"/>
+                </values>
+                <values xsi:type="robochart:TupleExp">
+                  <values xsi:type="robochart:Neg">
+                    <exp xsi:type="robochart:FloatExp" value="250.0"/>
+                  </values>
+                  <values xsi:type="robochart:FloatExp" value="250.0"/>
+                </values>
+              </initial>
+            </vars>
+          </variableList>
+          <variableList>
+            <vars name="l">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+              <initial xsi:type="robochart:RefExp" ref="/0/@modules.0/@nodes.1/@machines.2/@variableList.0/@vars.0"/>
+            </vars>
+          </variableList>
+          <variableList>
+            <vars name="a">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+            </vars>
+          </variableList>
+          <variableList modifier="CONST">
+            <vars name="c1">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+            </vars>
+          </variableList>
+          <events name="mv_evt1">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </events>
+          <events name="stop"/>
+          <events name="event1">
+            <type xsi:type="robochart:ProductType">
+              <types xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </types>
+              <types xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </types>
+            </type>
+          </events>
+          <events name="event2">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </events>
+          <events name="trigger1">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </events>
+          <nodes xsi:type="robochart:Initial" name="i0"/>
+          <nodes xsi:type="robochart:State" name="s0">
+            <actions xsi:type="robochart:EntryAction">
+              <action xsi:type="robochart:SeqStatement">
+                <statements xsi:type="robochart:Assignment">
+                  <left xsi:type="robochart:VarRef" name="/0/@modules.0/@nodes.1/@machines.2/@variableList.5/@vars.0"/>
+                  <right xsi:type="robochart:IntegerExp" value="3"/>
+                </statements>
+                <statements xsi:type="robochart:Call" operation="/0/@interfaces.2/@operations.1"/>
+                <statements xsi:type="robochart:CommunicationStmt">
+                  <communication event="/0/@modules.0/@nodes.1/@machines.2/@events.2" parameter="/0/@interfaces.1/@variableList.0/@vars.0" _type="INPUT"/>
+                </statements>
+                <statements xsi:type="robochart:CommunicationStmt">
+                  <communication event="/0/@modules.0/@nodes.1/@machines.2/@events.3" parameter="/0/@interfaces.1/@variableList.1/@vars.0" _type="INPUT"/>
+                </statements>
+                <statements xsi:type="robochart:Assignment">
+                  <left xsi:type="robochart:VarRef" name="/0/@interfaces.2/@variableList.0/@vars.0"/>
+                  <right xsi:type="robochart:Plus">
+                    <left xsi:type="robochart:RefExp" ref="/0/@interfaces.2/@variableList.0/@vars.0"/>
+                    <right xsi:type="robochart:RefExp" ref="/0/@modules.0/@nodes.1/@machines.2/@variableList.6/@vars.0"/>
+                  </right>
+                </statements>
+              </action>
+            </actions>
+            <actions xsi:type="robochart:DuringAction">
+              <action xsi:type="robochart:SeqStatement">
+                <statements xsi:type="robochart:Assignment">
+                  <left xsi:type="robochart:VarRef" name="/0/@modules.0/@nodes.1/@machines.2/@variableList.5/@vars.0"/>
+                  <right xsi:type="robochart:Plus">
+                    <left xsi:type="robochart:Plus">
+                      <left xsi:type="robochart:RefExp" ref="/0/@interfaces.1/@variableList.1/@vars.0"/>
+                      <right xsi:type="robochart:RefExp" ref="/0/@modules.0/@nodes.1/@machines.2/@variableList.4/@vars.0"/>
+                    </left>
+                    <right xsi:type="robochart:IntegerExp" value="1"/>
+                  </right>
+                </statements>
+                <statements xsi:type="robochart:Call" operation="/0/@interfaces.2/@operations.0">
+                  <args xsi:type="robochart:IntegerExp" value="4"/>
+                  <args xsi:type="robochart:IntegerExp" value="5"/>
+                </statements>
+              </action>
+            </actions>
+            <actions xsi:type="robochart:ExitAction">
+              <action xsi:type="robochart:SeqStatement">
+                <statements xsi:type="robochart:Call" operation="/0/@operations.0">
+                  <args xsi:type="robochart:IntegerExp" value="5"/>
+                </statements>
+                <statements xsi:type="robochart:Call" operation="/0/@interfaces.6/@operations.0">
+                  <args xsi:type="robochart:IntegerExp" value="1"/>
+                  <args xsi:type="robochart:IntegerExp" value="2"/>
+                </statements>
+              </action>
+            </actions>
+          </nodes>
+          <nodes xsi:type="robochart:Final" name="f0"/>
+          <transitions name="t0" source="/0/@modules.0/@nodes.1/@machines.2/@nodes.0" target="/0/@modules.0/@nodes.1/@machines.2/@nodes.1"/>
+          <transitions name="t1" source="/0/@modules.0/@nodes.1/@machines.2/@nodes.1" target="/0/@modules.0/@nodes.1/@machines.2/@nodes.2">
+            <trigger event="/0/@modules.0/@nodes.1/@machines.2/@events.1"/>
+          </transitions>
+          <transitions name="t2" source="/0/@modules.0/@nodes.1/@machines.2/@nodes.1" target="/0/@modules.0/@nodes.1/@machines.2/@nodes.1">
+            <trigger event="/0/@modules.0/@nodes.1/@machines.2/@events.3" parameter="/0/@modules.0/@nodes.1/@machines.2/@variableList.5/@vars.0" _type="INPUT"/>
+            <condition xsi:type="robochart:GreaterThan">
+              <left xsi:type="robochart:RefExp" ref="/0/@interfaces.1/@variableList.1/@vars.0"/>
+              <right xsi:type="robochart:IntegerExp" value="4"/>
+            </condition>
+            <action xsi:type="robochart:CommunicationStmt">
+              <communication event="/0/@modules.0/@nodes.1/@machines.2/@events.4" _type="OUTPUT">
+                <value xsi:type="robochart:ParExp">
+                  <exp xsi:type="robochart:Plus">
+                    <left xsi:type="robochart:Plus">
+                      <left xsi:type="robochart:RefExp" ref="/0/@interfaces.1/@variableList.1/@vars.0"/>
+                      <right xsi:type="robochart:RefExp" ref="/0/@interfaces.0/@variableList.0/@vars.0"/>
+                    </left>
+                    <right xsi:type="robochart:RefExp" ref="/0/@interfaces.0/@variableList.1/@vars.0"/>
+                  </exp>
+                </value>
+              </communication>
+            </action>
+          </transitions>
+        </machines>
+        <lOperations xsi:type="robochart:OperationDef" name="move">
+          <parameters name="lv">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+            </type>
+          </parameters>
+          <parameters name="a">
+            <type xsi:type="robochart:TypeRef">
+              <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+            </type>
+          </parameters>
+          <variableList>
+            <vars name="mv_var1">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+            </vars>
+          </variableList>
+          <variableList>
+            <vars name="mv_var2">
+              <type xsi:type="robochart:TypeRef">
+                <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+              </type>
+            </vars>
+          </variableList>
+          <nodes xsi:type="robochart:Initial" name="i0"/>
+          <nodes xsi:type="robochart:Final" name="f0"/>
+          <transitions name="t0" source="/0/@modules.0/@nodes.1/@lOperations.0/@nodes.0" target="/0/@modules.0/@nodes.1/@lOperations.0/@nodes.1">
+            <action xsi:type="robochart:Call" operation="/0/@operations.0">
               <args xsi:type="robochart:IntegerExp" value="2"/>
-            </statements>
-          </action>
-        </transitions>
-      </lOperations>
-    </nodes>
-  </modules>
-  <operations name="move1">
-    <parameters name="m">
+            </action>
+          </transitions>
+        </lOperations>
+      </nodes>
+    </modules>
+    <operations name="move1">
+      <parameters name="m">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations name="move4"/>
+    <operations name="move2" rInterfaces="/0/@interfaces.4">
+      <parameters name="lv">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
+        </type>
+      </parameters>
+      <parameters name="a">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </parameters>
+      <events name="opevt">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </events>
+      <nodes xsi:type="robochart:Initial" name="i0"/>
+      <nodes xsi:type="robochart:Final" name="f0"/>
+      <transitions name="t0" source="/0/@operations.2/@nodes.0" target="/0/@operations.2/@nodes.1">
+        <action xsi:type="robochart:SeqStatement">
+          <statements xsi:type="robochart:CommunicationStmt">
+            <communication event="/0/@operations.2/@events.0" _type="OUTPUT">
+              <value xsi:type="robochart:IntegerExp" value="3"/>
+            </communication>
+          </statements>
+          <statements xsi:type="robochart:Call" operation="/0/@interfaces.4/@operations.0">
+            <args xsi:type="robochart:IntegerExp" value="2"/>
+          </statements>
+        </action>
+      </transitions>
+    </operations>
+    <functions name="angle">
       <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
       </type>
-    </parameters>
-  </operations>
-  <operations name="move4"/>
-  <operations name="move2" rInterfaces="//@interfaces.4">
-    <parameters name="lv">
-      <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.4"/>
-      </type>
-    </parameters>
-    <parameters name="a">
-      <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-      </type>
-    </parameters>
-    <events name="opevt">
-      <type xsi:type="robochart:TypeRef">
-        <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
-      </type>
-    </events>
-    <nodes xsi:type="robochart:Initial" name="i0"/>
-    <nodes xsi:type="robochart:Final" name="f0"/>
-    <transitions name="t0" source="//@operations.2/@nodes.0" target="//@operations.2/@nodes.1">
-      <action xsi:type="robochart:SeqStatement">
-        <statements xsi:type="robochart:CommunicationStmt">
-          <communication event="//@operations.2/@events.0" _type="OUTPUT">
-            <value xsi:type="robochart:IntegerExp" value="3"/>
-          </communication>
-        </statements>
-        <statements xsi:type="robochart:Call" operation="//@interfaces.4/@operations.0">
-          <args xsi:type="robochart:IntegerExp" value="2"/>
-        </statements>
-      </action>
-    </transitions>
-  </operations>
-</robochart:RCPackage>
+      <parameters name="x">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+        </type>
+      </parameters>
+      <postconditions xsi:type="robochart:Equals">
+        <left xsi:type="robochart:ResultExp"/>
+        <right xsi:type="robochart:Plus">
+          <left xsi:type="robochart:RefExp" ref="/0/@functions.0/@parameters.0"/>
+          <right xsi:type="robochart:IntegerExp" value="1"/>
+        </right>
+      </postconditions>
+    </functions>
+  </robochart:RCPackage>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:ProductType">
+      <types xsi:type="robochart:TypeRef">
+        <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+      </types>
+      <types xsi:type="robochart:TypeRef">
+        <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+      </types>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:ProductType">
+      <types xsi:type="robochart:TypeRef">
+        <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+      </types>
+      <types xsi:type="robochart:TypeRef">
+        <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+      </types>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+  <robochart:Variable name="value">
+    <type xsi:type="robochart:TypeRef">
+      <ref xsi:type="robochart:PrimitiveType" href="../../plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+    </type>
+  </robochart:Variable>
+</xmi:XMI>

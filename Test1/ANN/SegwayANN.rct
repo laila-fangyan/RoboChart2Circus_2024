@@ -1,0 +1,44 @@
+diagram SegwayANN
+
+interface ANNInput {
+	event anewError:real
+	event adiff:real
+}
+
+interface ANNOutput {
+	event angleOutputE:real
+}
+
+module SegwayANN {
+	controller SegwayController {
+		uses HallSensorsI uses IMUI uses AnglePIDVars requires MotorsI requires InterruptsI
+		
+	sref stm_ref0 = BalanceSTM
+		connection SegwayController on leftMotorVelocity to stm_ref0 on leftMotorVelocity
+		connection SegwayController on rightMotorVelocity to stm_ref0 on rightMotorVelocity
+
+		connection SegwayController on gyroX to stm_ref0 on gyroX
+		connection SegwayController on gyroY to stm_ref0 on gyroY
+		connection SegwayController on gyroZ to stm_ref0 on gyroZ
+		connection stm_ref0 on anewError to SegwayController on anewError
+		connection stm_ref0 on adiff to SegwayController on adiff
+
+		connection stm_ref2 on speedOutputE to stm_ref0 on speedOutputE
+		connection stm_ref0 on snewError to stm_ref2 on snewError
+	sref stm_ref2 = SpeedPID
+
+		connection stm_ref0 on rdiff to stm_ref3 on rdiff
+		
+	sref stm_ref3 = RotationPID
+
+		connection SegwayController on angle to stm_ref0 on angle
+		connection stm_ref3 on rotationOutputE to stm_ref0 on rotationOutputE
+
+		connection SegwayController on angleOutputE to stm_ref0 on angleOutputE
+		
+	}
+	
+	rref rp_ref0 = SegwayRP
+
+	}
+

@@ -1,0 +1,33 @@
+ExternalEvents_ChemicalDetector = {|moveCall,flag,odometer,randomWalkRet,shortRandomWalkRet,gas,shortRandomWalkCall,randomWalkCall,obstacle,moveRet|}
+
+assert T_ChemicalDetector :[deterministic]
+-- zeno freedom
+assert T_ChemicalDetector :[divergence-free]
+assert T_ChemicalDetector ; RUN({tock}) :[deadlock-free]
+
+-- no time locks
+assert RUN({tock}) ||| CHAOS(ExternalEvents_ChemicalDetector)      [F= prioritise((T_ChemicalDetector ; RUN({tock})) |\ union(ExternalEvents_ChemicalDetector,{tock}),<{},{tock}>)
+
+-- every state is reachable in this module
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Waiting"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Going"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Found"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_j1"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Avoiding"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_TryingAgain"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_AvoidingAgain"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|Movement_enteredV."Movement_GettingOut"|}
+
+assert not STOP [T= T_ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|}
+assert not STOP [T= T_ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|}
+
+-- timed model is a refinement
+assert sbisim(diamond(ChemicalDetector)) [F= T_ChemicalDetector \ {tock}
+assert sbisim(diamond(ChemicalDetector_VS)) [T= T_ChemicalDetector_VS \ {tock}
+
+-- do time constraints constrain traces?
+assert T_ChemicalDetector \ {tock} [T= sbisim(diamond(ChemicalDetector))
+assert T_ChemicalDetector_VS \ {tock} [T= sbisim(diamond(ChemicalDetector_VS))

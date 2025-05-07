@@ -1,0 +1,6 @@
+assert Movement_O :[deadlock-free]	
+assert Movement_O;RUN :[deadlock-free]
+assert Movement_O :[deterministic]
+assert Movement_O :[divergence-free]
+	
+chase_Movement = chase(Movement_O)

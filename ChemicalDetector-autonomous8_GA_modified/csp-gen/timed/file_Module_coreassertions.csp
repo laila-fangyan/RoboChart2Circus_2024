@@ -1,0 +1,142 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 01-05-2025 09:52:17
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_Module.csp"
+
+
+-- generate OP_shortRandomWalk
+P_OP_shortRandomWalk = let
+	id__ = 0
+	
+	
+	
+	
+within
+	OP_shortRandomWalk::O__(id__)
+assert P_OP_shortRandomWalk :[deadlock-free]	
+assert P_OP_shortRandomWalk;RUN({r__}) :[deadlock-free]
+assert P_OP_shortRandomWalk :[deterministic]
+assert P_OP_shortRandomWalk :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_OP_shortRandomWalk[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_OP_shortRandomWalk
+-- generate OP_move
+P_OP_move = let
+	id__ = 0
+	
+	param_lv = 0
+	param_a = Chemical_Angle_Left
+	
+	
+	
+within
+	OP_move::O__(id__,
+				param_lv,
+				param_a)
+assert P_OP_move :[deadlock-free]	
+assert P_OP_move;RUN({r__}) :[deadlock-free]
+assert P_OP_move :[deterministic]
+assert P_OP_move :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_OP_move[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_OP_move
+
+
+-- generate ChemicalDetector
+P_ChemicalDetector = let
+	id__ = 0
+	
+	
+	
+	const_MicroController_stm_ref0_lv = const_Movement_lv
+	const_MicroController_stm_ref0_evadeTime = const_Movement_evadeTime
+	const_MicroController_stm_ref0_stuckPeriod = const_Movement_stuckPeriod
+	const_MicroController_stm_ref0_stuckDist = const_Movement_stuckDist
+	const_MicroController_stm_ref0_outPeriod = const_Movement_outPeriod
+	const_MainController_stm_ref0_thr = const_GasAnalysis_thr
+		
+	const_MicroController_op_ref0_lv = const_Location_changeDirection_lv
+	
+within
+	ChemicalDetector::O__(id__,
+			    const_MicroController_stm_ref0_lv,
+			    const_MicroController_stm_ref0_evadeTime,
+			    const_MicroController_stm_ref0_stuckPeriod,
+			    const_MicroController_stm_ref0_stuckDist,
+			    const_MicroController_stm_ref0_outPeriod,
+			    const_MainController_stm_ref0_thr,
+			   	const_MicroController_op_ref0_lv)
+assert P_ChemicalDetector :[deadlock-free]	
+assert P_ChemicalDetector;RUN({r__}) :[deadlock-free]
+assert P_ChemicalDetector :[deterministic]
+assert P_ChemicalDetector :[divergence-free]
+
+-- generate ChemicalDetector_ctrl_ref0
+P_ChemicalDetector_ctrl_ref0 = let
+	id__ = 0
+	
+	
+	
+	const_MicroController_stm_ref0_lv = const_Movement_lv
+	const_MicroController_stm_ref0_evadeTime = const_Movement_evadeTime
+	const_MicroController_stm_ref0_stuckPeriod = const_Movement_stuckPeriod
+	const_MicroController_stm_ref0_stuckDist = const_Movement_stuckDist
+	const_MicroController_stm_ref0_outPeriod = const_Movement_outPeriod
+		
+	const_MicroController_op_ref0_lv = const_Location_changeDirection_lv
+within
+	ChemicalDetector::ctrl_ref0::O__(id__,
+			    const_MicroController_stm_ref0_lv,
+			    const_MicroController_stm_ref0_evadeTime,
+			    const_MicroController_stm_ref0_stuckPeriod,
+			    const_MicroController_stm_ref0_stuckDist,
+			    const_MicroController_stm_ref0_outPeriod,
+			   	const_MicroController_op_ref0_lv)
+
+assert P_ChemicalDetector_ctrl_ref0 :[deadlock-free]	
+assert P_ChemicalDetector_ctrl_ref0;RUN({r__}) :[deadlock-free]
+assert P_ChemicalDetector_ctrl_ref0 :[deterministic]
+assert P_ChemicalDetector_ctrl_ref0 :[divergence-free]
+
+-- timed deadlock free
+assert prioritise(P_ChemicalDetector_ctrl_ref0[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_ChemicalDetector_ctrl_ref0
+-- generate ChemicalDetector_ctrl_ref1
+P_ChemicalDetector_ctrl_ref1 = let
+	id__ = 0
+	
+	
+	
+	const_MainController_stm_ref0_thr = const_GasAnalysis_thr
+		
+within
+	ChemicalDetector::ctrl_ref1::O__(id__,
+			    const_MainController_stm_ref0_thr)
+
+assert P_ChemicalDetector_ctrl_ref1 :[deadlock-free]	
+assert P_ChemicalDetector_ctrl_ref1;RUN({r__}) :[deadlock-free]
+assert P_ChemicalDetector_ctrl_ref1 :[deterministic]
+assert P_ChemicalDetector_ctrl_ref1 :[divergence-free]
+
+-- timed deadlock free
+assert prioritise(P_ChemicalDetector_ctrl_ref1[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_ChemicalDetector_ctrl_ref1
+-- timed deadlock free
+assert prioritise(P_ChemicalDetector[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_ChemicalDetector

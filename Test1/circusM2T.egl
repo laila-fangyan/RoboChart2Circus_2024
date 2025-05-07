@@ -46,15 +46,20 @@ record [%=ap.zSchText.declList.decls.at(0).name.word%] =
 	[%=vardecl.nameList.names.at(0).word%] :: "[%=vardecl.expr.parseExpr()%]"
 [%}} }%]
 
-[*constants and functions declaration*]
+[*constants and functions declaration and/or definition*]
 [%
 if(axParas.select(p|p.box = Z!Box#AxBox).size()>0){%]
-
-\<comment> \<open>constant and function declaration\<close>
-[%	for(ap in axParas.select(p|p.box = Z!Box#AxBox)){%]
+\<comment> \<open>constant and function declaration/definition\<close>
+[%for(ap in axParas.select(p|p.box = Z!Box#AxBox)){ 
+	if(ap.zSchText.pred.isDefined()){%]
+definition [%=ap.zSchText.declList.decls.at(0).nameList.names.at(0).word%] :: "[%=ap.zSchText.declList.decls.at(0).expr.parseExpr()%]"
+where "[%=ap.zSchText.declList.decls.at(0).nameList.names.at(0).word%] = [%=ap.zSchText.pred.rightExpr.exprList.exprs.at(0).parseExpr()%]"
+	[%} else{%]
 consts [%=ap.zSchText.declList.decls.at(0).nameList.names.at(0).word%] :: "[%=ap.zSchText.declList.decls.at(0).expr.parseExpr()%]"
-
-[% } }%]
+	[%}%]
+	
+[%}%]
+[%}%]
 
 \<comment> \<open>Channel Declaration\<close>
 chantype mychan = 
@@ -91,8 +96,12 @@ definition "[%= chansetpara.name.word%] = \<lbrace>
 [%}%]
 
 definition relu :: "real \<Rightarrow> real" where
-	"relu x = max 0 x"
+		   "relu x = max 0 x"
 
+definition norm :: "real \<Rightarrow> (real \<times> real) \<Rightarrow> (real \<times> real) \<Rightarrow> real" where
+		   "norm x r r' = (((x - fst(r)) / (snd(r) - fst(r))) 
+                              * (snd(r') - fst(r'))) + fst(r')"
+                              
 [%var procparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ProcessPara));
 //procparas.at(0).circusProcess.paraList.paras.at(0).circusAction.type().println();
 //
@@ -124,9 +133,17 @@ definition "ProcDef = cProcess [%= procpara.name.word%].ProcDef"
 end
 [%}%]
  
+[%var actparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ActionPara));
+if(procparas.size()=0 and actparas.size()>0){%]
+actions  is "(mychan, unit) action" where 
+"SSTOP = share  \<rightarrow>  SSTOP" |
+[%for(actpara in actparas){%]
+" [%= actpara.name.word%] = 
+	[%=actpara.circusAction.parseAction()%] "
+
+[%}%]
 end
-
-
+[%}%]
 
 
 
@@ -174,6 +191,9 @@ end
 	var str: String;
 	
 	for(actpara in self.paraList.paras){
+		("line 177, actpara = " + actpara.name).println();
+		
+		("line 177, actpara.circusAction = " + actpara.circusAction).println();
 		str = str + "\"" + actpara.nameWithSig() + " = " + actpara.circusAction.parseAction() + "\"";
 		if(hasMore){
 
@@ -212,40 +232,46 @@ end
 [%operation Z!CircusAction parseAction(){
 	if(self.instanceOf(Z!PrefixingAction)){
 		return self.parsePrefixingAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!InterruptAction)){
 		return self.parseInterruptAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!ExtChoiceAction)){
 		return self.parseExtChoiceAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!CallAction)){
 		return self.parseCallAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!SeqAction)){
 		return self.parseSeqAction();
-	} else
+	} //else
+	if(self.instanceOf(Z!SeqActionIte)){
+		return self.parseSeqActionIte();
+	}
 	if(self.instanceOf(Z!GuardedAction)){
 		return self.parseGuardedAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!SkipAction)){
 		return self.parseSkipAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!HideAction)){
 		return self.parseHideAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!ParamAction)){
 		return self.parseParamAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!ParallelAction)){
 		return self.parseParallelAction();
-	} else
+	} //else
 	if(self.instanceOf(Z!ParallelActionIte)){
 		return self.parseParallelActionIte();
-	} else
+	} //else
 	if(self.instanceOf(Z!InterleaveActionIte)){
 		return self.parseInterleaveActionIte();
-	} else
+	} //else
+	if(self.instanceOf(Z!InterleaveAction)){
+		return self.parseInterleaveAction();
+	} 
 	if(self.instanceOf(Z!RenameAction)){
 		return self.parseRenameAction();
 	} 
@@ -253,8 +279,6 @@ end
 
 
 [%operation Z!PrefixingAction parsePrefixingAction(): String{
-
-	"line 244, prefixaction is run".println();
 	return  "(" + self.communication.parseCommu() + " \\<rightarrow> " + self.circusAction.parseAction() + ")";
 }%]
 
@@ -279,8 +303,12 @@ end
 	return  "(" + self.leftAction.parseAction() + ";; " + self.rightAction.parseAction() + ")";
 }%]
 
+[%operation Z!SeqActionIte parseSeqActionIte(): String{
+	return  "( ;; "  +  self.declList.decls.at(0).parseVarDeclInIteAct() + " \\<bullet>  " + self.circusAction.parseAction() + " )";
+}%]
+
 [%operation Z!GuardedAction parseGuardedAction(): String{
-	return  "(" + self.pred.parseMemPred() + " & " + "(" + self.circusAction.parseAction() + ")" + ")";
+	return  "(" + self.pred.parseMemPred() + " \\<^bold>& " + "(" + self.circusAction.parseAction() + ")" + ")";
 	//The type of self.pred is MemPred, so self.pred.parse() points to "operation Z!MemPred parseMemPred()"
 }%]
 
@@ -335,6 +363,10 @@ end
 }%]
 [*suppose there is only one parameter for iteration*]
 
+[%operation Z!InterleaveAction parseInterleaveAction(): String{
+	return  "(" + self.leftAction.parseAction() + " \\<interleave> " +	self.rightAction.parseAction() + ")";
+}%]
+
 
 [%operation Z!RenameAction parseRenameAction(): String{
 	return  "(" + self.circusAction.parseAction() + " [ " + self.assignmentPairs.parseAssignmentPairs() + " ])";
@@ -369,10 +401,14 @@ end
 //		commu_str = self.channelExpr.parseExpr() + "?(" + self.fieldList.fields.at(0).varialbeName.parse() + ")";
 //	} else
 	
-	if(self.commPattern = Z!CommPattern#Input or self.commPattern =  Z!CommPattern#Output){
+//	if(self.commPattern = Z!CommPattern#Input or self.commPattern =  Z!CommPattern#Output){
+	{
 		commu_str = self.channelExpr.parseExpr();
-		var field = self.fieldList.fields.at(0);
-		commu_str = commu_str + field.parseField();
+//		var field = self.fieldList.fields.at(0);
+//		commu_str = commu_str + field.parseField();
+		for(field in self.fieldList.fields){
+			commu_str = commu_str + field.parseField();
+		}
 		
 //		if(field.outputField = true){
 //			commu_str = commu_str + "!" + self.fieldList.fields.at(0).expr.parseExpr();
@@ -385,12 +421,12 @@ end
 //		} 
 	} 
 	
-	if(self.commPattern = Z!CommPattern#Mixed){
-		commu_str = self.channelExpr.parseExpr();
-		for(field in self.fieldList.fields){
-			commu_str = commu_str + field.parseField();
-		}
-	}
+//	if(self.commPattern = Z!CommPattern#Mixed){
+//		commu_str = self.channelExpr.parseExpr();
+//		for(field in self.fieldList.fields){
+//			commu_str = commu_str + field.parseField();
+//		}
+//	}
 	return commu_str;
 }%]
 
@@ -402,25 +438,30 @@ end
 	if(self.instanceOf(Z!DotField)){
 	
 		if(self.outputField = true){
-			field_str = "!" + self.expr.parseExpr();
+			field_str = "\\<^bold>!" + self.expr.parseExpr();
 			
 		} else
 		if(self.outputField = false){
-			field_str = ".(" + self.expr.parseExpr() + ")";
+			field_str = "\\<^bold>." + self.expr.parseExpr();
 		} 
 	} else
 	
 	if(self.instanceOf(Z!InputField)){
-		field_str = "?(" + self.varialbeName.parse() + ")";
+		field_str = "\\<^bold>?" + self.varialbeName.parse();
 	}
 
 	return field_str;
 }%]
 
+
 [*In EOL for general RoboChart, condition and guards are transformed into MemPred. However, in ANN version, AndPred is used.*]
 [%operation Z!MemPred parseMemPred(): String{
 	if(self.mixFix = true){
-		return self.leftExpr.parseExpr();
+		if(self.rightExpr.parseExpr() =  "True"){
+			return "(" + self.leftExpr.parseExpr() + ")";
+		} else{
+		return "(" + self.leftExpr.parseExpr() + " = " + self.rightExpr.parseExpr() + ")";
+		}
 	}
 }%] 
 
@@ -454,12 +495,29 @@ end
 }%]  
 
 
-[*used in parseCallAction, e.g., the CallAciton is HiddenLayer(1,2,3), then parseCallAction returns "1,2,3" *]
+[*used in parseCallAction, e.g., the CallAciton is HiddenLayer(1,2,3), then parseZExprList returns "1,2,3" *]
 [%operation Z!ZExprList parseZExprList(): String{
 	var list_str : String;
 
 	for(expr in self.exprs){
-		list_str = list_str + expr.parseExpr();
+	
+//	TO DO: HOW CAN exprs contain a VARDECL??
+//  VarDecl is not an Expr, so can not be covered by the else clause below (parseExpr() is not the method for type VarDecl)
+		if(expr.isTypeOf(Z!VarDecl)){
+			
+			for(vname in expr.nameList.names){
+				list_str = list_str + vname.parse();
+				if(hasMore){
+					list_str = list_str + ",";
+				}
+			}
+		}
+		
+//		("expr.isTypeOf(Z!VarDecl) = " + expr.isTypeOf(Z!VarDecl)).println();
+		else {
+			list_str = list_str + expr.parseExpr();
+		}
+		
 		if (hasMore){
 			list_str = list_str + ",";
 		}
@@ -573,6 +631,7 @@ end
 	if(self.isTypeOf(Z!SetExpr)){
 		return self.parseSetExpr();
 	}
+	
 }%]
 
 
@@ -581,7 +640,7 @@ end
 	var seq_str : String;
 	
 	if(self.rightExpr.exprList.exprs.size()>0){
-		seq_str = "[" + self.rightExpr.parseSetExpr() + "]";
+		seq_str = "[" + self.rightExpr.parseSetExprOfSeq() + "]";
 	} else { 
 		seq_str = "[]";
 	}
@@ -589,6 +648,21 @@ end
 	return seq_str;
 }%]
 
+[%operation Z!SetExpr parseSetExprOfSeq(): String{
+	var seq_str : String;
+	
+	for(tup_expr in self.exprList.exprs){
+		seq_str = seq_str + tup_expr.exprList.exprs.at(1).parseExpr();
+		if(hasMore){
+			seq_str = seq_str + ",";
+		}
+	}
+	return seq_str;
+
+
+
+
+}%]
 [%operation Z!SetExpr parseSetExpr(): String{
 	var set_str : String;
 	
@@ -627,7 +701,7 @@ end
 		}
 	}
 
-	return tup_str;
+	return "(" + tup_str + ")";
 }%]
 
 
@@ -734,19 +808,6 @@ end
 }%]
   
  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   

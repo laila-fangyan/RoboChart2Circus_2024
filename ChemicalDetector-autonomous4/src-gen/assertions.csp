@@ -1,0 +1,66 @@
+include "Module.csp"
+
+assert Memory_GasAnalysis(<>) :[deadlock free]
+
+Spec1 = GasAnalysis_gas?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
+        |~|
+        SKIP
+        
+assert Spec1 [FD= (GasAnalysis_O\{|GasAnalysis_terminate|})
+
+Spec2 = let
+Init = randomWalkCall -> randomWalkRet -> SKIP |~| randomWalkCall -> SKIP |~| SKIP
+Reaction = |~|e:{|moveCall, moveRet, randomWalkCall, randomWalkRet, Movement_flag, Movement_obstacle, Movement_odometer|} @ e->(Reaction|~|SKIP)
+T = (SKIP |~| (|~|e:{|Movement_resume, Movement_turn,Movement_stop|} @ e->SKIP); Reaction; T)
+within
+Init ||| T
+
+assert Spec2 [FD= Movement_O
+
+NoGas = gas.<(0,0)> -> NoGas
+
+assert ChemicalDetector_O [| {|gas|} |] NoGas :[deadlock free]  
+
+FullGas = gas.<(1,1)> -> FullGas
+
+assert ChemicalDetector_O [| {|gas|} |] FullGas :[deadlock free]  
+
+RUN1(cs) = [] e: cs @ e -> RUN1(cs)
+
+assert MicroController_VS |\ {|Movement_enteredV."Movement_GettingOut"|} [T= RUN1({|Movement_enteredV."Movement_GettingOut"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_GettingOut"|} [T= RUN1({|Movement_enteredV."Movement_GettingOut"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Waiting"|} [T= RUN1({|Movement_enteredV."Movement_Waiting"|})
+
+-- every state is reachable
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Waiting"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Going"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Found"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_j1"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Avoiding"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_TryingAgain"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_AvoidingAgain"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|Movement_enteredV."Movement_GettingOut"|}
+
+-- states can be reached infinitely often
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Waiting"|} [T= RUN1({|Movement_enteredV."Movement_Waiting"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Going"|} [T= RUN1({|Movement_enteredV."Movement_Going"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Found"|} [T= RUN1({|Movement_enteredV."Movement_Found"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_j1"|} [T= RUN1({|Movement_enteredV."Movement_j1"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_Avoiding"|} [T= RUN1({|Movement_enteredV."Movement_Avoiding"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_TryingAgain"|} [T= RUN1({|Movement_enteredV."Movement_TryingAgain"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_AvoidingAgain"|} [T= RUN1({|Movement_enteredV."Movement_AvoidingAgain"|})
+assert ChemicalDetector_VS |\ {|Movement_enteredV."Movement_GettingOut"|} [T= RUN1({|Movement_enteredV."Movement_GettingOut"|})
+
+-- every state is reachable
+assert not STOP [T= ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|}
+assert not STOP [T= ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|}
+
+-- states can be reached infinitely often
+assert ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|} [T= RUN1({|GasAnalysis_enteredV."GasAnalysis_NoGas"|})
+assert ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|} [T= RUN1({|GasAnalysis_enteredV."GasAnalysis_Analysis"|})
+assert ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|} [T= RUN1({|GasAnalysis_enteredV."GasAnalysis_GasDetected"|})
+assert ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|} [T= RUN1({|GasAnalysis_enteredV."GasAnalysis_j1"|})
+assert ChemicalDetector_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|} [T= RUN1({|GasAnalysis_enteredV."GasAnalysis_Reading"|})

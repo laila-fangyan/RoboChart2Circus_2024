@@ -1,0 +1,54 @@
+-- declaring controller events
+channel MicroController_turn:Angle
+channel MicroController_obstacle:Loc
+channel MicroController_flag
+channel MicroController_stop
+channel MicroController_resume
+channel MicroController_odometer:real
+
+-- declaring controller variables
+
+
+
+-- declaring controller memory
+
+Memory_MicroController = SKIP
+
+-- delcaring controller termination channel
+
+channel MicroController_terminate
+
+MicroController = (Movement[[Movement_terminate <- MicroController_terminate, Movement_turn <- MicroController_turn, Movement_obstacle <- MicroController_obstacle, Movement_flag <- MicroController_flag, Movement_resume <- MicroController_resume, Movement_stop <- MicroController_stop, Movement_odometer <- MicroController_odometer]]
+	[|union({||},
+	{||})|]
+	Memory_MicroController
+)\union({||},
+{||})
+[|{|MicroController_terminate|}|>SKIP
+
+-- VS version
+MicroController_VS = (Movement_VS[[Movement_terminate <- MicroController_terminate, Movement_turn <- MicroController_turn, Movement_obstacle <- MicroController_obstacle, Movement_flag <- MicroController_flag, Movement_resume <- MicroController_resume, Movement_stop <- MicroController_stop, Movement_odometer <- MicroController_odometer]]
+	[|union({||},
+	{||})|]
+	Memory_MicroController
+)\union({||},
+{||})
+[|{|MicroController_terminate|}|>SKIP
+
+-- O version (optimised) THESE TWO PROCESSES SHOULD BE KEPT IN SYNC WITH THE ABOVE TWO
+MicroController_O = sbisim(diamond((Movement_O[[Movement_terminate <- MicroController_terminate, Movement_turn <- MicroController_turn, Movement_obstacle <- MicroController_obstacle, Movement_flag <- MicroController_flag, Movement_resume <- MicroController_resume, Movement_stop <- MicroController_stop, Movement_odometer <- MicroController_odometer]]
+	[|union({||},
+	{||})|]
+	Memory_MicroController
+)\union({||},
+{||})
+[|{|MicroController_terminate|}|>SKIP))
+
+-- VS_O version
+MicroController_VS_O = sbisim(diamond((Movement_VS_O[[Movement_terminate <- MicroController_terminate, Movement_turn <- MicroController_turn, Movement_obstacle <- MicroController_obstacle, Movement_flag <- MicroController_flag, Movement_resume <- MicroController_resume, Movement_stop <- MicroController_stop, Movement_odometer <- MicroController_odometer]]
+	[|union({||},
+	{||})|]
+	Memory_MicroController
+)\union({||},
+{||})
+[|{|MicroController_terminate|}|>SKIP))

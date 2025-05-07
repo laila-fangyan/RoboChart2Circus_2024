@@ -1,0 +1,44 @@
+Timed(OneStep) {
+	
+-- declaring module memory
+
+ChemicalDetector_visibleMemoryEvents = {||}
+		
+Memory_ChemicalDetector_Vehicle = SKIP
+
+ChemicalDetector = prioritise((let
+		Buffer0(<v>) = MainController_turn?x -> Buffer0(<x>) [] MicroController_turn!v -> Buffer0(<>)
+		Buffer0(<>) = MainController_turn?x -> Buffer0(<x>)
+	within
+		((Buffer0(<>))
+		[|{|MicroController_turn,MainController_turn|}|]
+	((MicroController[[MicroController_terminate <- ChemicalDetector_terminate, MicroController_stop <- MainController_stop, MicroController_obstacle <- obstacle, MicroController_flag <- flag, MicroController_resume <- MainController_resume, MicroController_odometer <- odometer]]
+	[|{|ChemicalDetector_terminate, MainController_stop, MainController_resume|}|]
+	MainController[[MainController_terminate <- ChemicalDetector_terminate, MainController_gas <- gas]]
+	)\diff({|ChemicalDetector_terminate, MainController_stop, MainController_resume|},{|ChemicalDetector_terminate|})
+	[|union({||},
+	{||})|]
+	Memory_ChemicalDetector_Vehicle
+	)
+	)\union({|MicroController_turn,MainController_turn|},{||})
+	[|{|ChemicalDetector_terminate|}|>SKIP)\{|ChemicalDetector_terminate|},<ChemicalDetector_visibleMemoryEvents,{tock}>)
+	
+-- visible state equivalent
+
+ChemicalDetector_VS = prioritise((let
+		Buffer0(<v>) = MainController_turn?x -> Buffer0(<x>) [] MicroController_turn!v -> Buffer0(<>)
+		Buffer0(<>) = MainController_turn?x -> Buffer0(<x>)
+	within
+		((Buffer0(<>))
+		[|{|MicroController_turn,MainController_turn|}|]
+	((MicroController_VS[[MicroController_terminate <- ChemicalDetector_terminate, MicroController_stop <- MainController_stop, MicroController_obstacle <- obstacle, MicroController_flag <- flag, MicroController_resume <- MainController_resume, MicroController_odometer <- odometer]]
+	[|{|ChemicalDetector_terminate, MainController_stop, MainController_resume|}|]
+	MainController_VS[[MainController_terminate <- ChemicalDetector_terminate, MainController_gas <- gas]]
+	)\diff({|ChemicalDetector_terminate, MainController_stop, MainController_resume|},{|ChemicalDetector_terminate|})
+	[|union({||},
+	{||})|]
+	Memory_ChemicalDetector_Vehicle
+	)
+	)\union({|MicroController_turn,MainController_turn|},{||})
+	[|{|ChemicalDetector_terminate|}|>SKIP)\{|ChemicalDetector_terminate|},<ChemicalDetector_visibleMemoryEvents,{tock}>)
+}	

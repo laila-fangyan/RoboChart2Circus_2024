@@ -1,0 +1,178 @@
+channel Location_changeDirection_internal__: Location_changeDirection_TIDS
+
+ShowEvents_Location_changeDirection(P,E) = P[[ Location_changeDirection_entered.x.y <- Location_changeDirection_enteredV.y | Location_changeDirection_entered.x.y <- E]]
+							 [[	Location_changeDirection_enter.x.y <- Location_changeDirection_enterV.y | Location_changeDirection_enter.x.y <- E]]
+							 [[ Location_changeDirection_exit.x.y <- Location_changeDirection_exitV.y | Location_changeDirection_exit.x.y <- E]]
+							 [[ Location_changeDirection_exited.x.y <- Location_changeDirection_exitedV.y | Location_changeDirection_exited.x.y <- E ]]
+
+channel Location_changeDirection_enteredV, Location_changeDirection_enterV, Location_changeDirection_exitV, Location_changeDirection_exitedV : Location_changeDirection_SIDS
+channel Location_changeDirection_enter, Location_changeDirection_entered: Location_changeDirection_SIDS.Location_changeDirection_SIDS
+channel Location_changeDirection_exit,Location_changeDirection_exited: Location_changeDirection_SIDS.Location_changeDirection_SIDS
+
+
+
+-- declaring identifiers of state and final states
+Location_changeDirection_SIDS = {
+	"Location_changeDirection",
+	"Location_changeDirection_From",
+	"Location_changeDirection_j0"
+}
+
+-- declaring identifiers of transitions
+Location_changeDirection_TIDS = {
+	"__NULLTRANSITION__",
+	"Location_changeDirection_t1",
+	"Location_changeDirection_t3",
+	"Location_changeDirection_t4"
+}
+
+-- declaring state machine events
+
+channel Location_changeDirection_terminate
+
+-- declaring all states
+CS_Location_changeDirection_From_sync = {|
+	Location_changeDirection_enter.y.x, 
+	Location_changeDirection_entered.y.x, 
+	Location_changeDirection_exit.y.x, 
+	Location_changeDirection_exited.y.x,
+	Location_changeDirection_enter.x.y, 
+	Location_changeDirection_entered.x.y, 
+	Location_changeDirection_exit.x.y, 
+	Location_changeDirection_exited.x.y |
+	x <- {"Location_changeDirection_From","Location_changeDirection_j0"},
+	y <- {"Location_changeDirection_From"}
+|}
+
+
+
+Location_changeDirection_From_triggers = {|
+	Location_changeDirection_internal__."Location_changeDirection_t1",
+	Location_changeDirection_internal__."Location_changeDirection_t3",
+	Location_changeDirection_internal__."Location_changeDirection_t4"
+|}
+		   
+S_Location_changeDirection_From(l) = let
+	T_Location_changeDirection_t1(l)	= Location_changeDirection_internal__!"Location_changeDirection_t1" ->  Location_changeDirection_exit!"Location_changeDirection_From"!"Location_changeDirection_From" -> SKIP;
+						SKIP;Location_changeDirection_exited!"Location_changeDirection_From"!"Location_changeDirection_From" -> SKIP;
+						(moveCall -> move(Location_changeDirection_lv,Right); moveRet -> SKIP);Location_changeDirection_enter!"Location_changeDirection_From"!"Location_changeDirection_j0" -> Location_changeDirection_entered!"Location_changeDirection_From"!"Location_changeDirection_j0" ->
+						S_Location_changeDirection_From(l)
+	T_Location_changeDirection_t3(l)	= Location_changeDirection_internal__!"Location_changeDirection_t3" ->  Location_changeDirection_exit!"Location_changeDirection_From"!"Location_changeDirection_From" -> SKIP;
+						SKIP;Location_changeDirection_exited!"Location_changeDirection_From"!"Location_changeDirection_From" -> SKIP;
+						(moveCall -> move(Location_changeDirection_lv,Left); moveRet -> SKIP);Location_changeDirection_enter!"Location_changeDirection_From"!"Location_changeDirection_j0" -> Location_changeDirection_entered!"Location_changeDirection_From"!"Location_changeDirection_j0" ->
+						S_Location_changeDirection_From(l)
+	T_Location_changeDirection_t4(l)	= Location_changeDirection_internal__!"Location_changeDirection_t4" ->  Location_changeDirection_exit!"Location_changeDirection_From"!"Location_changeDirection_From" -> SKIP;
+						SKIP;Location_changeDirection_exited!"Location_changeDirection_From"!"Location_changeDirection_From" -> SKIP;
+						(moveCall -> move(Location_changeDirection_lv,Back); moveRet -> SKIP);Location_changeDirection_enter!"Location_changeDirection_From"!"Location_changeDirection_j0" -> Location_changeDirection_entered!"Location_changeDirection_From"!"Location_changeDirection_j0" ->
+						S_Location_changeDirection_From(l)
+	
+
+	S_Location_changeDirection_From_execute(o__,l) = 
+	SKIP; 
+	Location_changeDirection_entered!o__!"Location_changeDirection_From" ->
+	   (SKIP
+	   										; STOP /\ (
+	   											    T_Location_changeDirection_t1(l)[]
+	   											    T_Location_changeDirection_t3(l)[]
+	   											    T_Location_changeDirection_t4(l)
+	   											    []
+	   											    Location_changeDirection_internal__?x:diff(Location_changeDirection_TIDS,{"__NULLTRANSITION__","Location_changeDirection_t1","Location_changeDirection_t3","Location_changeDirection_t4"}) ->
+	   											      Location_changeDirection_exit?y:diff(Location_changeDirection_SIDS,{"Location_changeDirection_From"})!"Location_changeDirection_From" -> (
+	   											      	SKIP;
+	   											      	Location_changeDirection_exited!y!"Location_changeDirection_From" -> SKIP);
+	   											      	S_Location_changeDirection_From(l)
+	   											    )
+	   										)
+within
+Location_changeDirection_enter?x:diff(Location_changeDirection_SIDS,{"Location_changeDirection_From"})!"Location_changeDirection_From" -> ( 
+	S_Location_changeDirection_From_execute(x,l)) 
+CS_Location_changeDirection_j0_sync = {|
+	Location_changeDirection_enter.y.x, 
+	Location_changeDirection_entered.y.x, 
+	Location_changeDirection_exit.y.x, 
+	Location_changeDirection_exited.y.x,
+	Location_changeDirection_enter.x.y, 
+	Location_changeDirection_entered.x.y, 
+	Location_changeDirection_exit.x.y, 
+	Location_changeDirection_exited.x.y |
+	x <- {"Location_changeDirection_From","Location_changeDirection_j0"},
+	y <- {"Location_changeDirection_j0"}
+|}
+
+
+
+Location_changeDirection_j0_triggers = {||}
+		   
+S_Location_changeDirection_j0(l) = let
+	
+
+	S_Location_changeDirection_j0_execute(o__,l) = 
+	SKIP; 
+	Location_changeDirection_entered!o__!"Location_changeDirection_j0" ->
+	   Location_changeDirection_terminate -> SKIP
+	   within
+Location_changeDirection_enter?x:diff(Location_changeDirection_SIDS,{"Location_changeDirection_j0"})!"Location_changeDirection_j0" -> ( 
+	S_Location_changeDirection_j0_execute(x,l)) 
+
+I_Location_changeDirection_i0(l) = T_Location_changeDirection_t2(l)
+
+
+
+Location_changeDirection_int_int = {|
+Location_changeDirection_internal__."Location_changeDirection_t1",
+Location_changeDirection_internal__."Location_changeDirection_t3",
+Location_changeDirection_internal__."Location_changeDirection_t4"
+|}
+
+Location_changeDirection_internal_events = {|Location_changeDirection_enter,Location_changeDirection_entered,
+			 				  Location_changeDirection_exit,Location_changeDirection_exited|}
+
+T_Location_changeDirection_t2(l)	= Location_changeDirection_enter!"Location_changeDirection"!"Location_changeDirection_From" -> Location_changeDirection_entered!"Location_changeDirection"!"Location_changeDirection_From" ->
+SKIP
+
+S_Location_changeDirection_From_R(l) = S_Location_changeDirection_From(l)
+ 		[|diff(Location_changeDirection_int_int,Location_changeDirection_From_triggers)|]
+ 		SKIP
+ 		
+S_Location_changeDirection_j0_R(l) = S_Location_changeDirection_j0(l)
+ 		[|diff(Location_changeDirection_int_int,Location_changeDirection_j0_triggers)|]
+ 		SKIP
+ 		
+STM_Location_changeDirection(l) = ShowEvents_Location_changeDirection(I_Location_changeDirection_i0(l)
+[|{|Location_changeDirection_enter.x.y,
+		Location_changeDirection_entered.x.y,
+		Location_changeDirection_exit.x.y,
+		Location_changeDirection_exited.x.y |
+		x <- diff(Location_changeDirection_SIDS,{"Location_changeDirection_From","Location_changeDirection_j0"}),
+		y <- {"Location_changeDirection_From","Location_changeDirection_j0"}
+|}|]
+ShowEvents_Location_changeDirection(S_Location_changeDirection_From_R(l)
+  [|inter(CS_Location_changeDirection_From_sync,CS_Location_changeDirection_j0_sync)|]
+ S_Location_changeDirection_j0_R(l),inter(CS_Location_changeDirection_From_sync,CS_Location_changeDirection_j0_sync))\inter(CS_Location_changeDirection_From_sync,CS_Location_changeDirection_j0_sync)
+ 	,{|Location_changeDirection_enter,Location_changeDirection_entered,
+ 	Location_changeDirection_exit,Location_changeDirection_exited|})\
+ 	Location_changeDirection_internal_events
+-- memory process
+Memory_Location_changeDirection(l) = (
+	((l==left))&(Location_changeDirection_internal__!"Location_changeDirection_t1" -> Memory_Location_changeDirection(l))
+	  []
+	((l==right))&(Location_changeDirection_internal__!"Location_changeDirection_t3" -> Memory_Location_changeDirection(l))
+	  []
+	((l==front))&(Location_changeDirection_internal__!"Location_changeDirection_t4" -> Memory_Location_changeDirection(l))
+	)
+-- main process
+Location_changeDirection_aux(l) = ((STM_Location_changeDirection(l)
+	[|union(
+		{||},
+		{|Location_changeDirection_internal__."Location_changeDirection_t1",
+		Location_changeDirection_internal__."Location_changeDirection_t3",
+		Location_changeDirection_internal__."Location_changeDirection_t4"|}
+	)|]
+	Memory_Location_changeDirection(l)
+)
+\{||})
+[|{|Location_changeDirection_terminate|}|>SKIP\{|Location_changeDirection_internal__|}
+
+Location_changeDirection(l) = Location_changeDirection_aux(l) \ {|Location_changeDirection_enteredV, Location_changeDirection_enterV, Location_changeDirection_exitV, Location_changeDirection_exitedV|}
+Location_changeDirection_VS(l) = Location_changeDirection_aux(l)
+

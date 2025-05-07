@@ -1,0 +1,6 @@
+assert ChemicalDetector_O :[deadlock-free]	
+assert ChemicalDetector_O;RUN :[deadlock-free]
+assert ChemicalDetector_O :[deterministic]
+assert ChemicalDetector_O :[divergence-free]
+	
+chase_ChemicalDetector = chase(ChemicalDetector_O)

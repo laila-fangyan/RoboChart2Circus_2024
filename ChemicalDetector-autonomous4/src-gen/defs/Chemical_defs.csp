@@ -1,0 +1,7 @@
+datatype Status = noGas | gasD
+datatype Angle = Left | Right | Back | Front
+nametype GasSensor = (Chem,Intensity)
+GasSensor_c((c,i)) = c
+GasSensor_i((c,i)) = i
+
+

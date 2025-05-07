@@ -1,0 +1,1757 @@
+<?xml version="1.0" encoding="ASCII"?>
+<circus:Spec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:circus="http://www.robocalc.circus/Circus">
+  <sects xsi:type="circus:NarrSect"/>
+  <sects xsi:type="circus:ZSect" name="circus">
+    <parents word="Boolean_operators"/>
+    <paraList>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="terminate"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="terminate_channel"/>
+      </paras>
+      <paras xsi:type="circus:FreePara">
+        <freetypeList xsi:type="circus:ZFreetypeList">
+          <freeTypes>
+            <name word="NIDS_stm1"/>
+            <branchList>
+              <branches>
+                <name word="NID_i0_stm1"/>
+              </branches>
+              <branches>
+                <name word="NID_s0_stm1"/>
+              </branches>
+              <branches>
+                <name word="NID_s1_stm1"/>
+              </branches>
+              <branches>
+                <name word="NID_f0_stm1"/>
+              </branches>
+            </branchList>
+          </freeTypes>
+        </freetypeList>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="internal__stm1"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_stm1"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="internal_channel_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="interrupt_stm1"/>
+              <names word="exited_stm1"/>
+              <names word="exit_stm1"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="flowchannel_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList/>
+        <name word="var_channel_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="a_in"/>
+              <names word="a_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="b_in"/>
+              <names word="b_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="c_in"/>
+              <names word="c_out"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="a__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_stm1"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="b__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_stm1"/>
+            </expr>
+          </decls>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="c__in"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="NIDS_stm1"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="event_channel_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_i0_stm1"/>
+              <names word="interrupt_i0_stm1"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="junction_channel_in_stmbd_i0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_s0_stm1"/>
+              <names word="entered_s0_stm1"/>
+              <names word="interrupt_s0_stm1"/>
+              <names word="enteredL_s0_stm1"/>
+              <names word="enteredR_s0_stm1"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_in_stmbd_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_s1_stm1"/>
+              <names word="entered_s1_stm1"/>
+              <names word="interrupt_s1_stm1"/>
+              <names word="enteredL_s1_stm1"/>
+              <names word="enteredR_s1_stm1"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_in_stmbd_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelPara">
+        <declList>
+          <decls xsi:type="circus:ChannelDecl">
+            <genFormals/>
+            <channelNameList>
+              <names word="enter_f0_stm1"/>
+              <names word="entered_f0_stm1"/>
+              <names word="interrupt_f0_stm1"/>
+              <names word="enteredL_f0_stm1"/>
+              <names word="enteredR_f0_stm1"/>
+            </channelNameList>
+            <expr xsi:type="circus:RefExpr">
+              <name word="SYNCH"/>
+            </expr>
+          </decls>
+        </declList>
+        <name word="state_channel_in_stmbd_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_s0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_s1_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_f0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="enterSS_in_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_s1_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_f0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_s0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="enteredSS_in_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_s0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_s1_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_f0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_s1_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_f0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="entered_s0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="interrupt_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="internal_events_in_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList/>
+          </expr>
+        </channelSet>
+        <name word="shared_variable_events_in_stmbd_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ChannelSetPara">
+        <channelSet xsi:type="circus:CircusChannelSet">
+          <expr xsi:type="circus:BasicChannelSetExpr">
+            <communicationList>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="terminate"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="a_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="a_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="b_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="b_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="c_in"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+              <communications commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="c_out"/>
+                </channelExpr>
+                <fieldList/>
+              </communications>
+            </communicationList>
+          </expr>
+        </channelSet>
+        <name word="sem__events_stm_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:ExtChoiceAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Activation_i0_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Termination_i0_stm1"/>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Inactive_i0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Active_i0_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_i0_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Activation_i0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Termination_i0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:InterruptAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="SSTOP"/>
+            </leftAction>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:SkipAction"/>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="interrupt_i0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </rightAction>
+          </leftAction>
+          <rightAction xsi:type="circus:CallAction">
+            <name word="Inactive_i0_stm1"/>
+          </rightAction>
+        </circusAction>
+        <name word="Active_i0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:ExtChoiceAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Activation_s0_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Termination_s0_stm1"/>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Inactive_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Active_s0_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_s0_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Activation_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Termination_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:SkipAction"/>
+          <rightAction xsi:type="circus:SeqAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Behaviour_s0_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Exiting_s0_stm1"/>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Active_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="During_s0_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_s0_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Behaviour_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:SeqAction">
+            <leftAction xsi:type="circus:SkipAction"/>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="SSTOP"/>
+            </rightAction>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="interrupt_s0_stm1"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </circusAction>
+        <name word="During_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:InterruptAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="SSTOP"/>
+            </leftAction>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:SkipAction"/>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exit_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </rightAction>
+          </leftAction>
+          <rightAction xsi:type="circus:SeqAction">
+            <leftAction xsi:type="circus:SkipAction"/>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:CallAction">
+                <name word="Inactive_s0_stm1"/>
+              </circusAction>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Exiting_s0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:ExtChoiceAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Activation_s1_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Termination_s1_stm1"/>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Inactive_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Active_s1_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_s1_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Activation_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Termination_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:SkipAction"/>
+          <rightAction xsi:type="circus:SeqAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Behaviour_s1_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Exiting_s1_stm1"/>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Active_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="During_s1_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_s1_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Behaviour_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:SeqAction">
+            <leftAction xsi:type="circus:SkipAction"/>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="SSTOP"/>
+            </rightAction>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:SkipAction"/>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="interrupt_s1_stm1"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </circusAction>
+        <name word="During_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:SeqAction">
+          <leftAction xsi:type="circus:InterruptAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="SSTOP"/>
+            </leftAction>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:SkipAction"/>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exit_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </rightAction>
+          </leftAction>
+          <rightAction xsi:type="circus:SeqAction">
+            <leftAction xsi:type="circus:SkipAction"/>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:CallAction">
+                <name word="Inactive_s1_stm1"/>
+              </circusAction>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Exiting_s1_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:ExtChoiceAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Activation_f0_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Termination_f0_stm1"/>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Inactive_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Entering_f0_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="enter_f0_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Activation_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Termination_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:CallAction">
+            <name word="Active_f0_stm1"/>
+          </circusAction>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="entered_f0_stm1"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="Entering_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:ExtChoiceAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="Termination_f0_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:CallAction">
+                <name word="Interrupted_f0_stm1"/>
+              </circusAction>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="interrupt_f0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </rightAction>
+          </rightAction>
+        </circusAction>
+        <name word="Active_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:InterruptAction">
+          <leftAction xsi:type="circus:CallAction">
+            <name word="SSTOP"/>
+          </leftAction>
+          <rightAction xsi:type="circus:PrefixingAction">
+            <circusAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:CallAction">
+                <name word="Inactivef0_stm1"/>
+              </circusAction>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="exited_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </circusAction>
+            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+              <channelExpr>
+                <name word="exit_stm1"/>
+              </channelExpr>
+              <fieldList/>
+            </communication>
+          </rightAction>
+        </circusAction>
+        <name word="Interrupted_f0_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:ParallelAction">
+          <leftAction xsi:type="circus:ParallelAction">
+            <leftAction xsi:type="circus:ParallelAction">
+              <leftAction xsi:type="circus:CallAction">
+                <name word="Inactive_s0_stm1"/>
+              </leftAction>
+              <rightAction xsi:type="circus:CallAction">
+                <name word="Inactive_s1_stm1"/>
+              </rightAction>
+              <leftNameSet xsi:type="circus:CircusNameSet">
+                <expr xsi:type="circus:SetExpr">
+                  <exprList/>
+                </expr>
+              </leftNameSet>
+              <rightNameSet xsi:type="circus:CircusNameSet">
+                <expr xsi:type="circus:SetExpr">
+                  <exprList/>
+                </expr>
+              </rightNameSet>
+              <channelSet xsi:type="circus:CircusChannelSet">
+                <expr xsi:type="circus:BasicChannelSetExpr">
+                  <communicationList>
+                    <communications commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="share"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communications>
+                    <communications commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="terminate"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communications>
+                  </communicationList>
+                </expr>
+              </channelSet>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="Inactive_f0_stm1"/>
+            </rightAction>
+            <leftNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </leftNameSet>
+            <rightNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </rightNameSet>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:BasicChannelSetExpr">
+                <communicationList>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="share"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="terminate"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                </communicationList>
+              </expr>
+            </channelSet>
+          </leftAction>
+          <rightAction xsi:type="circus:CallAction">
+            <name word="Inactive_i0_stm1"/>
+          </rightAction>
+          <leftNameSet xsi:type="circus:CircusNameSet">
+            <expr xsi:type="circus:SetExpr">
+              <exprList/>
+            </expr>
+          </leftNameSet>
+          <rightNameSet xsi:type="circus:CircusNameSet">
+            <expr xsi:type="circus:SetExpr">
+              <exprList/>
+            </expr>
+          </rightNameSet>
+          <channelSet xsi:type="circus:CircusChannelSet">
+            <expr xsi:type="circus:BasicChannelSetExpr">
+              <communicationList>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="share"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+              </communicationList>
+            </expr>
+          </channelSet>
+        </circusAction>
+        <name word="composeNodes_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:ParamAction" isParamCommand="true">
+          <circusAction xsi:type="circus:ExtChoiceAction">
+            <leftAction xsi:type="circus:ExtChoiceAction">
+              <leftAction xsi:type="circus:ExtChoiceAction">
+                <leftAction xsi:type="circus:ExtChoiceAction">
+                  <leftAction xsi:type="circus:ExtChoiceAction">
+                    <leftAction xsi:type="circus:GuardedAction">
+                      <circusAction xsi:type="circus:SeqAction">
+                        <leftAction xsi:type="circus:PrefixingAction">
+                          <circusAction xsi:type="circus:SkipAction"/>
+                          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="internal__stm1"/>
+                            </channelExpr>
+                            <fieldList>
+                              <fields xsi:type="circus:DotField" outputField="false">
+                                <expr xsi:type="circus:RefExpr">
+                                  <name word="NID_i0_stm1"/>
+                                </expr>
+                              </fields>
+                            </fieldList>
+                          </communication>
+                        </leftAction>
+                        <rightAction xsi:type="circus:PrefixingAction">
+                          <circusAction xsi:type="circus:CallAction">
+                            <exprList>
+                              <exprs xsi:type="circus:RefExpr">
+                                <name word="s0_stm1"/>
+                              </exprs>
+                            </exprList>
+                            <name word="Trans_stm1"/>
+                          </circusAction>
+                          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="enter_s0_stm1"/>
+                            </channelExpr>
+                            <fieldList/>
+                          </communication>
+                        </rightAction>
+                      </circusAction>
+                      <pred xsi:type="circus:MemPred" mixFix="true">
+                        <leftExpr xsi:type="circus:RefExpr">
+                          <name word="n_"/>
+                        </leftExpr>
+                        <rightExpr xsi:type="circus:SetExpr">
+                          <exprList>
+                            <exprs xsi:type="circus:RefExpr">
+                              <name word="i0"/>
+                            </exprs>
+                          </exprList>
+                        </rightExpr>
+                      </pred>
+                    </leftAction>
+                    <rightAction xsi:type="circus:GuardedAction">
+                      <circusAction xsi:type="circus:SeqAction">
+                        <leftAction xsi:type="circus:PrefixingAction">
+                          <circusAction xsi:type="circus:SkipAction"/>
+                          <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="a__in"/>
+                            </channelExpr>
+                            <fieldList>
+                              <fields xsi:type="circus:DotField" outputField="false">
+                                <expr xsi:type="circus:RefExpr">
+                                  <name word="NID_s0_stm1"/>
+                                </expr>
+                              </fields>
+                            </fieldList>
+                          </communication>
+                        </leftAction>
+                        <rightAction xsi:type="circus:SeqAction">
+                          <leftAction xsi:type="circus:InterruptAction">
+                            <leftAction xsi:type="circus:CallAction">
+                              <name word="SSTOP"/>
+                            </leftAction>
+                            <rightAction xsi:type="circus:PrefixingAction">
+                              <circusAction xsi:type="circus:SkipAction"/>
+                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="exit_stm1"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communication>
+                            </rightAction>
+                          </leftAction>
+                          <rightAction xsi:type="circus:InterruptAction">
+                            <leftAction xsi:type="circus:CallAction">
+                              <name word="SSTOP"/>
+                            </leftAction>
+                            <rightAction xsi:type="circus:SeqAction">
+                              <leftAction xsi:type="circus:PrefixingAction">
+                                <circusAction xsi:type="circus:SkipAction"/>
+                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                  <channelExpr>
+                                    <name word="exited_stm1"/>
+                                  </channelExpr>
+                                  <fieldList/>
+                                </communication>
+                              </leftAction>
+                              <rightAction xsi:type="circus:PrefixingAction">
+                                <circusAction xsi:type="circus:CallAction">
+                                  <exprList>
+                                    <exprs xsi:type="circus:RefExpr">
+                                      <name word="s1_stm1"/>
+                                    </exprs>
+                                  </exprList>
+                                  <name word="Trans_stm1"/>
+                                </circusAction>
+                                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                  <channelExpr>
+                                    <name word="enter_s1_stm1"/>
+                                  </channelExpr>
+                                  <fieldList/>
+                                </communication>
+                              </rightAction>
+                            </rightAction>
+                          </rightAction>
+                        </rightAction>
+                      </circusAction>
+                      <pred xsi:type="circus:MemPred" mixFix="true">
+                        <leftExpr xsi:type="circus:RefExpr">
+                          <name word="n_"/>
+                        </leftExpr>
+                        <rightExpr xsi:type="circus:SetExpr">
+                          <exprList>
+                            <exprs xsi:type="circus:RefExpr">
+                              <name word="s0"/>
+                            </exprs>
+                          </exprList>
+                        </rightExpr>
+                      </pred>
+                    </rightAction>
+                  </leftAction>
+                  <rightAction xsi:type="circus:GuardedAction">
+                    <circusAction xsi:type="circus:SeqAction">
+                      <leftAction xsi:type="circus:PrefixingAction">
+                        <circusAction xsi:type="circus:SkipAction"/>
+                        <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                          <channelExpr>
+                            <name word="b__in"/>
+                          </channelExpr>
+                          <fieldList>
+                            <fields xsi:type="circus:DotField" outputField="false">
+                              <expr xsi:type="circus:RefExpr">
+                                <name word="NID_s1_stm1"/>
+                              </expr>
+                            </fields>
+                          </fieldList>
+                        </communication>
+                      </leftAction>
+                      <rightAction xsi:type="circus:SeqAction">
+                        <leftAction xsi:type="circus:InterruptAction">
+                          <leftAction xsi:type="circus:CallAction">
+                            <name word="SSTOP"/>
+                          </leftAction>
+                          <rightAction xsi:type="circus:PrefixingAction">
+                            <circusAction xsi:type="circus:SkipAction"/>
+                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="exit_stm1"/>
+                              </channelExpr>
+                              <fieldList/>
+                            </communication>
+                          </rightAction>
+                        </leftAction>
+                        <rightAction xsi:type="circus:InterruptAction">
+                          <leftAction xsi:type="circus:CallAction">
+                            <name word="SSTOP"/>
+                          </leftAction>
+                          <rightAction xsi:type="circus:SeqAction">
+                            <leftAction xsi:type="circus:PrefixingAction">
+                              <circusAction xsi:type="circus:SkipAction"/>
+                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="exited_stm1"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communication>
+                            </leftAction>
+                            <rightAction xsi:type="circus:PrefixingAction">
+                              <circusAction xsi:type="circus:CallAction">
+                                <exprList>
+                                  <exprs xsi:type="circus:RefExpr">
+                                    <name word="s0_stm1"/>
+                                  </exprs>
+                                </exprList>
+                                <name word="Trans_stm1"/>
+                              </circusAction>
+                              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                                <channelExpr>
+                                  <name word="enter_s0_stm1"/>
+                                </channelExpr>
+                                <fieldList/>
+                              </communication>
+                            </rightAction>
+                          </rightAction>
+                        </rightAction>
+                      </rightAction>
+                    </circusAction>
+                    <pred xsi:type="circus:MemPred" mixFix="true">
+                      <leftExpr xsi:type="circus:RefExpr">
+                        <name word="n_"/>
+                      </leftExpr>
+                      <rightExpr xsi:type="circus:SetExpr">
+                        <exprList>
+                          <exprs xsi:type="circus:RefExpr">
+                            <name word="s1"/>
+                          </exprs>
+                        </exprList>
+                      </rightExpr>
+                    </pred>
+                  </rightAction>
+                </leftAction>
+                <rightAction xsi:type="circus:GuardedAction">
+                  <circusAction xsi:type="circus:SeqAction">
+                    <leftAction xsi:type="circus:PrefixingAction">
+                      <circusAction xsi:type="circus:SkipAction"/>
+                      <communication commPattern="Output" commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="internal__stm1"/>
+                        </channelExpr>
+                        <fieldList>
+                          <fields xsi:type="circus:DotField" outputField="false">
+                            <expr xsi:type="circus:RefExpr">
+                              <name word="NID_s1_stm1"/>
+                            </expr>
+                          </fields>
+                        </fieldList>
+                      </communication>
+                    </leftAction>
+                    <rightAction xsi:type="circus:SeqAction">
+                      <leftAction xsi:type="circus:InterruptAction">
+                        <leftAction xsi:type="circus:CallAction">
+                          <name word="SSTOP"/>
+                        </leftAction>
+                        <rightAction xsi:type="circus:PrefixingAction">
+                          <circusAction xsi:type="circus:SkipAction"/>
+                          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="exit_stm1"/>
+                            </channelExpr>
+                            <fieldList/>
+                          </communication>
+                        </rightAction>
+                      </leftAction>
+                      <rightAction xsi:type="circus:InterruptAction">
+                        <leftAction xsi:type="circus:CallAction">
+                          <name word="SSTOP"/>
+                        </leftAction>
+                        <rightAction xsi:type="circus:SeqAction">
+                          <leftAction xsi:type="circus:PrefixingAction">
+                            <circusAction xsi:type="circus:SkipAction"/>
+                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="exited_stm1"/>
+                              </channelExpr>
+                              <fieldList/>
+                            </communication>
+                          </leftAction>
+                          <rightAction xsi:type="circus:PrefixingAction">
+                            <circusAction xsi:type="circus:CallAction">
+                              <exprList>
+                                <exprs xsi:type="circus:RefExpr">
+                                  <name word="f0_stm1"/>
+                                </exprs>
+                              </exprList>
+                              <name word="Trans_stm1"/>
+                            </circusAction>
+                            <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                              <channelExpr>
+                                <name word="enter_f0_stm1"/>
+                              </channelExpr>
+                              <fieldList/>
+                            </communication>
+                          </rightAction>
+                        </rightAction>
+                      </rightAction>
+                    </rightAction>
+                  </circusAction>
+                  <pred xsi:type="circus:MemPred" mixFix="true">
+                    <leftExpr xsi:type="circus:RefExpr">
+                      <name word="n_"/>
+                    </leftExpr>
+                    <rightExpr xsi:type="circus:SetExpr">
+                      <exprList>
+                        <exprs xsi:type="circus:RefExpr">
+                          <name word="s1"/>
+                        </exprs>
+                      </exprList>
+                    </rightExpr>
+                  </pred>
+                </rightAction>
+              </leftAction>
+              <rightAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:CallAction">
+                  <exprList>
+                    <exprs xsi:type="circus:RefExpr">
+                      <name word="n"/>
+                    </exprs>
+                  </exprList>
+                  <name word="Trans_stm1"/>
+                </circusAction>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="share"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </rightAction>
+            </leftAction>
+            <rightAction xsi:type="circus:ExtChoiceAction">
+              <leftAction xsi:type="circus:SeqAction">
+                <leftAction xsi:type="circus:PrefixingAction">
+                  <circusAction xsi:type="circus:InterruptAction">
+                    <leftAction xsi:type="circus:CallAction">
+                      <name word="SSTOP"/>
+                    </leftAction>
+                    <rightAction xsi:type="circus:PrefixingAction">
+                      <circusAction xsi:type="circus:SkipAction"/>
+                      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="exit_stm1"/>
+                        </channelExpr>
+                        <fieldList/>
+                      </communication>
+                    </rightAction>
+                  </circusAction>
+                  <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="interrupt_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communication>
+                </leftAction>
+                <rightAction xsi:type="circus:InterruptAction">
+                  <leftAction xsi:type="circus:CallAction">
+                    <name word="SSTOP"/>
+                  </leftAction>
+                  <rightAction xsi:type="circus:PrefixingAction">
+                    <circusAction xsi:type="circus:PrefixingAction">
+                      <circusAction xsi:type="circus:SkipAction"/>
+                      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="terminate"/>
+                        </channelExpr>
+                        <fieldList/>
+                      </communication>
+                    </circusAction>
+                    <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="exited_stm1"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communication>
+                  </rightAction>
+                </rightAction>
+              </leftAction>
+              <rightAction xsi:type="circus:PrefixingAction">
+                <circusAction xsi:type="circus:SkipAction"/>
+                <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communication>
+              </rightAction>
+            </rightAction>
+          </circusAction>
+          <declList>
+            <decls xsi:type="circus:VarDecl">
+              <nameList>
+                <names word="n"/>
+              </nameList>
+              <expr xsi:type="circus:RefExpr">
+                <name word="NIDS_stm1"/>
+              </expr>
+            </decls>
+          </declList>
+        </circusAction>
+        <name word="Trans_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:ParallelAction">
+          <leftAction xsi:type="circus:RenameAction">
+            <circusAction xsi:type="circus:RenameAction">
+              <circusAction xsi:type="circus:CallAction">
+                <name word="composeNodes_stm1"/>
+              </circusAction>
+              <assignmentPairs>
+                <lhsElement>
+                  <names word="interrupt_i0_stm1"/>
+                  <names word="interrupt_s0_stm1"/>
+                  <names word="interrupt_s1_stm1"/>
+                  <names word="interrupt_s1_stm1"/>
+                  <names word="interrupt_s1_stm1"/>
+                  <names word="interrupt_f0_stm1"/>
+                  <names word="interrupt_s0_stm1"/>
+                </lhsElement>
+                <rhsElement>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="internal__stm1\&lt;cdot>NID_i0_stm1"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="a__in\&lt;cdot>NID_s0_stm1"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="b__in\&lt;cdot>NID_s1_stm1"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="internal__stm1\&lt;cdot>NID_s1_stm1"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="interrupt_stm1"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="interrupt_stm1"/>
+                  </exprs>
+                  <exprs xsi:type="circus:RefExpr">
+                    <name word="interrupt_stm1"/>
+                  </exprs>
+                </rhsElement>
+              </assignmentPairs>
+            </circusAction>
+            <assignmentPairs>
+              <lhsElement>
+                <names word="share"/>
+              </lhsElement>
+              <rhsElement>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="share"/>
+                </exprs>
+              </rhsElement>
+            </assignmentPairs>
+          </leftAction>
+          <rightAction xsi:type="circus:RenameAction">
+            <circusAction xsi:type="circus:PrefixingAction">
+              <circusAction xsi:type="circus:CallAction">
+                <name word="Trans_stm1"/>
+              </circusAction>
+              <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                <channelExpr>
+                  <name word="enter_i0_stm1"/>
+                </channelExpr>
+                <fieldList/>
+              </communication>
+            </circusAction>
+            <assignmentPairs>
+              <lhsElement>
+                <names word="share"/>
+              </lhsElement>
+              <rhsElement>
+                <exprs xsi:type="circus:RefExpr">
+                  <name word="share"/>
+                </exprs>
+              </rhsElement>
+            </assignmentPairs>
+          </rightAction>
+          <leftNameSet xsi:type="circus:CircusNameSet">
+            <expr xsi:type="circus:SetExpr">
+              <exprList/>
+            </expr>
+          </leftNameSet>
+          <rightNameSet xsi:type="circus:CircusNameSet">
+            <expr xsi:type="circus:SetExpr">
+              <exprList/>
+            </expr>
+          </rightNameSet>
+          <channelSet xsi:type="circus:CircusChannelSet">
+            <expr xsi:type="circus:BasicChannelSetExpr">
+              <communicationList>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_i0_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="b__in\&lt;cdot>NID_s1_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="internal__stm1\&lt;cdot>NID_s1_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="exited_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_f0_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="a__in\&lt;cdot>NID_s0_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_s0_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="interrupt_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="exit_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="internal__stm1\&lt;cdot>NID_i0_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enter_s1_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="share"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+              </communicationList>
+            </expr>
+          </channelSet>
+        </circusAction>
+        <name word="ncCoreBehaviour_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:RenameAction">
+          <circusAction xsi:type="circus:HideAction">
+            <circusAction xsi:type="circus:CallAction">
+              <name word="ncCoreBehaviour_stm1"/>
+            </circusAction>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:BasicChannelSetExpr">
+                <communicationList>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="enter_i0_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="enter_s0_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="enter_s1_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="enter_f0_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="exit_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="exited_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="internal__stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                </communicationList>
+              </expr>
+            </channelSet>
+          </circusAction>
+          <assignmentPairs>
+            <lhsElement>
+              <names word="a__in\&lt;cdot>x"/>
+              <names word="b__in\&lt;cdot>x"/>
+            </lhsElement>
+            <rhsElement>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="a_in"/>
+              </exprs>
+              <exprs xsi:type="circus:RefExpr">
+                <name word="b_in"/>
+              </exprs>
+            </rhsElement>
+          </assignmentPairs>
+        </circusAction>
+        <name word="ncBehaviour_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:HideAction">
+          <circusAction xsi:type="circus:ParallelAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="ncBehaviour_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:SkipAction"/>
+            <leftNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </leftNameSet>
+            <rightNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </rightNameSet>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:BasicChannelSetExpr">
+                <communicationList>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="interrupt_stm1"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                </communicationList>
+              </expr>
+            </channelSet>
+          </circusAction>
+          <channelSet xsi:type="circus:CircusChannelSet">
+            <expr xsi:type="circus:BasicChannelSetExpr">
+              <communicationList>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="enteredSS_stm1"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+              </communicationList>
+            </expr>
+          </channelSet>
+        </circusAction>
+        <name word="machineBody_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="varMemory_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:HideAction">
+          <circusAction xsi:type="circus:ParallelAction">
+            <leftAction xsi:type="circus:CallAction">
+              <name word="machineBody_stm1"/>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="varMemory_stm1"/>
+            </rightAction>
+            <leftNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </leftNameSet>
+            <rightNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </rightNameSet>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:BasicChannelSetExpr">
+                <communicationList>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="terminate"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                </communicationList>
+              </expr>
+            </channelSet>
+          </circusAction>
+          <channelSet xsi:type="circus:CircusChannelSet">
+            <expr xsi:type="circus:BasicChannelSetExpr">
+              <communicationList>
+                <communications commUsage="Normal" multiSych="0">
+                  <channelExpr>
+                    <name word="terminate"/>
+                  </channelExpr>
+                  <fieldList/>
+                </communications>
+              </communicationList>
+            </expr>
+          </channelSet>
+        </circusAction>
+        <name word="stateful_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:PrefixingAction">
+          <circusAction xsi:type="circus:SkipAction"/>
+          <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+            <channelExpr>
+              <name word="terminate"/>
+            </channelExpr>
+            <fieldList/>
+          </communication>
+        </circusAction>
+        <name word="sharedVarMemory_stm1"/>
+      </paras>
+      <paras xsi:type="circus:ActionPara">
+        <circusAction xsi:type="circus:HideAction">
+          <circusAction xsi:type="circus:ParallelAction">
+            <leftAction xsi:type="circus:ParallelAction">
+              <leftAction xsi:type="circus:RenameAction">
+                <circusAction xsi:type="circus:SeqAction">
+                  <leftAction xsi:type="circus:HideAction">
+                    <circusAction xsi:type="circus:CallAction">
+                      <name word="stateful_stm1"/>
+                    </circusAction>
+                    <channelSet xsi:type="circus:CircusChannelSet">
+                      <expr xsi:type="circus:BasicChannelSetExpr">
+                        <communicationList>
+                          <communications commUsage="Normal" multiSych="0">
+                            <channelExpr>
+                              <name word="terminate"/>
+                            </channelExpr>
+                            <fieldList/>
+                          </communications>
+                        </communicationList>
+                      </expr>
+                    </channelSet>
+                  </leftAction>
+                  <rightAction xsi:type="circus:InterruptAction">
+                    <leftAction xsi:type="circus:CallAction">
+                      <name word="SSTOP"/>
+                    </leftAction>
+                    <rightAction xsi:type="circus:PrefixingAction">
+                      <circusAction xsi:type="circus:SkipAction"/>
+                      <communication commPattern="Synch" commUsage="Normal" multiSych="0">
+                        <channelExpr>
+                          <name word="terminate"/>
+                        </channelExpr>
+                        <fieldList/>
+                      </communication>
+                    </rightAction>
+                  </rightAction>
+                </circusAction>
+                <assignmentPairs>
+                  <lhsElement/>
+                  <rhsElement/>
+                </assignmentPairs>
+              </leftAction>
+              <rightAction xsi:type="circus:SkipAction"/>
+              <leftNameSet xsi:type="circus:CircusNameSet">
+                <expr xsi:type="circus:SetExpr">
+                  <exprList/>
+                </expr>
+              </leftNameSet>
+              <rightNameSet xsi:type="circus:CircusNameSet">
+                <expr xsi:type="circus:SetExpr">
+                  <exprList/>
+                </expr>
+              </rightNameSet>
+              <channelSet xsi:type="circus:CircusChannelSet">
+                <expr xsi:type="circus:BasicChannelSetExpr">
+                  <communicationList>
+                    <communications commUsage="Normal" multiSych="0">
+                      <channelExpr>
+                        <name word="shared"/>
+                      </channelExpr>
+                      <fieldList/>
+                    </communications>
+                  </communicationList>
+                </expr>
+              </channelSet>
+            </leftAction>
+            <rightAction xsi:type="circus:CallAction">
+              <name word="sharedVarMemory_stm1"/>
+            </rightAction>
+            <leftNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </leftNameSet>
+            <rightNameSet xsi:type="circus:CircusNameSet">
+              <expr xsi:type="circus:SetExpr">
+                <exprList/>
+              </expr>
+            </rightNameSet>
+            <channelSet xsi:type="circus:CircusChannelSet">
+              <expr xsi:type="circus:BasicChannelSetExpr">
+                <communicationList>
+                  <communications commUsage="Normal" multiSych="0">
+                    <channelExpr>
+                      <name word="terminate"/>
+                    </channelExpr>
+                    <fieldList/>
+                  </communications>
+                </communicationList>
+              </expr>
+            </channelSet>
+          </circusAction>
+          <channelSet xsi:type="circus:CircusChannelSet">
+            <expr xsi:type="circus:BasicChannelSetExpr">
+              <communicationList/>
+            </expr>
+          </channelSet>
+        </circusAction>
+        <name word="stm_stm1"/>
+      </paras>
+    </paraList>
+  </sects>
+</circus:Spec>

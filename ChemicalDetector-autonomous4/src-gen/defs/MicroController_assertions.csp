@@ -1,0 +1,6 @@
+assert MicroController_O :[deadlock-free]	
+assert MicroController_O;RUN :[deadlock-free]
+assert MicroController_O :[deterministic]
+assert MicroController_O :[divergence-free]
+	
+chase_MicroController = chase(MicroController_O)

@@ -1,0 +1,52 @@
+-- declaring controller events
+channel MainController_turn:Angle
+channel MainController_stop
+channel MainController_gas:LSeq(GasSensor,2)
+channel MainController_resume
+
+-- declaring controller variables
+
+
+
+-- declaring controller memory
+
+Memory_MainController = SKIP
+
+-- delcaring controller termination channel
+
+channel MainController_terminate
+
+MainController = (GasAnalysis[[GasAnalysis_terminate <- MainController_terminate, GasAnalysis_gas <- MainController_gas, GasAnalysis_turn <- MainController_turn, GasAnalysis_stop <- MainController_stop, GasAnalysis_resume <- MainController_resume]]
+	[|union({||},
+	{||})|]
+	Memory_MainController
+)\union({||},
+{||})
+[|{|MainController_terminate|}|>SKIP
+
+-- VS version
+MainController_VS = (GasAnalysis_VS[[GasAnalysis_terminate <- MainController_terminate, GasAnalysis_gas <- MainController_gas, GasAnalysis_turn <- MainController_turn, GasAnalysis_stop <- MainController_stop, GasAnalysis_resume <- MainController_resume]]
+	[|union({||},
+	{||})|]
+	Memory_MainController
+)\union({||},
+{||})
+[|{|MainController_terminate|}|>SKIP
+
+-- O version (optimised) THESE TWO PROCESSES SHOULD BE KEPT IN SYNC WITH THE ABOVE TWO
+MainController_O = sbisim(diamond((GasAnalysis_O[[GasAnalysis_terminate <- MainController_terminate, GasAnalysis_gas <- MainController_gas, GasAnalysis_turn <- MainController_turn, GasAnalysis_stop <- MainController_stop, GasAnalysis_resume <- MainController_resume]]
+	[|union({||},
+	{||})|]
+	Memory_MainController
+)\union({||},
+{||})
+[|{|MainController_terminate|}|>SKIP))
+
+-- VS_O version
+MainController_VS_O = sbisim(diamond((GasAnalysis_VS_O[[GasAnalysis_terminate <- MainController_terminate, GasAnalysis_gas <- MainController_gas, GasAnalysis_turn <- MainController_turn, GasAnalysis_stop <- MainController_stop, GasAnalysis_resume <- MainController_resume]]
+	[|union({||},
+	{||})|]
+	Memory_MainController
+)\union({||},
+{||})
+[|{|MainController_terminate|}|>SKIP))

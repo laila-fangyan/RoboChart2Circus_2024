@@ -1,0 +1,30 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 01-05-2025 09:52:17
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "Location.csp"
+
+
+-- generate Location_OP_changeDirection
+P_Location_OP_changeDirection = let
+	id__ = 0
+	
+	param_l = Location_Loc_left
+	
+	
+	
+within
+	Location::OP_changeDirection::O__(id__,
+				param_l,
+			    const_Location_changeDirection_lv)
+assert P_Location_OP_changeDirection :[deadlock-free]	
+assert P_Location_OP_changeDirection;RUN({r__}) :[deadlock-free]
+assert P_Location_OP_changeDirection :[deterministic]
+assert P_Location_OP_changeDirection :[divergence-free]
+
+

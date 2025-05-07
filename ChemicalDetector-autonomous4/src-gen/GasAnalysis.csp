@@ -1,0 +1,31 @@
+include "defs/GasAnalysis_defs.csp"
+include "instantiations.csp"
+include "defs/robochart_defs.csp"
+include "defs/MicroController_defs.csp"
+include "defs/MainController_defs.csp"
+include "defs/core_defs.csp"
+include "defs/Movement_defs.csp"
+include "defs/Module_defs.csp"
+
+include "defs/GasAnalysis.csp"
+include "defs/shortRandomWalk_assertions.csp"
+include "defs/GasAnalysis_assertions.csp"
+include "defs/move_assertions.csp"
+include "defs/Chemical_defs.csp"
+include "defs/Location_defs.csp"
+include "defs/move.csp"
+include "defs/shortRandomWalk.csp"
+
+channel r__
+RUN = r__ -> RUN
+
+			
+channel moveCall, moveRet
+channel shortRandomWalkCall, shortRandomWalkRet
+channel randomWalkCall, randomWalkRet
+
+transparent diamond
+transparent sbisim
+transparent chase
+
+   

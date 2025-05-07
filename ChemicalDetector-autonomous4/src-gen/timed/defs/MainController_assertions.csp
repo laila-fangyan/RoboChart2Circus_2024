@@ -1,0 +1,33 @@
+ExternalEvents_MainController = {|MainController_stop,MainController_gas,MainController_turn,MainController_resume|}
+
+assert T_MainController :[deterministic]
+assert T_MainController :[divergence-free]
+assert T_MainController ; RUN({tock}) :[deadlock-free]
+
+-- no time locks
+assert RUN({tock}) ||| CHAOS(ExternalEvents_MainController)      [F= prioritise((T_MainController ; RUN({tock})) |\ union(ExternalEvents_MainController,{tock}),<{},{tock}>)
+
+-- zeno freedom
+assert T_MainController |\ union(ExternalEvents_MainController,{tock})  :[divergence-free]
+
+-- every state is reachable in this controller
+assert not STOP [T= T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|}
+assert not STOP [T= T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|}
+assert not STOP [T= T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|}
+assert not STOP [T= T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|}
+assert not STOP [T= T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|}
+
+-- every state can be reached infinitely often
+assert T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_NoGas"|}) 
+assert T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_Analysis"|}) 
+assert T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_GasDetected"|}) 
+assert T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_j1"|}) 
+assert T_MainController_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_Reading"|}) 
+
+-- timed model is a refinement
+assert sbisim(diamond(MainController)) [F= T_MainController \ {tock}
+assert sbisim(diamond(MainController_VS)) [T= T_MainController_VS \ {tock}
+
+-- do time constraints constrain traces?
+assert T_MainController \ {tock} [T= sbisim(diamond(MainController))
+assert T_MainController_VS \ {tock} [T= sbisim(diamond(MainController_VS))

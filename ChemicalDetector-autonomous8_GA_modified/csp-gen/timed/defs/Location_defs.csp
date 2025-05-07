@@ -1,0 +1,20 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 01-05-2025 09:52:17
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+-- data definitions used by platform:/resource/ChemicalDetector-autonomous8_GA_modified/Location.rct
+datatype Location_Loc = Location_Loc_left | Location_Loc_right | Location_Loc_front
+Location_Loc_is(Location_Loc_left,Location_Loc_left) = true
+Location_Loc_is(_,Location_Loc_left) = false
+Location_Loc_is(Location_Loc_right,Location_Loc_right) = true
+Location_Loc_is(_,Location_Loc_right) = false
+Location_Loc_is(Location_Loc_front,Location_Loc_front) = true
+Location_Loc_is(_,Location_Loc_front) = false
+
+
+	

@@ -1,0 +1,6 @@
+assert MainController_O :[deadlock-free]	
+assert MainController_O;RUN :[deadlock-free]
+assert MainController_O :[deterministic]
+assert MainController_O :[divergence-free]
+	
+chase_MainController = chase(MainController_O)

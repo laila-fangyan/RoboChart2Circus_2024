@@ -1,0 +1,43 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 01-05-2025 09:52:17
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "Location_defs.csp"
+include "function_toolkit_defs.csp"
+include "relation_toolkit_defs.csp"
+include "core_defs.csp"
+include "state_timed_defs.csp"
+include "../instantiations.csp"
+include "Chemical_defs.csp"
+include "set_toolkit_defs.csp"
+include "core_timed_defs.csp"
+include "sequence_toolkit_defs.csp"
+include "shortRandomWalk.csp"
+include "file_Module_defs.csp"
+include "robochart_defs.csp"
+
+transparent wbisim
+channel r__
+-- generate OP_shortRandomWalk
+P_OP_shortRandomWalk = let
+	id__ = 0
+	
+	
+	
+	
+within
+	OP_shortRandomWalk::O__(id__)
+assert P_OP_shortRandomWalk :[deadlock-free]	
+assert P_OP_shortRandomWalk;RUN({r__}) :[deadlock-free]
+assert P_OP_shortRandomWalk :[deterministic]
+assert P_OP_shortRandomWalk :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_OP_shortRandomWalk[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_OP_shortRandomWalk

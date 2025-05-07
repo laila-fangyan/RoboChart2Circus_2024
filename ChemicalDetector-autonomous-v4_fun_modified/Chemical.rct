@@ -1,0 +1,85 @@
+package
+Chemical
+
+import sequence_toolkit::*
+
+enumeration Status {  noGas gasD } 
+enumeration Angle { Left Right Back Front }
+datatype GasSensor {
+	c : Chem
+	i : Intensity
+}
+type Chem
+type Intensity
+
+//function dom(r:?X <-> ?Y): Set(?X) {
+//	postcondition result == {p: ?X*?Y | p in r @ p[1]}
+//}
+//
+//function ran(r:?X <-> ?Y): Set(?Y) {
+//	postcondition result == {p: ?X*?Y | p in r @ p[2]}
+//}
+//
+//function isTotal(f: ?X -> ?Y): boolean {
+//	postcondition result iff (forall x:?X @ exists y:?Y @ (|x,y|) in f)
+//}
+//
+//function isInjection(f: ?X -> ?Y): boolean {
+//	postcondition result iff (forall p:?X*?Y, q:?X*?Y | p in f /\ q in f @ p[1] == q[1] iff p[2] == q[2])
+//}
+//
+//function isTotalInjection(f: ?X -> ?Y): boolean {
+//	postcondition result iff isTotal(f) /\ isInjection(f)
+//}
+//
+//function isSurjection(f: ?X -> ?Y): boolean {
+//	postcondition result iff (ran(f) == {y:?Y}) 
+//}
+//
+//function isTotalSurjection(f: ?X -> ?Y): boolean {
+//	postcondition result iff isTotal(f) /\ isSurjection(f)
+//}
+//
+//function isBijection(f: ?X -> ?Y): boolean {
+//	postcondition result iff isTotalInjection(f) /\ isTotalSurjection(f)
+//}
+//function size(a:Set(?X)): nat {
+//	precondition true
+//	postcondition result == (the n: nat | (exists f: nat -> ?X | isBijection(f) @ dom(f) == range(1,n) /\ ran(f) == a) @ n)
+//}
+
+//function size(a:Seq(?X)): nat {
+////	precondition true
+////	postcondition result == (the n: nat | (exists f: nat -> ?X | isBijection(f) @ dom(f) == range(1,n) /\ ran(f) == a) @ n)
+//}
+
+
+//Analyze whether there is gas or not
+function analysis( gs : Seq( GasSensor )) : Status {
+}
+function goreq(  i1 : Intensity , i2 : Intensity) : boolean {
+}
+
+//Return the highest intensity
+//function intensity( gs : Seq( GasSensor )) : Intensity {
+//	precondition size ( gs ) > 0
+//	postcondition forall x : nat | 0 <= x /\ x <= size ( gs ) @ goreq ( result ,gs [ x ] . i )
+//	postcondition exists y: nat | 0 <= y /\ y <= size (gs) @ result == gs [ y ] . i
+//	
+//} 
+
+function intensity( gs : Seq( GasSensor )) : Intensity {
+//	precondition size ( gs ) > 0
+	postcondition forall x : nat | 0 <= x /\ x <= 4 @ goreq ( result ,gs [ x ] . i )
+	postcondition exists y: nat | 0 <= y /\ y <= 4 @ result == gs [ y ] . i
+} 
+
+function location( gs : Seq( GasSensor )) : Angle {
+//	precondition size ( gs ) > 0
+//	postcondition exists x : nat | 0 <= x /\ x <= size ( gs ) @ gs [ x ] . i == intensity ( gs ) /\ result == angle ( x )
+}
+function angle( x : nat) : Angle { 
+}
+
+function card(A:Set(?X)): nat {
+}

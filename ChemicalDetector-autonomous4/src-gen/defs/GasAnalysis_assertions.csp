@@ -1,0 +1,6 @@
+assert GasAnalysis_O :[deadlock-free]	
+assert GasAnalysis_O;RUN :[deadlock-free]
+assert GasAnalysis_O :[deterministic]
+assert GasAnalysis_O :[divergence-free]
+	
+chase_GasAnalysis = chase(GasAnalysis_O)

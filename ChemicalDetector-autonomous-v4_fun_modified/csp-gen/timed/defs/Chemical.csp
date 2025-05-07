@@ -1,0 +1,17 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 01-05-2025 09:52:12
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+module Chemical
+exports
+
+
+
+
+
+endmodule

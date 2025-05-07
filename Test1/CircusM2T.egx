@@ -14,14 +14,20 @@ pre{
  var javaDate = new Native("java.text.SimpleDateFormat")("ddMMyyyy_HHmmss").format(new Native("java.util.Date"));
  var javaDateString = new String;
  javaDateString= javaDate.toString();
-var name =Z!ZSect.allInstances.select(s|s.instanceOf(Z!ZSect)).at(0).name+ "_Circus";
+var name =Z!ZSect.allInstances.select(s|s.instanceOf(Z!ZSect)).at(0).name;
 }
 
 rule circusM2T
 transform z: Z!Spec {
 //transform z: Z!CApplExprList{
 template : "circusM2T.egl"
-target : "circus_gen/" +name + "_"+javaDateString+".thy" 
+target : "circus_gen/IsaCircus" + "_"+javaDateString+".thy" 
 //target : "circus_gen/" +"expr"+".thy" 
 //target : "circus_gen/" +"expr_"+javaDateString +".thy" 
+}
+
+rule circusM2T_HOLCSP
+transform z: Z!Spec {
+template : "circusM2T_HOLCSP.egl"
+target : "hol-csp_gen/HOLCSP"+ "_"+javaDateString+".thy" 
 }

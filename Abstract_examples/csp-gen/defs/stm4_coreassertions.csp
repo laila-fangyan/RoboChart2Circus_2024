@@ -1,0 +1,30 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 01-05-2025 09:52:09
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "core_defs.csp"
+include "state_defs.csp"
+include "stm4.csp"
+include "file_example3_defs.csp"
+include "robochart_defs.csp"
+include "../instantiations.csp"
+channel r__
+-- generate stm4
+P_stm4 = let
+	id__ = 0
+	
+	
+	
+within
+	stm4::O__(
+		id__
+	)
+assert P_stm4 :[deadlock-free]	
+assert P_stm4;RUN({r__}) :[deadlock-free]
+assert P_stm4 :[deterministic]
+assert P_stm4 :[divergence-free]

@@ -1,0 +1,17 @@
+access_(<x>^xs,1) = x
+access_(<x>^xs,N) = access_(xs,N-1)
+			   
+tuple2((p1,p2),1) = p1
+tuple2((p1,p2),2) = p2
+tuple3((p1,p2,p3),1) = p1
+tuple3((p1,p2,p3),2) = p2
+tuple3((p1,p2,p3),3) = p3
+tuple4((p1,p2,p3,p4),1) = p1
+tuple4((p1,p2,p3,p4),2) = p2
+tuple4((p1,p2,p3,p4),3) = p3
+tuple4((p1,p2,p3,p4),4) = p4
+tuple5((p1,p2,p3,p4,p5),1) = p1
+tuple5((p1,p2,p3,p4,p5),2) = p2
+tuple5((p1,p2,p3,p4,p5),3) = p3
+tuple5((p1,p2,p3,p4,p5),4) = p4
+tuple5((p1,p2,p3,p4,p5),5) = p5

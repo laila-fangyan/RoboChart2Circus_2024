@@ -1,0 +1,37 @@
+ExternalEvents_GasAnalysis = {|GasAnalysis_gas,GasAnalysis_turn,GasAnalysis_resume,GasAnalysis_stop|}
+
+assert T_GasAnalysis :[deterministic]
+assert T_GasAnalysis :[divergence-free]
+assert T_GasAnalysis ; RUN({tock}) :[deadlock-free]
+
+-- no time locks
+assert RUN({tock}) ||| CHAOS(ExternalEvents_GasAnalysis)      [F= prioritise((T_GasAnalysis ; RUN({tock})) |\ union(ExternalEvents_GasAnalysis,{tock}),<{},{tock}>)
+
+-- zeno freedom
+assert T_GasAnalysis |\ union(ExternalEvents_GasAnalysis,{tock})  :[divergence-free]
+
+-- every state is reachable
+assert not STOP [T= T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|}
+assert not STOP [T= T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|}
+assert not STOP [T= T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|}
+assert not STOP [T= T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|}
+assert not STOP [T= T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|}
+
+-- states can be reached infinitely often
+assert T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_NoGas"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_NoGas"|})
+assert T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Analysis"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_Analysis"|})
+assert T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_GasDetected"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_GasDetected"|})
+assert T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_j1"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_j1"|})
+assert T_GasAnalysis_VS |\ {|GasAnalysis_enteredV."GasAnalysis_Reading"|} [T= RUN({|GasAnalysis_enteredV."GasAnalysis_Reading"|})
+
+-- timed model is a refinement
+assert sbisim(diamond(GasAnalysis)) [F= T_GasAnalysis \ {tock}
+assert sbisim(diamond(GasAnalysis_VS)) [T= T_GasAnalysis_VS \ {tock}
+
+-- do time constraints constrain traces?
+assert T_GasAnalysis \ {tock} [T= sbisim(diamond(GasAnalysis))
+assert T_GasAnalysis_VS \ {tock} [T= sbisim(diamond(GasAnalysis_VS))
+
+-- memory models consistency check
+assert timed::MemoryN_GasAnalysis [FD= timed::MemoryO_GasAnalysis
+assert timed::MemoryO_GasAnalysis [FD= timed::MemoryN_GasAnalysis

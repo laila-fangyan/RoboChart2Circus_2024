@@ -1,0 +1,5 @@
+-- generate include
+include "Chemical.csp"
+
+-- generate customAssertions
+

@@ -6,26 +6,12 @@ const_pkg0_M_C1_c3 = 0
 -- generate string
 nametype core_string = LSeq(Char,2)
 
--- generate Chemical2_goreq
-Chemical2_goreq(i1,i2) = true
-
--- generate const_Chemical2_GasAnalysis_stm_thr
-const_Chemical2_GasAnalysis_stm_thr = 0
-
--- generate pkg0_move1_BOUND
-pkg0_move1_BOUND = 2
-
--- MODULE CONSTANTS
-
 -- generate Chem
 nametype Chemical_Chem = {0,1}
 
 -- generate -- OPERATION BOUNDS
 
 -- MODULE CONSTANTS
-
--- generate Chemical2_angle
-Chemical2_angle(x) = Chemical2_Angle_Left
 
 -- generate const_pkg0_M_C1_stm1_c1
 const_pkg0_M_C1_stm1_c1 = 0
@@ -42,15 +28,11 @@ const_pkg0_M_P1_c3 = 0
 -- generate const_pkg0_M_P1_c2
 const_pkg0_M_P1_c2 = 0
 
--- CONTROLLER CONSTANTS
-
 -- generate Plus
 Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
 
 -- generate const_pkg0_M_C1_c2
 const_pkg0_M_C1_c2 = 0
-
--- STATEMACHINE CONSTANTS
 
 -- generate Chemical_location
 Chemical_location(gs) = Chemical_Angle_Left
@@ -58,13 +40,16 @@ Chemical_location(gs) = Chemical_Angle_Left
 -- generate const_Chemical_GasAnalysis_stm_thr
 const_Chemical_GasAnalysis_stm_thr = 0
 
+-- generate pkg0_angle
+pkg0_angle(x) = 0
+
 -- generate --
 
 -- MODULE CONSTANTS
 
 -- generate nat
 nametype core_nat = union({0..2},{calc_type_min(Union(
-			{{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{x|x <- {0..2}},{3},{2}}))})
+			{{3},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{2},{4},{2},{x|x <- {0..2}},{5},{5},{2},{1}}))..calc_type_max(Union({{3},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{2},{4},{2},{x|x <- {0..2}},{5},{5},{2},{1}}))})
 
 -- generate core_clock_type
 nametype core_clock_type = {0..10}
@@ -82,7 +67,7 @@ Chemical_angle(x) = Chemical_Angle_Left
 
 -- generate real
 nametype core_real = union({ -2..2},{calc_type_min(Union(
-			{{(Plus(a3, c2, core_int))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, core_int)|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, core_int), 1, core_int)|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, core_int), 1, core_int)|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{(Plus(a3, c2, core_int))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, core_int)|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, core_int), 1, core_int)|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, core_int), 1, core_int)|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))}) 
+			{{(Plus(Plus(a3, c2, core_int), c3, core_int))|c3 <- { -2..2},a3 <- { -2..2},c2 <- { -2..2}},{3},{a1|a1 <- { -2..2}},{3},{Plus(m, c1, core_int)|c1 <- { -2..2},m <- { -2..2}},{Plus(Plus(a3, l, core_int), 1, core_int)|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, core_int), 1, core_int)|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{8},{ -2..2},{8},{ -2..2},{c6|c6 <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{2},{4},{2},{x|x <- {0..2}},{5},{5},{2},{1}}))..calc_type_max(Union({{(Plus(Plus(a3, c2, core_int), c3, core_int))|c3 <- { -2..2},a3 <- { -2..2},c2 <- { -2..2}},{3},{a1|a1 <- { -2..2}},{3},{Plus(m, c1, core_int)|c1 <- { -2..2},m <- { -2..2}},{Plus(Plus(a3, l, core_int), 1, core_int)|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, core_int), 1, core_int)|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{8},{ -2..2},{8},{ -2..2},{c6|c6 <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{2},{4},{2},{x|x <- {0..2}},{5},{5},{2},{1}}))}) 
 
 -- VECTOR TYPES AND OPERATIONS
 
@@ -94,16 +79,10 @@ Chemical_goreq(i1,i2) = true
 
 -- generate int
 nametype core_int = union({ -2..2},{calc_type_min(Union(
-			{{(Plus(a3, c2, { -2..2}))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, { -2..2})|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))..calc_type_max(Union({{(Plus(a3, c2, { -2..2}))|c2 <- { -2..2},a3 <- { -2..2}},{a1|a1 <- { -2..2}},{Plus(m, c1, { -2..2})|m <- { -2..2},c1 <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{x|x <- {0..2}},{3},{2}}))})
-
--- generate Chemical2_card
-Chemical2_card(A) = 0
+			{{(Plus(Plus(a3, c2, { -2..2}), c3, { -2..2}))|c3 <- { -2..2},a3 <- { -2..2},c2 <- { -2..2}},{3},{a1|a1 <- { -2..2}},{3},{Plus(m, c1, { -2..2})|c1 <- { -2..2},m <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{8},{ -2..2},{8},{ -2..2},{c6|c6 <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{2},{4},{2},{x|x <- {0..2}},{5},{5},{2},{1}}))..calc_type_max(Union({{(Plus(Plus(a3, c2, { -2..2}), c3, { -2..2}))|c3 <- { -2..2},a3 <- { -2..2},c2 <- { -2..2}},{3},{a1|a1 <- { -2..2}},{3},{Plus(m, c1, { -2..2})|c1 <- { -2..2},m <- { -2..2}},{Plus(Plus(a3, l, { -2..2}), 1, { -2..2})|a3 <- { -2..2},l <- { -2..2}},{Plus(Plus(a1, l, { -2..2}), 1, { -2..2})|a1 <- { -2..2},l <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{8},{ -2..2},{8},{ -2..2},{c6|c6 <- { -2..2}},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{ -2..2},{2},{4},{2},{x|x <- {0..2}},{5},{5},{2},{1}}))})
 
 -- generate Div
 Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
-
--- generate Chemical2_location
-Chemical2_location(gs) = Chemical2_Angle_Left
 
 -- generate const_pkg0_M_C1_stm0_c1
 const_pkg0_M_C1_stm0_c1 = 0
@@ -114,9 +93,6 @@ Neg(e1,T) = if member(-e1,T) then -e1 else e1
 -- generate Chemical_card
 Chemical_card(A) = 0
 
--- generate Chemical2_intensity
-Chemical2_intensity(gs) = 0
-
 -- generate const_pkg0_M_C1_stm0_c2
 const_pkg0_M_C1_stm0_c2 = 0
 
@@ -125,9 +101,6 @@ const_pkg0_M_C1_stm0_c3 = 0
 
 -- generate boolean
 nametype core_boolean = Bool
-
--- generate const_Chemical_GasAnalysis_thr
-const_Chemical_GasAnalysis_thr = 0
 
 -- generate Mult
 Mult(e1,e2,T) = if member(e1*e2,T) then e1*e2 else e1
@@ -143,7 +116,4 @@ Chemical_intensity(gs) = 0
 
 -- generate Minus
 Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
-
--- generate Chemical2_analysis
-Chemical2_analysis(gs) = Chemical2_Status_noGas
 
