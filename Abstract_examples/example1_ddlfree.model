@@ -11,6 +11,7 @@
     <transitions name="t0" source="//@machines.0/@nodes.0" target="//@machines.0/@nodes.1"/>
     <transitions name="t1" source="//@machines.0/@nodes.1" target="//@machines.0/@nodes.2">
       <trigger event="//@machines.0/@events.0"/>
+      <condition xsi:type="robochart:BooleanExp" value="true"/>
     </transitions>
     <transitions name="t2" source="//@machines.0/@nodes.2" target="//@machines.0/@nodes.1">
       <trigger event="//@machines.0/@events.1"/>

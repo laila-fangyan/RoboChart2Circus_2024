@@ -95,7 +95,7 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 
 /****************************
 We are verifying Trans in HOL-CSP as a parameterized recursive process, 
-so this eol need to be updated (Rule 53 and Rule 54).
+so this eol is updated from the original EOL by modifying Rule 53 and Rule 54.
 Rule 53: 
 (1) changed to ParamAction, 
 (2) recursive Trans pushed into extchoice
@@ -107,6 +107,18 @@ This parameterization is only for Trans, other actions are not affected.
 IsaCircus will need this parameterization as well later on.
 
 07.05.2025
+******************************/
+
+/****************************
+to introduce assumption guarantee for reading and writing var values,
+Rule 53: to insert inv after the reading the value for the variables in transition.condition
+Rule 65: to insert inv after the reading the value for the variables in state actions and in transition actions
+Rule 66: to insert inv before writing the value 
+by creating an IfGuardedCommand 
+
+To extend the operation createchanParaNC() by adding two channels: aviol and gviol
+
+14.05.2025
 ******************************/
 
 //var pkg =  RC!RCPackage.all().selectOne(p|p.name = "Chemical");
@@ -3681,6 +3693,11 @@ operation RC!NodeContainer createchanParaNC()  {
 	//10. Declaring State Local channelsets: enterSS_s0, enteredSS_s0, etc
 	//shall these local ones be declared in state semantics?
 	
+	
+	
+	//11. assumption-guarantee violation channel: aviol for assumption violation, gviol for guarantee violation
+	var ag_chanpara = Sequence{"aviol", "gviol"	}.createChannelPara("assumption-guarantee_viol_" + self.FQN());
+	
 }
 
 
@@ -4369,7 +4386,7 @@ operation createMetaParallelAction(
 	
 	var PRenamed = P.createRenameAction(PRenaming_pairR, PRenaming_pairL);
 	/****************************************************************
-	TO DO, this renaming above is WRONG, as it should be RELATIONAL renaming
+	TO DO, this renaming above is WRONG? as it should be RELATIONAL renaming
 	e.g.,  [[ share__ <- x__ | x__ <- {| share__,setR_a,setR_a1 |} ]] 
 	It means share becomes three channels
 	Thus, P = share -> P becomes
@@ -5215,6 +5232,30 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 	var trans = createAction2("ExtChoiceAction", choice1_action1, createAction2("ExtChoiceAction", choice2, choice3));
 	("trans: "+trans).println();
 	
+	//to introduce assumption condition, i.e. to change trans(n) into if inv then trans(n) else aviol -> trans(n)
+	//by creating an IfGuardedCommand 
+	
+	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables in HOL-CSP models
+	var if_pred = createTruePred();
+	
+	//if true then continue to behave as trans
+	var ifAction = createGuardedAction(if_pred, trans) ;
+	
+	var else_pred = createFalsePred();
+	
+	//elseif false then aviol -> Trans(n)
+	var elseAction = createPrefixingAction(createSynchCommunication("aviol"), ("Trans_" + self.FQN()).createCallAction(Sequence{"n"}.createRefExprSeq(false,false)));
+	elseAction = createGuardedAction(else_pred, elseAction);
+	
+	var actions = Sequence{ifAction, elseAction};
+	
+	
+	var trans_action = createIFGuardedCommand(actions);
+	
+
+
+
+
 	
 	var vguards = self.vguards(); 
 	"line309".println();
@@ -5222,12 +5263,12 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 	
 	var Trans = new Z!ParamAction;
 	Trans.isParamCommand = true;
-	Trans.circusAction = readStateA(vguards, trans);
+	Trans.circusAction = readStateA(vguards, trans_action);
 	Trans.declList = new Z!ZDeclList;
 	Trans.declList.decls.add(createVarDeclfromString("n", "NIDS_"+self.FQN()));
 	
 
-	return Trans.createActionPara("Trans_"+self.FQN());
+	return Trans.createActionPara("Trans_" + self.FQN());
 	
 	
 	//Trans is an actioin and can not be a process, because it will be prefixed.
@@ -5255,14 +5296,22 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 
 }
 
+operation createTruePred(): Z!TruePred{
+	var p = new Z!TruePred;
+	return p;
+}
 
+operation createFalsePred(): Z!FalsePred{
+	var p = new Z!FalsePred;
+	return p;
+}
 //CSP Rule 54
 //to create circus action for each transition
 operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 	var circusAction;
 	
 	//"n = src"
-	var src_grd_pred = createMemPredEquality("n", self.source.name);
+	var src_grd_pred = createMemPredEquality("n", "NID_" + self.source.FQN());
 	
 	if(self.source.type().name = "State"){
 					
@@ -5282,7 +5331,7 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		
 		
 		//to create action3_inner_2: enter
-		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), ("Trans_" + nc(self).FQN()).createCallAction(Sequence{self.target.FQN()}.createRefExprSeq(false,false))  );
+		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), ("Trans_" + nc(self).FQN()).createCallAction(Sequence{"NID_" + self.target.FQN()}.createRefExprSeq(false,false))  );
 		
 		var action3_right = createAction2("SeqAction", action3_inner_1, action3_inner_2);
 		
@@ -5314,7 +5363,7 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		var action1 = createPrefixingAction(tevent(self), prefixedAction);
 		
 		
-		var action2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), ("Trans_" + nc(self).FQN()).createCallAction(Sequence{self.target.FQN()}.createRefExprSeq(false,false)));
+		var action2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), ("Trans_" + nc(self).FQN()).createCallAction(Sequence{"NID_" + self.target.FQN()}.createRefExprSeq(false,false)));
 		
 		circusAction = createAction2("SeqAction", action1, action2);
 		
@@ -6026,12 +6075,12 @@ operation RC!Transition createTrActionAsCircusAction(): Z!CircusAction{
 
 
 
-//CSP Rule 62
+//CSP Rule 62, this is only used in Rule 65
 operation readState(varSet: Set<String>, action: Z!CircusAction):Z!CircusAction{
 	if(varSet.size()=0){
 		return action;
 	} else {
-		
+			
 		var var_name = varSet.at(0);
 
 		var commu = createInputCommunication("get_"+var_name, var_name);
@@ -6177,8 +6226,36 @@ operation createSynchCommunication(
 
 //CSP Rule 65
 operation RC!Statement createStmtInContextAsAction(): Z!CircusAction{
-
-	return readState(usedVariables(self), self.createStmtAsAction());
+	var action1 = self.createStmtAsAction();
+	
+	if(usedVariables(self).size()=0){
+		return readState(usedVariables(self), action1);
+	} else
+	//an extra step introduced to change action1 into "if inv_on_usedVariables(self) then action else aviol -> action"
+	//to introduce assumption condition, i.e. to change action into if inv then action else aviol -> action
+	//by creating an IfGuardedCommand 
+	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables whose values are read
+	{
+		var if_pred = createTruePred();
+		
+		//if true then continue to behave as action itself
+		var ifAction = createGuardedAction(if_pred, action1) ;
+		
+		var else_pred = createFalsePred();
+		
+		//if false then aviol -> action
+		var action2 = self.createStmtAsAction();
+		var elseAction = createPrefixingAction(createSynchCommunication("aviol"), action2);
+		elseAction = createGuardedAction(else_pred, elseAction);
+		
+		var actions = Sequence{ifAction, elseAction};
+		
+		var ifguard_action = createIFGuardedCommand(actions);
+		
+	//	return readState(usedVariables(self), action);// we replace action with ifguard_action to introduce assumption for read vars 
+		return readState(usedVariables(self), ifguard_action);
+	
+	}
 }
 
 //CSP Rule 65_1
@@ -6228,7 +6305,32 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	var rightAction = createPrefixingAction(prefix, createSkipAction());
 	//PrefixingAction is a type of Action1, so can not use createAction2()
 
-	var circusAction = createAction2("InterruptAction", leftAction, rightAction);
+
+	//to introduce guarantee condition for writing var values, i.e. to change rightAction from
+	// "set_vid(s.left)![[s.right]]expr -> Skip" 
+	// TO 
+	// "if inv then (set_vid(s.left)![[s.right]]expr -> Skip) else gviol -> STOP
+	// by creating an IfGuardedCommand (similar to the changes of Rule 53)
+	
+	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables in HOL-CSP models
+	var if_pred = createTruePred();
+	
+	//if true then continue to behave as rightAction, i.e., write the value
+	var ifAction = createGuardedAction(if_pred, rightAction) ;
+	
+	var else_pred = createFalsePred();
+	
+	//elseif false then gviol -> STOP
+	var elseAction = createPrefixingAction(createSynchCommunication("gviol"), createStopAction());
+	elseAction = createGuardedAction(else_pred, elseAction);
+	
+	var actions = Sequence{ifAction, elseAction};
+	
+	
+	var right_action = createIFGuardedCommand(actions);
+	
+	
+	var circusAction = createAction2("InterruptAction", leftAction, right_action);
 	
 	
 	//if assignment.right is a function call, and the function has a precondition, then circusAction should be guarded with function.precondition
@@ -6259,6 +6361,10 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	return circusAction;
 }
 
+operation createStopAction(): Z!StopAction{
+	var a = new Z!StopAction;
+	return a;
+}
 
 operation createAndExpr(
 	l:Z!Expr,
@@ -6301,16 +6407,29 @@ operation RC!IfStmt createIfStmtAsAction(): Z!IfGuardedCommand{
 	
 	var ifActionInContext = createGuardedAction(if_pred, self.then.createStmtInContextAsAction());
 	
-	var else_expr = new RC!Not;
-	else_expr.exp = clone(if_expr);
-	//else_pred.exp = self.expression;
-
-	var pred_else = else_expr.createExpr().createMemPredEquality();
+	var actions;
 	
-	var elseActionInContext = createGuardedAction(pred_else, self.`else`.createStmtInContextAsAction());
+//	RoboChart allow else to be not defined
+//	e.g.,transition t1 {
+//		  from s0
+//		  to s1
+//	      action if true then a end, or
+//	      action if true then a else b end, or
+//        action if true then a else if bl then b else c end end 
+//        action if true then a else (if bl then b else c end) end }
+	if(self.`else`.isDefined()){
+		var else_expr = new RC!Not;
+		else_expr.exp = clone(if_expr);
+		//else_pred.exp = self.expression;
 	
-	var actions = Sequence{ifActionInContext, elseActionInContext};
-	
+		var pred_else = else_expr.createExpr().createMemPredEquality();
+		
+		var elseActionInContext = createGuardedAction(pred_else, self.`else`.createStmtInContextAsAction());
+		
+		actions = Sequence{ifActionInContext, elseActionInContext};
+	} else {
+		actions = Sequence{ifActionInContext};
+	}
 	
 	var action = createIFGuardedCommand(actions);
 	
@@ -6320,9 +6439,9 @@ operation RC!IfStmt createIfStmtAsAction(): Z!IfGuardedCommand{
 
 operation createIFGuardedCommand(actions: Sequence<Z!GuardedAction>): Z!IfGuardedCommand{
 	var action = new Z!IfGuardedCommand;
-	action.actionList = new Z!CircusActionList;
-	action.actionList.circusActions = actions;
-	
+//	action.actionList = new Z!CircusActionList;
+//	action.actionList.circusActions = actions;
+	action.circusActions = actions;
 	return action;
 }
 

@@ -12,11 +12,11 @@ namespace robocalc
 	{
 		bool goreq(null i1, null i2);
 		 intensity(std::vector<GasSensor> gs);
-		Status analysis(std::vector<GasSensor> gs);
-		Angle location(std::vector<GasSensor> gs);
 		unsigned int card(std::set<> A);
-		unsigned int angle(unsigned int x);
 		Angle angle(unsigned int x);
+		unsigned int angle(unsigned int x);
+		Angle location(std::vector<GasSensor> gs);
+		Status analysis(std::vector<GasSensor> gs);
 		
 		template<typename T>
 		std::set<T> set_union(std::set<T> s1, std::set<T> s2)

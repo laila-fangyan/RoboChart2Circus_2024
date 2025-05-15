@@ -14,7 +14,9 @@ stm stm1 {
 	transition t1 {
 		from s0
 		to s1
-		trigger a
+		trigger 
+	a
+		condition true
 	}
 	transition t2 {
 		from s1

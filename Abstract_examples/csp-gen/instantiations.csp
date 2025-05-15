@@ -24,7 +24,7 @@ nametype core_string = LSeq(Char,2)
 
 -- generate real
 nametype core_real = union({ -2..2},{calc_type_min(Union(
-			{{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2}}))}) 
+			{{1},{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{1},{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))}) 
 
 -- VECTOR TYPES AND OPERATIONS
 
@@ -33,7 +33,7 @@ nametype core_real = union({ -2..2},{calc_type_min(Union(
 
 -- generate int
 nametype core_int = union({ -2..2},{calc_type_min(Union(
-			{{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2}}))})
+			{{1},{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{1},{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))})
 
 -- generate -- OPERATION BOUNDS
 

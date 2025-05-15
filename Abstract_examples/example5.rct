@@ -1,0 +1,45 @@
+/********************************
+ * THIS version is derived from example 4 by adding action in transition t1. 
+ * This action involves 
+ * (1) a new var bl so will introduce assume in HOL-CSP apart from the var reading at the beginning of Trans, 
+ * (2) ifstmt so a new lemma might be needed for proof
+ * 15052025
+*******************************/
+
+stm stm5 {
+	var v1 : int 
+	var bl: boolean
+	event a
+	event b
+	event c
+	initial i0
+	state s0 {
+	}
+	state s1 {
+	}
+	transition t0 {
+		from i0
+		to s0
+	action v1 = 1
+	}
+	transition t1 {
+		from s0
+		to s1
+		condition v1 >= 1
+		//action if true then a  end 
+		action if bl then b else c end
+		
+	}
+	transition t2 {
+		from s1
+		to s0
+		condition v1 < 1
+	}
+	transition t3 {
+		from s1
+		to s0
+		trigger a
+	}
+
+}
+

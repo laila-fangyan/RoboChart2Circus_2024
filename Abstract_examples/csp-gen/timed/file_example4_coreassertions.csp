@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 01-05-2025 09:52:09
+-- Automatically generated on 15-05-2025 10:22:14
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -9,25 +9,25 @@
 
 include "file_example4.csp"
 
--- generate stm4
-P_stm4 = let
+-- generate stm04
+P_stm04 = let
 	id__ = 0
 	
 	
 	
 within
-	stm4::O__(
+	stm04::O__(
 		id__
 	)
-assert P_stm4 :[deadlock-free]	
-assert P_stm4;RUN({r__}) :[deadlock-free]
-assert P_stm4 :[deterministic]
-assert P_stm4 :[divergence-free]
+assert P_stm04 :[deadlock-free]	
+assert P_stm04;RUN({r__}) :[deadlock-free]
+assert P_stm04 :[deterministic]
+assert P_stm04 :[divergence-free]
 -- timed deadlock free
-assert prioritise(P_stm4[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+assert prioritise(P_stm04[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
 
 -- timelock free
-assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_stm4
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_stm04
 
 
 

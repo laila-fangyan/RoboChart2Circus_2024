@@ -1,0 +1,28 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 15-05-2025 10:29:30
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_example5.csp"
+
+-- generate stm5
+P_stm5 = let
+	id__ = 0
+	
+	
+	
+within
+	stm5::O__(
+		id__
+	)
+assert P_stm5 :[deadlock-free]	
+assert P_stm5;RUN({r__}) :[deadlock-free]
+assert P_stm5 :[deterministic]
+assert P_stm5 :[divergence-free]
+
+
+

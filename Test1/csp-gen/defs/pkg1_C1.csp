@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 01-05-2025 09:52:22
+-- Automatically generated on 15-05-2025 10:22:28
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -174,7 +174,7 @@
 							 	  share__choice(exited -> SKIP) ; Inactive
 				
 					Behaviour 	= entered -> During
-					During 		= ((share__choice(share__choice(get_a1?a1 -> share__choice(get_l?l -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
+					During 		= ((share__choice(share__choice(get_l?l -> share__choice(get_a1?a1 -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
 				within
 					Inactive [| {terminate} |> SKIP)
 					
@@ -191,7 +191,7 @@
 							 	  share__choice(exited -> SKIP) ; Inactive
 				
 					Behaviour 	= entered -> During
-					During 		= ((share__choice(share__choice(get_a1?a1 -> share__choice(get_l?l -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
+					During 		= ((share__choice(share__choice(get_l?l -> share__choice(get_a1?a1 -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
 				within
 					Inactive [| {terminate} |> SKIP)
 				

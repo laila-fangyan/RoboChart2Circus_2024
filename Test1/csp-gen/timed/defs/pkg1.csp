@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 01-05-2025 09:52:23
+-- Automatically generated on 15-05-2025 10:22:28
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -115,11 +115,11 @@ exports
 			localClockResets = {||}
 			
 			
-			channel get_CLID_f0 : core_clock_type 
 			channel get_CLID_s0 : core_clock_type 
+			channel get_CLID_f0 : core_clock_type 
 			--channel increment__
 			
-			CLID_f0_clock_type(id__,
+			CLID_s0_clock_type(id__,
 					          const_pkg1_C1_stm0_const1) = 
 				let
 					max = (clock_type_max(Union({
@@ -129,7 +129,7 @@ exports
 			within
 				if member(max,core_clock_type) then ctype else error("core_clock_type is not wide enough")
 			
-			CLID_s0_clock_type(id__,
+			CLID_f0_clock_type(id__,
 					          const_pkg1_C1_stm0_const1) = 
 				let
 					max = (clock_type_max(Union({
@@ -218,7 +218,7 @@ exports
 									 	  share__choice(exited -> SKIP) ; Inactive
 						
 							Behaviour 	= entered -> During
-							During 		= ((share__choice(share__choice(get_a1?a1 -> share__choice(get_l?l -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
+							During 		= ((share__choice(share__choice(get_l?l -> share__choice(get_a1?a1 -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
 						within
 							Inactive [| {terminate} |> SKIP)
 							
@@ -235,7 +235,7 @@ exports
 									 	  share__choice(exited -> SKIP) ; Inactive
 						
 							Behaviour 	= entered -> During
-							During 		= ((share__choice(share__choice(get_a1?a1 -> share__choice(get_l?l -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
+							During 		= ((share__choice(share__choice(get_l?l -> share__choice(get_a1?a1 -> true & (share__choice(set_a!Plus(Plus(a1, l, core_int), 1, core_int) -> SKIP))))) ; SStop) /\ interrupt -> SKIP)
 						within
 							Inactive [| {terminate} |> SKIP)
 						

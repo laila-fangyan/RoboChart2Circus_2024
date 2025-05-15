@@ -1,7 +1,9 @@
 
-stm stm4 {
+stm stm04 {
 	var v1 : int 
+	
 	event a
+
 	initial i0
 	state s0 {
 	}
@@ -16,6 +18,7 @@ stm stm4 {
 		from s0
 		to s1
 		condition v1 >= 1
+	
 	}
 	transition t2 {
 		from s1

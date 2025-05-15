@@ -93,6 +93,33 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 ******************************/
 
 
+/****************************
+We are verifying Trans in HOL-CSP as a parameterized recursive process, 
+so this eol is updated from the original EOL by modifying Rule 53 and Rule 54.
+Rule 53: 
+(1) changed to ParamAction, 
+(2) recursive Trans pushed into extchoice
+Rule 54: 
+(1) Skip replaced by Trans(tgt)
+(2) "n = src" added as guard in Rule 54 for each transition
+
+This parameterization is only for Trans, other actions are not affected.
+IsaCircus will need this parameterization as well later on.
+
+07.05.2025
+******************************/
+
+/****************************
+to introduce assumption guarantee for reading and writing var values,
+Rule 53: to insert inv after the reading the value for the variables in transition.condition
+Rule 65: to insert inv after the reading the value for the variables in state actions and in transition actions
+Rule 66: to insert inv before writing the value 
+by creating an IfGuardedCommand 
+
+To extend the operation createchanParaNC() by adding two channels: aviol and gviol
+
+14.05.2025
+******************************/
 
 //var pkg =  RC!RCPackage.all().selectOne(p|p.name = "Chemical");
 RC!RCPackage.all().println();
@@ -214,7 +241,7 @@ for(stm in RC!StateMachineDef.all()){
 
 //ncBehaviour(nc);
  END OF TEMPORARILY COMMENTTED OUT ***/
-var zsect = createZSect("circus_theory", Sequence{}, Sequence{"Boolean_operators"});
+var zsect = createZSect("circus", Sequence{}, Sequence{"Boolean_operators"});
 	
 
 for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or 
@@ -231,7 +258,7 @@ for(p in Z!Para.all().select(p|p.instanceOf(Z!ChannelSetPara) or
 
 //To consider different configuration of the RoboChart models which can be a module, or controller, or just a stm.
 if(RC!RCModule.all().size() = 0 and RC!ControllerDef.all().size() = 0 and RC!StateMachineDef.all().size() > 0){
-	for(p in Z!Para.all().select(p.instanceOf(Z!ActionPara))){
+	for(p in Z!Para.all().select(p|p.instanceOf(Z!ActionPara))){
 		zsect.addPara2ZSect(p);	
 	}
 } 
@@ -350,6 +377,13 @@ operation RC!Field createVarDecl(): Z!VarDecl{
 
 
 
+operation createVarDeclfromString(var_name:String, type_name: String): Z!VarDecl{
+	var varDecl = new Z!VarDecl;
+	
+	varDecl.nameList = createNameList(Sequence{var_name});
+	varDecl.expr     = type_name.createTypeExpr();
+	return varDecl;
+}
 
 operation createFunctionDefsAsAxParas(pkg:RC!RCPackage){
 	for(f in pkg.functions.select(f|f.name != "card")){
@@ -2735,6 +2769,7 @@ operation RC!Type defaultValueAsZExpr(): Z!Expr{
 			return createNumExpr(0);
 		}
 		
+		
 		else {//TO DO
 		
 		}
@@ -2743,8 +2778,8 @@ operation RC!Type defaultValueAsZExpr(): Z!Expr{
 	if(self.type().name = "SeqType"){
 	
 	("line 1830, self = "  + self).println();
-	("line 1831, self.values = "  + self.values).println();
-		
+//	("line 1831, self.values = "  + self.values).println();
+//		TOã€€DO: SET Default value for SeqType
 	}
 
 	if(self.type().name = "ProductType"){
@@ -3658,6 +3693,11 @@ operation RC!NodeContainer createchanParaNC()  {
 	//10. Declaring State Local channelsets: enterSS_s0, enteredSS_s0, etc
 	//shall these local ones be declared in state semantics?
 	
+	
+	
+	//11. assumption-guarantee violation channel: aviol for assumption violation, gviol for guarantee violation
+	var ag_chanpara = Sequence{"aviol", "gviol"	}.createChannelPara("assumption-guarantee_viol_" + self.FQN());
+	
 }
 
 
@@ -4346,7 +4386,7 @@ operation createMetaParallelAction(
 	
 	var PRenamed = P.createRenameAction(PRenaming_pairR, PRenaming_pairL);
 	/****************************************************************
-	TO DO, this renaming above is WRONG, as it should be RELATIONAL renaming
+	TO DO, this renaming above is WRONG? as it should be RELATIONAL renaming
 	e.g.,  [[ share__ <- x__ | x__ <- {| share__,setR_a,setR_a1 |} ]] 
 	It means share becomes three channels
 	Thus, P = share -> P becomes
@@ -5063,10 +5103,10 @@ operation createParallelProcessFromProcSet(
 }
 
 /*
-channel set to be synchronized in a parallel action/process is shown as ‘Enumerated channel set’ in CZT tool.
+channel set to be synchronized in a parallel action/process is shown as ï¿½Enumerated channel setï¿½ in CZT tool.
 It is BaiscChannelSetExpr in CZT AST, which contains a set of communications. 
 So it is not a channelset, but an expr.
-So in the channel set, it’s a list of communications, instead of a list of channels
+So in the channel set, itï¿½s a list of communications, instead of a list of channels
 */
 //to create BasicChannelSetExpr used in channel set declaration
 operation createBasicChannelSetExpr(channel_names:Sequence<String>): Z!BasicChannelSetExpr{
@@ -5164,13 +5204,13 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 		choice1_action1_left = tran_seq.createSequenceAsExtchoiceAction();
 	}
 
-	
-	var choice1_action1_right = createPrefixingAction(createSynchCommunication("share"), createSkipAction());
+	//share -> Trans(n)
+	var choice1_action1_right = createPrefixingAction(createSynchCommunication("share"), ("Trans_"+self.FQN()).createCallAction(Sequence{"n"}.createRefExprSeq(false,false)));
 	
  	var choice1_action1 = createAction2("ExtChoiceAction", choice1_action1_left, choice1_action1_right);
 
-//	var choice1 = createAction2("SeqAction", choice1_action1, "trans".createCallAction());
-	var choice1 = createAction2("SeqAction", choice1_action1, ("Trans_"+self.FQN()).createCallAction());
+//  Because the Trans recursion is pushed into each choice, this seqAction below is no longer needed.
+//	var choice1 = createAction2("SeqAction", choice1_action1, ("Trans_"+self.FQN()).createCallAction());
 	
 	/* Start of Choice 2 creation*/
 	//Stop /\ (exit -> Skip)
@@ -5189,15 +5229,46 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 	//terminate -> Skip
 	var choice3 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
 		
-	var trans = createAction2("ExtChoiceAction", choice1, createAction2("ExtChoiceAction", choice2, choice3));
+	var trans = createAction2("ExtChoiceAction", choice1_action1, createAction2("ExtChoiceAction", choice2, choice3));
 	("trans: "+trans).println();
 	
+	//to introduce assumption condition, i.e. to change trans(n) into if inv then trans(n) else aviol -> trans(n)
+	//by creating an IfGuardedCommand 
+	
+	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables in HOL-CSP models
+	var if_pred = createTruePred();
+	
+	//if true then continue to behave as trans
+	var ifAction = createGuardedAction(if_pred, trans) ;
+	
+	var else_pred = createFalsePred();
+	
+	//elseif false then aviol -> Trans(n)
+	var elseAction = createPrefixingAction(createSynchCommunication("aviol"), ("Trans_" + self.FQN()).createCallAction(Sequence{"n"}.createRefExprSeq(false,false)));
+	elseAction = createGuardedAction(else_pred, elseAction);
+	
+	var actions = Sequence{ifAction, elseAction};
+	
+	
+	var trans_action = createIFGuardedCommand(actions);
+	
+
+
+
+
 	
 	var vguards = self.vguards(); 
 	"line309".println();
 	vguards.println();
-	var Trans = readStateA(vguards, trans);
-	return Trans.createActionPara("Trans_"+self.FQN());
+	
+	var Trans = new Z!ParamAction;
+	Trans.isParamCommand = true;
+	Trans.circusAction = readStateA(vguards, trans_action);
+	Trans.declList = new Z!ZDeclList;
+	Trans.declList.decls.add(createVarDeclfromString("n", "NIDS_"+self.FQN()));
+	
+
+	return Trans.createActionPara("Trans_" + self.FQN());
 	
 	
 	//Trans is an actioin and can not be a process, because it will be prefixed.
@@ -5225,11 +5296,23 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 
 }
 
+operation createTruePred(): Z!TruePred{
+	var p = new Z!TruePred;
+	return p;
+}
 
+operation createFalsePred(): Z!FalsePred{
+	var p = new Z!FalsePred;
+	return p;
+}
 //CSP Rule 54
 //to create circus action for each transition
 operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 	var circusAction;
+	
+	//"n = src"
+	var src_grd_pred = createMemPredEquality("n", "NID_" + self.source.FQN());
+	
 	if(self.source.type().name = "State"){
 					
 		//action1: trigger; action2: interruptAction1 ; action3: interruptAction(SStop, SeqAction )
@@ -5248,7 +5331,7 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		
 		
 		//to create action3_inner_2: enter
-		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), createSkipAction());
+		var action3_inner_2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), ("Trans_" + nc(self).FQN()).createCallAction(Sequence{"NID_" + self.target.FQN()}.createRefExprSeq(false,false))  );
 		
 		var action3_right = createAction2("SeqAction", action3_inner_1, action3_inner_2);
 		
@@ -5258,6 +5341,7 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		
 		circusAction = createAction2("SeqAction", action1, createAction2("SeqAction", action2, action3));
 		
+		
 		if(self.condition != null){
 			
 			("line 2419,  self.condition.eContainer() = " + self.condition.eContainer()).println(); 
@@ -5265,7 +5349,8 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 			("line 2419,  self.condition.type() = " + self.condition.type()).println();
 			var pred = self.condition.createExpr().createMemPredEquality();
 			circusAction = createGuardedAction(pred, circusAction);
-		} 
+		}
+		
 	} else 
 	
 	if(self.source.type().name != "State"){
@@ -5278,16 +5363,19 @@ operation RC!Transition createTransitionAsCircusAction(): Z!CircusAction{
 		var action1 = createPrefixingAction(tevent(self), prefixedAction);
 		
 		
-		var action2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), createSkipAction());
+		var action2 = createPrefixingAction(createSynchCommunication("enter_" + self.target.FQN()), ("Trans_" + nc(self).FQN()).createCallAction(Sequence{"NID_" + self.target.FQN()}.createRefExprSeq(false,false)));
 		
 		circusAction = createAction2("SeqAction", action1, action2);
-				
+		
 		if(self.condition != null){
 			var pred = self.condition.createExpr().createMemPredEquality();
+			
 			circusAction = createGuardedAction(pred, circusAction);
 		} 
 	} 
 	
+	//the line below is to introduce an extra guard "n = source node"
+	circusAction = createGuardedAction(src_grd_pred, circusAction); 
 	return circusAction;
 }
 
@@ -5321,7 +5409,21 @@ operation RC!Variable createMemPredEquality(): Z!MemPred{
 	return pred;
 }
 
-
+//used in Rule 54 for introducing new guard: n = src
+//equality is s relation operator application (C.5.12): MemPred
+//l = "n"
+//r = src node name
+operation createMemPredEquality(l: String, r: String): Z!MemPred{
+	var pred =  new Z!MemPred;
+	pred.leftExpr = l.createRefExpr(false,false);
+	
+	var set = Set{r.createRefExpr(false,false)};
+	pred.rightExpr = set.createSetExpr();
+	
+	pred.mixFix = true;
+	
+	return pred;
+}
 operation  Set<Z!Expr> createSetExpr(): Z!SetExpr{
 	var setExpr = new Z!SetExpr;
 	var exprList = new Z!ZExprList;
@@ -5973,12 +6075,12 @@ operation RC!Transition createTrActionAsCircusAction(): Z!CircusAction{
 
 
 
-//CSP Rule 62
+//CSP Rule 62, this is only used in Rule 65
 operation readState(varSet: Set<String>, action: Z!CircusAction):Z!CircusAction{
 	if(varSet.size()=0){
 		return action;
 	} else {
-		
+			
 		var var_name = varSet.at(0);
 
 		var commu = createInputCommunication("get_"+var_name, var_name);
@@ -6124,8 +6226,36 @@ operation createSynchCommunication(
 
 //CSP Rule 65
 operation RC!Statement createStmtInContextAsAction(): Z!CircusAction{
-
-	return readState(usedVariables(self), self.createStmtAsAction());
+	var action1 = self.createStmtAsAction();
+	
+	if(usedVariables(self).size()=0){
+		return readState(usedVariables(self), action1);
+	} else
+	//an extra step introduced to change action1 into "if inv_on_usedVariables(self) then action else aviol -> action"
+	//to introduce assumption condition, i.e. to change action into if inv then action else aviol -> action
+	//by creating an IfGuardedCommand 
+	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables whose values are read
+	{
+		var if_pred = createTruePred();
+		
+		//if true then continue to behave as action itself
+		var ifAction = createGuardedAction(if_pred, action1) ;
+		
+		var else_pred = createFalsePred();
+		
+		//if false then aviol -> action
+		var action2 = self.createStmtAsAction();
+		var elseAction = createPrefixingAction(createSynchCommunication("aviol"), action2);
+		elseAction = createGuardedAction(else_pred, elseAction);
+		
+		var actions = Sequence{ifAction, elseAction};
+		
+		var ifguard_action = createIFGuardedCommand(actions);
+		
+	//	return readState(usedVariables(self), action);// we replace action with ifguard_action to introduce assumption for read vars 
+		return readState(usedVariables(self), ifguard_action);
+	
+	}
 }
 
 //CSP Rule 65_1
@@ -6175,7 +6305,32 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	var rightAction = createPrefixingAction(prefix, createSkipAction());
 	//PrefixingAction is a type of Action1, so can not use createAction2()
 
-	var circusAction = createAction2("InterruptAction", leftAction, rightAction);
+
+	//to introduce guarantee condition for writing var values, i.e. to change rightAction from
+	// "set_vid(s.left)![[s.right]]expr -> Skip" 
+	// TO 
+	// "if inv then (set_vid(s.left)![[s.right]]expr -> Skip) else gviol -> STOP
+	// by creating an IfGuardedCommand (similar to the changes of Rule 53)
+	
+	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables in HOL-CSP models
+	var if_pred = createTruePred();
+	
+	//if true then continue to behave as rightAction, i.e., write the value
+	var ifAction = createGuardedAction(if_pred, rightAction) ;
+	
+	var else_pred = createFalsePred();
+	
+	//elseif false then gviol -> STOP
+	var elseAction = createPrefixingAction(createSynchCommunication("gviol"), createStopAction());
+	elseAction = createGuardedAction(else_pred, elseAction);
+	
+	var actions = Sequence{ifAction, elseAction};
+	
+	
+	var right_action = createIFGuardedCommand(actions);
+	
+	
+	var circusAction = createAction2("InterruptAction", leftAction, right_action);
 	
 	
 	//if assignment.right is a function call, and the function has a precondition, then circusAction should be guarded with function.precondition
@@ -6206,6 +6361,10 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	return circusAction;
 }
 
+operation createStopAction(): Z!StopAction{
+	var a = new Z!StopAction;
+	return a;
+}
 
 operation createAndExpr(
 	l:Z!Expr,
@@ -6248,16 +6407,29 @@ operation RC!IfStmt createIfStmtAsAction(): Z!IfGuardedCommand{
 	
 	var ifActionInContext = createGuardedAction(if_pred, self.then.createStmtInContextAsAction());
 	
-	var else_expr = new RC!Not;
-	else_expr.exp = clone(if_expr);
-	//else_pred.exp = self.expression;
-
-	var pred_else = else_expr.createExpr().createMemPredEquality();
+	var actions;
 	
-	var elseActionInContext = createGuardedAction(pred_else, self.`else`.createStmtInContextAsAction());
+//	RoboChart allow else to be not defined
+//	e.g.,transition t1 {
+//		  from s0
+//		  to s1
+//	      action if true then a end, or
+//	      action if true then a else b end, or
+//        action if true then a else if bl then b else c end end 
+//        action if true then a else (if bl then b else c end) end }
+	if(self.`else`.isDefined()){
+		var else_expr = new RC!Not;
+		else_expr.exp = clone(if_expr);
+		//else_pred.exp = self.expression;
 	
-	var actions = Sequence{ifActionInContext, elseActionInContext};
-	
+		var pred_else = else_expr.createExpr().createMemPredEquality();
+		
+		var elseActionInContext = createGuardedAction(pred_else, self.`else`.createStmtInContextAsAction());
+		
+		actions = Sequence{ifActionInContext, elseActionInContext};
+	} else {
+		actions = Sequence{ifActionInContext};
+	}
 	
 	var action = createIFGuardedCommand(actions);
 	
@@ -6267,9 +6439,9 @@ operation RC!IfStmt createIfStmtAsAction(): Z!IfGuardedCommand{
 
 operation createIFGuardedCommand(actions: Sequence<Z!GuardedAction>): Z!IfGuardedCommand{
 	var action = new Z!IfGuardedCommand;
-	action.actionList = new Z!CircusActionList;
-	action.actionList.circusActions = actions;
-	
+//	action.actionList = new Z!CircusActionList;
+//	action.actionList.circusActions = actions;
+	action.circusActions = actions;
 	return action;
 }
 
@@ -6660,7 +6832,7 @@ operation OrderedSet<Any> createSeqAsAction(): Z!CircusAction{
 		return null; //TO DO: need to confirm
 	} else
 	if(seq.size()= 1){
-		//return seq.at(0).createStmtAsAction();
+
 		return seq.at(0).createStmtInContextAsAction();
 		
 	} else	
@@ -6669,6 +6841,7 @@ operation OrderedSet<Any> createSeqAsAction(): Z!CircusAction{
 		var leftAction = seq.at(0).createStmtInContextAsAction();
 		seq.removeAt(0);
 		var rightAction = seq.createSeqAsAction();
+		"line 6672".println();
 		return createAction2("SeqAction", leftAction, rightAction);
 
 	}
@@ -7219,6 +7392,8 @@ operation RC!Expression createExpr():Z!Expr{
 	if(self.isTypeOf(RC!TupleExp)){
 			return self.createTupleExpr();
 		} 
+		else
+		{}
 		
 	//TO DO
 /*	if(self.isTypeOf(RC!IfExpression)  or 

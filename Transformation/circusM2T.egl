@@ -453,10 +453,15 @@ end
 	return field_str;
 }%]
 
+
 [*In EOL for general RoboChart, condition and guards are transformed into MemPred. However, in ANN version, AndPred is used.*]
 [%operation Z!MemPred parseMemPred(): String{
 	if(self.mixFix = true){
-		return self.leftExpr.parseExpr();
+		if(self.rightExpr.parseExpr() =  "True"){
+			return "(" + self.leftExpr.parseExpr() + ")";
+		} else{
+		return "(" + self.leftExpr.parseExpr() + " = " + self.rightExpr.parseExpr() + ")";
+		}
 	}
 }%] 
 
