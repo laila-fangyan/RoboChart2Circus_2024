@@ -104,7 +104,7 @@ Rule 54:
 (2) "n = src" added as guard in Rule 54 for each transition
 
 This parameterization is only for Trans, other actions are not affected.
-IsaCircus will need this parameterization as well later on.
+IsaCircus will need this parameterization as well later on, so we use only one version M2M to generate Circusfor both HOL-CSP and IsaCircus.
 
 07.05.2025
 ******************************/
@@ -2662,7 +2662,7 @@ operation sharedVarMemory(stm: RC!Context): Z!ActionPara{
 
 
 //Rule 35 
-/*this is different from the manual in two ways
+/*this is different from the RoboChart manual in two ways
 1. the main body is moved to function IndividualVarMemory
 2. the initial or default value of the variable is assigned in Rule according to the manual, but in CSPM code, it is assigned when Memory(v) is called in varMemory; So to be consistent with CSPM, the within part in Rule 35 of manual is moved to Rule 31 here above.
 
@@ -2684,7 +2684,7 @@ operation Memory(v: RC!Variable,stm: RC!Context): Z!ActionPara{
 					set_a?x__ -> Memory_a(x__)
 					[]
 					terminate -> SKIP  ??
-Memory_a(0) is an action whose name is Memory_a, parameter is a RC!Expression 0 in this case
+Memory_a(0) is an action whose name is Memory_a, parameter is a RC!Expression, 0 in this case
 */
 
 /*e.g., Memory_a(0) where

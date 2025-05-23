@@ -1,3 +1,7 @@
+[*19052025
+parseIfGuardedCommand udpated to (1) process assumption-guarantee (2) properly parse nested IFStmt
+????????????????*]
+
 theory [%=z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).name%]_Circus 
 	imports Axiomatic_Circus
 begin
@@ -74,10 +78,11 @@ for(chanpara in channelparas){%]
 		var chans = chandecl.channelNameList.names;%]
 
 		[%for(chan in chans){%]
-[%=chan.word%] [*[%if(chandecl.expr.name.word = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.name.word = "Value"){%]real[%}else{%][%=chandecl.expr.name.word%][%}}*][%if(chandecl.expr.parseExpr() = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.parseExpr() = "Value"){%]real[%} else {%]"[%=chandecl.expr.parseExpr()%]"[%}}%]
+[%=chan.word%] [*[%if(chandecl.expr.name.word = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.name.word = "Value"){%]real[%}else{%][%=chandecl.expr.name.word%][%}}*]
+[%if(chandecl.expr.parseExpr() = "SYNCH"){%] :: unit [%} else{%] :: [%if(chandecl.expr.parseExpr() = "Value"){%]real[%} else {%]"[%=chandecl.expr.parseExpr()%]"[%}}if(hasMore){%] [%}%]
 
-		[%}
-	}%]
+		[%}if(hasMore){%] |[%}
+	}if(hasMore){%] |[%}%]
 	
 [%}%]
 
@@ -132,13 +137,18 @@ definition "ProcDef = cProcess [%= procpara.name.word%].ProcDef"
 
 end
 [%}%]
- 
+
 [%var actparas = z.eContents.select(s|s.instanceOf(Z!ZSect)).at(0).paraList.paras.select(s|s.instanceOf(Z!ActionPara));
 if(procparas.size()=0 and actparas.size()>0){%]
+abbreviation "assume b Q P \<equiv> (if b then P else aviol \<rightarrow> Q)"
+abbreviation "guar b P \<equiv> (if b then P else gviol \<rightarrow> STOP)"
+
 actions  is "(mychan, unit) action" where 
 "SSTOP = share  \<rightarrow>  SSTOP" |
-[%for(actpara in actparas){%]
-" [%= actpara.name.word%] = 
+[%for(actpara in actparas){
+	if(actpara.circusAction.instanceOf(Z!ParamAction)){%]
+" [%= actpara.name.word%]([%=actpara.circusAction.declList.parseZDeclList()%]) = [%} else {%]
+" [%= actpara.name.word%] = [%}%]
 	[%=actpara.circusAction.parseAction()%] "
 
 [%}%]
@@ -146,6 +156,28 @@ end
 [%}%]
 
 
+[%operation Z!ZDeclList parseZDeclList(): String{
+	var list_str : String;
+
+	for(decl in self.decls){
+	
+		if(decl.isTypeOf(Z!VarDecl)){
+			
+			for(vname in decl.nameList.names){
+				list_str = list_str + vname.parse();
+				if(hasMore){
+					list_str = list_str + ",";
+				}
+			}
+		}
+		
+		
+		if (hasMore){
+			list_str = list_str + ",";
+		}
+	}
+	return list_str;
+}%]  
 
 [%operation Z!CircusProcess parseProc(): String{
 	if(self.instanceOf(Z!HideProcess)){
@@ -275,6 +307,58 @@ end
 	if(self.instanceOf(Z!RenameAction)){
 		return self.parseRenameAction();
 	} 
+	if(self.instanceOf(Z!StopAction)){
+		return "STOP";
+	}
+	if(self.instanceOf(Z!IfGuardedCommand)){
+		return self.parseIfGuardedCommand();
+	}
+}%]
+
+[%operation Z!IfGuardedCommand parseIfGuardedCommand(): String{
+	var guarded_actions = self.circusActions;
+	var size = self.circusActions.size();
+	var string = new String;
+	
+	//this IfGuardCommand is introduced FOR assumption-guarantee, and is not derived from RoboChart ifStmt
+	if(size = 2 and 
+	   guarded_actions.at(0).pred.isTypeOf(Z!TruePred) and 
+	   guarded_actions.at(1).pred.isTypeOf(Z!FalsePred) and 
+	   guarded_actions.at(1).circusAction.isTypeOf(Z!PrefixingAction) and
+	   guarded_actions.at(1).circusAction.communication.commPattern = Z!CommPattern#Synch and
+	   (guarded_actions.at(1).circusAction.communication.channelExpr.name.word = "aviol" or
+	    guarded_actions.at(1).circusAction.communication.channelExpr.name.word = "gviol")){
+	   
+	   if(guarded_actions.at(1).circusAction.communication.channelExpr.name.word = "aviol"){
+	   		// assume inv Trans(n) (...)
+	   		//guarded_actions.at(0).pred = TruePred, so print out True directly instead of parsePred
+	   		return "(assume True (" + guarded_actions.at(1).circusAction.circusAction.parseAction() + ") " + guarded_actions.at(0).circusAction.parseAction() + ")";
+	   } else if(guarded_actions.at(1).circusAction.communication.channelExpr.name.word = "gviol"){
+	   		// guar inv (set_v!3 -> Skip)
+	   		return "(guar True " + guarded_actions.at(0).circusAction.parseAction() + ")";
+	   }
+	} 
+	
+	
+	//this is for the case of IfGuardCommand that is derived from RoboChart ifStmt 	
+	//	RoboChart allow else to be not defined
+//	e.g.,transition t1 {
+//		  from s0
+//		  to s1
+//	      action if true then a end, or
+//	      action if true then a else b end, or
+//        action if true then a else if bl then b else c end end, or
+//        action if true then a else (if bl then b else c end) end, or
+//        action if true then if bl then b else c end  end }
+	else {
+		string = "(if " + guarded_actions.at(0).pred.parseMemPred() + "then " + guarded_actions.at(0).circusAction.parseAction() ;
+		if(size = 2){
+			string = string + "else" + guarded_actions.at(1).circusAction.parseAction();
+		}
+		return string + ")";
+			
+	}
+
 }%]
 
 
@@ -599,7 +683,11 @@ end
 	} //else 
 	
 	if(self.isTypeOf(Z!RefExpr) and self.explicit = false and self.mixFix = false){//create RefExpr as Reference: explicit = false, mixFix = false
-		return self.name.word;
+		if(self.name.word = "boolean"){
+			return "bool";
+		} else {
+			return self.name.word;
+		}
 	} //else 
 	
 	if(self.isTypeOf(Z!RefExpr) and self.explicit = true and self.mixFix = true){//create RefExpr as Generic Operator Application: explicit = true, mixFix = true. Currently only channel type Seq(type) falls into this case 
