@@ -1,0 +1,28 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 26-01-2026 10:48:47
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "ex2.csp"
+
+-- generate ex2_stm3
+P_ex2_stm3 = let
+	id__ = 0
+	
+	
+	
+within
+	ex2::stm3::O__(
+		id__
+	)
+assert P_ex2_stm3 :[deadlock-free]	
+assert P_ex2_stm3;RUN({r__}) :[deadlock-free]
+assert P_ex2_stm3 :[deterministic]
+assert P_ex2_stm3 :[divergence-free]
+
+
+

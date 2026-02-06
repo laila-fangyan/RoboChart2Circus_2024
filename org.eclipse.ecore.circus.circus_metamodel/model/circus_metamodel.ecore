@@ -757,8 +757,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CircusGuardedCommand" abstract="true"
       eSuperTypes="#//CircusCommand">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="actionList" eType="#//CircusActionList"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="circusActions" upperBound="-1"
+        eType="#//GuardedAction" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IfGuardedCommand" eSuperTypes="#//CircusGuardedCommand"/>
   <eClassifiers xsi:type="ecore:EClass" name="DoGuardedCommand" eSuperTypes="#//CircusGuardedCommand"/>
@@ -997,7 +997,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TupleSelExpr" eSuperTypes="#//Expr1">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="numeral" eType="#//Numeral"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="numeral" eType="#//ZNumeral"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Expr2" abstract="true" eSuperTypes="#//Expr">

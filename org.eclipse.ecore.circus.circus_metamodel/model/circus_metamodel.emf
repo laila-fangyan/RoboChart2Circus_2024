@@ -12,9 +12,6 @@ abstract class Term {
 	
 }
 
-
-
-
 /*************************************
            Ann
 *************************************/
@@ -1069,7 +1066,8 @@ class VarDeclCommand extends CircusCommand {
 }
 
 abstract class CircusGuardedCommand extends CircusCommand {
-	val CircusActionList actionList;
+//	val CircusActionList actionList;
+	val GuardedAction[*] circusActions;
 
 }
 
@@ -1408,7 +1406,7 @@ class ThetaExpr extends Expr1 {
 }
 
 class TupleSelExpr extends Expr1 {
-	val Numeral numeral;
+	val ZNumeral numeral;
 }
 
 

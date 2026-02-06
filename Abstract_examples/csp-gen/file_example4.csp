@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 15-05-2025 10:22:13
+-- Automatically generated on 23-01-2026 11:22:18
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -10,12 +10,25 @@
 include "defs/file_example3_defs.csp"
 include "defs/file_example4.csp"
 include "defs/file_example1_ddl_defs.csp"
-include "defs/robochart_defs.csp"
 include "defs/state_defs.csp"
 include "defs/core_defs.csp"
 include "defs/file_example2_defs.csp"
 include "defs/file_example1_ddlfree_defs.csp"
 include "defs/file_example4_defs.csp"
+include "defs/file_example_interlock_evt_ddlk_defs.csp"
+include "defs/file_example9_defs.csp"
+include "defs/file_example9_empty_stm_defs.csp"
+include "defs/file_example_robot2_defs.csp"
+include "defs/file_example_robot_DDLK_defs.csp"
+include "defs/file_example8_defs.csp"
+include "defs/robochart_defs.csp"
+include "defs/file_example_interlock_evt_within_stm_ddlk_defs.csp"
+include "defs/file_example7_defs.csp"
+include "defs/file_example_robot_defs.csp"
+include "defs/file_example1_ddlf_no_final_defs.csp"
 include "defs/file_example5_defs.csp"
 include "instantiations.csp"
+include "defs/file_example_interlock_var_ddlk_defs.csp"
+include "defs/file_example6_defs.csp"
+include "defs/file_example_interlock_evt_ddlk_to_fix_defs.csp"
 channel r__

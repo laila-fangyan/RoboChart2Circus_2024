@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 15-05-2025 10:22:14
+-- Automatically generated on 23-01-2026 11:22:16
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -77,12 +77,12 @@ exports
 	localClockResets = {||}
 	
 	
-	channel get_CLID_s0 : core_clock_type 
 	channel get_CLID_s2 : core_clock_type 
+	channel get_CLID_s0 : core_clock_type 
 	channel get_CLID_s1 : core_clock_type 
 	--channel increment__
 	
-	CLID_s0_clock_type(id__) = 
+	CLID_s2_clock_type(id__) = 
 		let
 			max = (clock_type_max(Union({
 	}))+1)
@@ -90,7 +90,7 @@ exports
 	within
 		if member(max,core_clock_type) then ctype else error("core_clock_type is not wide enough")
 	
-	CLID_s2_clock_type(id__) = 
+	CLID_s0_clock_type(id__) = 
 		let
 			max = (clock_type_max(Union({
 	}))+1)
@@ -414,7 +414,7 @@ exports
 				 [] dbisim((true)&(internal__!NID_i0 -> SKIP ;  ((SKIP ; s0::enter -> SKIP))))
 				 [] dbisim((true)&(a__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s1::enter -> SKIP)))
 				 [] dbisim((true)&(b__!NID_s1.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s0::enter -> SKIP)))
-				 [] dbisim((true)&(a__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s2::enter -> SKIP)))
+				 [] dbisim((true)&(b__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s2::enter -> SKIP)))
 				 []
 				 (interrupt -> share__choice(exit -> SKIP) ; share__choice(exited -> terminate -> SKIP))
 				 []
@@ -451,7 +451,7 @@ exports
 						-- IMPLEMENTATION NOTE: the channel set 'enter' is calculated explicitly
 						-- because CSPM modules are used for the semantics of Node.
 						flowevts = union(enterSS,{|exit,exited,interrupt|})
-						transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,a__.NID_s0.in|}
+						transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,b__.NID_s0.in|}
 					within
 						((
 						 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
@@ -466,7 +466,7 @@ exports
 						   )
 						   )
 						 )
-						 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,a__.NID_s0.in|}]]
+						 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,b__.NID_s0.in|}]]
 						 [[s1::interrupt <- x__ | x__ <- {|interrupt,b__.NID_s1.in|}]]
 						 [[s2::interrupt <- x__ | x__ <- {|interrupt|}]]
 						 [[i0::interrupt <- x__ | x__ <- {|internal__.NID_i0|}]]
@@ -499,7 +499,7 @@ exports
 		
 		Behaviour(id__) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_s0,s0::entered,get_CLID_s2,s2::entered,get_CLID_s1,s1::entered|}
+				stateClockSync = {|get_CLID_s2,s2::entered,get_CLID_s0,s0::entered,get_CLID_s1,s1::entered|}
 			 within
 				(MachineBody(id__) [| union(stateClockSync,{terminate}) |] StateClocks(id__)) \ union(stateClockSync,enteredSS)
 			)
@@ -507,7 +507,7 @@ exports
 		
 		IteratedBehaviour(id__) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_s0,s0::entered,get_CLID_s2,s2::entered,get_CLID_s1,s1::entered|}
+				stateClockSync = {|get_CLID_s2,s2::entered,get_CLID_s0,s0::entered,get_CLID_s1,s1::entered|}
 			 within
 				(dbisim(
 					sbisim(
@@ -520,13 +520,13 @@ exports
 										dbisim(Clock_CLID_s1(id__,0))
 									)\{|get_CLID_s1|}
 								)
-								[| {|get_CLID_s2,s2::entered,terminate|} |]
-								dbisim(Clock_CLID_s2(id__,0))
-							)\{|get_CLID_s2|}
+								[| {|get_CLID_s0,s0::entered,terminate|} |]
+								dbisim(Clock_CLID_s0(id__,0))
+							)\{|get_CLID_s0|}
 						)
-						[| {|get_CLID_s0,s0::entered,terminate|} |]
-						dbisim(Clock_CLID_s0(id__,0))
-					)\{|get_CLID_s0|}
+						[| {|get_CLID_s2,s2::entered,terminate|} |]
+						dbisim(Clock_CLID_s2(id__,0))
+					)\{|get_CLID_s2|}
 				)
 				) \ union(stateClockSync,enteredSS)
 			)
@@ -569,7 +569,7 @@ exports
 						-- IMPLEMENTATION NOTE: the channel set 'enter' is calculated explicitly
 						-- because CSPM modules are used for the semantics of Node.
 						flowevts = union(enterSS,{|exit,exited,interrupt|})
-						transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,a__.NID_s0.in|}
+						transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,b__.NID_s0.in|}
 					within
 						((
 						 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
@@ -584,7 +584,7 @@ exports
 						   )
 						   )
 						 )
-						 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,a__.NID_s0.in|}]]
+						 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,b__.NID_s0.in|}]]
 						 [[s1::interrupt <- x__ | x__ <- {|interrupt,b__.NID_s1.in|}]]
 						 [[s2::interrupt <- x__ | x__ <- {|interrupt|}]]
 						 [[i0::interrupt <- x__ | x__ <- {|internal__.NID_i0|}]]
@@ -617,7 +617,7 @@ exports
 		
 		Behaviour_VS_O(id__) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_s0,s0::entered,get_CLID_s2,s2::entered,get_CLID_s1,s1::entered|}
+				stateClockSync = {|get_CLID_s2,s2::entered,get_CLID_s0,s0::entered,get_CLID_s1,s1::entered|}
 			 within
 				(MachineBody_VS_O(id__) [| union(stateClockSync,{terminate}) |] StateClocks(id__)) \ diff(union(stateClockSync,enteredSS),enteredSS)
 			)
@@ -625,7 +625,7 @@ exports
 		
 		IteratedBehaviour_VS_O(id__) = 
 			dbisim((let
-				stateClockSync = {|get_CLID_s0,s0::entered,get_CLID_s2,s2::entered,get_CLID_s1,s1::entered|}
+				stateClockSync = {|get_CLID_s2,s2::entered,get_CLID_s0,s0::entered,get_CLID_s1,s1::entered|}
 			 within
 				(dbisim(
 					sbisim(
@@ -638,13 +638,13 @@ exports
 										dbisim(Clock_CLID_s1(id__,0))
 									)\{|get_CLID_s1|}
 								)
-								[| {|get_CLID_s2,s2::entered,terminate|} |]
-								dbisim(Clock_CLID_s2(id__,0))
-							)\{|get_CLID_s2|}
+								[| {|get_CLID_s0,s0::entered,terminate|} |]
+								dbisim(Clock_CLID_s0(id__,0))
+							)\{|get_CLID_s0|}
 						)
-						[| {|get_CLID_s0,s0::entered,terminate|} |]
-						dbisim(Clock_CLID_s0(id__,0))
-					)\{|get_CLID_s0|}
+						[| {|get_CLID_s2,s2::entered,terminate|} |]
+						dbisim(Clock_CLID_s2(id__,0))
+					)\{|get_CLID_s2|}
 				)
 				) \ diff(union(stateClockSync,enteredSS),enteredSS)
 			)
@@ -691,13 +691,6 @@ exports
 		
 		clockSync = {||}
 		
-		Clock_CLID_s0(id__,x__) = 
-			TimeOut_1(
-				s0::entered -> Clock_CLID_s0(id__,0)
-				[]
-				get_CLID_s0!x__ -> Clock_CLID_s0(id__,x__)
-				[]
-				terminate -> SKIP,Clock_CLID_s0(id__,clock_type_plus(x__,1,CLID_s0_clock_type(id__))))
 		Clock_CLID_s2(id__,x__) = 
 			TimeOut_1(
 				s2::entered -> Clock_CLID_s2(id__,0)
@@ -705,6 +698,13 @@ exports
 				get_CLID_s2!x__ -> Clock_CLID_s2(id__,x__)
 				[]
 				terminate -> SKIP,Clock_CLID_s2(id__,clock_type_plus(x__,1,CLID_s2_clock_type(id__))))
+		Clock_CLID_s0(id__,x__) = 
+			TimeOut_1(
+				s0::entered -> Clock_CLID_s0(id__,0)
+				[]
+				get_CLID_s0!x__ -> Clock_CLID_s0(id__,x__)
+				[]
+				terminate -> SKIP,Clock_CLID_s0(id__,clock_type_plus(x__,1,CLID_s0_clock_type(id__))))
 		Clock_CLID_s1(id__,x__) = 
 			TimeOut_1(
 				s1::entered -> Clock_CLID_s1(id__,0)
@@ -713,15 +713,15 @@ exports
 				[]
 				terminate -> SKIP,Clock_CLID_s1(id__,clock_type_plus(x__,1,CLID_s1_clock_type(id__))))
 		
-		StateClocks(id__) = dbisim(Clock_CLID_s0(id__,0))
+		StateClocks(id__) = dbisim(Clock_CLID_s2(id__,0))
 		[| { terminate } |] (
-		dbisim(Clock_CLID_s2(id__,0))
+		dbisim(Clock_CLID_s0(id__,0))
 		[| { terminate } |] (
 		dbisim(Clock_CLID_s1(id__,0))
 		)
 		)
 		
-		stateClockSync = {|get_CLID_s0,s0::entered,get_CLID_s2,s2::entered,get_CLID_s1,s1::entered|}
+		stateClockSync = {|get_CLID_s2,s2::entered,get_CLID_s0,s0::entered,get_CLID_s1,s1::entered|}
 		
 		-- Shared memory
 		-- Shared memory variables

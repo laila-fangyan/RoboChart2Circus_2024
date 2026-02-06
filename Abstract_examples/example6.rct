@@ -1,0 +1,45 @@
+/********************************
+ * THIS example is to test the ddl due to uncovered possibility of the transition conditions
+ * 19/06/2025
+ * 
+ * FDR deadlock check: pass when t2.cond vv<1/2/3
+ * 					   fail when t2.cond vv<0
+ * WHY?
+*******************************/
+
+stm stm6 {
+	var v : int  =5
+	var bl: boolean
+	event a
+	event b
+	event c
+	initial i0
+	state s0 {
+	}
+	state s1 {
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to s1
+		action b
+		
+	}
+	transition t2 {
+		from s1
+		to s0
+		condition v < 0
+		action a
+	}
+	transition t3 {
+		from s1
+		to s0
+		condition v > 6
+		action c
+	}
+
+}
+

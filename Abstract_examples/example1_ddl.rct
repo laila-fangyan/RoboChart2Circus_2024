@@ -27,7 +27,8 @@ event c
 	transition t3 {
 		from s0
 		to s2
-		trigger a
+		trigger 
+	b
 	}
 }
 

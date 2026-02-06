@@ -1,0 +1,32 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:15
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "core_defs.csp"
+include "file_example_interlock_var_ddlk_defs.csp"
+include "state_defs.csp"
+include "robot_var_interlock_stm0.csp"
+include "robochart_defs.csp"
+include "../instantiations.csp"
+channel r__
+-- generate robot_var_interlock_stm0
+P_robot_var_interlock_stm0 = let
+	id__ = 0
+	
+	const_robot_var_interlock_stm0_dest = 0
+	
+	
+within
+	robot_var_interlock_stm0::O__(
+		id__,
+		const_robot_var_interlock_stm0_dest
+	)
+assert P_robot_var_interlock_stm0 :[deadlock-free]	
+assert P_robot_var_interlock_stm0;RUN({r__}) :[deadlock-free]
+assert P_robot_var_interlock_stm0 :[deterministic]
+assert P_robot_var_interlock_stm0 :[divergence-free]

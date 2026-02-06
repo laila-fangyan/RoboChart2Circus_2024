@@ -1,0 +1,61 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:18
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_example_robot2_defs.csp"
+include "core_timed_defs.csp"
+include "core_defs.csp"
+include "ObsDetector.csp"
+include "state_timed_defs.csp"
+include "robochart_defs.csp"
+include "../instantiations.csp"
+
+transparent wbisim
+channel r__
+-- generate ObsDetector
+P_ObsDetector = let
+	id__ = 0
+	
+	
+	
+		
+within
+	ObsDetector::O__(id__,
+			    const_ObsDetector_dest)
+
+assert P_ObsDetector :[deadlock-free]	
+assert P_ObsDetector;RUN({r__}) :[deadlock-free]
+assert P_ObsDetector :[deterministic]
+assert P_ObsDetector :[divergence-free]
+
+-- generate ObsDetector_ObsDetect
+P_ObsDetector_ObsDetect = let
+	id__ = 0
+	
+	const_ObsDetector_ObsDetect_dest = 0
+	
+	
+within
+	ObsDetector::ObsDetect::O__(
+		id__,
+		const_ObsDetector_ObsDetect_dest
+	)
+assert P_ObsDetector_ObsDetect :[deadlock-free]	
+assert P_ObsDetector_ObsDetect;RUN({r__}) :[deadlock-free]
+assert P_ObsDetector_ObsDetect :[deterministic]
+assert P_ObsDetector_ObsDetect :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_ObsDetector_ObsDetect[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_ObsDetector_ObsDetect
+-- timed deadlock free
+assert prioritise(P_ObsDetector[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_ObsDetector

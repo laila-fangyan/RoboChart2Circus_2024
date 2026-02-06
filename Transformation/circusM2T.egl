@@ -678,8 +678,11 @@ end
 		return self.parseSequence();
 	} //else
 	
-	if(self.isTypeOf(Z!ApplExpr) and self.mixFix = false){//this is a RC!CallExpr
-		return self.parseApplExprAsCallExpr();
+	if(self.isTypeOf(Z!ApplExpr) and self.mixFix = false){
+		if(self.rightExpr.isTypeOf(Z!TupleExpr)){//this is a RC!CallExpr
+			return self.parseApplExprAsCallExpr();}
+		if(self.rightExpr.isTypeOf(Z!NumExpr)){//this is a RC!Array to represent a sequence member
+			return self.parseApplExprAsSeqMember();}
 	} //else 
 	
 	if(self.isTypeOf(Z!RefExpr) and self.explicit = false and self.mixFix = false){//create RefExpr as Reference: explicit = false, mixFix = false
@@ -718,6 +721,11 @@ end
 	
 	if(self.isTypeOf(Z!SetExpr)){
 		return self.parseSetExpr();
+	}
+	
+	//parsed as a tuple member
+	if(self.isTypeOf(Z!TupleSelExpr)){
+		return self.parseTupleSelExpr();
 	}
 	
 }%]
@@ -780,6 +788,13 @@ end
 }%]
 
 
+[%operation Z!ApplExpr parseApplExprAsSeqMember(): String{
+	var str : String;
+
+	str = self.leftExpr.parseExpr() + " ! " + self.rightExpr.numeral.value;
+
+	return str;
+}%]
 [%operation Z!TupleExpr parseTupleExpr(): String{
 	var tup_str : String;
 	for(expr in self.exprList.exprs){
@@ -792,6 +807,23 @@ end
 	return "(" + tup_str + ")";
 }%]
 
+
+[*to parse the TupleSelExpr as a member of tuple in RoboChart*]
+[*TO DO: 
+(1) only tuple with two members are implemented here, for tuple with more than 2, is not covered
+*]
+[%operation Z!TupleSelExpr parseTupleSelExpr(): String{
+	var  str : String;
+
+	if(self.numeral.value = 1){
+		str = "fst " + self.expr.name.word;
+	}
+	if(self.numeral.value = 2){
+		str = "snd " + self.expr.name.word;
+	}
+	
+	return "(" + str + ")";
+}%]
 
 [%operation Z!ApplExpr parseLessThan(): String{
 	return  "("+ self.rightExpr.exprList.exprs.at(0).parseExpr() +" < " + self.rightExpr.exprList.exprs.at(1).parseExpr() +")";

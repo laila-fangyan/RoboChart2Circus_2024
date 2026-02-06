@@ -1,0 +1,33 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:19
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_example6.csp"
+
+-- generate stm6
+P_stm6 = let
+	id__ = 0
+	
+	
+	
+within
+	stm6::O__(
+		id__
+	)
+assert P_stm6 :[deadlock-free]	
+assert P_stm6;RUN({r__}) :[deadlock-free]
+assert P_stm6 :[deterministic]
+assert P_stm6 :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_stm6[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_stm6
+
+
+

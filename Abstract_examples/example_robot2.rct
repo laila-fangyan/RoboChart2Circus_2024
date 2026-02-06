@@ -1,0 +1,64 @@
+interface SharedVarConst {
+    var obs : int , eps: real, vel:real
+    const dest : real
+}
+
+controller ObsDetector {
+
+    var obs : int , eps: real, vel:real
+    const dest : real
+
+    stm ObsDetect {
+        requires SharedVarConst    
+        var pos: real
+
+        event arrival
+        event flag
+        event step
+
+        initial i0
+        state Detect {
+        }
+        state Stop {
+        }
+        state Move {
+//        	entry posSen?pos
+        }
+        final f0
+
+        transition t0 {
+            from i0
+            to Detect       
+        }
+        transition t1 {
+            from Detect
+            to Stop
+            condition obs == 1
+            action flag
+        }
+        transition t3 {
+            from Stop
+            to f0
+        }
+        transition t4 {
+            from Move
+            to Stop
+            condition pos >= dest - eps /\ pos <= dest + eps
+            action arrival
+        }
+        transition t5 {
+            from Detect
+            to Move
+            condition obs == -1
+           
+        }
+        transition t2 {
+            from Move
+            to Detect
+            trigger step
+            condition pos < (dest - eps)
+            action pos = pos + vel * 1
+        }
+    }
+
+}

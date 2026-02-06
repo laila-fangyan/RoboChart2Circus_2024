@@ -1,0 +1,102 @@
+interface Interface0{
+	var obs : int
+	const dest : nat
+}
+controller robot_ctrl_D{
+	var pos: nat
+	var obs : int 
+	const dest : nat
+stm stm0 {
+	requires Interface0	
+	var pos: nat
+
+	event arrival
+
+	initial i0
+	state detect {
+	}
+	state stop {
+	}
+	transition t0 {
+		from i0
+		to detect
+	}
+	transition t1 {
+		from detect
+		to stop
+		condition obs == 1
+		}
+		transition t3 {
+			from stop
+			to f0
+		}
+		state move {
+		}
+		final f0
+		transition t4 {
+			from move
+			to stop
+			condition pos == dest
+			action arrival
+		}
+		transition t5 {
+			from detect
+			to move
+			condition obs == -1
+		}
+		transition t2 {
+			from move
+			to detect
+			condition pos < dest
+			action pos = pos + 1
+		}
+	}
+
+
+stm stm1 {
+	requires Interface0	
+	var pos: nat
+
+	event arrival
+
+	initial i0
+	state detect {
+	}
+	state stop {
+	}
+	transition t0 {
+		from i0
+		to detect
+	}
+	transition t1 {
+		from detect
+		to stop
+		condition obs == 1
+		}
+		transition t3 {
+			from stop
+			to f0
+		}
+		state move {
+		}
+		final f0
+		transition t4 {
+			from move
+			to stop
+			trigger arrival
+		}
+		transition t5 {
+			from detect
+			to move
+			condition obs == -1
+		}
+		transition t2 {
+			from move
+			to detect
+			condition pos < dest
+			action pos = pos + 1
+		}
+	}
+connection stm0 on arrival to stm1 on arrival
+}
+

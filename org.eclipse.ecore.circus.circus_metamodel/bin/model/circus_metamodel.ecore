@@ -757,8 +757,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CircusGuardedCommand" abstract="true"
       eSuperTypes="#//CircusCommand">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="actionList" eType="#//CircusActionList"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="circusActions" upperBound="-1"
+        eType="#//GuardedAction" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IfGuardedCommand" eSuperTypes="#//CircusGuardedCommand"/>
   <eClassifiers xsi:type="ecore:EClass" name="DoGuardedCommand" eSuperTypes="#//CircusGuardedCommand"/>
@@ -849,15 +849,15 @@
     <eLiterals name="ValueResult" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QualifiedDecl" eSuperTypes="#//Decl">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nameList" eType="#//ZNameList"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="paramQualifier" eType="#//ParamQualifier"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VarDecl" eSuperTypes="#//Decl">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nameList" eType="#//ZNameList"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Branch" eSuperTypes="#//Term">
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//ZName"
@@ -944,12 +944,12 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="C.6.21 - Generic Operator Application. For example: S \rel T.  mixfix and explicit are  true; C.6.28 - Reference. For example: \arithmos, mixfix and explicit are false; C.6.29 - Generic Instantiation. For example: \emptyset[T], mixfix is always false"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="explicit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exprList" eType="#//ZExprList"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mixFix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//ZName"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprList" eType="#//ZExprList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="explicit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mixFix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SigmaExpr" eSuperTypes="#//Expr">
     <eStructuralFeatures xsi:type="ecore:EReference" name="channel" eType="#//RefExpr"
@@ -997,7 +997,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TupleSelExpr" eSuperTypes="#//Expr1">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="numeral" eType="#//Numeral"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="numeral" eType="#//ZNumeral"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Expr2" abstract="true" eSuperTypes="#//Expr">

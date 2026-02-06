@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 15-05-2025 10:22:14
+-- Automatically generated on 23-01-2026 11:22:16
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -345,7 +345,7 @@ exports
 			 [] dbisim((true)&(internal__!NID_i0 -> SKIP ;  ((SKIP ; s0::enter -> SKIP))))
 			 	 [] dbisim((true)&(a__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s1::enter -> SKIP)))
 			 	 [] dbisim((true)&(b__!NID_s1.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s0::enter -> SKIP)))
-			 	 [] dbisim((true)&(a__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s2::enter -> SKIP)))
+			 	 [] dbisim((true)&(b__!NID_s0.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s2::enter -> SKIP)))
 			 ) ; Trans)
 			 []
 			 (interrupt -> share__choice(exit -> SKIP) ; share__choice(exited -> terminate -> SKIP))
@@ -382,7 +382,7 @@ exports
 					-- IMPLEMENTATION NOTE: the channel set 'enter' is calculated explicitly
 					-- because CSPM modules are used for the semantics of Node.
 					flowevts = union(enterSS,{|exit,exited,interrupt|})
-					transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,a__.NID_s0.in|}
+					transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,b__.NID_s0.in|}
 				within
 					((
 					 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
@@ -397,7 +397,7 @@ exports
 					   )
 					   )
 					 )
-					 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,a__.NID_s0.in|}]]
+					 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,b__.NID_s0.in|}]]
 					 [[s1::interrupt <- x__ | x__ <- {|interrupt,b__.NID_s1.in|}]]
 					 [[s2::interrupt <- x__ | x__ <- {|interrupt|}]]
 					 [[i0::interrupt <- x__ | x__ <- {|internal__.NID_i0|}]]
@@ -464,7 +464,7 @@ exports
 					-- IMPLEMENTATION NOTE: the channel set 'enter' is calculated explicitly
 					-- because CSPM modules are used for the semantics of Node.
 					flowevts = union(enterSS,{|exit,exited,interrupt|})
-					transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,a__.NID_s0.in|}
+					transSync = {|internal__.NID_i0,a__.NID_s0.in,b__.NID_s1.in,b__.NID_s0.in|}
 				within
 					((
 					 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
@@ -479,7 +479,7 @@ exports
 					   )
 					   )
 					 )
-					 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,a__.NID_s0.in|}]]
+					 [[s0::interrupt <- x__ | x__ <- {|interrupt,a__.NID_s0.in,b__.NID_s0.in|}]]
 					 [[s1::interrupt <- x__ | x__ <- {|interrupt,b__.NID_s1.in|}]]
 					 [[s2::interrupt <- x__ | x__ <- {|interrupt|}]]
 					 [[i0::interrupt <- x__ | x__ <- {|internal__.NID_i0|}]]

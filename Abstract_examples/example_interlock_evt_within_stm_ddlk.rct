@@ -1,0 +1,44 @@
+
+
+controller robot_evt_interlock{
+	var pos: nat
+	var obs : int 
+	const dest : nat
+	event c
+	event d
+	event a
+	event b
+stm stm0 {
+	var pos: nat
+
+	event a
+event b
+	initial i0
+	state s0 {
+		entry c
+	}
+	state s1 {
+		entry b
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to s1
+		trigger a
+		}
+		transition t3 {
+			from s1
+			to f0
+		}
+		
+		final f0
+	
+	event c
+	}
+
+	connection stm0 on c to robot_evt_interlock on c
+}
+

@@ -1,0 +1,57 @@
+interface Interface1{
+	var obs : int
+	const dest : real
+}
+controller robot_ctrl{
+
+	var obs : int = 0
+	const dest : real
+stm ObsDetect {
+	requires Interface1	
+	var pos: real
+
+	event arrival
+
+	initial i0
+	state Detect {
+	}
+	state Stop {
+	}
+	transition t0 {
+		from i0
+		to Detect
+	}
+	transition t1 {
+		from Detect
+		to Stop
+		condition obs == 1
+		}
+		transition t3 {
+			from Stop
+			to f0
+		}
+		state Move {
+		}
+		final f0
+		transition t4 {
+			from Move
+			to Stop
+			condition pos == dest
+			action arrival
+		}
+		transition t5 {
+			from Detect
+			to Move
+			condition obs == -1
+		}
+		transition t2 {
+			from Move
+			to Detect
+			condition pos < dest
+			action pos = pos + 1
+		}
+	}
+
+
+}
+

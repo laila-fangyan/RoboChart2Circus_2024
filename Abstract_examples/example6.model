@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ASCII"?>
+<robochart:RCPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:robochart="http://www.robocalc.circus/RoboChart">
+  <machines name="stm6">
+    <variableList>
+      <vars name="vv">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </vars>
+    </variableList>
+    <variableList>
+      <vars name="bl">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.3"/>
+        </type>
+      </vars>
+    </variableList>
+    <events name="a"/>
+    <events name="b"/>
+    <events name="c"/>
+    <nodes xsi:type="robochart:Initial" name="i0"/>
+    <nodes xsi:type="robochart:State" name="s0"/>
+    <nodes xsi:type="robochart:State" name="s1"/>
+    <transitions name="t0" source="//@machines.0/@nodes.0" target="//@machines.0/@nodes.1"/>
+    <transitions name="t1" source="//@machines.0/@nodes.1" target="//@machines.0/@nodes.2">
+      <action xsi:type="robochart:CommunicationStmt">
+        <communication event="//@machines.0/@events.1"/>
+      </action>
+    </transitions>
+    <transitions name="t2" source="//@machines.0/@nodes.2" target="//@machines.0/@nodes.1">
+      <condition xsi:type="robochart:LessThan">
+        <left xsi:type="robochart:RefExp" ref="//@machines.0/@variableList.0/@vars.0"/>
+        <right xsi:type="robochart:IntegerExp"/>
+      </condition>
+      <action xsi:type="robochart:CommunicationStmt">
+        <communication event="//@machines.0/@events.0"/>
+      </action>
+    </transitions>
+    <transitions name="t3" source="//@machines.0/@nodes.2" target="//@machines.0/@nodes.1">
+      <condition xsi:type="robochart:GreaterThan">
+        <left xsi:type="robochart:RefExp" ref="//@machines.0/@variableList.0/@vars.0"/>
+        <right xsi:type="robochart:IntegerExp" value="6"/>
+      </condition>
+      <action xsi:type="robochart:CommunicationStmt">
+        <communication event="//@machines.0/@events.2"/>
+      </action>
+    </transitions>
+  </machines>
+</robochart:RCPackage>

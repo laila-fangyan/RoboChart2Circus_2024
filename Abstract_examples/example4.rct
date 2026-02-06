@@ -1,18 +1,22 @@
 
 stm stm04 {
-	var v1 : int 
-	
+	var v1 : int =7
+	const c1: int = 2
+	const c2: int
 	event a
+	event b
 
 	initial i0
 	state s0 {
+		entry a
 	}
 	state s1 {
+		during b
 	}
 	transition t0 {
 		from i0
 		to s0
-	action v1 = 1
+	action v1 = 2
 	}
 	transition t1 {
 		from s0

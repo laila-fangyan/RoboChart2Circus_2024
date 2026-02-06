@@ -1,0 +1,38 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:16
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "core_timed_defs.csp"
+include "robot_evt_interlock_stm1.csp"
+include "core_defs.csp"
+include "state_timed_defs.csp"
+include "file_example_interlock_evt_ddlk_defs.csp"
+include "robochart_defs.csp"
+include "../instantiations.csp"
+
+transparent wbisim
+channel r__
+-- generate robot_evt_interlock_stm1
+P_robot_evt_interlock_stm1 = let
+	id__ = 0
+	
+	
+	
+within
+	robot_evt_interlock_stm1::O__(
+		id__
+	)
+assert P_robot_evt_interlock_stm1 :[deadlock-free]	
+assert P_robot_evt_interlock_stm1;RUN({r__}) :[deadlock-free]
+assert P_robot_evt_interlock_stm1 :[deterministic]
+assert P_robot_evt_interlock_stm1 :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_robot_evt_interlock_stm1[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_evt_interlock_stm1

@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 15-05-2025 10:22:14
+-- Automatically generated on 23-01-2026 11:22:18
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -22,10 +22,13 @@ P_stm04 = let
 	id__ = 0
 	
 	
+	const_stm04_c1 = 2
 	
 within
 	stm04::O__(
-		id__
+		id__,
+		const_stm04_c1,
+		const_stm04_c2
 	)
 assert P_stm04 :[deadlock-free]	
 assert P_stm04;RUN({r__}) :[deadlock-free]

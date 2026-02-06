@@ -1,7 +1,7 @@
 
 --
 -- RoboChart generator version 3.0.0.202401231330
--- Automatically generated on 15-05-2025 10:22:13
+-- Automatically generated on 23-01-2026 11:22:18
 --
 -- Iterated compression status: true
 -- Assertions compression status: false
@@ -42,6 +42,8 @@ exports
 	-- Declaring state machine events
 	channel a__: NIDS.InOut
 	channel a: InOut
+	channel b__: NIDS.InOut
+	channel b: InOut
 	
 	-- Declaring call and ret events for undefined operations
 	
@@ -64,7 +66,8 @@ exports
 	-- channel set with all visible events
 	sem__events = {|
 		terminate
-	,	a
+	,	a,
+		b
 		|}
 
 	-- Nodes --
@@ -77,7 +80,9 @@ exports
 	
 		channel enter, interrupt
 		
-		D__(id__) = 
+		D__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2) = 
 			dbisim(let
 				Inactive 	= share__choice(enter -> SKIP [] terminate -> SKIP) ; Active
 				
@@ -87,7 +92,11 @@ exports
 			within
 				Inactive [| {terminate} |> SKIP)
 		
-		VS_O__(id__) = D__(id__)
+		VS_O__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2) = D__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2)
 	
 	endmodule
 	----------------------------------------------------------------------
@@ -117,7 +126,9 @@ exports
 		--	Rule: behaviours(Node)
 		--  Note that FDR has problems with efficiently compiling the process below
 		-- 	if using a different recursion pattern.
-		D__(id__) = 
+		D__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2) = 
 		dbisim(let
 			-- IMPLEMENTATION NOTE: 
 			-- The following should be defined as: Inactive = share__choice(Activation [] Termination),
@@ -128,7 +139,7 @@ exports
 			
 			Termination = terminate -> SKIP
 			
-			Active 		= SKIP ; 
+			Active 		= true&(share__choice(a.out -> SKIP)) ; 
 					 	  Behaviour ; 
 					 	  share__choice(exit -> SKIP) ; SKIP ; 
 					 	  share__choice(exited -> SKIP) ; Inactive
@@ -138,13 +149,15 @@ exports
 		within
 			Inactive [| {terminate} |> SKIP)
 			
-		VS_O__(id__) = 
+		VS_O__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2) = 
 		dbisim(let
 			Inactive 	= share__choice(enter -> SKIP [] terminate -> SKIP) ; Active
 			
 			Termination = terminate -> SKIP
 			
-			Active 		= SKIP ; 
+			Active 		= true&(share__choice(a.out -> SKIP)) ; 
 					 	  Behaviour ; 
 					 	  share__choice(exit -> SKIP) ; SKIP ; 
 					 	  share__choice(exited -> SKIP) ; Inactive
@@ -183,7 +196,9 @@ exports
 		--	Rule: behaviours(Node)
 		--  Note that FDR has problems with efficiently compiling the process below
 		-- 	if using a different recursion pattern.
-		D__(id__) = 
+		D__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2) = 
 		dbisim(let
 			-- IMPLEMENTATION NOTE: 
 			-- The following should be defined as: Inactive = share__choice(Activation [] Termination),
@@ -200,11 +215,13 @@ exports
 					 	  share__choice(exited -> SKIP) ; Inactive
 		
 			Behaviour 	= entered -> During
-			During 		= ((SKIP ; SStop) /\ interrupt -> SKIP)
+			During 		= ((true&(share__choice(b.out -> SKIP)) ; SStop) /\ interrupt -> SKIP)
 		within
 			Inactive [| {terminate} |> SKIP)
 			
-		VS_O__(id__) = 
+		VS_O__(id__,
+				    const_stm04_c1,
+				    const_stm04_c2) = 
 		dbisim(let
 			Inactive 	= share__choice(enter -> SKIP [] terminate -> SKIP) ; Active
 			
@@ -216,7 +233,7 @@ exports
 					 	  share__choice(exited -> SKIP) ; Inactive
 		
 			Behaviour 	= entered -> During
-			During 		= ((SKIP ; SStop) /\ interrupt -> SKIP)
+			During 		= ((true&(share__choice(b.out -> SKIP)) ; SStop) /\ interrupt -> SKIP)
 		within
 			Inactive [| {terminate} |> SKIP)
 		
@@ -236,39 +253,53 @@ exports
 	-- END of Operation calls --
 	
 	-- STM processes
-	STM(id__) = -- RULE: [[stm:StateMachineDef]]_STM^nops : CSPProcess
+	STM(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = -- RULE: [[stm:StateMachineDef]]_STM^nops : CSPProcess
 	( 
 		(
 			(
-				(IteratedStateful(id__) \ {terminate} ; share__choice(terminate -> SKIP))
+				(IteratedStateful(id__,
+						    const_stm04_c1,
+						    const_stm04_c2) \ {terminate} ; share__choice(terminate -> SKIP))
 			 	[[ share__ <- x__ | x__ <- {||} ]]
 			)
 		[| {share__} |]
 		SKIP
 		)
 		[| union(sharedVarSync,{terminate}) |]
-		dbisim(sharedVarMemory(id__))
+		dbisim(sharedVarMemory(id__,
+				    const_stm04_c1,
+				    const_stm04_c2))
 	)\sharedVarHide
 	
-	STM_VS_O(id__) = -- RULE: [[stm:StateMachineDef]]_STM^nops : CSPProcess
+	STM_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = -- RULE: [[stm:StateMachineDef]]_STM^nops : CSPProcess
 	( 
 		(
 			(
-				(IteratedStateful_VS_O(id__) \ {terminate} ; share__choice(terminate -> SKIP))
+				(IteratedStateful_VS_O(id__,
+						    const_stm04_c1,
+						    const_stm04_c2) \ {terminate} ; share__choice(terminate -> SKIP))
 			 	[[ share__ <- x__ | x__ <- {||} ]]
 			)
 		[| {share__} |]
 		SKIP
 		)
 		[| union(sharedVarSync,{terminate}) |]
-		dbisim(sharedVarMemory(id__))
+		dbisim(sharedVarMemory(id__,
+				    const_stm04_c1,
+				    const_stm04_c2))
 	)\sharedVarHide
 	
 	-- Transitions
-	Transitions(id__) = ((let
+	Transitions(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = ((let
 		Trans = share__choice(get_v1?v1 -> (
 			((share__ -> SKIP
-			 [] dbisim((true)&(internal__!NID_i0 -> SKIP ;  ((share__choice(true & (share__choice(set_v1!1 -> SKIP))) ; s0::enter -> SKIP))))
+			 [] dbisim((true)&(internal__!NID_i0 -> SKIP ;  ((share__choice(true & (share__choice(set_v1!2 -> SKIP))) ; s0::enter -> SKIP))))
 			 	 [] dbisim(((v1>=1))&(internal__!NID_s0 -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s1::enter -> SKIP)))
 			 	 [] dbisim(((v1<1))&(internal__!NID_s1 -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s0::enter -> SKIP)))
 			 	 [] dbisim((true)&(a__!NID_s1.in -> SKIP ;  share__choice(exit -> SKIP) ; (share__choice(exited -> SKIP) ; SKIP ; s0::enter -> SKIP)))
@@ -288,7 +319,9 @@ exports
 	-- RULE: Stateful(stm:StateMachineBody) : CSPProcess
 	
 	-- Named process definitions
-	MachineBody(id__) = 
+	MachineBody(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
 		dbisim((
 		let
 			finalNodesEntered = {||}
@@ -312,11 +345,17 @@ exports
 				within
 					((
 					 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
-					   i0::D__(id__)
+					   i0::D__(id__,
+					   		    const_stm04_c1,
+					   		    const_stm04_c2)
 					   [| { share__, terminate } |] (
-					   s0::D__(id__)
+					   s0::D__(id__,
+					   		    const_stm04_c1,
+					   		    const_stm04_c2)
 					   [| { share__, terminate } |] (
-					   s1::D__(id__)
+					   s1::D__(id__,
+					   		    const_stm04_c1,
+					   		    const_stm04_c2)
 					   )
 					   )
 					 )
@@ -330,7 +369,9 @@ exports
 					 [| union(union(union(flowevts,transSync),{terminate}),{|share__
 					 			,setL_v1
 					|}) |]
-					 ((i0::enter -> Transitions(id__))
+					 ((i0::enter -> Transitions(id__,
+					 		    const_stm04_c1,
+					 		    const_stm04_c2))
 					  [[ share__ <- x__ | x__ <- {| share__,setL_v1 |} ]]
 					 )
 					)[[setL_v1 <- set_v1]]
@@ -338,7 +379,8 @@ exports
 				)
 				 \ hideSet)
 				[[
-					a__.x____ <- a
+					a__.x____ <- a,
+					b__.x____ <- b
 					| x____ <- NIDS
 				]]
 			)
@@ -346,33 +388,53 @@ exports
 		)
 		)
 	
-	Behaviour(id__) = 
-		dbisim((MachineBody(id__)\ enteredSS)
+	Behaviour(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
+		dbisim((MachineBody(id__,
+				    const_stm04_c1,
+				    const_stm04_c2)\ enteredSS)
 		)
 	
-	IteratedBehaviour(id__) = 
-		dbisim((MachineBody(id__)\ enteredSS)
+	IteratedBehaviour(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
+		dbisim((MachineBody(id__,
+				    const_stm04_c1,
+				    const_stm04_c2)\ enteredSS)
 		)
 	
-	Stateful(id__) = 
+	Stateful(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
 		((
-			(Behaviour(id__) [| union(getsetLocalChannels,{terminate}) |] varMemory(id__))
+			(Behaviour(id__,
+					    const_stm04_c1,
+					    const_stm04_c2) [| union(getsetLocalChannels,{terminate}) |] varMemory(id__,
+					    const_stm04_c1,
+					    const_stm04_c2))
 		 	\getsetLocalChannels
 		)
 		)
 	
-	IteratedStateful(id__) =
+	IteratedStateful(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) =
 		(dbisim(
 			sbisim(
-				Behaviour(id__)
+				Behaviour(id__,
+						    const_stm04_c1,
+						    const_stm04_c2)
 				[| {|get_v1,set_v1,terminate|} |]
-				Memory_v1(0)
+				Memory_v1(7)
 			)\{|get_v1,set_v1|}
 		)
 		)
 	
 	-- Visible counterparts
-	MachineBody_VS_O(id__) = 
+	MachineBody_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
 		dbisim((
 		let
 			finalNodesEntered = {||}
@@ -396,11 +458,17 @@ exports
 				within
 					((
 					 (((-- RULE composeNodes(nc:NodeContainer)^nops : CSPProcess
-					   i0::VS_O__(id__)
+					   i0::VS_O__(id__,
+					   		    const_stm04_c1,
+					   		    const_stm04_c2)
 					   [| { share__, terminate } |] (
-					   s0::VS_O__(id__)
+					   s0::VS_O__(id__,
+					   		    const_stm04_c1,
+					   		    const_stm04_c2)
 					   [| { share__, terminate } |] (
-					   s1::VS_O__(id__)
+					   s1::VS_O__(id__,
+					   		    const_stm04_c1,
+					   		    const_stm04_c2)
 					   )
 					   )
 					 )
@@ -414,7 +482,9 @@ exports
 					 [| union(union(union(flowevts,transSync),{terminate}),{|share__
 					 			,setL_v1
 					|}) |]
-					 ((i0::enter -> Transitions(id__))
+					 ((i0::enter -> Transitions(id__,
+					 		    const_stm04_c1,
+					 		    const_stm04_c2))
 					  [[ share__ <- x__ | x__ <- {| share__,setL_v1 |} ]]
 					 )
 					)[[setL_v1 <- set_v1]]
@@ -422,7 +492,8 @@ exports
 				)
 				 \ hideSet)
 				[[
-					a__.x____ <- a
+					a__.x____ <- a,
+					b__.x____ <- b
 					| x____ <- NIDS
 				]]
 			)
@@ -430,27 +501,45 @@ exports
 		)
 		)
 	
-	Behaviour_VS_O(id__) = 
-		dbisim((MachineBody_VS_O(id__))
+	Behaviour_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
+		dbisim((MachineBody_VS_O(id__,
+				    const_stm04_c1,
+				    const_stm04_c2))
 		)
 	
-	IteratedBehaviour_VS_O(id__) = 
-		dbisim((MachineBody_VS_O(id__))
+	IteratedBehaviour_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
+		dbisim((MachineBody_VS_O(id__,
+				    const_stm04_c1,
+				    const_stm04_c2))
 		)
 	
-	Stateful_VS_O(id__) = 
+	Stateful_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = 
 		dbisim((
-			(Behaviour_VS_O(id__) [| union(getsetLocalChannels,{terminate}) |] varMemory(id__))
+			(Behaviour_VS_O(id__,
+					    const_stm04_c1,
+					    const_stm04_c2) [| union(getsetLocalChannels,{terminate}) |] varMemory(id__,
+					    const_stm04_c1,
+					    const_stm04_c2))
 		 	\getsetLocalChannels
 		)
 		)
 	
-	IteratedStateful_VS_O(id__) =
+	IteratedStateful_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) =
 		(dbisim(
 			sbisim(
-				Behaviour_VS_O(id__)
+				Behaviour_VS_O(id__,
+						    const_stm04_c1,
+						    const_stm04_c2)
 				[| {|get_v1,set_v1,terminate|} |]
-				Memory_v1(0)
+				Memory_v1(7)
 			)\{|get_v1,set_v1|}
 		)
 		)
@@ -467,25 +556,57 @@ exports
 		terminate -> SKIP
 	
 	-- varMemory process
-	varMemory(id__) = Memory_v1(0)
+	varMemory(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = Memory_v1(7)
 	
 	getsetLocalChannels = {|get_v1,set_v1|}
 	
 	-- Definition of the behaviour of state machines (default, optimised, visible, visible and optimised)
-	FVS__(id__) = STM_VS_O(id__)
+	FVS__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = STM_VS_O(id__,
+			    const_stm04_c1,
+			    const_stm04_c2)
 	
-	D__(id__) = STM(id__) \ internal_events
-	O__(id__) = sbisim(diamond(D__(id__)))
-	VS__(id__) = FVS__(id__)
-	VS_O__(id__) = sbisim(diamond(FVS__(id__)))
-	HEXT__(id__) = O__(id__) [|shared_variable_events|] SKIP
-	HUP__(id__) = O__(id__) [|{share__}|] SKIP
+	D__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = STM(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) \ internal_events
+	O__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = sbisim(diamond(D__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2)))
+	VS__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = FVS__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2)
+	VS_O__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = sbisim(diamond(FVS__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2)))
+	HEXT__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = O__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) [|shared_variable_events|] SKIP
+	HUP__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = O__(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) [|{share__}|] SKIP
 	
 	-- Shared memory
 	-- Shared memory variables
 	
 	-- sharedVarMemory process
-	sharedVarMemory(id__) = terminate -> SKIP
+	sharedVarMemory(id__,
+			    const_stm04_c1,
+			    const_stm04_c2) = terminate -> SKIP
 	
 	sharedVarSync = {||}
 	

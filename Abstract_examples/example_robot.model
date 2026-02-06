@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ASCII"?>
+<robochart:RCPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:robochart="http://www.robocalc.circus/RoboChart">
+  <interfaces name="Interface1">
+    <variableList>
+      <vars name="obs">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </vars>
+    </variableList>
+    <variableList modifier="CONST">
+      <vars name="dest">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+        </type>
+      </vars>
+    </variableList>
+  </interfaces>
+  <controllers name="robot_ctrl">
+    <variableList>
+      <vars name="obs">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.1"/>
+        </type>
+      </vars>
+    </variableList>
+    <variableList modifier="CONST">
+      <vars name="dest">
+        <type xsi:type="robochart:TypeRef">
+          <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+        </type>
+      </vars>
+    </variableList>
+    <machines xsi:type="robochart:StateMachineDef" rInterfaces="//@interfaces.0" name="stm0">
+      <variableList>
+        <vars name="pos">
+          <type xsi:type="robochart:TypeRef">
+            <ref xsi:type="robochart:PrimitiveType" href="platform:/plugin/circus.robocalc.robochart.textual/lib/robochart/core.rct#//@types.0"/>
+          </type>
+        </vars>
+      </variableList>
+      <events name="arrival"/>
+      <nodes xsi:type="robochart:Initial" name="i0"/>
+      <nodes xsi:type="robochart:State" name="detect"/>
+      <nodes xsi:type="robochart:State" name="stop"/>
+      <nodes xsi:type="robochart:State" name="move"/>
+      <nodes xsi:type="robochart:Final" name="f0"/>
+      <transitions name="t0" source="//@controllers.0/@machines.0/@nodes.0" target="//@controllers.0/@machines.0/@nodes.1"/>
+      <transitions name="t1" source="//@controllers.0/@machines.0/@nodes.1" target="//@controllers.0/@machines.0/@nodes.2">
+        <condition xsi:type="robochart:Equals">
+          <left xsi:type="robochart:RefExp" ref="//@interfaces.0/@variableList.0/@vars.0"/>
+          <right xsi:type="robochart:IntegerExp" value="1"/>
+        </condition>
+      </transitions>
+      <transitions name="t3" source="//@controllers.0/@machines.0/@nodes.2" target="//@controllers.0/@machines.0/@nodes.4"/>
+      <transitions name="t4" source="//@controllers.0/@machines.0/@nodes.3" target="//@controllers.0/@machines.0/@nodes.2">
+        <condition xsi:type="robochart:Equals">
+          <left xsi:type="robochart:RefExp" ref="//@controllers.0/@machines.0/@variableList.0/@vars.0"/>
+          <right xsi:type="robochart:RefExp" ref="//@interfaces.0/@variableList.1/@vars.0"/>
+        </condition>
+        <action xsi:type="robochart:CommunicationStmt">
+          <communication event="//@controllers.0/@machines.0/@events.0"/>
+        </action>
+      </transitions>
+      <transitions name="t5" source="//@controllers.0/@machines.0/@nodes.1" target="//@controllers.0/@machines.0/@nodes.3">
+        <condition xsi:type="robochart:Equals">
+          <left xsi:type="robochart:RefExp" ref="//@interfaces.0/@variableList.0/@vars.0"/>
+          <right xsi:type="robochart:Neg">
+            <exp xsi:type="robochart:IntegerExp" value="1"/>
+          </right>
+        </condition>
+      </transitions>
+      <transitions name="t2" source="//@controllers.0/@machines.0/@nodes.3" target="//@controllers.0/@machines.0/@nodes.1">
+        <condition xsi:type="robochart:LessThan">
+          <left xsi:type="robochart:RefExp" ref="//@controllers.0/@machines.0/@variableList.0/@vars.0"/>
+          <right xsi:type="robochart:RefExp" ref="//@interfaces.0/@variableList.1/@vars.0"/>
+        </condition>
+        <action xsi:type="robochart:Assignment">
+          <left xsi:type="robochart:VarRef" name="//@controllers.0/@machines.0/@variableList.0/@vars.0"/>
+          <right xsi:type="robochart:Plus">
+            <left xsi:type="robochart:RefExp" ref="//@controllers.0/@machines.0/@variableList.0/@vars.0"/>
+            <right xsi:type="robochart:IntegerExp" value="1"/>
+          </right>
+        </action>
+      </transitions>
+    </machines>
+  </controllers>
+</robochart:RCPackage>

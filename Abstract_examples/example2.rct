@@ -1,11 +1,16 @@
-//package ex2
+package ex2
 stm stm3 {
 	var v1 : int
+	var v : int
 	event a
+	event b
 	initial i0
+	final f0
 	state s0 {
+		entry b
 	}
 	state s1 {
+		exit v = v +1
 	}
 	transition t0 {
 		from i0
@@ -25,6 +30,11 @@ stm stm3 {
 		from s1
 		to s0
 		trigger a
+	}
+	transition t4 {
+		from s1
+		to f0
+		condition v > 3
 	}
 
 }

@@ -1,0 +1,77 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:19
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_example_robot_DDLK.csp"
+
+
+
+-- generate robot_ctrl_D
+P_robot_ctrl_D = let
+	id__ = 0
+	
+	
+	
+		
+within
+	robot_ctrl_D::O__(id__,
+			    const_robot_ctrl_D_dest)
+
+assert P_robot_ctrl_D :[deadlock-free]	
+assert P_robot_ctrl_D;RUN({r__}) :[deadlock-free]
+assert P_robot_ctrl_D :[deterministic]
+assert P_robot_ctrl_D :[divergence-free]
+
+-- generate robot_ctrl_D_stm0
+P_robot_ctrl_D_stm0 = let
+	id__ = 0
+	
+	const_robot_ctrl_D_stm0_dest = 0
+	
+	
+within
+	robot_ctrl_D::stm0::O__(
+		id__,
+		const_robot_ctrl_D_stm0_dest
+	)
+assert P_robot_ctrl_D_stm0 :[deadlock-free]	
+assert P_robot_ctrl_D_stm0;RUN({r__}) :[deadlock-free]
+assert P_robot_ctrl_D_stm0 :[deterministic]
+assert P_robot_ctrl_D_stm0 :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_robot_ctrl_D_stm0[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_ctrl_D_stm0
+-- generate robot_ctrl_D_stm1
+P_robot_ctrl_D_stm1 = let
+	id__ = 0
+	
+	const_robot_ctrl_D_stm1_dest = 0
+	
+	
+within
+	robot_ctrl_D::stm1::O__(
+		id__,
+		const_robot_ctrl_D_stm1_dest
+	)
+assert P_robot_ctrl_D_stm1 :[deadlock-free]	
+assert P_robot_ctrl_D_stm1;RUN({r__}) :[deadlock-free]
+assert P_robot_ctrl_D_stm1 :[deterministic]
+assert P_robot_ctrl_D_stm1 :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_robot_ctrl_D_stm1[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_ctrl_D_stm1
+-- timed deadlock free
+assert prioritise(P_robot_ctrl_D[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_ctrl_D
+

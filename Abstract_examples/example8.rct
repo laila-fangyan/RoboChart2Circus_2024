@@ -1,0 +1,36 @@
+interface i01{
+	var v1:int
+}
+controller ctrl{
+	
+	var v1 : int 
+	
+stm stm0 {
+	requires i01	
+	event a
+
+	initial i0
+	state s0 {
+	}
+	state s1 {
+	}
+	transition t0 {
+		from i0
+		to s0
+	action v1 = 2
+	}
+	transition t1 {
+		from s0
+		to s1
+		condition v1 >= 1
+		action v1 = v1 - 2
+	
+	}
+	transition t2 {
+		from s1
+		to s0
+		trigger a
+		}
+	}
+}
+

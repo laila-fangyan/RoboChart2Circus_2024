@@ -1,0 +1,84 @@
+interface Interface2{
+	var obs : int
+	const dest : nat
+	var pos : int
+}
+
+controller robot_var_interlock{
+	var pos : int = 1
+	var obs : int 
+	const dest : nat
+	event c
+	event d
+	event a:nat
+	event b
+stm stm0 {
+	requires Interface2	
+//	var pos: nat
+
+	event a:nat
+	event b
+	initial i0
+	state s0 {
+//		entry a!pos
+	
+	}
+	state s1 {
+		entry pos = pos -2
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to s1
+//		trigger a
+		condition pos > 2
+		}
+		transition t3 {
+			from s1
+			to f0
+		}
+		
+		final f0
+	
+	event c
+	}
+
+stm stm1 {
+//	var pos: nat
+	requires Interface2	
+	event a:nat
+	event b
+	initial i0
+	state s0 {
+			entry pos = pos + 3
+	}
+	state s1 {
+
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to s1
+		trigger b
+		}
+		transition t3 {
+			from s1
+			to f0
+		}
+		
+		final f0
+	
+	event d
+	}
+connection stm0 on b to stm1 on b
+
+//connection stm1 on d to robot_ctrl_interlock on d
+//	connection stm0 on c to robot_ctrl_interlock on c
+}
+

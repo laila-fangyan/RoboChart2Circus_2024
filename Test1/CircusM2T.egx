@@ -17,11 +17,13 @@ pre{
 var name =Z!ZSect.allInstances.select(s|s.instanceOf(Z!ZSect)).at(0).name;
 }
 
-rule circusM2T
+
+
+rule circusM2T_IsaCircus_enriched
 transform z: Z!Spec {
 //transform z: Z!CApplExprList{
 template : "circusM2T.egl"
-target : "circus_gen/IsaCircus" + "_"+javaDateString+".thy" 
+target : "circus_gen/IsaCircus_enriched_" + z.version + "_"+javaDateString+".thy" 
 //target : "circus_gen/" +"expr"+".thy" 
 //target : "circus_gen/" +"expr_"+javaDateString +".thy" 
 }
@@ -29,5 +31,12 @@ target : "circus_gen/IsaCircus" + "_"+javaDateString+".thy"
 rule circusM2T_HOLCSP
 transform z: Z!Spec {
 template : "circusM2T_HOLCSP.egl"
-target : "hol-csp_gen/HOLCSP"+ "_"+javaDateString+".thy" 
+target : "hol-csp_gen/HOLCSP"+ "_" + z.version + "_" +javaDateString +".thy" 
+}
+
+
+rule circusM2T_HOLCSP_AbstractInst
+transform z: Z!Spec {
+template : "circusM2T_HOLCSP_AbstractInst.egl"
+target : "hol-csp-abstact_gen/HOLCSP_AbstractInst"+ "_"+ z.version + "_" +javaDateString+".thy" 
 }

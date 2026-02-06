@@ -1,0 +1,48 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:17
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_example_robot_defs.csp"
+include "core_defs.csp"
+include "state_defs.csp"
+include "robochart_defs.csp"
+include "robot_ctrl.csp"
+include "../instantiations.csp"
+channel r__
+-- generate robot_ctrl
+P_robot_ctrl = let
+	id__ = 0
+	
+	
+	
+		
+within
+	robot_ctrl::O__(id__,
+			    const_robot_ctrl_dest)
+
+assert P_robot_ctrl :[deadlock-free]	
+assert P_robot_ctrl;RUN({r__}) :[deadlock-free]
+assert P_robot_ctrl :[deterministic]
+assert P_robot_ctrl :[divergence-free]
+
+-- generate robot_ctrl_ObsDetect
+P_robot_ctrl_ObsDetect = let
+	id__ = 0
+	
+	const_robot_ctrl_ObsDetect_dest = 0
+	
+	
+within
+	robot_ctrl::ObsDetect::O__(
+		id__,
+		const_robot_ctrl_ObsDetect_dest
+	)
+assert P_robot_ctrl_ObsDetect :[deadlock-free]	
+assert P_robot_ctrl_ObsDetect;RUN({r__}) :[deadlock-free]
+assert P_robot_ctrl_ObsDetect :[deterministic]
+assert P_robot_ctrl_ObsDetect :[divergence-free]

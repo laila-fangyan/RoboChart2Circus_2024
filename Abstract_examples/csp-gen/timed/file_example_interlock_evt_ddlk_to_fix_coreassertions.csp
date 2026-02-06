@@ -1,0 +1,73 @@
+
+--
+-- RoboChart generator version 3.0.0.202401231330
+-- Automatically generated on 23-01-2026 11:22:19
+--
+-- Iterated compression status: true
+-- Assertions compression status: false
+--
+
+include "file_example_interlock_evt_ddlk_to_fix.csp"
+
+
+
+-- generate robot_evt_interlock_f
+P_robot_evt_interlock_f = let
+	id__ = 0
+	
+	
+	
+		
+within
+	robot_evt_interlock_f::O__(id__,
+			    const_robot_evt_interlock_f_dest)
+
+assert P_robot_evt_interlock_f :[deadlock-free]	
+assert P_robot_evt_interlock_f;RUN({r__}) :[deadlock-free]
+assert P_robot_evt_interlock_f :[deterministic]
+assert P_robot_evt_interlock_f :[divergence-free]
+
+-- generate robot_evt_interlock_f_stm0
+P_robot_evt_interlock_f_stm0 = let
+	id__ = 0
+	
+	
+	
+within
+	robot_evt_interlock_f::stm0::O__(
+		id__
+	)
+assert P_robot_evt_interlock_f_stm0 :[deadlock-free]	
+assert P_robot_evt_interlock_f_stm0;RUN({r__}) :[deadlock-free]
+assert P_robot_evt_interlock_f_stm0 :[deterministic]
+assert P_robot_evt_interlock_f_stm0 :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_robot_evt_interlock_f_stm0[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_evt_interlock_f_stm0
+-- generate robot_evt_interlock_f_stm1
+P_robot_evt_interlock_f_stm1 = let
+	id__ = 0
+	
+	
+	
+within
+	robot_evt_interlock_f::stm1::O__(
+		id__
+	)
+assert P_robot_evt_interlock_f_stm1 :[deadlock-free]	
+assert P_robot_evt_interlock_f_stm1;RUN({r__}) :[deadlock-free]
+assert P_robot_evt_interlock_f_stm1 :[deterministic]
+assert P_robot_evt_interlock_f_stm1 :[divergence-free]
+-- timed deadlock free
+assert prioritise(P_robot_evt_interlock_f_stm1[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_evt_interlock_f_stm1
+-- timed deadlock free
+assert prioritise(P_robot_evt_interlock_f[[tock<-tock,tock<-tock']],<diff(Events,{tock',tock}),{tock}>)\{tock} :[divergence free [FD]]
+
+-- timelock free
+assert RUN({tock}) ||| CHAOS(diff(Events,{|tock|})) [F= P_robot_evt_interlock_f
+

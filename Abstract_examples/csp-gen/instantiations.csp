@@ -1,39 +1,17 @@
--- generate --
+-- generate const_obs_detector_eps
+const_obs_detector_eps = 0
 
--- MODULE CONSTANTS
-
--- CONTROLLER CONSTANTS
-
--- STATEMACHINE CONSTANTS
-
--- OPERATION CONSTANTS
-
--- BASIC TYPES
-
--- generate nat
-nametype core_nat = union({0..2},{calc_type_min(Union(
-			{}))..calc_type_max(Union({}))})
-
--- generate core_clock_type
-nametype core_clock_type = {0..10}
-
--- BASIC FUNCTIONS
+-- generate const_ObsDetector_ObsDetect_dest
+const_ObsDetector_ObsDetect_dest = 0
 
 -- generate string
 nametype core_string = LSeq(Char,2)
 
--- generate real
-nametype core_real = union({ -2..2},{calc_type_min(Union(
-			{{1},{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{1},{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))}) 
+-- generate const_obs_detector_stm0_eps
+const_obs_detector_stm0_eps = 0
 
--- VECTOR TYPES AND OPERATIONS
-
-
--- CLOCKS
-
--- generate int
-nametype core_int = union({ -2..2},{calc_type_min(Union(
-			{{1},{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))..calc_type_max(Union({{1},{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{ -2..2},{ -2..2},{ -2..2},{ -2..2}}))})
+-- generate const_obs_detector_stm0_dest
+const_obs_detector_stm0_dest = 0
 
 -- generate -- OPERATION BOUNDS
 
@@ -41,11 +19,72 @@ nametype core_int = union({ -2..2},{calc_type_min(Union(
 
 -- CONTROLLER CONSTANTS
 
+-- generate const_robot_var_interlock_dest
+const_robot_var_interlock_dest = 0
+
 -- STATEMACHINE CONSTANTS
+
+-- generate const_robot_ctrl_D_stm0_dest
+const_robot_ctrl_D_stm0_dest = 0
+
+-- generate const_obs_detector_dest
+const_obs_detector_dest = 0
+
+-- generate const_robot_ctrl_dest
+const_robot_ctrl_dest = 0
+
+-- generate Plus
+Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
+
+-- generate const_robot_ctrl_ObsDetect_dest
+const_robot_ctrl_ObsDetect_dest = 0
+
+-- generate --
+
+-- MODULE CONSTANTS
+
+-- CONTROLLER CONSTANTS
+
+-- generate nat
+nametype core_nat = union({0..2},{calc_type_min(Union(
+			{{Plus(pos, 1, {0..2})|pos <- {0..2}},{Plus(pos, 1, {0..2})|pos <- {0..2}},{Plus(pos, 1, {0..2})|pos <- {0..2}},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2}}))..calc_type_max(Union({{Plus(pos, 1, {0..2})|pos <- {0..2}},{Plus(pos, 1, {0..2})|pos <- {0..2}},{Plus(pos, 1, {0..2})|pos <- {0..2}},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2},{0..2}}))})
+
+-- generate core_clock_type
+nametype core_clock_type = {0..10}
+
+-- BASIC FUNCTIONS
+
+-- generate const_robot_evt_interlock_f_dest
+const_robot_evt_interlock_f_dest = 0
+
+-- generate const_robot_ctrl_stm0_dest
+const_robot_ctrl_stm0_dest = 10
+
+-- generate const_robot_evt_interlock_dest
+const_robot_evt_interlock_dest = 0
+
+-- generate real
+nametype core_real = union({ -2..2},{calc_type_min(Union(
+			{{2},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{2},{Minus(v1, 2, core_int)|v1 <- { -2..2}},{Minus(pos, 2, core_int)|pos <- { -2..2}},{Plus(pos, 3, core_int)|pos <- { -2..2}},{2},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{5},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{1},{ -2..2},{ -2..2},{0..2},{7},{ -2..2}}))..calc_type_max(Union({{2},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{1},{Plus(v1, 1, core_int)|v1 <- { -2..2}},{0},{2},{Minus(v1, 2, core_int)|v1 <- { -2..2}},{Minus(pos, 2, core_int)|pos <- { -2..2}},{Plus(pos, 3, core_int)|pos <- { -2..2}},{2},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{5},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{1},{ -2..2},{ -2..2},{0..2},{7},{ -2..2}}))}) 
+
+-- VECTOR TYPES AND OPERATIONS
+
+
+-- CLOCKS
+
+-- generate const_robot_var_interlock_stm1_dest
+const_robot_var_interlock_stm1_dest = 0
 
 -- OPERATION CONSTANTS
 
 -- BASIC TYPES
+
+-- generate int
+nametype core_int = union({ -2..2},{calc_type_min(Union(
+			{{2},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{2},{Minus(v1, 2, { -2..2})|v1 <- { -2..2}},{Minus(pos, 2, { -2..2})|pos <- { -2..2}},{Plus(pos, 3, { -2..2})|pos <- { -2..2}},{2},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{5},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{1},{ -2..2},{ -2..2},{0..2},{7},{ -2..2}}))..calc_type_max(Union({{2},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{Plus(pos, 1, core_nat)|pos <- {0..2}},{1},{Plus(v1, 1, { -2..2})|v1 <- { -2..2}},{0},{2},{Minus(v1, 2, { -2..2})|v1 <- { -2..2}},{Minus(pos, 2, { -2..2})|pos <- { -2..2}},{Plus(pos, 3, { -2..2})|pos <- { -2..2}},{2},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{5},{ -2..2},{ -2..2},{ -2..2},{0..2},{ -2..2},{0..2},{0..2},{0..2},{ -2..2},{0..2},{ -2..2},{1},{ -2..2},{ -2..2},{0..2},{7},{ -2..2}}))})
+
+-- generate const_stm04_c2
+const_stm04_c2 = 0
 
 -- generate Div
 Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
@@ -62,9 +101,18 @@ Mult(e1,e2,T) = if member(e1*e2,T) then e1*e2 else e1
 -- generate Modulus
 Modulus(e1,e2,T) = if member(e1%e2,T) then e1%e2 else e1
 
--- generate Plus
-Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
+-- generate const_robot_ctrl_D_dest
+const_robot_ctrl_D_dest = 0
+
+-- generate const_robot_ctrl_D_stm1_dest
+const_robot_ctrl_D_stm1_dest = 0
+
+-- generate const_robot_var_interlock_stm0_dest
+const_robot_var_interlock_stm0_dest = 0
 
 -- generate Minus
 Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
+
+-- generate const_ObsDetector_dest
+const_ObsDetector_dest = 0
 

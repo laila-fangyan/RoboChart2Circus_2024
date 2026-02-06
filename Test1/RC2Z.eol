@@ -78,6 +78,7 @@ option 2: to remove Exception by pushing end event into the process
 
 
 /****************************
+rct Vs EMF (1)
 when using rct as source model, if the source is set as both read on load and store on disposal, the model is deleted every time the program run
 this issue is avoided when use exported EMF models
 One thing to notice:
@@ -94,36 +95,49 @@ We will need the usedVariablesModel again and modify it to implement the FQN rep
 
 
 /****************************
+rct Vs EMF (2)
+using EMF exported rct as source model does not support functions in Z toolkit, e.g., size()
+using rct as source model supports Z toolkit functions
+05.12.2025
+******************************/
+
+
+/****************************
 We are verifying Trans in HOL-CSP as a parameterized recursive process, 
-so this eol is updated from the original EOL by modifying Rule 53 and Rule 54.
+so this eol is updated from the original EOL by modifying Rule 53 and Rule 54
+to enrich the semantics.
 Rule 53: 
 (1) changed to ParamAction, 
 (2) recursive Trans pushed into extchoice
 Rule 54: 
 (1) Skip replaced by Trans(tgt)
 (2) "n = src" added as guard in Rule 54 for each transition
-
 This parameterization is only for Trans, other actions are not affected.
-IsaCircus will need this parameterization as well later on.
+IsaCircus will need this parameterization as well later on, so we use only one version M2M to generate Circusfor both HOL-CSP and IsaCircus.
+
+TBD: (3) add a branch for final state: (n=fi)& (terminate -> Skip)
 
 07.05.2025
 ******************************/
 
 /****************************
 to introduce assumption guarantee for reading and writing var values,
-Rule 53: to insert inv after the reading the value for the variables in transition.condition
+Rule 53: to insert inv after the reading the value for the variables in transition.condition: Rule64 readStateA
 Rule 65: to insert inv after the reading the value for the variables in state actions and in transition actions
+
+to introduce guarantee for reading and writing var values,
 Rule 66: to insert inv before writing the value 
 by creating an IfGuardedCommand 
 
 To extend the operation createchanParaNC() by adding two channels: aviol and gviol
-
 14.05.2025
+
+TBD: Rule 55 and Rule 68
 ******************************/
 
 //var pkg =  RC!RCPackage.all().selectOne(p|p.name = "Chemical");
 RC!RCPackage.all().println();
-var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0" or p.name = "Chemical" or p.name = "BalanceSTM"  or p.name != "core");
+var pkg =  RC!RCPackage.all().selectOne(p|p.name = "pkg0" or p.name = "Chemical" or p.name = "Chemical_ga" or p.name = "BalanceSTM" or p.name = "Adaptation_Plan" or p.name != "core");
 pkg.println();
 
 //for(stm in RC!StateMachineDef.all().selectOne(s|s.name = "stm0" or s.name = "GasAnalysis_stm")){
@@ -181,15 +195,18 @@ replaceRef();
 //To transform RoboChart user defined types
 createTypeDeclPara(pkg);
 
-
+//to transform functions
 createFunctionDefsAsAxParas(pkg);
 
-//create termination channel: terminate
+//to create termination channel: terminate
 var terminate_chanpara = Sequence{"terminate"}.createChannelPara("terminate_channel");
 
 //for(m in RC!RCModule.all()){
 //	createModuleAsProcessPara(m);
 //}
+
+
+
 
 //To consider different configuration of the RoboChart models which can be a module, or controller, or just a stm.
 if(RC!RCModule.all().size()>0){
@@ -210,6 +227,10 @@ if(RC!StateMachineDef.all().size()>0){
 		createStateMachineDefAsActionPara(stm);
 	}
 }
+
+
+
+
 
 /** TEMPORARILY COMMENTTED OUT 
 //To copy the shared vardecls as local vardecls, then replace all the shared with local, then FQN in localdecls
@@ -240,7 +261,10 @@ for(stm in RC!StateMachineDef.all()){
 
 
 //ncBehaviour(nc);
+
  END OF TEMPORARILY COMMENTTED OUT ***/
+ 
+ 
 var zsect = createZSect("circus", Sequence{}, Sequence{"Boolean_operators"});
 	
 
@@ -262,9 +286,21 @@ if(RC!RCModule.all().size() = 0 and RC!ControllerDef.all().size() = 0 and RC!Sta
 		zsect.addPara2ZSect(p);	
 	}
 } 
+//
+//var pkg_name = new String;
+//if(RC!RCPackage.name.isDefined()){
+//	pkg_name = RC!RCPackage.name;
+//} else {
+//	pkg_name = RC!
+//}
+//
 
+/* to read the file name */
+var rcFileName = RC.modelFile.split("/").last();
+var file_name = rcFileName.replace(".rct", "");
+("base name = " + file_name).println();
 
-createSpec(zsect);
+createSpec(zsect, file_name);
 
  
 /*
@@ -958,8 +994,12 @@ operation RC!RCModule createchanParaModule()  {
 	}
 	
 	//CASE 3. variable channels, each var has a channel declaration, as vars can have different types, while the channels in the chandecl.list should have the same type.
-	
-	
+	/*There is no variable declaration in Circus for a RoboChart variable, instead there are variable channel declaration as all variables are accessed through channel in the CSP semantics
+	an RoboChart example moveCall: nat * nat
+	the corresponding CZT example: \circchannel moveCall: \num \cross \num
+	the model for the CZT model: this declaration is a channel paragraph,
+								 the type of the channel is cartesian product EXPRESSION
+	*/
 	var var_chanpara = createChannelPara("var_channels_pltf_" + self.FQN());
 	
 	//Case 3.1:  variable channels for Variables  declared directly in the platform
@@ -1249,14 +1289,14 @@ operation mod_memory(
 			if(rcontrollers_v.size()>0){
 						
 				if(rcontrollers_v.size() = 1){
-					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name is followed by rcontrollers_v.at(0).FQN(). If v.name is FQN, should be renamed as the simple name first.
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(0).FQN(), "x__v", "OUTPUT");//To DO v.name is followed by rcontrollers_v.at(0).FQN(). If v.name is FQN, should be renamed as the simple name first.
 					prefixAction = createPrefixingAction(prefix, createSkipAction());
 				} else{
-					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(0).FQN(), "x__v", "OUTPUT");//To DO v.name
 					prefixAction = createPrefixingAction(prefix, createSkipAction());
 					var i=1;
 					while(i< rcontrollers_v.size()){
-						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(i).FQN(), "x__", "OUTPUT");//To DO v.name
+						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rcontrollers_v.at(i).FQN(), "x__v", "OUTPUT");//To DO v.name
 						prefixAction = createPrefixingAction(prefix, prefixAction);
 						i++;
 					} 
@@ -1264,9 +1304,9 @@ operation mod_memory(
 			
 			}
 			
-			//1.2 (set_v -> prefixaction );Mmory(vars)
+			//1.2 set_v -> prefixaction ;Mmory(vars)
 			//prefixaction = (set_Ext_v1 ->set_Ext_v2 -> ..-> Skip)  from 1.1
-			var commu = createInputCommunication("set_" + v.name, "x__"); 
+			var commu = createInputCommunication("set_" + v.name, "x__v"); 
 			//set_vid(v)?x 
 			//TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names
 			
@@ -1285,7 +1325,7 @@ operation mod_memory(
 			while(i<size){
 				
 				if(varsAndconts_names.at(i) = v.name){
-					new_varsAndconts_names.add("x__");
+					new_varsAndconts_names.add("x__v");
 				}
 				else{
 					elem = varsAndconts_names.at(i);
@@ -1583,12 +1623,13 @@ operation Buffer_empty(efrom: RC!Event,
 					   eto: RC!Event,
 					   c: RC!Connection): Z!CircueProcess{
 		
-	var prefix1 = createInputCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out", "x__");  
+	var prefix1 = createInputCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out", "x__v");  
 	//e.g., ctrl_ref1::turn_out ? x
 	
 	var choice1 = createPrefixingAction(prefix1, 
-										buffer_x_actpara.name.word.createCallAction(Sequence{"x__".createRefExpr(false, false)})
+										buffer_x_actpara.name.word.createCallAction(Sequence{"x__v".createRefExpr(false, false)})
 										);	//Might 'x' conflict with other'x' used as the name of the RoboChart variable, shall we use 'x__'here? Yes
+										//HOL-CSP does not allow x__, so changed to x__v
 	
 	var choice2 = createPrefixingAction(createSynchCommunication("terminate"), 
 										createSkipAction()
@@ -1608,9 +1649,9 @@ operation Buffer_empty(efrom: RC!Event,
 	actionParaSeq.add(buffer_empty_actpara);
 		
 	
-	var prefix3 = createInputCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out", "x__"); 
+	var prefix3 = createInputCommunication(efrom.name + "_" + controllerDefOfCon(c).FQN() + "_out", "x__v"); 
 	var choice3 = createPrefixingAction(prefix3, 
-										buffer_x_actpara.name.word.createCallAction(Sequence{"x__".createRefExpr(false, false)})
+										buffer_x_actpara.name.word.createCallAction(Sequence{"x__v".createRefExpr(false, false)})
 									   );
 	var prefix4 = createOutputCommunicationFromString(eto.name + "_" + controllerDefOfCon(c).FQN() + "_in", "v");
 	var choice4 = createPrefixingAction(prefix4, 
@@ -2040,14 +2081,14 @@ operation ctrl_memory(
 			if(rmachines_v.size()>0){
 						
 				if(rmachines_v.size() = 1){
-					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name is followed by rmachines_v.at(0).FQN(). If v.name is FQN, should be renamed as the simple name first.
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__v", "OUTPUT");//To DO v.name is followed by rmachines_v.at(0).FQN(). If v.name is FQN, should be renamed as the simple name first.
 					prefixAction = createPrefixingAction(prefix, createSkipAction());
 				} else{
-					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__v", "OUTPUT");//To DO v.name
 					prefixAction = createPrefixingAction(prefix, createSkipAction());
 					var i=1;
 					while(i< rmachines_v.size()){
-						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(i).FQN(), "x__", "OUTPUT");//To DO v.name
+						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(i).FQN(), "x__v", "OUTPUT");//To DO v.name
 						prefixAction = createPrefixingAction(prefix, prefixAction);
 						i++;
 					} 
@@ -2055,7 +2096,7 @@ operation ctrl_memory(
 			
 			}
 			
-			var commu = createInputCommunication("set_" + v.name, "x__"); //set_vid(v)?x //TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names
+			var commu = createInputCommunication("set_" + v.name, "x__v"); //set_vid(v)?x //TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names
 			var action;
 			
 			//to replace the name of v with "x__"
@@ -2071,7 +2112,7 @@ operation ctrl_memory(
 			while(i<size){
 				
 				if(varsAndconts_names.at(i) = v.name){
-					new_varsAndconts_names.add("x__");
+					new_varsAndconts_names.add("x__v");
 				}
 				else{
 //					("line 1322, ss.at(i) = " + ss.at(i)).println();
@@ -2124,14 +2165,14 @@ operation ctrl_memory(
 			if(rmachines_v.size()>0){
 			
 				if(rmachines_v.size()=1){
-					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//TO DO v.name
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__v", "OUTPUT");//TO DO v.name
 					prefixAction = createPrefixingAction(prefix, createSkipAction());
 				} else{
-					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__", "OUTPUT");//To DO v.name
+					var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(0).FQN(), "x__v", "OUTPUT");//To DO v.name
 					prefixAction = createPrefixingAction(prefix, createSkipAction());
 					var i=1;
 					while(i< rmachines_v.size()){
-						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(i).FQN(), "x__", "OUTPUT");//To DO v.name
+						var prefix = createOutputCommunicationFromString("set_Ext_" + v.name + "_" + rmachines_v.at(i).FQN(), "x__v", "OUTPUT");//To DO v.name
 						prefixAction = createPrefixingAction(prefix, prefixAction);
 						i++;
 					} 
@@ -2139,7 +2180,7 @@ operation ctrl_memory(
 			
 			}
 			
-			var commu = createInputCommunication("set_Ext_" + v.name, "x__"); //set_Ext_vid(v)?x //TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names.
+			var commu = createInputCommunication("set_Ext_" + v.name, "x__v"); //set_Ext_vid(v)?x //TBC here we use v.name instead of FQN because we assume all variables have the fully qualified names.
 			var action;
 			
 			//to replace the name of v with "x__"
@@ -2157,7 +2198,7 @@ operation ctrl_memory(
 			while(i<size){
 				
 				if(varsAndconts_names.at(i) = v.name){
-					new_varsAndconts_names.add("x__");
+					new_varsAndconts_names.add("x__v");
 				}
 				else{
 					elem = varsAndconts_names.at(i);
@@ -2393,7 +2434,7 @@ operation renStmEvts(c: RC!Controller,
 //Rule 25
 operation createStateMachineDefAsActionPara(stm: RC!StateMachineDef): Z!ActionPara{
 
-	//declare Constants, this is not covered RoboChart manual
+	//declare Constants, this is not covered in RoboChart manual
 	declareConstants(stm);
 	
 	
@@ -2492,7 +2533,7 @@ operation machineBody(stm: RC!StateMachineBody): Z!ActionPara{
 	
 	var parallelL = ncBehaviour(stm).name.word.createCallAction();
 	var parallelR = createSkipAction();
-	var channelSet = Set{"interrupt_" + stm.FQN()};
+	var channelSet = Set{"interrupt_" + stm.FQN()};//sync on interrupt means stm can not be interrupted according to Pedro
 	var machineBody = createParallelAction(channelSet, parallelL,parallelR).createHideAction(Sequence{"enteredSS_"+stm.FQN()});
 	
 	return machineBody.createActionPara("machineBody_"+ stm.FQN());
@@ -2582,7 +2623,8 @@ operation RC!Variable getInitialOrDefaultValueAsExpr(): Z!Expr{
 	if(self.initial != null){
 		"self.initial != null".println();
 		return self.initial.createExpr();
-	} else{
+	} 
+	else{
 		
 		"self.initial = null".println();
 		return self.type.defaultValueAsZExpr();			
@@ -2662,7 +2704,7 @@ operation sharedVarMemory(stm: RC!Context): Z!ActionPara{
 
 
 //Rule 35 
-/*this is different from the manual in two ways
+/*this is different from the RoboChart manual in two ways
 1. the main body is moved to function IndividualVarMemory
 2. the initial or default value of the variable is assigned in Rule according to the manual, but in CSPM code, it is assigned when Memory(v) is called in varMemory; So to be consistent with CSPM, the within part in Rule 35 of manual is moved to Rule 31 here above.
 
@@ -2684,7 +2726,7 @@ operation Memory(v: RC!Variable,stm: RC!Context): Z!ActionPara{
 					set_a?x__ -> Memory_a(x__)
 					[]
 					terminate -> SKIP  ??
-Memory_a(0) is an action whose name is Memory_a, parameter is a RC!Expression 0 in this case
+Memory_a(0) is an action whose name is Memory_a, parameter is a RC!Expression, 0 in this case
 */
 
 /*e.g., Memory_a(0) where
@@ -2713,10 +2755,10 @@ operation IndividualVarMemory(v: RC!Variable, v_FQN: String): Z!ParamAction{
 	
 	
 	
-	var commu2  = createInputCommunication("set_" + v_FQN, "x__");
+	var commu2  = createInputCommunication("set_" + v_FQN, "x__v");
 	var choice2 = createPrefixingAction(
 						commu2, 
-						("Memory_"+ v_FQN).createCallAction(Sequence{"x__".createRefExpr(false, false)})
+						("Memory_"+ v_FQN).createCallAction(Sequence{"x__v".createRefExpr(false, false)})
 						);  
 	
 	var choice3 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
@@ -2745,7 +2787,11 @@ operation IndividualVarMemory(v: RC!Variable, v_FQN: String): Z!ParamAction{
 	return action;
 }
 
-//TO DO
+//TO DO: this operation should be no longer needed, but I kept it here temporally as more work needed if remove it
+/*When converting RoboChart to CSPM, default values are assigned to uninitialized constants as a workaround
+due to limitations of FDR. However, this step is not necessary in the RoboChart2Circus process, 
+as Isabelle can handle infinite scopes.
+*/
 operation RC!Type defaultValueAsZExpr(): Z!Expr{
 ("line 1807, self.type().name = " + self.type().name).println();
 
@@ -2857,16 +2903,16 @@ operation IndividualSharedVarMemory(v: RC!Variable): Z!ParamAction{
 	
 	
 	
-	var commu2  = createInputCommunication("set_" + v.name, "x__");
+	var commu2  = createInputCommunication("set_" + v.name, "x__v");
 	var choice2 = createPrefixingAction(
 						commu2, 
-						("sharedMemory_"+v.name).createCallAction(Sequence{"x__".createRefExpr(false, false)})
+						("sharedMemory_"+v.name).createCallAction(Sequence{"x__v".createRefExpr(false, false)})
 						);  
 						
-	var commu3  = createInputCommunication("set_EXT_" + v.name, "x__");
+	var commu3  = createInputCommunication("set_EXT_" + v.name, "x__v");
 	var choice3 = createPrefixingAction(
 						commu3, 
-						("sharedMemory_"+v.name).createCallAction(Sequence{"x__".createRefExpr(false, false)})
+						("sharedMemory_"+v.name).createCallAction(Sequence{"x__v".createRefExpr(false, false)})
 						);  
 	
 	var choice4 = createPrefixingAction(createSynchCommunication("terminate"), createSkipAction());
@@ -3144,10 +3190,11 @@ operation module(ctlr: RC!ControllerRef): RC!RCModule{
 }
 
 //Spec is the ROOT element of the generated Circus model, it contains a narrative section and a ZSection
-operation createSpec(zsect: Z!ZSect): Z!Spec{
+operation createSpec(zsect: Z!ZSect, file_name: String): Z!Spec{
 	var spec = new Z!Spec;
 	var narrativeSect = new Z!NarrSect;
 	spec.sects = Sequence{narrativeSect, zsect};
+	spec.version = file_name;
 	return spec;
 }
 
@@ -3654,7 +3701,7 @@ operation RC!NodeContainer createchanParaNC()  {
 	//enteredSS
 	var enteredSSchannelset = createChannelSet(createBasicChannelSetExpr(enteredSS(self)));
 	var enteredSSchannelsetPara = enteredSSchannelset.createChanSetPara("enteredSS_in_stmbd_"+self.FQN());
-	
+	//TBC: WHY is _in_stmbd needed?
 	
 	//internal_events
 	var internal_stringset = enterSS(self).includingAll(enteredSS(self)).includingAll(Sequence{"interrupt_"+self.FQN(), "exited_"+self.FQN()});
@@ -4108,9 +4155,8 @@ operation ncBehaviour(nc:RC!NodeContainer): Z!ActionPara{
 
 
 
-//CSP Rule 41
+//Rule 41
 operation ncCoreBehaviour(nc: RC!NodeContainer): Z!ActionPara{
-
 	
 	/***************start of tidsR(nc) calculation************************/
 	
@@ -4122,11 +4168,9 @@ operation ncCoreBehaviour(nc: RC!NodeContainer): Z!ActionPara{
 	}
 	var tidsR_trans_pairR = new Sequence<String>;
 	for(t in nc.transitions){
-//		tidsR_trans_pairR.add(tevent(t,nc.name));
 		tidsR_trans_pairR.add(tevent_str(t));
 	} 
 	
-
 	//Secondly, to calculate the renaming pair for the nodes
 	var tidsR_nodes_pairL = new Sequence<String>; 
 	for(n in nc.nodes.select(m|m.instanceOf(State))){
@@ -4137,11 +4181,9 @@ operation ncCoreBehaviour(nc: RC!NodeContainer): Z!ActionPara{
 		tidsR_nodes_pairR.add("interrupt_" + nc.FQN());
 	}
 	
-
 	//to combine the two sets of pair
 	var tidsR_pairL = tidsR_trans_pairL.includingAll(tidsR_nodes_pairL);
 	var tidsR_pairR = tidsR_trans_pairR.includingAll(tidsR_nodes_pairR);
-	
 	/***************end of tidsR(nc)************************/
 	
 	
@@ -4829,18 +4871,18 @@ operation usedVariables(stmt:RC!Statement):Set<String>{
 	if(stmt.instanceOf(RC!CommunicationStmt) and (stmt.communication._type=CommunicationType#SYNC or stmt.communication._type=CommunicationType#OUTPUT)){
 		varSet = usedVariablesInExpr(stmt.communication.value,container);
 	} else
-//	if(stmt.instanceOf(RC!SeqStatement)){
-//		for(s in stmt.statements){
-//			varSet = varSet.includingAll(usedVariables(s));
-//		}
-//	} else
-//	if(stmt.instanceOf(RC!ParStmt)){
-//		varSet = usedVariables(stmt.stmt);
-//	} else
+	if(stmt.instanceOf(RC!SeqStatement)){
+		for(s in stmt.statements){
+			varSet = varSet.includingAll(usedVariables(s));
+		}
+	} else
+	if(stmt.instanceOf(RC!ParStmt)){
+		varSet = usedVariables(stmt.stmt);
+	} else
 	if(stmt.instanceOf(RC!TimedStatement)){
 		varSet = usedVariables(stmt.stmt).includingAll(usedVariables(stmt.deadline));
 	} else
-	{//SeqStatement falls in this case
+	{
 	}
 	
 	return varSet;
@@ -4905,7 +4947,7 @@ operation composeNodes(nodes: Set<Node>, nc: RC!NodeContainer): Z!ActionPara{
 		
 //		var ndProcSet = new Set<CircusProcess>;
 //		var ndProcNameSet = new Set<String>;
-	
+		var ndActionNameSet = new Set<String>;
 		
 		for(nd in nodes){
 //			var proc_name = "node_proc_" + nd.FQN();
@@ -4914,11 +4956,12 @@ operation composeNodes(nodes: Set<Node>, nc: RC!NodeContainer): Z!ActionPara{
 //				nd.createJunctionAsBasicProcess().createProcessPara(proc_name, true);
 				nd.createJunctionAsActionParas();
 //				ndProcNameSet.add(proc_name);
-				
+				ndActionNameSet.add("InactiveJct_"+nd.FQN());
 
 			} else
 			if(nd.instanceOf(Final)){
 				nd.createFinalAsActionParas();
+				ndActionNameSet.add("InactiveFn_"+nd.FQN());
 //				nd.createFinalAsBasicProcess().createProcessPara(proc_name, true);
 //				ndProcNameSet.add(proc_name);
 //				ndProcSet.add(nd.createFinalAsBasicProcess());
@@ -4926,6 +4969,7 @@ operation composeNodes(nodes: Set<Node>, nc: RC!NodeContainer): Z!ActionPara{
 			if(nd.instanceOf(State)){
 				if(nd.nodes.size()=0){
 					nd.createSimpleStateAsActionParas();
+					ndActionNameSet.add("Inactive_"+nd.FQN());
 //					nd.createSimpleStateAsBasicProcess().createProcessPara(proc_name, true);
 //					ndProcNameSet.add(proc_name);
 //					ndProcSet.add(nd.createSimpleStateAsBasicProcess());
@@ -4943,7 +4987,6 @@ operation composeNodes(nodes: Set<Node>, nc: RC!NodeContainer): Z!ActionPara{
 		if(nodes.size()<2){
 			throw "There are less than 2 nodes, so the parallel process can not be composed.";
 		} else{
-			var ndActionNameSet = getNodeActionNameSet(nodes);
 			//we can directly use the node process ndProcSet.at(0),ndProcSet.at(1) to create parallel process directly, but to be consistent with the auto-gen CSPM, we use callProcess here
 //			procForComposeNodes = createParallelProcess(Set{"share", "terminate"}, ndProcNameSet.at(0).createCallProcess(),ndProcNameSet.at(1).createCallProcess());
 //			ndProcNameSet.removeAt(0);
@@ -4966,13 +5009,6 @@ operation composeNodes(nodes: Set<Node>, nc: RC!NodeContainer): Z!ActionPara{
 }
 
 
-operation getNodeActionNameSet(nodes: Set<RC!Node>): Set<String>{
-	var nameSet = new Set<String>;
-	for(nd in nodes){
-		nameSet.add("Inactive_"+nd.FQN());
-	}
-	return nameSet;
-}
 
 operation String createCallProcess(): Z!CallProcess{
 	var proc = new Z!CallProcess;
@@ -5185,7 +5221,8 @@ operation Z!CircusChannelSet createChanSetPara(name: String): Z!ChannelSetPara{
 }
 
 
-//CSP Rule 53, modified: 1. update action Trans into a prefixingaction, then 2. updated as a process: (enter.initial(nc.nodes) -> Trans)
+//CSP Rule 53, modified: 1. update action Trans into a prefixingaction, 2. updated as a process: (enter.initial(nc.nodes) -> Trans)
+//enter.initial is moved from Rule 41 to here
 operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 	
 	var trans;
@@ -5249,12 +5286,18 @@ operation RC!NodeContainer createTransitionsAsActionPara(): Z!ActionPara{
 	
 	var actions = Sequence{ifAction, elseAction};
 	
-	
+	/*
+	1. we first create the main body of trans (without the readStateA part) as trans
+	2. then add assumption as an outer layer
+	so, here trans is the behaviour after gets
+	*/
 	var trans_action = createIFGuardedCommand(actions);
 	
 
 
-
+	/*
+	3. to add another outer layer of readStateA
+	*/
 
 	
 	var vguards = self.vguards(); 
@@ -5529,7 +5572,7 @@ operation RC!Junction createJunctionAsActionParas() {
 	
 		
 	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", ("Activation_"+self.FQN()).createCallAction(), ("Termination_"+self.FQN()).createCallAction()));
-	Inactive.createActionPara("Inactive_"+self.FQN());
+	Inactive.createActionPara("InactiveJct_"+self.FQN());
 //	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
 	
 		
@@ -5543,7 +5586,7 @@ operation RC!Junction createJunctionAsActionParas() {
 	
 	var seqAction1 = createAction2("InterruptAction", "SSTOP".createCallAction(), createPrefixingAction(createSynchCommunication("interrupt_"+self.FQN()), createSkipAction()));
 	
-	var Active = createAction2("SeqAction", seqAction1, ("Inactive_"+self.FQN()).createCallAction());
+	var Active = createAction2("SeqAction", seqAction1, ("InactiveJct_"+self.FQN()).createCallAction());
 	Active.createActionPara("Active_"+self.FQN());
 //	actionParaSeq.add(Active.createActionPara("Active"));
 	
@@ -5561,7 +5604,7 @@ operation RC!Final createFinalAsActionParas() {
 //	var actionParaSeq = new Sequence<Z!ActionPara>;
 	
 	var Inactive = createAction2("InterruptAction", "SSTOP".createCallAction(), createAction2("ExtChoiceAction", ("Activation_"+self.FQN()).createCallAction(), ("Termination_"+self.FQN()).createCallAction()));
-	Inactive.createActionPara("Inactive_"+self.FQN());
+	Inactive.createActionPara("InactiveFn_"+self.FQN());
 //	actionParaSeq = Sequence{Inactive.createActionPara("Inactive")};
 	
 		
@@ -5586,7 +5629,7 @@ operation RC!Final createFinalAsActionParas() {
 	Active.createActionPara("Active_"+self.FQN());
 //	actionParaSeq.add(Active.createActionPara("Active"));
 	
-	var rightAction2 = createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), ("Inactive"+self.FQN()).createCallAction()));
+	var rightAction2 = createPrefixingAction(createSynchCommunication("exit_"+ nc(self).FQN()), createPrefixingAction(createSynchCommunication("exited_"+ nc(self).FQN()), ("InactiveFn_"+self.FQN()).createCallAction()));
 	
 	var Interrupted = createAction2("InterruptAction", "SSTOP".createCallAction(), rightAction2);
 	Interrupted.createActionPara("Interrupted_"+self.FQN());
@@ -6243,11 +6286,39 @@ operation RC!Statement createStmtInContextAsAction(): Z!CircusAction{
 		
 		var else_pred = createFalsePred();
 		
-		//if false then aviol -> action
-		var action2 = self.createStmtAsAction();
-		var elseAction = createPrefixingAction(createSynchCommunication("aviol"), action2);
-		elseAction = createGuardedAction(else_pred, elseAction);
+//		//if false then aviol -> action
+//		var action2 = self.createStmtAsAction();
+//		var elseAction = createPrefixingAction(createSynchCommunication("aviol"), action2);
+//		elseAction = createGuardedAction(else_pred, elseAction);
 		
+		
+		
+		/*elseif false then aviol -> Trans(n)
+		this only works for assume-gurantee in Transitions, as we fall back to Trans(n)
+		if fall back to other process Q, aviol -> Q can not be discharged in ddlf proof
+		*/
+		
+		//the following commented out content need to be fixed later, we need to find the node container of the stmt, 
+		//but for some stmt, errors
+//		var fqn = nc(self);
+//		("fqn = " + fqn).println();
+//		("self stmt = " +self).println;
+//		
+//		("self stmt left= " +self.left.name).println;
+
+		/*
+		 * this is a workaround for name the process that contains this stmt
+		 * It is not necessarily Trans, can also be State_xx
+		 * Currently, need correct it by hand after the auto-gen
+		 * To be fixed in future 05Dec2025
+		*/
+		var id = "tbd";
+		var elseAction = createPrefixingAction(createSynchCommunication("aviol"), ("Trans_" + id).createCallAction(Sequence{"n"}.createRefExprSeq(false,false)));
+		elseAction = createGuardedAction(else_pred, elseAction);
+	
+	
+	
+	
 		var actions = Sequence{ifAction, elseAction};
 		
 		var ifguard_action = createIFGuardedCommand(actions);
@@ -6258,7 +6329,7 @@ operation RC!Statement createStmtInContextAsAction(): Z!CircusAction{
 	}
 }
 
-//CSP Rule 65_1
+//CSP Rule 65_aux
 operation RC!Statement createStmtAsAction(): Z!CircusAction{
 	if(self.instanceOf(RC!Assignment)){
 		return self.createAssignmentStmtAsAction();
@@ -6291,7 +6362,7 @@ operation RC!Statement createStmtAsAction(): Z!CircusAction{
 operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	
 	/*/
-	//assignment is an interrupt actio in Circus
+	//assignment is an interrupt action in Circus
 	//left action is SStop
 	//right action is a prefixing action
 	/*/
@@ -6306,13 +6377,13 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	//PrefixingAction is a type of Action1, so can not use createAction2()
 
 
-	//to introduce guarantee condition for writing var values, i.e. to change rightAction from
-	// "set_vid(s.left)![[s.right]]expr -> Skip" 
-	// TO 
-	// "if inv then (set_vid(s.left)![[s.right]]expr -> Skip) else gviol -> STOP
-	// by creating an IfGuardedCommand (similar to the changes of Rule 53)
-	
-	//true means inv=true, this true shall be MANUALLY REPLACED by invariant on the variables in HOL-CSP models
+	/*to introduce guarantee condition for writing var values, i.e. to change rightAction from
+	 "set_vid(s.left)![[s.right]]expr -> Skip" 
+	 TO 
+	 "if inv then (set_vid(s.left)![[s.right]]expr -> Skip) else gviol -> STOP
+	 by creating an IfGuardedCommand (similar to the changes of Rule 53)*/
+		
+	//true means inv=true, it is a default inv, and shall be MANUALLY REPLACED by actual invariant on the variables in HOL-CSP models
 	var if_pred = createTruePred();
 	
 	//if true then continue to behave as rightAction, i.e., write the value
@@ -6333,6 +6404,7 @@ operation RC!Assignment createAssignmentStmtAsAction(): Z!CircusAction{
 	var circusAction = createAction2("InterruptAction", leftAction, right_action);
 	
 	
+
 	//if assignment.right is a function call, and the function has a precondition, then circusAction should be guarded with function.precondition
 	//e.g., pre_Chemical_location(gs) & (share__choice(set_anl!Chemical_location(gs) -> SKIP)
 	if(self.right.instanceOf(RC!CallExp)){
@@ -6913,7 +6985,7 @@ operation RC!State indexOfStateAction(actionType: String): Integer{
 
 
 
-//TO DO: to confirm if this is used: No
+//TO DO: to confirm if this is used: No, it's not used
 //operation RC!Communication createCommuAsAction(): Z!CircusAction{
 //
 //	if(self._type.name = "INPUT"){
@@ -7012,6 +7084,14 @@ operation Sequence<String> createRefExprSeq(explicit: Boolean, mixFix: Boolean):
 	return seq;
 
 }
+
+/******************************************
+Expression Section
+
+The Expression transformation does not follow the RoboChart csp semantics
+in the RoboTool developers manual Section 3.
+The transformation is designed according to the semantics of the CZT expression model
+***********************************************/
 
 operation RC!BooleanExp createBooleanExpr(): Z!RefExpr{
 	var boolExpr = new Z!RefExpr;
@@ -7128,7 +7208,8 @@ operation RC!CallExp createCallExpr(): Z!ApplExpr{
 	("line 6843, self = " + self).println();
 	("line 6843, self.`function`.type() = " + self.`function`.type()).println();
 	("line 6843, self.`function`.ref = " + self.`function`.ref).println();
-//	("line 6843, self.`function`.ref.name = " + self.`function`.ref.name).println();
+	("line 6843, self.`function`.ref.name = " + self.`function`.ref.name).println();
+	
 	expr.leftExpr = self.`function`.createExpr();
 	
 	("self.function = " + self.`function`).println();
@@ -7361,6 +7442,9 @@ operation RC!Expression createExpr():Z!Expr{
 	} //else
 	
 	if(self.isTypeOf(RC!RefExp)){
+	("line 7410, self = " + self).println();
+	("line 7410, self.ref = " + self.ref).println();
+	("line 7410, self.ref.type = " + self.ref.type).println();
 		return self.ref.name.createRefExpr(false, false);
 	} //else
 	
@@ -7391,10 +7475,33 @@ operation RC!Expression createExpr():Z!Expr{
 	
 	if(self.isTypeOf(RC!TupleExp)){
 			return self.createTupleExpr();
-		} 
-		else
-		{}
-		
+		}
+	if(self.isTypeOf(RC!ArrayExp)){
+	("line 7408,self = "+ self).println();
+	("line 7408,self.value = "+ self.value).println();
+	("line 7408,self.value.type() = "+ self.value.type()).println();
+	("line 7408,self.value.isTypeOf(RefExp) = "+ self.value.isTypeOf(RefExp)).println();
+	("line 7408,self.value.ref = "+ self.value.ref).println();
+	("line 7408,self.value.ref.name = "+ self.value.ref.name).println();
+	self.parameters.println();
+	for (v in RC!Variable.all().selectOne(v| v.name = self.value.ref.name)){
+		("line 7420, I found the var for the array and the type is " + v.type).println();
+		("line 7420, array is a member of product type =  " + v.type.type().name ).println();	
+		if(v.type.type().name = "ProductType"){
+		"line 7419".println();
+			return self.createTupleSelExpr(v.name);
+		}	
+		if(v.type.type().name = "SeqType"){
+		"line 7423".println();
+			return self.createApplExprforSeqMember(v.name);
+		}	
+	}
+//		if(self.value){
+//			return self.createTupleSelExpr();
+//		}
+//		else
+//		{}
+		}
 	//TO DO
 /*	if(self.isTypeOf(RC!IfExpression)  or 
 	   self.isTypeOf(RC!ResultExp) or 
@@ -7407,7 +7514,18 @@ operation RC!Expression createExpr():Z!Expr{
 }
 
 
-//TupleExpr is tuple extension expression
+//TupleExpr is �tuple extension expression� in CZT model
+/*
+RoboChart example: 
+var intPair : nat * nat
+CZT example: 
+\begin{axdef}
+  intPair : \num \cross \num
+\where
+  intPair = (2, 3)
+\end{axdef}
+where (2,3) is �tuple extension expression�
+*/
 operation Sequence<Z!Expr> createTupleExpr(): Z!TupleExpr{
 	var tupleExpr = new Z!TupleExpr;
 	tupleExpr.exprList = new Z!ZExprList;
@@ -7415,5 +7533,60 @@ operation Sequence<Z!Expr> createTupleExpr(): Z!TupleExpr{
 //	("line 4044 self.name = " + self.name).println();
 	tupleExpr.exprList.exprs = self;
 	return tupleExpr;
+
+}
+
+
+
+//TupleSelExpr is �tuple selection expression� in CZT model
+/*
+RoboChart example: 
+var intPair : nat * nat
+transition t1
+	condition intPair[1] == 10
+CZT example: 
+intPair.1 = 10
+
+where intPair.1 is �tuple selection expression�
+*/
+operation RC!ArrayExp createTupleSelExpr(v_name: String): Z!TupleSelExpr{
+	var tupleSelExpr = new Z!TupleSelExpr;
+	tupleSelExpr.expr = v_name.createRefExpr(false,false);
+	("line 7481, TupleSelExpr.parameters.at(0).value = " + self.parameters.at(0).value).println();
+	tupleSelExpr.numeral = new Z!ZNumeral;
+	tupleSelExpr.numeral.value = self.parameters.at(0).value;
+	return tupleSelExpr;
+
+}
+
+
+//ApplExpr is �application expression� in CZT model
+/*
+RoboChart example: 
+var seqtest: Seq(nat) = <10,20,50>
+
+CZT example: 
+\begin{axdef}
+  intList : \seq_1 \num
+\where
+  intList = \langle 20, 30 \rangle
+\end{axdef}
+...
+\circelse intList~1 = intList~2
+
+where intList~1 is �application expression�
+*/
+operation RC!ArrayExp createApplExprforSeqMember(v_name: String): Z!ApplExpr{
+	var expr = new Z!ApplExpr;
+	expr.mixFix = false; //CZT: C.6.22 (Application)
+	
+	expr.leftExpr = v_name.createRefExpr(false,false);
+
+	expr.rightExpr = new Z!NumExpr; //A number literal expression (C.6.30)
+	expr.rightExpr.numeral = new Z!ZNumeral;
+	("line 7515, TupleSelExpr.parameters.at(0).value = " + self.parameters.at(0).value).println();
+	expr.rightExpr.numeral.value = self.parameters.at(0).value;
+	
+	return 	expr;
 
 }
